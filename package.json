@@ -11,9 +11,8 @@
     "author": "Lucas Kitaev",
     "contributors": [],
     "dependencies": {
-        "moment": "2.19.3",
         "jquery": "3.2.1",
-        "angular": "1.6.7"
+        "moment": "2.19.3"
     },
     "devDependencies": {
         "webpack": "3.10.0",
