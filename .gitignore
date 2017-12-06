@@ -23,3 +23,5 @@ hs_err_pid*
 
 nbproject/private
 node_modules
+web/WEB-INF/glassfish-resources.xml
+src/java/hibernate.cfg.xml
