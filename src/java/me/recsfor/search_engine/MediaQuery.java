@@ -1,4 +1,4 @@
-package search_engine;
+package me.recsfor.search_engine;
 
 /*
  * Copyright 2018 Lucas Kitaev.

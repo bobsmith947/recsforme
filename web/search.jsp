@@ -7,7 +7,7 @@
         <title>recs for me :: Search</title>
     </head>
     <body>
-        <jsp:useBean id="search" scope="request" class="search_engine.MediaQuery" />
+        <jsp:useBean id="search" scope="request" class="me.recsfor.search_engine.MediaQuery" />
         <jsp:setProperty name="search" property="query" />
         <h1><jsp:getProperty name="search" property="query" /></h1>
     </body>

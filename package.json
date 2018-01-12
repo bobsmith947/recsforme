@@ -9,19 +9,19 @@
         "browser"
     ],
     "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bobsmith947/recsforme.git"
+        "type": "git",
+        "url": "git+https://github.com/bobsmith947/recsforme.git"
     },
     "author": "Lucas Kitaev",
     "license": "Apache-2.0",
     "bugs": {
-    "url": "https://github.com/bobsmith947/recsforme/issues"
+        "url": "https://github.com/bobsmith947/recsforme/issues"
     },
     "homepage": "https://github.com/bobsmith947/recsforme#readme",
     "contributors": [],
     "dependencies": {
         "jquery": "3.2.1",
-        "moment": "2.19.3"
+        "moment": "^2.20.1"
     },
     "devDependencies": {
         "minify": "3.0.2",
