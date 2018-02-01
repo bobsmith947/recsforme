@@ -13,8 +13,9 @@
         <title>recs for me :: Home</title>
     </head>
     <body>
+        <h1>Enter a movie, TV show, artist, album, or song:</h1>
         <form name="Search Box" action="search.jsp">
-            <input type="text" name="query" autocomplete="off" autofocus>
+            <input id="media-search" type="text" name="query" maxlength="100" autocomplete="on" autofocus>
         </form>
     </body>
 </html>

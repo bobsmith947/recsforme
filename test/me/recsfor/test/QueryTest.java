@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Lucas Desktop.
+ * Copyright 2018 Lucas Kitaev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 package me.recsfor.test;
-
+import org.junit.*;
 /**
  *
- * @author Lucas Desktop
+ * @author Lucas Kitaev
  */
 public class QueryTest {
   

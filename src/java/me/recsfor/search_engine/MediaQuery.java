@@ -1,5 +1,3 @@
-package me.recsfor.search_engine;
-
 /*
  * Copyright 2018 Lucas Kitaev.
  *
@@ -15,7 +13,7 @@ package me.recsfor.search_engine;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+package me.recsfor.search_engine;
 /**
  *
  * @author lkitaev

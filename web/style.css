@@ -16,8 +16,9 @@ limitations under the License.
 @charset "UTF-8";
 * {box-sizing: border-box}
 a {color: inherit}
+nav {margin: 1em 0}
 body {
-  background-color: white;
+  background-color: gainsboro;
   color: black;
   font-family: 'Roboto', sans-serif;
 }
@@ -35,4 +36,59 @@ noscript {
   font-weight: bold;
   color: red;
   padding-bottom: 10px;
+}
+ul {
+    list-style-position: inside;
+    margin: auto;
+    width: 25%;
+}
+progress {
+  -webkit-appearance: none;
+  appearance: none;
+  border: none;
+  display: block;
+  margin: 15px auto;
+  width: 50%;
+}
+::-webkit-progress-bar {background-color: #E6E6E6}
+::-webkit-progress-value {
+  /*background-color: green;*/
+  transition-duration: 1s;
+}
+::-webkit-progress-inner-element {/*border: 2px solid black;*/}
+::-moz-progress-bar {
+  background-color: green;
+  /*transition-duration: 1s;*/
+}
+::-ms-fill {
+  background-color: green;
+  transition-duration: 1s;
+}
+.ext {transition: color 0.25s}
+.ext:link {color: blue}
+.ext:visited {color: green}
+.ext:hover {color: red}
+.ext:active {color: black}
+.int {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  color: white;
+  background-color: #333;
+  padding: 8px;
+  margin: 0 -5px;
+  transition: background-color 0.5s
+}
+.int:hover {background-color: #111}
+.exp {
+  display: block;
+  margin: auto;
+  padding: 15px;
+  width: 15%;
+  transition: width 1s;
+}
+#media-search {
+    display: block;
+    margin: auto;
+    width: 50%;
 }
