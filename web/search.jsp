@@ -13,12 +13,13 @@
         <title>recs for me :: Search</title>
     </head>
     <body>
-        <jsp:useBean id="search" scope="request" class="me.recsfor.search_engine.MediaQuery" />
-        <jsp:setProperty name="search" property="query" />
-        <h1><jsp:getProperty name="search" property="query" /></h1>
+        <jsp:useBean id="mq" scope="request" class="me.recsfor.search_engine.MediaQuery" />
+        <jsp:setProperty name="mq" property="query" />
+        <h1><jsp:getProperty name="mq" property="query" /></h1>
         <%
-          String query = request.getQueryString();
-          out.println(query.substring(query.indexOf("=")+1));
+          //String query = request.getQueryString();
+          //out.println(query.substring(query.indexOf("=")+1));
+          out.println(mq.getQuery());
         %>
     </body>
 </html>

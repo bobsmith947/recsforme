@@ -14,19 +14,68 @@
  * limitations under the License.
  */
 package me.recsfor.search_engine;
+
+import com.omertron.omdbapi.*;
+import com.omertron.omdbapi.model.*;
+import java.util.List;
 /**
  *
  * @author lkitaev
  */
 public class MediaQuery {
     private String query;
+    private SearchResults results;
+    
     public MediaQuery() {
         this.query = null;
+        this.results = null;
     }
+    /**
+    * @return the query
+    */
     public String getQuery() {
         return this.query;
     }
+    /**
+    * @param query the query to set
+    */
     public void setQuery(String query) {
         this.query = query;
+    }
+    /**
+    * @return the results
+    */
+    public SearchResults getResults() {
+      return results;
+    }
+    /**
+    * @param results the results to set
+    */
+    public void setResults(SearchResults results) {
+      this.results = results;
+    }
+    
+    private void search() throws OMDBException {
+      if (query == null || query.equals("")) {
+        results = null;
+      } else {
+        results = new SearchResults();
+      }
+    }
+    
+    public String[] printSearch() {
+      try {
+        search();
+      } catch (OMDBException e) {
+        String[] warn = {"An error occured:" + e.getMessage()};
+        return warn;
+      }
+      List<OmdbVideoBasic> list = results.getResults();
+      String[] res = new String[list.size()];
+      for (int i = 0; i < res.length; i++) {
+        OmdbVideoBasic o = list.get(i);
+        res[i] = o.getTitle();
+      }
+      return res;
     }
 }
