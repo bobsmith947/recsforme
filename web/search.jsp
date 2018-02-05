@@ -1,3 +1,4 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,6 +21,10 @@
           //String query = request.getQueryString();
           //out.println(query.substring(query.indexOf("=")+1));
           out.println(mq.getQuery());
+          String[] rs = mq.printSearch();
         %>
+        <c:forEach var="r" items="rs">
+            <c:out value = "${r}"/><p>
+        </c:forEach>
     </body>
 </html>

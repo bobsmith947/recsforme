@@ -25,6 +25,7 @@ import java.util.List;
 public class MediaQuery {
     private String query;
     private SearchResults results;
+    private static final OmdbApi CLIENT = new OmdbApi();
     
     public MediaQuery() {
         this.query = null;
@@ -59,7 +60,7 @@ public class MediaQuery {
       if (query == null || query.equals("")) {
         results = null;
       } else {
-        results = new SearchResults();
+        results = CLIENT.search(query);
       }
     }
     
@@ -76,6 +77,7 @@ public class MediaQuery {
         OmdbVideoBasic o = list.get(i);
         res[i] = o.getTitle();
       }
-      return res;
+      String[] test = {"This is a test"};
+      return test;
     }
 }
