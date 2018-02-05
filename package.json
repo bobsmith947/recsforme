@@ -21,16 +21,17 @@
     "homepage": "https://github.com/bobsmith947/recsforme#readme",
     "contributors": [],
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "build": "webpack --progress -p",
-      "watch": "webpack --progress --watch",
-      "optimize": "for %f in (./web/img/*.png) do oxipng -o 4 -s \"./img/%f\""
-  },
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "webpack --progress -p",
+        "watch": "webpack --progress --watch",
+        "optimize": "for %f in (./web/img/*.png) do oxipng -o 4 -s \"./img/%f\""
+    },
     "dependencies": {
         "jquery": "3.2.1",
         "moment": "^2.20.1"
     },
     "devDependencies": {
+        "uglifyjs-webpack-plugin": "1.1.8",
         "minify": "3.0.2",
         "webpack": "3.10.0",
         "babel-preset-env": "1.6.1",
