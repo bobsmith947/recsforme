@@ -1,4 +1,3 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -10,21 +9,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="style.css" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
-        <script src="script.js" type="text/javascript" charset="UTF-8" async></script>
+        <script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>
         <title>recs for me :: Search</title>
     </head>
     <body>
         <jsp:useBean id="mq" scope="request" class="me.recsfor.search_engine.MediaQuery" />
         <jsp:setProperty name="mq" property="query" />
         <h1><jsp:getProperty name="mq" property="query" /></h1>
-        <%
-          //String query = request.getQueryString();
-          //out.println(query.substring(query.indexOf("=")+1));
-          out.println(mq.getQuery());
-          String[] rs = mq.printSearch();
-        %>
-        <c:forEach var="r" items="rs">
-            <c:out value = "${r}"/><p>
-        </c:forEach>
+        <% String[] rs = mq.printSearch();
+          for (int i = 0; i < rs.length; i++) { %>
+          <h5><%= rs[i] %></h5> <% } %>
     </body>
 </html>

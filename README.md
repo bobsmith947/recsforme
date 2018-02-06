@@ -1,9 +1,11 @@
 # recsforme
 A media recommendation web app.
 
-## Installation
+Java/SQL backend + CSS/JS frontend. Focused on as little use of web frameworks as possible, so as to provide a better learning experience.
 
-Follow these directions to get a copy of this repository on your local machine for development and testing purposes. If you just want to use the app, it will be deployed online when it's ready.
+## Getting Started
+
+Want to get recsforme up and running on your local machine for development and testing purposes? Great! This is how to get started:
 
 ### Prerequisites
 
@@ -23,21 +25,17 @@ Follow these directions to get a copy of this repository on your local machine f
 
 You can then open the project in NetBeans and run. I'm not using a POM, so you'll need to manually copy any Maven dependencies, sorry.
 
-If you don't like NetBeans, feel free to use the IDE of your choice. You can also set up GlassFish server manually if you're into that.
+If you don't like NetBeans, feel free to use the IDE of your choice. You can also do it all manually if you're into that.
 
 ## Contributing
 
 Please read the [contributing](./CONTRIBUTING.md) and [code of conduct](./CODE_OF_CONDUCT.md) files for details on the code of conduct, and the process for submitting pull requests and issues.
 
-## Versioning
-
-[Semantic Versioning](http://semver.org/) is used for versioning. For the versions available, see the [tags](https://github.com/bobsmith947/recsforme/tags). Currently, recsforme is in early development, and there are no releases.
-
 ## Authors
 
 * **[Lucas Kitaev](https://github.com/bobsmith947)** - *Lead Developer and Designer*
 * **Oleg Kitaev** - *Expert Advisor*
-* **Sai Donepudi**, **Noah Tewahade**, and **Autumn Sears** - *Support Advisors*
+* **Sai Donepudi** - *Code Support Advisor*
 
 ## License
 

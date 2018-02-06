@@ -13,19 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-if (!String.prototype.includes) {
-  String.prototype.includes = function(search, start) {
-    if (typeof start !== "number") {
-      start = 0;
-    }
-    
-    if (start + search.length > this.length) {
-      return false;
-    } else {
-      return this.indexOf(search, start) !== -1;
-    }
-  };
-}
 document.body.onload = () => {
   let elems = document.links, len = elems.length, i = undefined;
   //set link class based on href and add appropriate target
