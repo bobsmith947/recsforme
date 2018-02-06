@@ -27,6 +27,7 @@
         "optimize": "for %f in (./web/img/*.png) do oxipng -o 4 -s \"./img/%f\""
     },
     "dependencies": {
+        "babel-polyfill": "6.26.0",
         "jquery": "3.2.1",
         "moment": "^2.20.1"
     },
