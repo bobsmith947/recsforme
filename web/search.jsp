@@ -20,7 +20,7 @@
       <form action="search.jsp">
         <input id="media-search" type="text" name="query" maxlength="100" autocomplete="off" value="<jsp:getProperty name="vq" property="query" />">
       </form>
-      <% String[] rs = vq.printSearch();
+      <% String[] rs = vq.printResults();
         for (int i = 0; i < rs.length; i++) { %>
       <h5><%= rs[i] %></h5> <% } %>
     </body>

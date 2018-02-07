@@ -17,47 +17,53 @@ package me.recsfor.search_engine;
 
 import com.omertron.omdbapi.*;
 import com.omertron.omdbapi.model.*;
+import com.omertron.omdbapi.tools.OmdbParameters;
+import com.omertron.omdbapi.tools.Param;
 import java.util.List;
 /**
  *
  * @author lkitaev
  */
-public class MovieQuery extends AbstractQuery {
+public class MovieQuery {
     private String query;
     private SearchResults results;
     private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
     
     public MovieQuery() {
-      this.query = null;
-      this.results = null;
+      query = null;
+      results = null;
+    }
+    
+    public MovieQuery(String query) {
+        this.query = query;
+        this.search();
     }
     /**
-    * @return the query
-    */
+     * @return the query
+     */
     public String getQuery() {
       return query;
     }
     /**
-    * @param query the query to set
-    */
+     * @param query the query to set
+     */
     public void setQuery(String query) {
       this.query = query;
     }
     /**
-    * @return the results
-    */
+     * @return the results
+     */
     public SearchResults getResults() {
       return results;
     }
     /**
-    * @param results the results to set
-    */
+     * @param results the results to set
+     */
     public void setResults(SearchResults results) {
       this.results = results;
     }
     
-    @Override
-    protected void search() {
+    private void search() {
       if (query == null || query.equals("")) {
         results = null;
       } else {
@@ -70,9 +76,8 @@ public class MovieQuery extends AbstractQuery {
       }
     }
     
-    @Override
-    public String[] printSearch() {
-      search();
+    public String[] printResults() {
+      this.search();
       if (results != null) {
         List<OmdbVideoBasic> list = results.getResults();
         String[] res = new String[list.size()];
@@ -85,5 +90,33 @@ public class MovieQuery extends AbstractQuery {
       else {
         return null;
       }
+    }
+    
+    public String printYear(String title) throws OMDBException {
+        OmdbParameters params = new OmdbParameters();
+        params.add(Param.TITLE, title);
+        OmdbVideoFull info = CLIENT.getInfo(params);
+        return info.getYear();
+    }
+    
+    public String printType(String title) throws OMDBException {
+        OmdbParameters params = new OmdbParameters();
+        params.add(Param.TITLE, title);
+        OmdbVideoFull info = CLIENT.getInfo(params);
+        return info.getType();
+    }
+    
+    public String printPlot(String title) throws OMDBException {
+        OmdbParameters params = new OmdbParameters();
+        params.add(Param.TITLE, title);
+        OmdbVideoFull info = CLIENT.getInfo(params);
+        return info.getPlot();
+    }
+    
+    public String printId(String title) throws OMDBException {
+        OmdbParameters params = new OmdbParameters();
+        params.add(Param.TITLE, title);
+        OmdbVideoFull info = CLIENT.getInfo(params);
+        return info.getImdbID();
     }
 }
