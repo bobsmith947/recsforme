@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.recsfor.test;
+package me.recsfor.search_engine;
 
-import org.junit.*;
 /**
  *
  * @author lkitaev
  */
-public class QueryTest {
+public abstract class AbstractQuery {
+
+  protected abstract void search();
   
+  public abstract String[] printSearch();
 }

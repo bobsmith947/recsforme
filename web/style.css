@@ -15,6 +15,8 @@ limitations under the License.
 */
 @charset "UTF-8";
 * {box-sizing: border-box}
+/*define semantics as block for compatibility*/
+header, section, footer, aside, nav, main, article, figure {display: block}
 a {color: inherit}
 nav {margin: 1em 0}
 body {
@@ -22,7 +24,7 @@ body {
   color: black;
   font-family: 'Roboto', sans-serif;
 }
-h1, h2, h3, h4, h5, h6, header, footer {
+h1, h2, h3, h4, h5, h6 {
   text-align: center;
   margin: 10px;
 }

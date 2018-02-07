@@ -13,13 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.recsfor.test;
+package me.recsfor.search_engine;
 
-import org.junit.*;
+import org.musicbrainz.MBWS2Exception;
+import org.musicbrainz.Controller.*;
+import org.musicbrainz.FilterWs2.*;
+import org.musicbrainz.QueryWs2.*;
+import org.musicbrainz.modelWs2.*;
 /**
  *
  * @author lkitaev
  */
-public class QueryTest {
+public class MusicQuery extends AbstractQuery {
+
+  @Override
+  protected void search() {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
+
+  @Override
+  public String[] printSearch() {
+    throw new UnsupportedOperationException("Not supported yet.");
+  }
   
 }

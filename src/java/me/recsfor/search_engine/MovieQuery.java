@@ -22,26 +22,26 @@ import java.util.List;
  *
  * @author lkitaev
  */
-public class MediaQuery {
+public class MovieQuery extends AbstractQuery {
     private String query;
     private SearchResults results;
     private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
     
-    public MediaQuery() {
-        this.query = null;
-        this.results = null;
+    public MovieQuery() {
+      this.query = null;
+      this.results = null;
     }
     /**
     * @return the query
     */
     public String getQuery() {
-        return this.query;
+      return query;
     }
     /**
     * @param query the query to set
     */
     public void setQuery(String query) {
-        this.query = query;
+      this.query = query;
     }
     /**
     * @return the results
@@ -56,27 +56,34 @@ public class MediaQuery {
       this.results = results;
     }
     
-    private void search() throws OMDBException {
+    @Override
+    protected void search() {
       if (query == null || query.equals("")) {
         results = null;
       } else {
-        results = CLIENT.search(query);
+        try {
+          results = CLIENT.search(query);
+        } catch (OMDBException e) {
+          results = null;
+          query = e.getMessage();
+        }
       }
     }
     
+    @Override
     public String[] printSearch() {
-      try {
-        search();
-      } catch (OMDBException e) {
-        String[] warn = {"An error occured:" + e.getMessage()};
-        return warn;
+      search();
+      if (results != null) {
+        List<OmdbVideoBasic> list = results.getResults();
+        String[] res = new String[list.size()];
+        for (int i = 0; i < res.length; i++) {
+          OmdbVideoBasic o = list.get(i);
+          res[i] = o.getTitle();
+        }
+        return res;
       }
-      List<OmdbVideoBasic> list = results.getResults();
-      String[] res = new String[list.size()];
-      for (int i = 0; i < res.length; i++) {
-        OmdbVideoBasic o = list.get(i);
-        res[i] = o.getTitle();
+      else {
+        return null;
       }
-      return res;
     }
 }

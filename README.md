@@ -14,7 +14,8 @@ Want to get recsforme up and running on your local machine for development and t
 * [GlassFish Server 4.1.1](https://javaee.github.io/glassfish/download) (can also be installed with NetBeans)
 * npm (installed with [Node.js](https://nodejs.org/en/download/))
 * [api-omdb](https://github.com/Omertron/api-omdb) + dependencies
-* [oxipng](https://github.com/shssoichiro/oxipng#installing) (optional)
+* [musicbrainzws2-java](https://code.google.com/archive/p/musicbrainzws2-java/) + dependencies
+* [oxipng](https://github.com/shssoichiro/oxipng) (optional)
 
 ### Installing
 
@@ -23,7 +24,7 @@ Want to get recsforme up and running on your local machine for development and t
     cd recsforme
     npm install
 
-You can then open the project in NetBeans and run. I'm not using a POM, so you'll need to manually copy any Maven dependencies, sorry.
+You can then open the project in NetBeans and run. I'm not using a POM, so at the moment you'll need to manually copy any Java dependencies, sorry.
 
 If you don't like NetBeans, feel free to use the IDE of your choice. You can also do it all manually if you're into that.
 

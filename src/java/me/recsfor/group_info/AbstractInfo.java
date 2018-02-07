@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.recsfor.test;
+package me.recsfor.group_info;
 
-import org.junit.*;
 /**
  *
  * @author lkitaev
  */
-public class QueryTest {
+public abstract class AbstractInfo {
   
 }
