@@ -20,23 +20,34 @@ import com.omertron.omdbapi.model.*;
 import com.omertron.omdbapi.tools.OmdbParameters;
 import com.omertron.omdbapi.tools.Param;
 import java.util.List;
+import org.apache.commons.lang3.text.WordUtils;
 /**
- *
+ * Uses the OMDb API (https://omdbapi.com) to gather data for search results and group pages.
  * @author lkitaev
  */
 public class MovieQuery {
     private String query;
     private SearchResults results;
     private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
-    
+    private OmdbParameters params;
+    /**
+     * For use when querying data for search page via bean.
+     */
     public MovieQuery() {
       query = null;
       results = null;
+      params = null;
     }
-    
-    public MovieQuery(String query) {
-        this.query = query;
-        this.search();
+    /**
+     * For use when querying data for group page via servlet.
+     * @param title
+     */
+    public MovieQuery(String title) {
+        params = new OmdbParameters();
+        //title = WordUtils.capitalize(title);
+        params.add(Param.TITLE, title);
+        query = title;
+        results = null;
     }
     /**
      * @return the query
@@ -62,7 +73,9 @@ public class MovieQuery {
     public void setResults(SearchResults results) {
       this.results = results;
     }
-    
+    /**
+     * Performs a search using the defined client and instance query.
+     */
     private void search() {
       if (query == null || query.equals("")) {
         results = null;
@@ -75,12 +88,16 @@ public class MovieQuery {
         }
       }
     }
-    
+    /**
+     * Compiles search results as a string array.
+     * @return an array either containing the results or null 
+     */
     public String[] printResults() {
-      this.search();
+      String[] res;
+      search();
       if (results != null) {
         List<OmdbVideoBasic> list = results.getResults();
-        String[] res = new String[list.size()];
+        res = new String[list.size()];
         for (int i = 0; i < res.length; i++) {
           OmdbVideoBasic o = list.get(i);
           res[i] = o.getTitle();
@@ -88,35 +105,40 @@ public class MovieQuery {
         return res;
       }
       else {
-        return null;
+        res = null;
+        return res;
       }
     }
-    
-    public String printYear(String title) throws OMDBException {
-        OmdbParameters params = new OmdbParameters();
-        params.add(Param.TITLE, title);
-        OmdbVideoFull info = CLIENT.getInfo(params);
-        return info.getYear();
+    /**
+     * Gets the year using the defined client and instance query.
+     * @return the year
+     * @throws OMDBException 
+     */
+    public String printYear() throws OMDBException {
+        return CLIENT.getInfo(params).getYear();
     }
-    
-    public String printType(String title) throws OMDBException {
-        OmdbParameters params = new OmdbParameters();
-        params.add(Param.TITLE, title);
-        OmdbVideoFull info = CLIENT.getInfo(params);
-        return info.getType();
+    /**
+     * Gets the type (movie or series) using the defined client and instance query. Also capitalizes the type because it gets return lower case.
+     * @return the type
+     * @throws OMDBException 
+     */
+    public String printType() throws OMDBException {
+        return WordUtils.capitalize(CLIENT.getInfo(params).getType());
     }
-    
-    public String printPlot(String title) throws OMDBException {
-        OmdbParameters params = new OmdbParameters();
-        params.add(Param.TITLE, title);
-        OmdbVideoFull info = CLIENT.getInfo(params);
-        return info.getPlot();
+    /**
+     * Gets the short plot synopsis using the defined client and instance query.
+     * @return the plot
+     * @throws OMDBException 
+     */
+    public String printPlot() throws OMDBException {
+        return CLIENT.getInfo(params).getPlot();
     }
-    
-    public String printId(String title) throws OMDBException {
-        OmdbParameters params = new OmdbParameters();
-        params.add(Param.TITLE, title);
-        OmdbVideoFull info = CLIENT.getInfo(params);
-        return info.getImdbID();
+    /**
+     * Gets the corresponding IMDb ID using the defined client and instance query.
+     * @return the id
+     * @throws OMDBException 
+     */
+    public String printId() throws OMDBException {
+        return CLIENT.getInfo(params).getImdbID();
     }
 }

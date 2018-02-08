@@ -27,3 +27,4 @@ web/WEB-INF/glassfish-resources.xml
 src/java/hibernate.cfg.xml
 build/
 lib/
+dist/

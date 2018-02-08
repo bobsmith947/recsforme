@@ -66,11 +66,13 @@ progress {
   background-color: green;
   transition-duration: 1s;
 }
+/*
 .ext {transition: color 0.25s}
 .ext:link {color: blue}
 .ext:visited {color: green}
 .ext:hover {color: red}
 .ext:active {color: black}
+*/
 .int {
   display: inline-block;
   text-decoration: none;

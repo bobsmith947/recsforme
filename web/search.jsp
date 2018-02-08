@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="java.net.URLEncoder"%>
 <jsp:useBean id="vq" scope="request" class="me.recsfor.search_engine.MovieQuery" />
 <jsp:setProperty name="vq" property="query" />
 <!DOCTYPE html>
@@ -20,8 +20,10 @@
       <form action="search.jsp">
         <input id="media-search" type="text" name="query" maxlength="100" autocomplete="off" value="<jsp:getProperty name="vq" property="query" />">
       </form>
-      <% String[] rs = vq.printResults();
-        for (int i = 0; i < rs.length; i++) { %>
-      <h5><%= rs[i] %></h5> <% } %>
+      <div style="margin: 100px">
+        <% String[] rs = vq.printResults();
+          for (int i = 0; i < rs.length; i++) { %>
+          <a href="MovieInfo?<%= URLEncoder.encode(rs[i], "UTF-8") %>"><h5><%= rs[i] %></h5></a> <% } %>
+      </div>
     </body>
 </html>

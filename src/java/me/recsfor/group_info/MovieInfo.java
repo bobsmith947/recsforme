@@ -16,42 +16,42 @@
 package me.recsfor.group_info;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import com.omertron.omdbapi.OMDBException;
+import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletException;
+import java.io.PrintWriter;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
-import com.omertron.omdbapi.*;
 import me.recsfor.search_engine.MovieQuery;
 /**
- *
+ * A servlet to build group pages for movies and TV shows. It can be initialized using the request parameter (the title of the move/show). The request parameter has no associated name. For example, <code>MovieInfo?Blade+Runner</code>.
  * @author lkitaev
  */
 public class MovieInfo extends HttpServlet {
+    //TODO implement init() and destroy() support
     private String title;
     private String year;
     private String type;
     private String plot;
     private String id;
-    
     public MovieInfo() {
         title = null;
-        id = null;
+        year = null;
         type = null;
         plot = null;
-        year = null;
+        id = null;
     }
     
     public MovieInfo(String title) throws OMDBException {
         MovieQuery query = new MovieQuery(title);
-        this.title = title;
-        year = query.printYear(title);
-        type = query.printType(title);
-        plot = query.printPlot(title);
-        id = query.printId(title);
+        this.title = query.getQuery();
+        year = query.printYear();
+        type = query.printType();
+        plot = query.printPlot();
+        id = query.printId();
     }
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
@@ -61,15 +61,16 @@ public class MovieInfo extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
         String q = request.getQueryString();
-        String t = q.substring(q.indexOf("=")+1);
         MovieInfo info;
         try {
-            info = new MovieInfo(URLDecoder.decode(t, "UTF-8"));
-        } catch (OMDBException ex) {
-            info = null;
+            info = new MovieInfo(URLDecoder.decode(q, "UTF-8"));
+            //info = new MovieInfo(URLDecoder.decode(q.substring(q.indexOf("=")+1), "UTF-8"));
+        } catch (OMDBException | UnsupportedEncodingException e) {
+            info = new MovieInfo();
+            info.setTitle(e.getMessage());
         }
+        response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             out.println("<!DOCTYPE html>");
             out.println("<html><head>");
@@ -81,12 +82,10 @@ public class MovieInfo extends HttpServlet {
             out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
             out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
             out.println("<title>recsforme :: " + info.getTitle() + "</title></head><body>");
-            //out.println("<h1>Servlet MovieInfo at " + request.getContextPath() + "</h1>");
             out.println("<h1>recsforme</h1>");
-            out.println("<h2>" + info.getTitle() + " (" + info.getYear() + ")</h2>");
-            out.println("<h3>" + info.getType() + "</h3>");
+            out.println("<h2>" + info.getTitle() + " (" + info.getYear() + ") - " + info.getType() + "</h2>");
             out.println("<p>" + info.getPlot() + "</p>");
-            out.println("<a href=\"https://imdb.com/title/" + info.getId() + "\">View on IMDb</a>");
+            out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + info.getId() + "\">View on IMDb</a>");
             out.println("</body></html>");
         }
     }
