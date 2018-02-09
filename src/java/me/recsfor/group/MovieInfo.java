@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.recsfor.group_info;
+package me.recsfor.group;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
-import me.recsfor.search_engine.MovieQuery;
+import me.recsfor.search.MovieQuery;
 /**
  * A servlet to build group pages for movies and TV shows. It can be initialized using the request parameter (the title of the move/show). The request parameter has no associated name. For example, <code>MovieInfo?Blade+Runner</code>.
  * @author lkitaev

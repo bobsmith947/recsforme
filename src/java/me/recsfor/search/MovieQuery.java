@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.recsfor.search_engine;
+package me.recsfor.search;
 
 import com.omertron.omdbapi.*;
 import com.omertron.omdbapi.model.*;
@@ -25,41 +25,21 @@ import org.apache.commons.lang3.text.WordUtils;
  * Uses the OMDb API (https://omdbapi.com) to gather data for search results and group pages.
  * @author lkitaev
  */
-public class MovieQuery {
-    private String query;
+public class MovieQuery extends AbstractQuery {
     private SearchResults results;
     private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
     private final OmdbParameters PARAMS;
-    /**
-     * For use when querying data for a search page.
-     */
     public MovieQuery() {
       query = null;
       results = null;
       PARAMS = null;
     }
-    /**
-     * For use when querying data for a group page.
-     * @param title
-     */
-    public MovieQuery(String title) {
+    public MovieQuery(String query) {
         PARAMS = new OmdbParameters();
         //title = WordUtils.capitalize(title);
-        PARAMS.add(Param.TITLE, title);
-        query = title;
+        PARAMS.add(Param.TITLE, query);
+        this.query = query;
         results = null;
-    }
-    /**
-     * @return the query
-     */
-    public String getQuery() {
-      return query;
-    }
-    /**
-     * @param query the query to set
-     */
-    public void setQuery(String query) {
-      this.query = query;
     }
     /**
      * @return the results
@@ -76,7 +56,8 @@ public class MovieQuery {
     /**
      * Performs a search using the defined client and instance query.
      */
-    private void search() {
+    @Override
+    protected void search() {
       if (query == null || query.equals("")) {
         results = null;
       } else {
@@ -92,6 +73,7 @@ public class MovieQuery {
      * Compiles search results as a string array.
      * @return an array either containing the results or null 
      */
+    @Override
     public String[] printResults() {
       String[] res;
       search();
@@ -103,8 +85,7 @@ public class MovieQuery {
           res[i] = o.getTitle();
         }
         return res;
-      }
-      else {
+      } else {
         res = null;
         return res;
       }

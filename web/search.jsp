@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" import="java.net.URLEncoder"%>
-<jsp:useBean id="q" scope="request" class="me.recsfor.search_engine.QueryBean" />
+<jsp:useBean id="q" scope="request" class="me.recsfor.search.QueryBean" />
 <jsp:setProperty name="q" property="type" />
 <jsp:setProperty name="q" property="query" />
 <!DOCTYPE html>
@@ -18,9 +18,10 @@
     <body>
       <h1>recsforme</h1>
       <h2>Enter another search:</h2>
+      <%-- TODO dynamically select option --%>
       <form id="media-search" action="search.jsp">
         <select name="type">
-          <option value="movie" selected>TV Show/Movie</option>
+          <option value="movie">TV Show/Movie</option>
           <option value="artist">Artist</option>
           <option value="album">Album</option>
           <option value="song">Song</option>
@@ -29,9 +30,29 @@
         <button type="submit">Search!</button>
       </form>
       <div id="results">
-        <% String[] rs = q.sendMovieQuery().printResults();
-          for (int i = 0; i < rs.length; i++) { %>
-          <a href="MovieInfo?<%= URLEncoder.encode(rs[i], "UTF-8") %>"><h5><%= rs[i] %></h5></a> <% } %>
+        <%  String t = q.getType();
+            String[] rs;
+            switch (t) {
+                case "movie":
+                    rs = q.sendMovieQuery().printResults();
+                    break;
+                case "artist":
+                    rs = q.sendArtistQuery().printResults();
+                    break;
+                case "album":
+                    rs = q.sendAlbumQuery().printResults();
+                    break;
+                case "song":
+                    rs = q.sendSongQuery().printResults();
+                    break;
+                default:
+                    rs = null;
+                    break;
+            }
+            if (rs != null) {
+                for (int i = 0; i < rs.length; i++) { %>
+          <a href="MovieInfo?<%= URLEncoder.encode(rs[i], "UTF-8") %>"><h5><%= rs[i] %></h5></a> <%  }
+                                                                                                   } %>
       </div>
     </body>
 </html>

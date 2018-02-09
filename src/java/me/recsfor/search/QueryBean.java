@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.recsfor.search_engine;
+package me.recsfor.search;
 
 import java.beans.*;
 import java.io.Serializable;
@@ -31,6 +31,8 @@ public class QueryBean implements Serializable {
   
   public QueryBean() {
     propertySupport = new PropertyChangeSupport(this);
+    type = null;
+    query = null;
   }
   
   public String getType() {
@@ -63,5 +65,17 @@ public class QueryBean implements Serializable {
   
   public MovieQuery sendMovieQuery() {
     return new MovieQuery(query);
+  }
+  
+  public ArtistQuery sendArtistQuery() {
+      return new ArtistQuery(query);
+  }
+  
+  public AlbumQuery sendAlbumQuery() {
+      return new AlbumQuery(query);
+  }
+  
+  public SongQuery sendSongQuery() {
+      return new SongQuery(query);
   }
 }
