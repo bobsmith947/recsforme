@@ -16,7 +16,6 @@
 package me.recsfor.group_info;
 
 import java.io.IOException;
-import com.omertron.omdbapi.OMDBException;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletException;
 import java.io.PrintWriter;
@@ -43,8 +42,7 @@ public class MovieInfo extends HttpServlet {
         plot = null;
         id = null;
     }
-    
-    public MovieInfo(String title) throws OMDBException {
+    public MovieInfo(String title) {
         MovieQuery query = new MovieQuery(title);
         this.title = query.getQuery();
         year = query.printYear();
@@ -66,7 +64,7 @@ public class MovieInfo extends HttpServlet {
         try {
             info = new MovieInfo(URLDecoder.decode(q, "UTF-8"));
             //info = new MovieInfo(URLDecoder.decode(q.substring(q.indexOf("=")+1), "UTF-8"));
-        } catch (OMDBException | UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             info = new MovieInfo();
             info.setTitle(e.getMessage());
         }
@@ -90,7 +88,7 @@ public class MovieInfo extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

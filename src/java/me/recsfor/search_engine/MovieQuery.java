@@ -29,23 +29,23 @@ public class MovieQuery {
     private String query;
     private SearchResults results;
     private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
-    private OmdbParameters params;
+    private final OmdbParameters PARAMS;
     /**
-     * For use when querying data for search page via bean.
+     * For use when querying data for a search page.
      */
     public MovieQuery() {
       query = null;
       results = null;
-      params = null;
+      PARAMS = null;
     }
     /**
-     * For use when querying data for group page via servlet.
+     * For use when querying data for a group page.
      * @param title
      */
     public MovieQuery(String title) {
-        params = new OmdbParameters();
+        PARAMS = new OmdbParameters();
         //title = WordUtils.capitalize(title);
-        params.add(Param.TITLE, title);
+        PARAMS.add(Param.TITLE, title);
         query = title;
         results = null;
     }
@@ -112,33 +112,54 @@ public class MovieQuery {
     /**
      * Gets the year using the defined client and instance query.
      * @return the year
-     * @throws OMDBException 
      */
-    public String printYear() throws OMDBException {
-        return CLIENT.getInfo(params).getYear();
+    public String printYear() {
+      String year;
+      try {
+        year = CLIENT.getInfo(PARAMS).getYear();
+      } catch (OMDBException e) {
+        year = e.getMessage();
+      }
+      return year;
     }
     /**
-     * Gets the type (movie or series) using the defined client and instance query. Also capitalizes the type because it gets return lower case.
+     * Gets the type (movie or series) using the defined client and instance query.
      * @return the type
-     * @throws OMDBException 
      */
-    public String printType() throws OMDBException {
-        return WordUtils.capitalize(CLIENT.getInfo(params).getType());
+    public String printType() {
+      String type;
+      try {
+        type = CLIENT.getInfo(PARAMS).getType();
+        type = WordUtils.capitalize(type); //give it title case because it gets returned lower case
+      } catch (OMDBException e) {
+        type = e.getMessage();
+      }
+      return type;
     }
     /**
      * Gets the short plot synopsis using the defined client and instance query.
-     * @return the plot
-     * @throws OMDBException 
+     * @return the plot 
      */
-    public String printPlot() throws OMDBException {
-        return CLIENT.getInfo(params).getPlot();
+    public String printPlot() {
+      String plot;
+      try {
+        plot = CLIENT.getInfo(PARAMS).getPlot();
+      } catch (OMDBException e) {
+        plot = e.getMessage();
+      }
+      return plot;
     }
     /**
      * Gets the corresponding IMDb ID using the defined client and instance query.
      * @return the id
-     * @throws OMDBException 
      */
-    public String printId() throws OMDBException {
-        return CLIENT.getInfo(params).getImdbID();
+    public String printId() {
+      String id;
+      try {
+        id = CLIENT.getInfo(PARAMS).getImdbID();
+      } catch (OMDBException e) {
+        id = e.getMessage();
+      }
+      return id;
     }
 }

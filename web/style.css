@@ -92,7 +92,14 @@ progress {
   transition: width 1s;
 }
 #media-search {
-    display: block;
     margin: auto;
     width: 50%;
+}
+#media-search > * {
+  display: block;
+  margin: 5px auto;
+}
+#results > .int {
+  display: block;
+  margin: 10px 10%;
 }

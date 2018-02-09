@@ -15,9 +15,16 @@
     <body>
         <h1>recsforme</h1>
         <h3>Welcome to recsforme, a media recommendation web app.</h3>
-        <h2>Enter a movie or TV show:</h2>
-        <form action="search.jsp">
-            <input id="media-search" type="text" name="query" maxlength="100" autocomplete="off" autofocus>
+        <h2>Enter a search:</h2>
+        <form id="media-search" action="search.jsp">
+          <select name="type">
+            <option value="movie" selected>TV Show/Movie</option>
+            <option value="artist">Artist</option>
+            <option value="album">Album</option>
+            <option value="song">Song</option>
+          </select>
+          <input type="search" name="query" maxlength="100" autocomplete="off" autofocus>
+          <button type="submit">Search!</button>
         </form>
     </body>
 </html>
