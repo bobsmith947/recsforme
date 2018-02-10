@@ -26,17 +26,26 @@
         "watch": "webpack --progress --watch",
         "optimize": "for %f in (./web/img/*.png) do oxipng -o 4 -s \"./img/%f\""
     },
+    "browserslist": [
+        "last 2 years",
+        ">= 1%"
+    ],
     "dependencies": {
         "babel-polyfill": "6.26.0",
         "jquery": "3.2.1",
         "moment": "^2.20.1"
     },
     "devDependencies": {
-        "uglifyjs-webpack-plugin": "1.1.8",
-        "minify": "3.0.2",
-        "webpack": "3.10.0",
-        "babel-preset-env": "1.6.1",
+        "sugarss": "1.0.1",
+        "autoprefixer": "7.2.6",
+        "babel-core": "6.26.0",
         "babel-loader": "7.1.2",
-        "babel-core": "6.26.0"
+        "babel-preset-env": "1.6.1",
+        "browserslist": "2.11.3",
+        "postcss-load-config": "1.2.0",
+        "postcss-loader": "2.1.0",
+        "postcss-plugin": "1.0.0",
+        "uglifyjs-webpack-plugin": "1.1.8",
+        "webpack": "3.10.0"
     }
 }

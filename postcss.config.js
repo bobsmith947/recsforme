@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 module.exports = {
-    entry: ["babel-polyfill", "./web/script.js"],
-    output: {
-        filename: "./web/bundle.js"
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "babel-loader",
-                options: {
-                    presets: ["env"]
-                }
-            },
-            {
-              test: /\.css$/,
-              use: ["postcss-loader"]
-            }
-        ]
-        
-    }
+  /*parser: "sugarss",
+  map: false,
+  from: "./web/style.css",
+  to: "./web/post.css",
+  plugins: {
+    "postcss-plugin": {},
+    "autoprefixer": {}
+  }*/
+  plugins: [
+    require('autoprefixer')
+  ]
 };
