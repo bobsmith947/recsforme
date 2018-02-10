@@ -18,41 +18,48 @@
     <body>
       <h1>recsforme</h1>
       <h2>Enter another search:</h2>
-      <%-- TODO dynamically select option --%>
       <form id="media-search" action="search.jsp">
-        <select name="type">
-          <option value="movie">TV Show/Movie</option>
-          <option value="artist">Artist</option>
-          <option value="album">Album</option>
-          <option value="song">Song</option>
-        </select>
         <input type="search" name="query" maxlength="100" autocomplete="off" value="<jsp:getProperty name="q" property="query" />">
+        <select name="type">
+          <%  String t = q.getType(); %>
+          <option value="movie" <% if (t.equals("movie")) out.print("selected"); %> >TV Show/Movie</option>
+          <option value="artist" <% if (t.equals("artist")) out.print("selected"); %> >Artist</option>
+          <!--<option value="album" <% if (t.equals("album")) out.print("selected"); %> >Album</option>
+          <option value="song" <% if (t.equals("song")) out.print("selected"); %> >Song</option>-->
+          <%-- TODO implement album and song searchability --%>
+        </select>
         <button type="submit">Search!</button>
       </form>
       <div id="results">
-        <%  String t = q.getType();
-            String[] rs;
+        <%  String[] rs;
+            String u;
             switch (t) {
-                case "movie":
-                    rs = q.sendMovieQuery().printResults();
-                    break;
-                case "artist":
-                    rs = q.sendArtistQuery().printResults();
-                    break;
-                case "album":
-                    rs = q.sendAlbumQuery().printResults();
-                    break;
-                case "song":
-                    rs = q.sendSongQuery().printResults();
-                    break;
-                default:
-                    rs = null;
-                    break;
+              case "movie":
+                rs = q.sendMovieQuery().printResults();
+                u = "MovieInfo?";
+                break;
+              case "artist":
+                rs = q.sendArtistQuery().printResults();
+                u = "ArtistInfo?";
+                break;
+              case "album":
+                rs = q.sendAlbumQuery().printResults();
+                u = "AlbumInfo?";
+                break;
+              case "song":
+                rs = q.sendSongQuery().printResults();
+                u = "SongInfo?";
+                break;
+              default:
+                rs = null;
+                u = "search.jsp?query=";
+                break;
             }
             if (rs != null) {
                 for (int i = 0; i < rs.length; i++) { %>
-          <a href="MovieInfo?<%= URLEncoder.encode(rs[i], "UTF-8") %>"><h5><%= rs[i] %></h5></a> <%  }
-                                                                                                   } %>
+        <a href="<%= u + URLEncoder.encode(rs[i], "UTF-8") %>">
+          <%= rs[i] %></a> <%  }
+            } else out.println("<h3>No results found!"); %>
       </div>
     </body>
 </html>

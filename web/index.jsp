@@ -17,13 +17,13 @@
         <h3>Welcome to recsforme, a media recommendation web app.</h3>
         <h2>Enter a search:</h2>
         <form id="media-search" action="search.jsp">
+          <input type="search" name="query" maxlength="100" autocomplete="off" autofocus>
           <select name="type">
             <option value="movie" selected>TV Show/Movie</option>
             <option value="artist">Artist</option>
             <option value="album">Album</option>
             <option value="song">Song</option>
           </select>
-          <input type="search" name="query" maxlength="100" autocomplete="off" autofocus>
           <button type="submit">Search!</button>
         </form>
     </body>

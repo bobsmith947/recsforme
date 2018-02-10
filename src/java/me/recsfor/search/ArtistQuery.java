@@ -18,8 +18,8 @@ package me.recsfor.search;
 import org.musicbrainz.Controller.*;
 import org.musicbrainz.modelWs2.SearchResult.*;
 import org.musicbrainz.modelWs2.Entity.*;
-import org.musicbrainz.IncludesWs2.*;
-import org.musicbrainz.FilterWs2.SearchFilter.*;
+//import org.musicbrainz.IncludesWs2.*;
+//import org.musicbrainz.FilterWs2.SearchFilter.*;
 import java.util.List;
 /**
  *
@@ -33,13 +33,14 @@ public class ArtistQuery extends AbstractQuery {
         super(query);
     }
     
+    //TODO disable pagination
     @Override
     protected void search() {
         if (query == null || query.equals("")) {
             results = null;
         } else {
             CLIENT.search(query);
-            results = CLIENT.getFirstSearchResultPage();
+            results = CLIENT.getFullSearchResultList();
         }
     }
 
@@ -51,7 +52,7 @@ public class ArtistQuery extends AbstractQuery {
             res = new String[results.size()];
             for (int i = 0; i < res.length; i++) {
                 ArtistWs2 a = results.get(i).getArtist();
-                res[i] = a.getName();
+                res[i] = a.getUniqueName();
             }
             return res;
         } else {

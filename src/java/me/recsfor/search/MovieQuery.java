@@ -77,7 +77,7 @@ public class MovieQuery extends AbstractQuery {
     public String[] printResults() {
       String[] res;
       search();
-      if (results != null) {
+      if (results != null && results.getError().isEmpty()) {
         List<OmdbVideoBasic> list = results.getResults();
         res = new String[list.size()];
         for (int i = 0; i < res.length; i++) {

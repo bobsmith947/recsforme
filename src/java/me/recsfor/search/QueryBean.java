@@ -31,8 +31,8 @@ public class QueryBean implements Serializable {
   
   public QueryBean() {
     propertySupport = new PropertyChangeSupport(this);
-    type = null;
-    query = null;
+    type = "movie";
+    query = "";
   }
   
   public String getType() {
