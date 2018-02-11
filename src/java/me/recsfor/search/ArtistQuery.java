@@ -36,12 +36,14 @@ public class ArtistQuery extends AbstractQuery {
     //TODO disable pagination
     @Override
     protected void search() {
-        if (query == null || query.equals("")) {
-            results = null;
-        } else {
-            CLIENT.search(query);
-            results = CLIENT.getFullSearchResultList();
-        }
+      final long minScore = 50L;
+      if (query == null || query.equals("")) {
+        results = null;
+      } else {
+        CLIENT.getSearchFilter().setMinScore(minScore);
+        CLIENT.search(query);
+        results = CLIENT.getFirstSearchResultPage();
+      }
     }
 
     @Override
