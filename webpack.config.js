@@ -27,10 +27,6 @@ module.exports = {
                 options: {
                     presets: ["env"]
                 }
-            },
-            {
-              test: /\.css$/,
-              use: ["postcss-loader"]
             }
         ]
         
