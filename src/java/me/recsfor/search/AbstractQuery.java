@@ -21,6 +21,7 @@ package me.recsfor.search;
  */
 public abstract class AbstractQuery {
     protected String query;
+    //TODO implement functionality to check if the query didn't change
 
     public AbstractQuery() {
         query = null;

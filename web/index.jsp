@@ -21,11 +21,10 @@
           <select name="type">
             <option value="movie" selected>TV Show/Movie</option>
             <option value="artist">Artist</option>
-            <!--<option value="album">Album</option>
-            <option value="song">Song</option>-->
-            <%-- TODO implement album and song search functionality --%>
+            <option value="album">Album</option>
+            <option value="song">Song</option>
           </select>
-          <button type="submit">Search!</button>
+          <button type="submit">Search</button>
         </form>
     </body>
 </html>

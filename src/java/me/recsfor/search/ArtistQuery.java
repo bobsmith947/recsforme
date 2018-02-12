@@ -19,7 +19,7 @@ import org.musicbrainz.Controller.*;
 import org.musicbrainz.modelWs2.SearchResult.*;
 import org.musicbrainz.modelWs2.Entity.*;
 //import org.musicbrainz.IncludesWs2.*;
-//import org.musicbrainz.FilterWs2.SearchFilter.*;
+import org.musicbrainz.FilterWs2.SearchFilter.*;
 import java.util.List;
 /**
  *
@@ -27,39 +27,42 @@ import java.util.List;
  */
 public class ArtistQuery extends AbstractQuery {
     private List<ArtistResultWs2> results;
-    private static final Artist CLIENT = new Artist();
+    private static Artist artist;
 
     public ArtistQuery(String query) {
-        super(query);
+      super(query);
     }
     
-    //TODO disable pagination
     @Override
     protected void search() {
+      artist = new Artist(); //TODO find something more efficient than making a new object each time
+      ArtistSearchFilterWs2 filter = artist.getSearchFilter();
       final long minScore = 50L;
+      final long maxResults = 25L;
       if (query == null || query.equals("")) {
         results = null;
       } else {
-        CLIENT.getSearchFilter().setMinScore(minScore);
-        CLIENT.search(query);
-        results = CLIENT.getFirstSearchResultPage();
+        filter.setMinScore(minScore);
+        filter.setLimit(maxResults);
+        artist.search(query);
+        results = artist.getFirstSearchResultPage();
       }
     }
 
     @Override
     public String[] printResults() {
-        String[] res;
-        search();
-        if (results != null) {
-            res = new String[results.size()];
-            for (int i = 0; i < res.length; i++) {
-                ArtistWs2 a = results.get(i).getArtist();
-                res[i] = a.getUniqueName();
-            }
-            return res;
-        } else {
-            res = null;
-            return res;
+      String[] res;
+      search();
+      if (results != null && !results.isEmpty()) {
+        res = new String[results.size()];
+        for (int i = 0; i < res.length; i++) {
+          ArtistWs2 a = results.get(i).getArtist();
+          res[i] = a.getUniqueName();
+        }
+        return res;
+      } else {
+        res = null;
+        return res;
         }
     }
 }

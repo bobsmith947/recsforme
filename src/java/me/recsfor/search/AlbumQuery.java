@@ -18,7 +18,7 @@ package me.recsfor.search;
 import org.musicbrainz.Controller.*;
 import org.musicbrainz.modelWs2.SearchResult.*;
 import org.musicbrainz.modelWs2.Entity.*;
-import org.musicbrainz.IncludesWs2.*;
+//import org.musicbrainz.IncludesWs2.*;
 import org.musicbrainz.FilterWs2.SearchFilter.*;
 import java.util.List;
 /**
@@ -26,18 +26,43 @@ import java.util.List;
  * @author lkitaev
  */
 public class AlbumQuery extends AbstractQuery {
+  private List<ReleaseGroupResultWs2> results;
+  private static ReleaseGroup album;
 
     public AlbumQuery(String query) {
-        super(query);
+      super(query);
     }
+    
     @Override
     protected void search() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      album = new ReleaseGroup();
+      ReleaseGroupSearchFilterWs2 filter = album.getSearchFilter();
+      final long minScore = 50L;
+      final long maxResults = 25L;
+      if (query == null || query.equals("")) {
+        results = null;
+      } else {
+        filter.setMinScore(minScore);
+        filter.setLimit(maxResults);
+        album.search(query);
+        results = album.getFirstSearchResultPage();
+      }
     }
 
     @Override
     public String[] printResults() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      String[] res;
+      search();
+      if (results != null && !results.isEmpty()) {
+        res = new String[results.size()];
+        for (int i = 0; i < res.length; i++) {
+          ReleaseGroupWs2 a = results.get(i).getReleaseGroup();
+          res[i] = a.getTitle() + " - " + a.getArtistCreditString();
+        }
+        return res;
+      } else {
+        res = null;
+        return res;
+      }
     }
-  
 }
