@@ -22,52 +22,45 @@ import org.musicbrainz.modelWs2.Entity.*;
 import org.musicbrainz.FilterWs2.SearchFilter.*;
 import java.util.List;
 /**
- *
+ * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for artist search result and group pages.
  * @author lkitaev
  */
 public class ArtistQuery extends MusicQuery {
-    private List<ArtistResultWs2> results;
-    private static Artist artist;
+  private List<ArtistResultWs2> results;
+  private static Artist artist;
 
-    public ArtistQuery(String query) {
-      super(query);
-    }
-    
-    @Override
-    protected void search() {
-      artist = new Artist(); //TODO find something more efficient than making a new object each time
-      ArtistSearchFilterWs2 filter = artist.getSearchFilter();
-      final long minScore = 50L;
-      final long maxResults = 25L;
-      if (query == null || query.equals("")) {
-        results = null;
-      } else {
-        filter.setMinScore(minScore);
-        filter.setLimit(maxResults);
-        artist.search(query);
-        results = artist.getFirstSearchResultPage();
-      }
-    }
-
-    @Override
-    public String[] printResults() {
-      String[] res;
-      search();
-      if (results != null && !results.isEmpty()) {
-        res = new String[results.size()];
-        for (int i = 0; i < res.length; i++) {
-          ArtistWs2 a = results.get(i).getArtist();
-          res[i] = a.getUniqueName();
-        }
-        return res;
-      } else {
-        res = null;
-        return res;
-        }
-    }
+  public ArtistQuery(String query) {
+    super(query);
+  }
 
   @Override
-  public boolean changed(String curQuery, String prevQuery) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  protected void search() {
+    artist = new Artist(); //TODO find something more efficient than making a new Artist each time
+    ArtistSearchFilterWs2 filter = artist.getSearchFilter();
+    if (query == null || query.equals("")) {
+      results = null;
+    } else {
+      filter.setMinScore(MIN_SCORE);
+      filter.setLimit(MAX_RESULTS);
+      artist.search(query);
+      results = artist.getFirstSearchResultPage();
+    }
+  }
+
+  @Override
+  public String[] printResults() {
+    String[] res;
+    search();
+    if (results != null && !results.isEmpty()) {
+      res = new String[results.size()];
+      for (int i = 0; i < res.length; i++) {
+        ArtistWs2 a = results.get(i).getArtist();
+        res[i] = a.getUniqueName();
+      }
+      return res;
+    } else {
+      res = null;
+      return res;
+      }
   }
 }

@@ -16,30 +16,33 @@
 package me.recsfor.search;
 
 /**
- *
+ * Parent class for all queries.
  * @author lkitaev
  */
 public abstract class AbstractQuery implements GenericQuery {
-    protected String query;
+  protected String query;
 
-    /**
-     * @return the query
-     */
-    @Override
-    public String getQuery() {
-        return query;
-    }
+  @Override
+  public String getQuery() {
+      return query;
+  }
 
-    /**
-     * @param query the query to set
-     */
-    @Override
-    public void setQuery(String query) {
-        this.query = query;
-    }
+  @Override
+  public void setQuery(String query) {
+      this.query = query;
+  }
 
-    /**
-     * Performs a search using the defined client and instance query.
-     */
-    protected abstract void search();
+  @Override
+  public boolean changed(String newQuery) {
+      if (query != null) {
+          return newQuery.equals(query);
+      } else {
+          return false;
+      }
+  }
+
+  /**
+   * Performs a search using the defined client and instance query.
+   */
+  protected abstract void search();
 }

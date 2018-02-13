@@ -22,52 +22,45 @@ import org.musicbrainz.modelWs2.Entity.*;
 import org.musicbrainz.FilterWs2.SearchFilter.*;
 import java.util.List;
 /**
- *
+ * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for song search result and group pages.
  * @author lkitaev
  */
 public class SongQuery extends MusicQuery {
   private List<RecordingResultWs2> results;
   private static Recording song;
 
-    public SongQuery(String query) {
-        super(query);
-    }
-    
-    @Override
-    protected void search() {
-      song = new Recording();
-      RecordingSearchFilterWs2 filter = song.getSearchFilter();
-      final long minScore = 50L;
-      final long maxResults = 25L;
-      if (query == null || query.equals("")) {
-        results = null;
-      } else {
-        filter.setMinScore(minScore);
-        filter.setLimit(maxResults);
-        song.search(query);
-        results = song.getFirstSearchResultPage();
-      }
-    }
-
-    @Override
-    public String[] printResults() {
-      String[] res;
-      search();
-      if (results != null && !results.isEmpty()) {
-        res = new String[results.size()];
-        for (int i = 0; i < res.length; i++) {
-          RecordingWs2 s = results.get(i).getRecording();
-          res[i] = s.getTitle() + " - " + s.getArtistCreditString();
-        }
-        return res;
-      } else {
-        res = null;
-        return res;
-      }
-    }
+  public SongQuery(String query) {
+      super(query);
+  }
 
   @Override
-  public boolean changed(String curQuery, String prevQuery) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  protected void search() {
+    song = new Recording(); //TODO find something more efficient than making a new Recording each time
+    RecordingSearchFilterWs2 filter = song.getSearchFilter();
+    if (query == null || query.equals("")) {
+      results = null;
+    } else {
+      filter.setMinScore(MIN_SCORE);
+      filter.setLimit(MAX_RESULTS);
+      song.search(query);
+      results = song.getFirstSearchResultPage();
+    }
+  }
+
+  @Override
+  public String[] printResults() {
+    String[] res;
+    search();
+    if (results != null && !results.isEmpty()) {
+      res = new String[results.size()];
+      for (int i = 0; i < res.length; i++) {
+        RecordingWs2 s = results.get(i).getRecording();
+        res[i] = s.getTitle() + " - " + s.getArtistCreditString();
+      }
+      return res;
+    } else {
+      res = null;
+      return res;
+    }
   }
 }

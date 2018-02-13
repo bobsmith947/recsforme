@@ -24,11 +24,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
 /**
- *
+ * A servlet to build group pages for albums. It can be initialized using the request parameter (the title of the album). The request parameter has no associated name. For example, <code>AlbumInfo?Homework</code>.
  * @author lkitaev
  */
 public class AlbumInfo extends HttpServlet {
 
+  private static final long serialVersionUID = 3558291301985484615L;
+
+  //TODO implement functionality
+  
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    *
@@ -101,5 +105,4 @@ public class AlbumInfo extends HttpServlet {
   public String getServletInfo() {
     return "Provides information for album groups.";
   }// </editor-fold>
-
 }

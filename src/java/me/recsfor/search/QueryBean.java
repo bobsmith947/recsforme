@@ -25,9 +25,11 @@ import java.io.Serializable;
 public class QueryBean implements Serializable {
   public static final String PROP_TYPE = "type";
   public static final String PROP_QUERY = "query";
+  private static final long serialVersionUID = -2224562734989733429L; //just in case
   private String type;
   private String query;
   private PropertyChangeSupport propertySupport;
+  
   
   public QueryBean() {
     propertySupport = new PropertyChangeSupport(this);

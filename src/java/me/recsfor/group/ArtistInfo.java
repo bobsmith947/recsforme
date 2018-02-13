@@ -24,10 +24,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
 /**
- *
+ * A servlet to build group pages for artists. It can be initialized using the request parameter (the name of the artist). The request parameter has no associated name. For example, <code>ArtistInfo?Daft+Punk</code>.
  * @author lkitaev
  */
 public class ArtistInfo extends HttpServlet {
+
+  private static final long serialVersionUID = -8210213618927548383L; //just in case
+  
+  //TODO implement functionality
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.

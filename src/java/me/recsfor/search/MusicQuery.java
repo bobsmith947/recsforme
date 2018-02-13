@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 package me.recsfor.search;
-
-import java.util.List;
-import org.musicbrainz.modelWs2.Entity.EntityWs2;
 /**
- *
+ * Parent class for music-based queries.
  * @author lkitaev
  */
 public abstract class MusicQuery extends AbstractQuery {
+  protected static final long MIN_SCORE = 50L;
+  protected static final long MAX_RESULTS = 25L;
   
   protected MusicQuery() {
     this.query = "";

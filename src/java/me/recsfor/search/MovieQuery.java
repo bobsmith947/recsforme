@@ -22,130 +22,124 @@ import com.omertron.omdbapi.tools.Param;
 import java.util.List;
 import org.apache.commons.lang3.text.WordUtils;
 /**
- * Uses the OMDb API (https://omdbapi.com) to gather data for search results and group pages.
+ * Uses the OMDb API (https://omdbapi.com) to gather data for movie/TV show search result and group pages.
  * @author lkitaev
  */
 public class MovieQuery extends AbstractQuery {
-    private SearchResults results;
-    private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
-    private final OmdbParameters PARAMS;
-    
-    public MovieQuery() {
-      query = null;
+  private SearchResults results;
+  private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
+  private final OmdbParameters PARAMS;
+
+  public MovieQuery() {
+    query = null;
+    results = null;
+    PARAMS = null;
+  }
+
+  public MovieQuery(String query) {
+      PARAMS = new OmdbParameters();
+      //title = WordUtils.capitalize(title);
+      PARAMS.add(Param.TITLE, query);
+      this.query = query;
       results = null;
-      PARAMS = null;
-    }
-    
-    public MovieQuery(String query) {
-        PARAMS = new OmdbParameters();
-        //title = WordUtils.capitalize(title);
-        PARAMS.add(Param.TITLE, query);
-        this.query = query;
+  }
+  /**
+   * @return the results
+   */
+  public SearchResults getResults() {
+    return results;
+  }
+  /**
+   * @param results the results to set
+   */
+  public void setResults(SearchResults results) {
+    this.results = results;
+  }
+  /**
+   * Performs a search using the defined client and instance query.
+   */
+  @Override
+  protected void search() {
+    if (query == null || query.equals("")) {
+      results = null;
+    } else {
+      try {
+        results = CLIENT.search(query);
+      } catch (OMDBException e) {
         results = null;
-    }
-    /**
-     * @return the results
-     */
-    public SearchResults getResults() {
-      return results;
-    }
-    /**
-     * @param results the results to set
-     */
-    public void setResults(SearchResults results) {
-      this.results = results;
-    }
-    /**
-     * Performs a search using the defined client and instance query.
-     */
-    @Override
-    protected void search() {
-      if (query == null || query.equals("")) {
-        results = null;
-      } else {
-        try {
-          results = CLIENT.search(query);
-        } catch (OMDBException e) {
-          results = null;
-          query = e.getMessage();
-        }
+        query = e.getMessage();
       }
     }
+  }
 
-    @Override
-    public String[] printResults() {
-      String[] res;
-      search();
-      if (results != null && results.getTotalResults() >= 1) {
-        List<OmdbVideoBasic> list = results.getResults();
-        res = new String[list.size()];
-        for (int i = 0; i < res.length; i++) {
-          OmdbVideoBasic o = list.get(i);
-          res[i] = o.getTitle();
-        }
-        return res;
-      } else {
-        res = null;
-        return res;
+  @Override
+  public String[] printResults() {
+    String[] res;
+    search();
+    if (results != null && results.getTotalResults() >= 1) {
+      List<OmdbVideoBasic> list = results.getResults();
+      res = new String[list.size()];
+      for (int i = 0; i < res.length; i++) {
+        OmdbVideoBasic o = list.get(i);
+        res[i] = o.getTitle();
       }
+      return res;
+    } else {
+      res = null;
+      return res;
     }
-    /**
-     * Gets the year using the defined client and instance query.
-     * @return the year
-     */
-    public String printYear() {
-      String year;
-      try {
-        year = CLIENT.getInfo(PARAMS).getYear();
-      } catch (OMDBException e) {
-        year = e.getMessage();
-      }
-      return year;
+  }
+  /**
+   * Gets the year using the defined client and instance query.
+   * @return the year
+   */
+  public String printYear() {
+    String year;
+    try {
+      year = CLIENT.getInfo(PARAMS).getYear();
+    } catch (OMDBException e) {
+      year = e.getMessage();
     }
-    /**
-     * Gets the type (movie or series) using the defined client and instance query.
-     * @return the type
-     */
-    public String printType() {
-      String type;
-      try {
-        type = CLIENT.getInfo(PARAMS).getType();
-        type = WordUtils.capitalize(type); //give it title case because it gets returned lower case
-      } catch (OMDBException e) {
-        type = e.getMessage();
-      }
-      return type;
+    return year;
+  }
+  /**
+   * Gets the type (movie or series) using the defined client and instance query.
+   * @return the type
+   */
+  public String printType() {
+    String type;
+    try {
+      type = CLIENT.getInfo(PARAMS).getType();
+      type = WordUtils.capitalize(type); //give it title case because it gets returned lower case
+    } catch (OMDBException e) {
+      type = e.getMessage();
     }
-    /**
-     * Gets the short plot synopsis using the defined client and instance query.
-     * @return the plot 
-     */
-    public String printPlot() {
-      String plot;
-      try {
-        plot = CLIENT.getInfo(PARAMS).getPlot();
-      } catch (OMDBException e) {
-        plot = e.getMessage();
-      }
-      return plot;
+    return type;
+  }
+  /**
+   * Gets the short plot synopsis using the defined client and instance query.
+   * @return the plot 
+   */
+  public String printPlot() {
+    String plot;
+    try {
+      plot = CLIENT.getInfo(PARAMS).getPlot();
+    } catch (OMDBException e) {
+      plot = e.getMessage();
     }
-    /**
-     * Gets the corresponding IMDb ID using the defined client and instance query.
-     * @return the id
-     */
-    public String printId() {
-      String id;
-      try {
-        id = CLIENT.getInfo(PARAMS).getImdbID();
-      } catch (OMDBException e) {
-        id = e.getMessage();
-      }
-      return id;
+    return plot;
+  }
+  /**
+   * Gets the corresponding IMDb ID using the defined client and instance query.
+   * @return the id
+   */
+  public String printId() {
+    String id;
+    try {
+      id = CLIENT.getInfo(PARAMS).getImdbID();
+    } catch (OMDBException e) {
+      id = e.getMessage();
     }
-
-    //TODO implement changed method
-    @Override
-    public boolean changed(String curQuery, String prevQuery) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    return id;
+  }
 }

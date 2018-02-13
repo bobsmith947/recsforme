@@ -16,20 +16,20 @@
 package me.recsfor.search;
 
 /**
- *
+ * Interface for all queries.
  * @author lkitaev
  */
 public interface GenericQuery {
 
   /**
+   * @return the query
+   */
+  String getQuery();  
+  
+  /**
    * @param query the query to set
    */
   void setQuery(String query);
-  
-  /**
-   * @return the query
-   */
-  String getQuery();
 
   /**
    * Compiles search results as a string array.
@@ -39,9 +39,8 @@ public interface GenericQuery {
   
   /**
    * Checks if the current query is different from the last query.
-   * @param curQuery the new query
-   * @param prevQuery the old query
+   * @param newQuery the new query
    * @return true if the query has changed, false otherwise
    */
-  boolean changed(String curQuery, String prevQuery);
+  boolean changed(String newQuery);
 }

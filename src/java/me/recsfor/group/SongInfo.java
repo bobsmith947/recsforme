@@ -24,11 +24,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 /**
- *
+ * A servlet to build group pages for songs. It can be initialized using the request parameter (the title of the song). The request parameter has no associated name. For example, <code>SongInfo?Around+the+World</code>.
  * @author lkitaev
  */
 public class SongInfo extends HttpServlet {
 
+  private static final long serialVersionUID = -5659526787337752302L;
+
+  //TODO implement functionality
+  
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    *
@@ -101,5 +105,4 @@ public class SongInfo extends HttpServlet {
   public String getServletInfo() {
     return "Provides information for song groups.";
   }// </editor-fold>
-
 }
