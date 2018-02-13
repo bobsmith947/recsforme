@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author lkitaev
  */
-public class SongQuery extends AbstractQuery {
+public class SongQuery extends MusicQuery {
   private List<RecordingResultWs2> results;
   private static Recording song;
 
@@ -65,4 +65,9 @@ public class SongQuery extends AbstractQuery {
         return res;
       }
     }
+
+  @Override
+  public boolean changed(String curQuery, String prevQuery) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 }

@@ -29,11 +29,13 @@ public class MovieQuery extends AbstractQuery {
     private SearchResults results;
     private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
     private final OmdbParameters PARAMS;
+    
     public MovieQuery() {
       query = null;
       results = null;
       PARAMS = null;
     }
+    
     public MovieQuery(String query) {
         PARAMS = new OmdbParameters();
         //title = WordUtils.capitalize(title);
@@ -69,10 +71,7 @@ public class MovieQuery extends AbstractQuery {
         }
       }
     }
-    /**
-     * Compiles search results as a string array.
-     * @return an array either containing the results or null 
-     */
+
     @Override
     public String[] printResults() {
       String[] res;
@@ -142,5 +141,11 @@ public class MovieQuery extends AbstractQuery {
         id = e.getMessage();
       }
       return id;
+    }
+
+    //TODO implement changed method
+    @Override
+    public boolean changed(String curQuery, String prevQuery) {
+      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

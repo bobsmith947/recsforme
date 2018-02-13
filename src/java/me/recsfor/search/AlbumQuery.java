@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author lkitaev
  */
-public class AlbumQuery extends AbstractQuery {
+public class AlbumQuery extends MusicQuery {
   private List<ReleaseGroupResultWs2> results;
   private static ReleaseGroup album;
 
@@ -65,4 +65,9 @@ public class AlbumQuery extends AbstractQuery {
         return res;
       }
     }
+
+  @Override
+  public boolean changed(String curQuery, String prevQuery) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 lkitaev.
+ * Copyright 2018 Lucas Kitaev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,31 +15,19 @@
  */
 package me.recsfor.search;
 
+import java.util.List;
+import org.musicbrainz.modelWs2.Entity.EntityWs2;
 /**
  *
  * @author lkitaev
  */
-public abstract class AbstractQuery implements GenericQuery {
-    protected String query;
-
-    /**
-     * @return the query
-     */
-    @Override
-    public String getQuery() {
-        return query;
-    }
-
-    /**
-     * @param query the query to set
-     */
-    @Override
-    public void setQuery(String query) {
-        this.query = query;
-    }
-
-    /**
-     * Performs a search using the defined client and instance query.
-     */
-    protected abstract void search();
+public abstract class MusicQuery extends AbstractQuery {
+  
+  protected MusicQuery() {
+    this.query = "";
+  }
+  
+  protected MusicQuery(String query) {
+    this.query = query;
+  }
 }

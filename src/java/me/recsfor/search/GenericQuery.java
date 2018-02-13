@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 lkitaev.
+ * Copyright 2018 Lucas Kitaev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,27 +19,29 @@ package me.recsfor.search;
  *
  * @author lkitaev
  */
-public abstract class AbstractQuery implements GenericQuery {
-    protected String query;
+public interface GenericQuery {
 
-    /**
-     * @return the query
-     */
-    @Override
-    public String getQuery() {
-        return query;
-    }
+  /**
+   * @param query the query to set
+   */
+  void setQuery(String query);
+  
+  /**
+   * @return the query
+   */
+  String getQuery();
 
-    /**
-     * @param query the query to set
-     */
-    @Override
-    public void setQuery(String query) {
-        this.query = query;
-    }
-
-    /**
-     * Performs a search using the defined client and instance query.
-     */
-    protected abstract void search();
+  /**
+   * Compiles search results as a string array.
+   * @return an array either containing the results or null
+   */
+  String[] printResults();
+  
+  /**
+   * Checks if the current query is different from the last query.
+   * @param curQuery the new query
+   * @param prevQuery the old query
+   * @return true if the query has changed, false otherwise
+   */
+  boolean changed(String curQuery, String prevQuery);
 }
