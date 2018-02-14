@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 /**
  * JavaBeans component to delegate queries to the proper class.
+ * This class is not able to perform queries on its own, and therefore doesn't implement <code>GenericQuery</code>.
  * @author lkitaev
  */
 public class QueryBean implements Serializable {

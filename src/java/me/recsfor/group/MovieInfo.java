@@ -30,7 +30,7 @@ import me.recsfor.search.MovieQuery;
  */
 public class MovieInfo extends HttpServlet {
 
-  private static final long serialVersionUID = -4184169288250689262L;
+  private static final long serialVersionUID = -4184169288250689262L; //just in case
   private String title;
   private String year;
   private String type;

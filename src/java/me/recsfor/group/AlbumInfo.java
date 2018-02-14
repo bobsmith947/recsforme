@@ -29,7 +29,7 @@ import java.net.URLDecoder;
  */
 public class AlbumInfo extends HttpServlet {
 
-  private static final long serialVersionUID = 3558291301985484615L;
+  private static final long serialVersionUID = 3558291301985484615L; //just in case
 
   //TODO implement functionality
   
