@@ -23,16 +23,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
+import me.recsfor.search.ArtistQuery;
 /**
  * A servlet to build group pages for artists. It can be initialized using the request parameter (the name of the artist). The request parameter has no associated name. For example, <code>ArtistInfo?Daft+Punk</code>.
  * @author lkitaev
  */
 public class ArtistInfo extends HttpServlet {
-
   private static final long serialVersionUID = -8210213618927548383L; //just in case
-  
-  //TODO implement functionality
-
+  private String name;
+  private String type;
+  private String years;
+  private String albums;
+  private String contrib;
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    *
@@ -43,11 +45,11 @@ public class ArtistInfo extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String q = request.getQueryString();
-    String t;
     try {
-      t = URLDecoder.decode(q, "UTF-8");
+      populate(URLDecoder.decode(q, "UTF-8"));
     } catch (UnsupportedEncodingException e) {
-      t = e.getMessage();
+      populate();
+      setName(e.getMessage());
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
@@ -60,10 +62,12 @@ public class ArtistInfo extends HttpServlet {
       out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + t + "</title></head>");
+      out.println("<title>recsforme :: " + getName() + "</title></head>");
       out.println("<body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + t + "</h2>");
+      out.println("<h2>" + getName() + " - " + getType() + " (" + getYears() + ")" + "</h2>");
+      out.println("<p>" + getAlbums() + "</p>");
+      out.println("<p>" + getContrib() + "</p>");
       out.println("</body>");
       out.println("</html>");
     }
@@ -106,4 +110,90 @@ public class ArtistInfo extends HttpServlet {
     return "Provides information for artist groups.";
   }// </editor-fold>
 
+  private void populate(String name) {
+    ArtistQuery query = new ArtistQuery(name);
+    this.name = query.getQuery();
+    type = query.printType();
+    years = query.printYears();
+    albums = query.printAlbums();
+    contrib = query.printContrib();
+  }
+  
+  private void populate() {
+    name = "Unknown name";
+    type = "Unknown type";
+    years = "Unknown years";
+    albums = "Unknown albums";
+    contrib = "Unknown contributions";
+  }
+  
+  /**
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * @param name the name to set
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * @return the type
+   */
+  public String getType() {
+    return type;
+  }
+
+  /**
+   * @param type the type to set
+   */
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  /**
+   * @return the years
+   */
+  public String getYears() {
+    return years;
+  }
+
+  /**
+   * @param years the years to set
+   */
+  public void setYears(String years) {
+    this.years = years;
+  }
+
+  /**
+   * @return the albums
+   */
+  public String getAlbums() {
+    return albums;
+  }
+
+  /**
+   * @param albums the albums to set
+   */
+  public void setAlbums(String albums) {
+    this.albums = albums;
+  }
+
+  /**
+   * @return the contrib
+   */
+  public String getContrib() {
+    return contrib;
+  }
+
+  /**
+   * @param contrib the contrib to set
+   */
+  public void setContrib(String contrib) {
+    this.contrib = contrib;
+  }
 }

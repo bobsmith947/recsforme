@@ -63,4 +63,24 @@ public class ArtistQuery extends MusicQuery {
       return res;
       }
   }
+  
+  public String printType() {
+    return artist.lookUp(query).getType();
+  }
+  
+  public String printYears() {
+    return artist.lookUp(query).getLifeSpan().getBegin().concat(artist.lookUp(query).getLifeSpan().getEnd());
+  }
+  
+  public String printAlbums() {
+    String string = new String();
+    artist.lookUp(query).getReleaseGroups().forEach(album -> string.concat(album.getTitle()));
+    return string;
+  }
+  
+  public String printContrib() {
+    String string = new String();
+    artist.lookUp(query).getReleasesVA().forEach(album -> string.concat(album.getTitle()));
+    return string;
+  }
 }
