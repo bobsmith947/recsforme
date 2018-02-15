@@ -1,4 +1,7 @@
 # recsforme
+
+[![Build Status](https://travis-ci.org/bobsmith947/recsforme.svg?branch=master)](https://travis-ci.org/bobsmith947/recsforme)
+
 A media recommendation web app.
 
 Java/SQL backend + CSS/JS frontend. Focused on as little use of web frameworks as possible, so as to provide a better learning experience.
