@@ -37,11 +37,11 @@ public class MovieQuery extends AbstractQuery {
   }
 
   public MovieQuery(String query) {
-      PARAMS = new OmdbParameters();
-      //title = WordUtils.capitalize(title);
-      PARAMS.add(Param.TITLE, query);
-      this.query = query;
-      results = null;
+    PARAMS = new OmdbParameters();
+    //title = WordUtils.capitalize(title);
+    PARAMS.add(Param.TITLE, query);
+    this.query = query;
+    results = null;
   }
   /**
    * @return the results

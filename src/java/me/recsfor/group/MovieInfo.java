@@ -29,32 +29,12 @@ import me.recsfor.search.MovieQuery;
  * @author lkitaev
  */
 public class MovieInfo extends HttpServlet {
-
   private static final long serialVersionUID = -4184169288250689262L; //just in case
   private String title;
   private String year;
   private String type;
   private String plot;
   private String id;
-  
-  //TODO implement init() and destroy() support
-  
-  public MovieInfo() {
-    title = null;
-    year = null;
-    type = null;
-    plot = null;
-    id = null;
-  }
-  
-  public MovieInfo(String title) {
-    MovieQuery query = new MovieQuery(title);
-    this.title = query.getQuery();
-    year = query.printYear();
-    type = query.printType();
-    plot = query.printPlot();
-    id = query.printId();
-  }
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    *
@@ -65,13 +45,13 @@ public class MovieInfo extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String q = request.getQueryString();
-    MovieInfo info;
+    //MovieInfo info;
     try {
-      info = new MovieInfo(URLDecoder.decode(q, "UTF-8"));
+      populate(URLDecoder.decode(q, "UTF-8"));
       //info = new MovieInfo(URLDecoder.decode(q.substring(q.indexOf("=")+1), "UTF-8"));
     } catch (UnsupportedEncodingException e) {
-      info = new MovieInfo();
-      info.setTitle(e.getMessage());
+      populate();
+      setTitle(e.getMessage());
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
@@ -84,11 +64,11 @@ public class MovieInfo extends HttpServlet {
       out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + info.getTitle() + "</title></head><body>");
+      out.println("<title>recsforme :: " + getTitle() + "</title></head><body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + info.getTitle() + " (" + info.getYear() + ") - " + info.getType() + "</h2>");
-      out.println("<p>" + info.getPlot() + "</p>");
-      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + info.getId() + "\">View on IMDb</a>");
+      out.println("<h2>" + getTitle() + " (" + getYear() + ") - " + getType() + "</h2>");
+      out.println("<p>" + getPlot() + "</p>");
+      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + getId() + "\">View on IMDb</a>");
       out.println("</body></html>");
     }
   }
@@ -130,6 +110,23 @@ public class MovieInfo extends HttpServlet {
     return "Provides information for movie/TV show groups.";
   }// </editor-fold>
 
+  private void populate(String title) {
+    MovieQuery query = new MovieQuery(title);
+    this.title = query.getQuery();
+    year = query.printYear();
+    type = query.printType();
+    plot = query.printPlot();
+    id = query.printId();
+  }
+  
+  private void populate() {
+    title = "Unknown title";
+    year = "Unknown year";
+    type = "Unknown type";
+    plot = "Unknown plot";
+    id = "";
+  }
+  
   /**
    * @return the title
    */
