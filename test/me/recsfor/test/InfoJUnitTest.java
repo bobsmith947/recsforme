@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Lucas Kitaev
+ * @author lkitaev
  */
 public class InfoJUnitTest {
   
@@ -48,8 +48,10 @@ public class InfoJUnitTest {
   }
 
   // TODO add test methods here.
-  // The methods must be annotated with annotation @Test. For example:
-  //
-  // @Test
-  // public void hello() {}
+  @Test
+  public void hello() {
+    String string = new String();
+    String concat = string.concat("Hello World!");
+    assertNotSame(string, concat);
+  }
 }

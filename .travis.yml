@@ -1,0 +1,10 @@
+language: java
+install:
+  - wget http://download.oracle.com/glassfish/4.1.1/release/glassfish-4.1.1.zip
+  - unzip glassfish-4.1.1.zip
+  - wget https://github.com/bobsmith947/recsforme/releases/download/v0.0.1-alpha/recsforme_v0.0.1-alpha.dependencies.zip
+  - unzip recsforme_v0.0.1-alpha.dependencies.zip
+before_script: glassfish4/bin/asadmin start-domain domain1
+script: ant test -Dj2ee.server.home=./glassfish4/glassfish
+after_script: glassfish4/bin/asadmin stop-domain domain1
+jdk: oraclejdk8
