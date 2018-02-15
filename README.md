@@ -24,9 +24,21 @@ Want to get recsforme up and running on your local machine for development and t
     cd recsforme
     npm install
 
-You can then open the project in NetBeans and run. I'm not using a POM, so at the moment you'll need to manually copy any Java dependencies, sorry.
+At the moment, I'm not using dependency management for Java, so you'll need to manually copy any JAR's. You can find the latest Java dependency package in the [releases](https://github.com/bobsmith947/recsforme/releases) section. Please note, I don't always add new dependencies, so it may not always be under the latest release.
 
-If you don't like NetBeans, feel free to use the IDE of your choice. You can also do it all manually if you're into that.
+You can then open recsforme in NetBeans, or the IDE of your choice.
+
+recsforme can also be run directly from the command line:
+
+    cd *your glassfish install directory*
+    glassfish4/bin/asadmin start-domain domain1
+    cd *your recsforme install directory*
+    ant -Dj2ee.server.home=*your glassfish install directory*
+
+When you're done:
+
+    cd *your glassfish install directory*
+    glassfish4/bin/asadmin stop-domain domain1
 
 ## Contributing
 
