@@ -65,22 +65,40 @@ public class ArtistQuery extends MusicQuery {
   }
   
   public String printType() {
-    return artist.lookUp(query).getType();
+    search();
+    try {
+      String type = results.get(0).getArtist().getType();
+      return type.substring(type.indexOf("#")+1);
+    } catch (NullPointerException e) {
+      return e.getMessage();
+    }
   }
   
-  public String printYears() {
-    return artist.lookUp(query).getLifeSpan().getBegin().concat(artist.lookUp(query).getLifeSpan().getEnd());
+  public String[] printYears() {
+    search();
+    String[] years = new String[2];
+    ArtistWs2 a = results.get(0).getArtist();
+    try {
+      years[0] = a.getLifeSpan().getBegin();
+    } catch (NullPointerException e) {
+      years[0] = e.getMessage();
+    } finally {
+      try {
+        years[1] = a.getLifeSpan().getEnd();
+      } catch (NullPointerException e) {
+        years[1] = e.getMessage();
+      }
+    }
+    return years;
   }
   
-  public String printAlbums() {
-    String string = new String();
-    artist.lookUp(query).getReleaseGroups().forEach(album -> string.concat(album.getTitle()));
-    return string;
+  public List<ReleaseGroupWs2> printAlbums() {
+    search();
+    return results.get(0).getArtist().getReleaseGroups();
   }
   
-  public String printContrib() {
-    String string = new String();
-    artist.lookUp(query).getReleasesVA().forEach(album -> string.concat(album.getTitle()));
-    return string;
+  public List<ReleaseWs2> printContrib() {
+    search();
+    return results.get(0).getArtist().getReleases();
   }
 }

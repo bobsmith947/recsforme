@@ -23,7 +23,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
+import java.util.List;
 import me.recsfor.search.ArtistQuery;
+import org.musicbrainz.modelWs2.Entity.ReleaseGroupWs2;
+import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
 /**
  * A servlet to build group pages for artists. It can be initialized using the request parameter (the name of the artist). The request parameter has no associated name. For example, <code>ArtistInfo?Daft+Punk</code>.
  * @author lkitaev
@@ -32,9 +35,9 @@ public class ArtistInfo extends HttpServlet {
   private static final long serialVersionUID = -8210213618927548383L; //just in case
   private String name;
   private String type;
-  private String years;
-  private String albums;
-  private String contrib;
+  private String[] years;
+  private List<ReleaseGroupWs2> albums;
+  private List<ReleaseWs2> contrib;
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    *
@@ -65,9 +68,15 @@ public class ArtistInfo extends HttpServlet {
       out.println("<title>recsforme :: " + getName() + "</title></head>");
       out.println("<body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + getName() + " - " + getType() + " (" + getYears() + ")" + "</h2>");
-      out.println("<p>" + getAlbums() + "</p>");
-      out.println("<p>" + getContrib() + "</p>");
+      out.println("<h2>" + getName() + " - " + getType() + "</h2>");
+      out.println("<h3>" + getYears()[0] + " to " + getYears()[1] + "</h3>");
+      //TODO get these working
+      out.print("<p>");
+      getAlbums().forEach(album -> out.print(album.getTitle()));
+      out.print("</p>");
+      out.print("<p>");
+      getContrib().forEach(album -> out.print(album.getTitle()));
+      out.print("</p>");
       out.println("</body>");
       out.println("</html>");
     }
@@ -122,9 +131,11 @@ public class ArtistInfo extends HttpServlet {
   private void populate() {
     name = "Unknown name";
     type = "Unknown type";
-    years = "Unknown years";
-    albums = "Unknown albums";
-    contrib = "Unknown contributions";
+    years = new String[2];
+    years[0] = "Unknown years";
+    years[1] = "Unknown years";
+    albums = null;
+    contrib = null;
   }
   
   /**
@@ -158,42 +169,42 @@ public class ArtistInfo extends HttpServlet {
   /**
    * @return the years
    */
-  public String getYears() {
+  public String[] getYears() {
     return years;
   }
 
   /**
    * @param years the years to set
    */
-  public void setYears(String years) {
+  public void setYears(String[] years) {
     this.years = years;
   }
 
   /**
    * @return the albums
    */
-  public String getAlbums() {
+  public List<ReleaseGroupWs2> getAlbums() {
     return albums;
   }
 
   /**
    * @param albums the albums to set
    */
-  public void setAlbums(String albums) {
+  public void setAlbums(List<ReleaseGroupWs2> albums) {
     this.albums = albums;
   }
 
   /**
    * @return the contrib
    */
-  public String getContrib() {
+  public List<ReleaseWs2> getContrib() {
     return contrib;
   }
 
   /**
    * @param contrib the contrib to set
    */
-  public void setContrib(String contrib) {
+  public void setContrib(List<ReleaseWs2> contrib) {
     this.contrib = contrib;
   }
 }
