@@ -18,39 +18,44 @@ package me.recsfor.search;
 import org.musicbrainz.Controller.*;
 import org.musicbrainz.modelWs2.SearchResult.*;
 import org.musicbrainz.modelWs2.Entity.*;
-//import org.musicbrainz.IncludesWs2.*;
-import org.musicbrainz.FilterWs2.SearchFilter.*;
+import org.musicbrainz.IncludesWs2.*;
+//import org.musicbrainz.FilterWs2.SearchFilter.*;
 import java.util.List;
+import org.musicbrainz.QueryWs2.Search.ReadySearches.ArtistSearchbyName;
 /**
  * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for artist search result and group pages.
  * @author lkitaev
  */
 public class ArtistQuery extends MusicQuery {
   private List<ArtistResultWs2> results;
-  private static Artist artist;
+  private final Artist CLIENT;
+  private String id;
 
   public ArtistQuery(String query) {
     super(query);
+    this.CLIENT = new Artist();
+    this.search();
   }
 
   @Override
-  protected void search() {
-    artist = new Artist(); //TODO find something more efficient than making a new Artist each time
-    ArtistSearchFilterWs2 filter = artist.getSearchFilter();
+  protected final void search() {
+    //artist = new Artist(); //TODO find something more efficient than making a new Artist each time
+    //ArtistSearchFilterWs2 filter = artist.getSearchFilter();
     if (query == null || query.equals("")) {
       results = null;
     } else {
-      filter.setMinScore(MIN_SCORE);
-      filter.setLimit(MAX_RESULTS);
-      artist.search(query);
-      results = artist.getFirstSearchResultPage();
+      //filter.setMinScore(MIN_SCORE);
+      //filter.setLimit(MAX_RESULTS);
+      //artist.search(query);
+      results = new ArtistSearchbyName(query).getFirstPage();
+      //results = artist.getFirstSearchResultPage();
     }
   }
 
   @Override
   public String[] printResults() {
     String[] res;
-    search();
+    //search();
     if (results != null && !results.isEmpty()) {
       res = new String[results.size()];
       for (int i = 0; i < res.length; i++) {
@@ -65,7 +70,7 @@ public class ArtistQuery extends MusicQuery {
   }
   
   public String printType() {
-    search();
+    //search();
     try {
       String type = results.get(0).getArtist().getType();
       return type.substring(type.indexOf("#")+1);
@@ -75,8 +80,8 @@ public class ArtistQuery extends MusicQuery {
   }
   
   public String[] printYears() {
-    search();
     String[] years = new String[2];
+    //search();
     ArtistWs2 a = results.get(0).getArtist();
     try {
       years[0] = a.getLifeSpan().getBegin();
@@ -91,14 +96,18 @@ public class ArtistQuery extends MusicQuery {
     }
     return years;
   }
-  
+  //TODO fix includes
   public List<ReleaseGroupWs2> printAlbums() {
-    search();
-    return results.get(0).getArtist().getReleaseGroups();
+    //search();
+    id = results.get(0).getArtist().getId();
+    CLIENT.getIncludes().setReleaseGroups(true);
+    return CLIENT.lookUp(id).getReleaseGroups();
   }
   
   public List<ReleaseWs2> printContrib() {
-    search();
-    return results.get(0).getArtist().getReleases();
+    //search();
+    id = results.get(0).getArtist().getId();
+    CLIENT.getIncludes().setReleases(true);
+    return CLIENT.lookUp(id).getReleasesVA();
   }
 }

@@ -65,20 +65,17 @@ public class ArtistInfo extends HttpServlet {
       out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + getName() + "</title></head>");
-      out.println("<body>");
+      out.println("<title>recsforme :: " + getName() + "</title></head><body>");
       out.println("<h1>recsforme</h1>");
       out.println("<h2>" + getName() + " - " + getType() + "</h2>");
       out.println("<h3>" + getYears()[0] + " to " + getYears()[1] + "</h3>");
-      //TODO get these working
-      out.print("<p>");
-      getAlbums().forEach(album -> out.print(album.getTitle()));
-      out.print("</p>");
-      out.print("<p>");
-      getContrib().forEach(album -> out.print(album.getTitle()));
-      out.print("</p>");
-      out.println("</body>");
-      out.println("</html>");
+      out.println("<ul>");
+      getAlbums().forEach(album -> out.println("<li>" + album.getTitle() + "</li>"));
+      out.println("</ul>");
+      out.println("<ul>");
+      getContrib().forEach(album -> out.println("<li>" + album.getTitle() + "</li>"));
+      out.println("</ul>");
+      out.println("</body></html>");
     }
   }
 
@@ -132,8 +129,6 @@ public class ArtistInfo extends HttpServlet {
     name = "Unknown name";
     type = "Unknown type";
     years = new String[2];
-    years[0] = "Unknown years";
-    years[1] = "Unknown years";
     albums = null;
     contrib = null;
   }
