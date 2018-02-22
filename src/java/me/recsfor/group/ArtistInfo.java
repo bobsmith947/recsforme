@@ -69,9 +69,11 @@ public class ArtistInfo extends HttpServlet {
       out.println("<h1>recsforme</h1>");
       out.println("<h2>" + getName() + " - " + getType() + "</h2>");
       out.println("<h3>" + getYears()[0] + " to " + getYears()[1] + "</h3>");
+      out.println("<h3>Albums:</h3>");
       out.println("<ul>");
       getAlbums().forEach(album -> out.println("<li>" + album.getTitle() + "</li>"));
       out.println("</ul>");
+      out.println("<h3>Contributions:</h3>");
       out.println("<ul>");
       getContrib().forEach(album -> out.println("<li>" + album.getTitle() + "</li>"));
       out.println("</ul>");

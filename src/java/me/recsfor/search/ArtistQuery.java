@@ -19,8 +19,9 @@ import org.musicbrainz.Controller.*;
 import org.musicbrainz.modelWs2.SearchResult.*;
 import org.musicbrainz.modelWs2.Entity.*;
 import org.musicbrainz.IncludesWs2.*;
-//import org.musicbrainz.FilterWs2.SearchFilter.*;
 import java.util.List;
+import org.musicbrainz.MBWS2Exception;
+import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
 import org.musicbrainz.QueryWs2.Search.ReadySearches.ArtistSearchbyName;
 /**
  * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for artist search result and group pages.
@@ -38,7 +39,7 @@ public class ArtistQuery extends MusicQuery {
   }
 
   @Override
-  protected final void search() {
+  protected void search() {
     //artist = new Artist(); //TODO find something more efficient than making a new Artist each time
     //ArtistSearchFilterWs2 filter = artist.getSearchFilter();
     if (query == null || query.equals("")) {
@@ -96,18 +97,34 @@ public class ArtistQuery extends MusicQuery {
     }
     return years;
   }
-  //TODO fix includes
   public List<ReleaseGroupWs2> printAlbums() {
     //search();
     id = results.get(0).getArtist().getId();
-    CLIENT.getIncludes().setReleaseGroups(true);
-    return CLIENT.lookUp(id).getReleaseGroups();
+    ArtistIncludesWs2 i = new ArtistIncludesWs2();
+    i.setReleaseGroups(true);
+    ArtistWs2 a;
+    try {
+      a = new LookUpWs2().getArtistById(id, i);
+    } catch (MBWS2Exception e) {
+      a = new ArtistWs2();
+      a.setName(e.getMessage());
+    }
+    return a.getReleaseGroups();
   }
   
   public List<ReleaseWs2> printContrib() {
     //search();
     id = results.get(0).getArtist().getId();
-    CLIENT.getIncludes().setReleases(true);
-    return CLIENT.lookUp(id).getReleasesVA();
+    ArtistIncludesWs2 i = new ArtistIncludesWs2();
+    i.setVariousArtists(true);
+    i.setReleases(true);
+    ArtistWs2 a;
+    try {
+      a = new LookUpWs2().getArtistById(id, i);
+    } catch (MBWS2Exception e) {
+      a = new ArtistWs2();
+      a.setName(e.getMessage());
+    }
+    return a.getReleases();
   }
 }
