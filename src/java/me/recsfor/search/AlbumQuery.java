@@ -23,12 +23,15 @@ import org.musicbrainz.modelWs2.Entity.*;
 //import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
 import org.musicbrainz.QueryWs2.Search.ReadySearches.*;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Arrays;
 /**
  * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for album/EP/single search result and group pages.
  * @author lkitaev
  */
 public class AlbumQuery extends MusicQuery {
-  private final List<ReleaseGroupResultWs2> results;
+  //private final List<ReleaseGroupResultWs2> results;
+  private HashMap<String, String> results;
 
   public AlbumQuery() {
     super();
@@ -36,39 +39,64 @@ public class AlbumQuery extends MusicQuery {
   }
   public AlbumQuery(String query) {
     super(query);
-    results = new ReleaseGroupSearchbyTitle(query).getFirstPage();
+    String replace = query.replace("/", "");
+    //results = new ReleaseGroupSearchbyTitle(replace).getFirstPage();
+    results = new HashMap<>();
+    new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r -> {
+      results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle());
+    });
+  }
+  /**
+   * @return the results
+   */
+  public HashMap<String, String> getResults() {
+    return results;
+  }
+  /**
+   * @param results the results to set
+   */
+  public void setResults(HashMap<String, String> results) {
+    this.results = results;
   }
 
   @Override
   public String[] printResults() {
-    String[] res;
-    if (results != null && !results.isEmpty()) {
-      res = new String[results.size()];
-      for (int i = 0; i < res.length; i++) {
-        ReleaseGroupWs2 a = results.get(i).getReleaseGroup();
-        res[i] = a.getTitle() + " - " + a.getArtistCreditString();
-      }
-      return res;
+    String[] res = new String[0];
+    if (getResults() != null && !results.isEmpty()) {
+      res = Arrays.copyOf(results.values().toArray(res), getResults().size());
     } else {
       res = null;
-      return res;
     }
+    return res;
   }
   
+  public String[] printIds() {
+    String[] res = new String[0];
+    if (getResults() != null && !getResults().isEmpty()) {
+      res = Arrays.copyOf(getResults().keySet().toArray(res), getResults().size());
+    } else {
+      res = null;
+    }
+    return res;
+  }
+  
+  //TODO fix the below methods
   //TODO optimize the below methods
   
   public String printType() {
     String type;
     try {
-      type = results.get(0).getReleaseGroup().getTypeString();
+      //type = results.get(0).getReleaseGroup().getTypeString();
     } catch (NullPointerException e) {
       type = e.getMessage();
     }
+    type = "";
     return type;
   }
   
   public String printArtist() {
-    return results.get(0).getReleaseGroup().getArtistCreditString();
+    //return results.get(0).getReleaseGroup().getArtistCreditString();
+    return "";
   }
   
   //TODO print out the available releases

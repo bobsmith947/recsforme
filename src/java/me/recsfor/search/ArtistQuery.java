@@ -28,7 +28,7 @@ import java.util.List;
  * @author lkitaev
  */
 public class ArtistQuery extends MusicQuery {
-  private final List<ArtistResultWs2> results;
+  private List<ArtistResultWs2> results;
 
   public ArtistQuery() {
     super();
@@ -37,16 +37,29 @@ public class ArtistQuery extends MusicQuery {
   
   public ArtistQuery(String query) {
     super(query);
-    results = new ArtistSearchbyName(query).getFirstPage();
+    String replace = query.replace("/", "");
+    results = new ArtistSearchbyName(replace).getFirstPage();
+  }
+  /**
+   * @return the results
+   */
+  public List<ArtistResultWs2> getResults() {
+    return results;
+  }
+  /**
+   * @param results the results to set
+   */
+  public void setResults(List<ArtistResultWs2> results) {
+    this.results = results;
   }
 
   @Override
   public String[] printResults() {
     String[] res;
-    if (results != null && !results.isEmpty()) {
-      res = new String[results.size()];
+    if (getResults() != null && !results.isEmpty()) {
+      res = new String[getResults().size()];
       for (int i = 0; i < res.length; i++) {
-        ArtistWs2 a = results.get(i).getArtist();
+        ArtistWs2 a = getResults().get(i).getArtist();
         res[i] = a.getUniqueName();
       }
       return res;
@@ -59,7 +72,7 @@ public class ArtistQuery extends MusicQuery {
   public String printType() {
     String type;
     try {
-      type = results.get(0).getArtist().getType();
+      type = getResults().get(0).getArtist().getType();
       type = type.substring(type.indexOf("#")+1);
     } catch (NullPointerException e) {
       type = e.getMessage();
@@ -71,7 +84,7 @@ public class ArtistQuery extends MusicQuery {
   
   public String[] printYears() {
     String[] years = new String[2];
-    ArtistWs2 a = results.get(0).getArtist();
+    ArtistWs2 a = getResults().get(0).getArtist();
     try {
       years[0] = a.getLifeSpan().getBegin();
     } catch (NullPointerException e) {
@@ -86,7 +99,7 @@ public class ArtistQuery extends MusicQuery {
     return years;
   }
   public List<ReleaseGroupWs2> printAlbums() {
-    id = results.get(0).getArtist().getId();
+    id = getResults().get(0).getArtist().getId();
     ArtistIncludesWs2 i = new ArtistIncludesWs2();
     i.setReleaseGroups(true);
     ArtistWs2 a;
@@ -100,7 +113,7 @@ public class ArtistQuery extends MusicQuery {
   }
   
   public List<ReleaseWs2> printContrib() {
-    id = results.get(0).getArtist().getId();
+    id = getResults().get(0).getArtist().getId();
     ArtistIncludesWs2 i = new ArtistIncludesWs2();
     i.setVariousArtists(true);
     i.setReleases(true);

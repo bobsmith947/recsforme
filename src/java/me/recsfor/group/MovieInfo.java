@@ -22,7 +22,8 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLDecoder;
+import static java.net.URLDecoder.decode;
+//import static java.net.URLEncoder.encode;
 import me.recsfor.search.MovieQuery;
 /**
  * A servlet to build group pages for movies and TV shows. It can be initialized using the request parameter (the title of the move/show). The request parameter has no associated name. For example, <code>MovieInfo?Blade+Runner</code>.
@@ -47,7 +48,7 @@ public class MovieInfo extends HttpServlet {
     String q = request.getQueryString();
     //MovieInfo info;
     try {
-      populate(URLDecoder.decode(q, "UTF-8"));
+      populate(decode(q, "UTF-8"));
       //info = new MovieInfo(URLDecoder.decode(q.substring(q.indexOf("=")+1), "UTF-8"));
     } catch (UnsupportedEncodingException e) {
       populate();

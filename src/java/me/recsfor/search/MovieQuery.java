@@ -34,7 +34,7 @@ public class MovieQuery extends AbstractQuery {
   private final OmdbParameters PARAMS;
 
   public MovieQuery() {
-    query = null;
+    query = "";
     results = null;
     info = null;
     PARAMS = null;
@@ -82,6 +82,18 @@ public class MovieQuery extends AbstractQuery {
   public void setResults(SearchResults results) {
     this.results = results;
   }
+  /**
+   * @return the info
+   */
+  public OmdbVideoFull getInfo() {
+    return info;
+  }
+  /**
+   * @param info the info to set
+   */
+  public void setInfo(OmdbVideoFull info) {
+    this.info = info;
+  }
 
   @Override
   public String[] printResults() {
@@ -104,14 +116,14 @@ public class MovieQuery extends AbstractQuery {
    * @return the year
    */
   public String printYear() {
-    return info.getYear();
+    return getInfo().getYear();
   }
   /**
    * Gets the type (movie or series) using the defined client and instance query.
    * @return the type
    */
   public String printType() {
-    String type = info.getType();
+    String type = getInfo().getType();
     type = WordUtils.capitalize(type); //give it title case because it gets returned lower case
     return type;
   }
@@ -120,13 +132,13 @@ public class MovieQuery extends AbstractQuery {
    * @return the plot 
    */
   public String printPlot() {
-    return info.getPlot();
+    return getInfo().getPlot();
   }
   /**
    * Gets the corresponding IMDb ID using the defined client and instance query.
    * @return the id
    */
   public String printId() {
-    return info.getImdbID();
+    return getInfo().getImdbID();
   }
 }

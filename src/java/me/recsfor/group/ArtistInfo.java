@@ -22,7 +22,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLDecoder;
+import static java.net.URLDecoder.decode;
+import static java.net.URLEncoder.encode;
 import java.util.List;
 import me.recsfor.search.ArtistQuery;
 import org.musicbrainz.modelWs2.Entity.ReleaseGroupWs2;
@@ -49,7 +50,7 @@ public class ArtistInfo extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String q = request.getQueryString();
     try {
-      populate(URLDecoder.decode(q, "UTF-8"));
+      populate(decode(q, "UTF-8"));
     } catch (UnsupportedEncodingException e) {
       populate();
       setName(e.getMessage());
@@ -71,12 +72,27 @@ public class ArtistInfo extends HttpServlet {
       out.println("<h3>" + getYears()[0] + " to " + getYears()[1] + "</h3>");
       out.println("<h3>Albums:</h3>");
       out.println("<ul>");
-      //TODO link to AlbumInfo
-      getAlbums().forEach(album -> out.println("<li>" + album.getTitle() + "</li>"));
+      getAlbums().forEach(album -> {
+        String title = album.getTitle();
+        try {
+          out.print("<li><a href=\"AlbumInfo?" + encode(title + " - " + getName(), "UTF-8") + "\">" + title);
+        } catch (UnsupportedEncodingException e) {
+          out.print("<li><a href=\"#\">" + e.getMessage());
+        }
+        out.print("</a></li>");
+      });
       out.println("</ul>");
       out.println("<h3>Contributions:</h3>");
       out.println("<ul>");
-      getContrib().forEach(album -> out.println("<li>" + album.getTitle() + "</li>"));
+      getContrib().forEach(cont -> {
+        String title = cont.getTitle();
+        try {
+          out.print("<li><a href=\"AlbumInfo?" + encode(title + " - Various Artists", "UTF-8") + "\">" + title);
+        } catch (UnsupportedEncodingException e) {
+          out.print("<li><a href=\"#\">" + e.getMessage());
+        }
+        out.print("</a></li>");
+      });
       out.println("</ul>");
       out.println("</body></html>");
     }

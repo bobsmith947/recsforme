@@ -30,28 +30,33 @@
     </form>
     <div id="results">
       <%  String[] rs;
+          String[] id;
           String u;
           switch (t) {
             case "movie":
               rs = q.sendMovieQuery().printResults();
+              id = null;
               u = "MovieInfo?";
               break;
             case "artist":
               rs = q.sendArtistQuery().printResults();
+              id = null;
               u = "ArtistInfo?";
               break;
             case "album":
               rs = q.sendAlbumQuery().printResults();
+              id= q.sendAlbumQuery().printIds();
               u = "AlbumInfo?";
               break;
             default:
               rs = null;
+              id = null;
               u = "search.jsp?query=";
               break;
           }
           if (rs != null) {
             for (int i = 0; i < rs.length; i++) { %>
-              <a href="<%= u + URLEncoder.encode(rs[i], "UTF-8") %>">
+              <a href="<%= u + URLEncoder.encode(id[i], "UTF-8") %>">
               <%= rs[i] %></a> <%
             }
           } else out.println("<h3>No results found!</h3>"); %>

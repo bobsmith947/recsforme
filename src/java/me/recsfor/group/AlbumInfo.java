@@ -22,7 +22,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLDecoder;
+import static java.net.URLDecoder.decode;
+//import static java.net.URLEncoder.encode;
 import me.recsfor.search.AlbumQuery;
 /**
  * A servlet to build group pages for albums. It can be initialized using the request parameter (the title of the album). The request parameter has no associated name. For example, <code>AlbumInfo?Homework</code>.
@@ -44,7 +45,7 @@ public class AlbumInfo extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String q = request.getQueryString();
     try {
-      populate(URLDecoder.decode(q, "UTF-8"));
+      populate(decode(q, "UTF-8"));
     } catch (UnsupportedEncodingException e) {
       populate();
       setTitle(e.getMessage());
