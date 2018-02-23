@@ -20,7 +20,8 @@ package me.recsfor.search;
  */
 public abstract class MusicQuery extends AbstractQuery {
   protected static final long MIN_SCORE = 50L;
-  protected static final long MAX_RESULTS = 10L;
+  protected static final long MAX_RESULTS = 25L;
+  protected String id;
   
   protected MusicQuery() {
     this.query = "";

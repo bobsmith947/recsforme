@@ -24,7 +24,7 @@
           <%  String t = q.getType(); %>
           <option value="movie" <% if (t.equals("movie")) out.print("selected"); %> >TV Show/Movie</option>
           <option value="artist" <% if (t.equals("artist")) out.print("selected"); %> >Artist</option>
-          <option value="album" <% if (t.equals("album")) out.print("selected"); %> >Album</option>
+          <option value="album" <% if (t.equals("album")) out.print("selected"); %> >Album/EP/Single</option>
           <option value="song" <% if (t.equals("song")) out.print("selected"); %> >Song</option>
         </select>
         <button type="submit">Search</button>

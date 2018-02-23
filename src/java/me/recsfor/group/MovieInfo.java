@@ -64,11 +64,11 @@ public class MovieInfo extends HttpServlet {
       out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + getTitle() + "</title></head><body>");
+      out.println("<title>recsforme :: " + title + "</title></head><body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + getTitle() + " (" + getYear() + ") - " + getType() + "</h2>");
-      out.println("<p>" + getPlot() + "</p>");
-      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + getId() + "\">View on IMDb</a>");
+      out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
+      out.println("<p>" + plot + "</p>");
+      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + id + "\">View on IMDb</a>");
       out.println("</body></html>");
     }
   }
@@ -111,7 +111,7 @@ public class MovieInfo extends HttpServlet {
   }// </editor-fold>
 
   private void populate(String title) {
-    MovieQuery query = new MovieQuery(title);
+    MovieQuery query = new MovieQuery(title, true);
     this.title = query.getQuery();
     year = query.printYear();
     type = query.printType();

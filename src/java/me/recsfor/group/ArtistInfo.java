@@ -52,7 +52,7 @@ public class ArtistInfo extends HttpServlet {
       populate(URLDecoder.decode(q, "UTF-8"));
     } catch (UnsupportedEncodingException e) {
       populate();
-      setName(e.getMessage());
+      name = e.getMessage();
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
@@ -65,17 +65,18 @@ public class ArtistInfo extends HttpServlet {
       out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + getName() + "</title></head><body>");
+      out.println("<title>recsforme :: " + name + "</title></head><body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + getName() + " - " + getType() + "</h2>");
-      out.println("<h3>" + getYears()[0] + " to " + getYears()[1] + "</h3>");
+      out.println("<h2>" + name + " - " + type + "</h2>");
+      out.println("<h3>" + years[0] + " to " + years[1] + "</h3>");
       out.println("<h3>Albums:</h3>");
       out.println("<ul>");
-      getAlbums().forEach(album -> out.println("<li>" + album.getTitle() + "</li>"));
+      //TODO link to AlbumInfo
+      albums.forEach(album -> out.println("<li>" + album.getTitle() + "</li>"));
       out.println("</ul>");
       out.println("<h3>Contributions:</h3>");
       out.println("<ul>");
-      getContrib().forEach(album -> out.println("<li>" + album.getTitle() + "</li>"));
+      contrib.forEach(album -> out.println("<li>" + album.getTitle() + "</li>"));
       out.println("</ul>");
       out.println("</body></html>");
     }
@@ -131,6 +132,8 @@ public class ArtistInfo extends HttpServlet {
     name = "Unknown name";
     type = "Unknown type";
     years = new String[2];
+    years[0] = "Unknown start";
+    years[1] = "Unknown end";
     albums = null;
     contrib = null;
   }

@@ -21,7 +21,7 @@
           <select name="type">
             <option value="movie" selected>TV Show/Movie</option>
             <option value="artist">Artist</option>
-            <option value="album">Album</option>
+            <option value="album">Album/EP/Single</option>
             <option value="song">Song</option>
           </select>
           <button type="submit">Search</button>

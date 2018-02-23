@@ -34,23 +34,8 @@ public class SongQuery extends MusicQuery {
   }
 
   @Override
-  protected void search() {
-    song = new Recording(); //TODO find something more efficient than making a new Recording each time
-    RecordingSearchFilterWs2 filter = song.getSearchFilter();
-    if (query == null || query.equals("")) {
-      results = null;
-    } else {
-      filter.setMinScore(MIN_SCORE);
-      filter.setLimit(MAX_RESULTS);
-      song.search(query);
-      results = song.getFirstSearchResultPage();
-    }
-  }
-
-  @Override
   public String[] printResults() {
     String[] res;
-    search();
     if (results != null && !results.isEmpty()) {
       res = new String[results.size()];
       for (int i = 0; i < res.length; i++) {
