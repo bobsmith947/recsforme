@@ -14,7 +14,7 @@ Want to get recsforme set up on your local machine for development and testing p
 
 * [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * Java EE 7 API Library and JUnit 4.12 + Hamcrest 1.3 (included in [NetBeans](https://netbeans.org/downloads/))
-* [GlassFish Server 4.1.1](https://javaee.github.io/glassfish/download) and [Ant 1.7.1+](http://ant.apache.org/bindownload.cgi) (can also be installed with NetBeans)
+* [Apache Tomcat 8.0.x](https://tomcat.apache.org/download-80.cgi) *this will reach end of life soon, but I will upgrade* and [Ant 1.7.1+](http://ant.apache.org/bindownload.cgi) (can also be installed with NetBeans)
 * npm (installed with [Node.js](https://nodejs.org/en/download/))
 * [api-omdb](https://github.com/Omertron/api-omdb) + dependencies
 * [musicbrainzws2-java](https://code.google.com/archive/p/musicbrainzws2-java/) + dependencies
@@ -39,7 +39,7 @@ recsforme can also be run directly from the command line (be sure to add your Gl
     /bin/asadmin start-domain domain1
     cd *your recsforme install directory*
     ant run -Dj2ee.server.home=glassfish4/glassfish
-    
+
 Unit tests can be executed with:
 
     ant test -Dj2ee.server.home=glassfish4/glassfish
