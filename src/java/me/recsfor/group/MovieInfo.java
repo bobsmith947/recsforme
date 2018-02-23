@@ -68,7 +68,7 @@ public class MovieInfo extends HttpServlet {
       out.println("<h1>recsforme</h1>");
       out.println("<h2>" + getTitle() + " (" + getYear() + ") - " + getType() + "</h2>");
       out.println("<p>" + getPlot() + "</p>");
-      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + getId() + "\">View on IMDb</a>");
+      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + id + "\">View on IMDb</a>");
       out.println("</body></html>");
     }
   }
@@ -111,85 +111,75 @@ public class MovieInfo extends HttpServlet {
   }// </editor-fold>
 
   private void populate(String title) {
-    MovieQuery query = new MovieQuery(title);
-    this.title = query.getQuery();
-    year = query.printYear();
-    type = query.printType();
-    plot = query.printPlot();
-    id = query.printId();
+    MovieQuery query = new MovieQuery(title, true);
+    setTitle(title);
+    setYear(query.printYear());
+    setType(query.printType());
+    setPlot(query.printPlot());
+    setId(query.printId());
   }
   
   private void populate() {
-    title = "Unknown title";
-    year = "Unknown year";
-    type = "Unknown type";
-    plot = "Unknown plot";
-    id = "";
+    setTitle("Unknown title");
+    setYear("Unknown year");
+    setType("Unknown type");
+    setPlot("Unknown plot");
+    setId("");
   }
-  
   /**
    * @return the title
    */
   public String getTitle() {
     return title;
   }
-
   /**
    * @param title the title to set
    */
   public void setTitle(String title) {
     this.title = title;
   }
-
   /**
    * @return the id
    */
   public String getId() {
     return id;
   }
-
   /**
    * @param id the id to set
    */
   public void setId(String id) {
     this.id = id;
   }
-
   /**
    * @return the type
    */
   public String getType() {
     return type;
   }
-
   /**
    * @param type the type to set
    */
   public void setType(String type) {
     this.type = type;
   }
-
   /**
    * @return the plot
    */
   public String getPlot() {
     return plot;
   }
-
   /**
    * @param plot the plot to set
    */
   public void setPlot(String plot) {
     this.plot = plot;
   }
-
   /**
    * @return the year
    */
   public String getYear() {
     return year;
   }
-
   /**
    * @param year the year to set
    */

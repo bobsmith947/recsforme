@@ -23,16 +23,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
+import me.recsfor.search.AlbumQuery;
 /**
  * A servlet to build group pages for albums. It can be initialized using the request parameter (the title of the album). The request parameter has no associated name. For example, <code>AlbumInfo?Homework</code>.
  * @author lkitaev
  */
 public class AlbumInfo extends HttpServlet {
-
   private static final long serialVersionUID = 3558291301985484615L; //just in case
-
-  //TODO implement functionality
-  
+  private String title;
+  private String type;
+  private String artist;
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    *
@@ -43,11 +43,11 @@ public class AlbumInfo extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String q = request.getQueryString();
-    String t;
     try {
-      t = URLDecoder.decode(q, "UTF-8");
+      populate(URLDecoder.decode(q, "UTF-8"));
     } catch (UnsupportedEncodingException e) {
-      t = e.getMessage();
+      populate();
+      setTitle(e.getMessage());
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
@@ -60,10 +60,9 @@ public class AlbumInfo extends HttpServlet {
       out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + t + "</title></head>");
-      out.println("<body>");
+      out.println("<title>recsforme :: " + getTitle() + "</title></head><body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + t + "</h2>");
+      out.println("<h2>" + getTitle() + " (" + getType() + ")" + "</h2>");
       out.println("</body>");
       out.println("</html>");
     }
@@ -105,4 +104,53 @@ public class AlbumInfo extends HttpServlet {
   public String getServletInfo() {
     return "Provides information for album groups.";
   }// </editor-fold>
+  
+  private void populate(String title) {
+    AlbumQuery query = new AlbumQuery(title);
+    setTitle(title);
+    setType(query.printType());
+    setArtist(query.printArtist());
+  }
+  
+  private void populate() {
+    setTitle("Unknown title");
+    setType("Unknown type");
+    setArtist("Unknown artist");
+  }
+  /**
+   * @return the title
+   */
+  public String getTitle() {
+    return title;
+  }
+  /**
+   * @param title the title to set
+   */
+  public void setTitle(String title) {
+    this.title = title;
+  }
+  /**
+   * @return the type
+   */
+  public String getType() {
+    return type;
+  }
+  /**
+   * @param type the type to set
+   */
+  public void setType(String type) {
+    this.type = type;
+  }
+  /**
+   * @return the artist
+   */
+  public String getArtist() {
+    return artist;
+  }
+  /**
+   * @param artist the artist to set
+   */
+  public void setArtist(String artist) {
+    this.artist = artist;
+  }
 }

@@ -15,42 +15,34 @@
  */
 package me.recsfor.search;
 
-import org.musicbrainz.Controller.*;
-import org.musicbrainz.modelWs2.SearchResult.*;
+//import org.musicbrainz.Controller.Artist;
+import org.musicbrainz.modelWs2.SearchResult.ArtistResultWs2;
 import org.musicbrainz.modelWs2.Entity.*;
-//import org.musicbrainz.IncludesWs2.*;
-import org.musicbrainz.FilterWs2.SearchFilter.*;
+import org.musicbrainz.IncludesWs2.ArtistIncludesWs2;
+import org.musicbrainz.MBWS2Exception;
+import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
+import org.musicbrainz.QueryWs2.Search.ReadySearches.ArtistSearchbyName;
 import java.util.List;
 /**
  * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for artist search result and group pages.
  * @author lkitaev
  */
 public class ArtistQuery extends MusicQuery {
-  private List<ArtistResultWs2> results;
-  private static Artist artist;
+  private final List<ArtistResultWs2> results;
 
+  public ArtistQuery() {
+    super();
+    results = null;
+  }
+  
   public ArtistQuery(String query) {
     super(query);
-  }
-
-  @Override
-  protected void search() {
-    artist = new Artist(); //TODO find something more efficient than making a new Artist each time
-    ArtistSearchFilterWs2 filter = artist.getSearchFilter();
-    if (query == null || query.equals("")) {
-      results = null;
-    } else {
-      filter.setMinScore(MIN_SCORE);
-      filter.setLimit(MAX_RESULTS);
-      artist.search(query);
-      results = artist.getFirstSearchResultPage();
-    }
+    results = new ArtistSearchbyName(query).getFirstPage();
   }
 
   @Override
   public String[] printResults() {
     String[] res;
-    search();
     if (results != null && !results.isEmpty()) {
       res = new String[results.size()];
       for (int i = 0; i < res.length; i++) {
@@ -62,5 +54,63 @@ public class ArtistQuery extends MusicQuery {
       res = null;
       return res;
       }
+  }
+  
+  public String printType() {
+    String type;
+    try {
+      type = results.get(0).getArtist().getType();
+      type = type.substring(type.indexOf("#")+1);
+    } catch (NullPointerException e) {
+      type = e.getMessage();
+    }
+    return type;
+  }
+
+  //TODO optimize the below methods
+  
+  public String[] printYears() {
+    String[] years = new String[2];
+    ArtistWs2 a = results.get(0).getArtist();
+    try {
+      years[0] = a.getLifeSpan().getBegin();
+    } catch (NullPointerException e) {
+      years[0] = e.getMessage();
+    } finally {
+      try {
+        years[1] = a.getLifeSpan().getEnd();
+      } catch (NullPointerException e) {
+        years[1] = e.getMessage();
+      }
+    }
+    return years;
+  }
+  public List<ReleaseGroupWs2> printAlbums() {
+    id = results.get(0).getArtist().getId();
+    ArtistIncludesWs2 i = new ArtistIncludesWs2();
+    i.setReleaseGroups(true);
+    ArtistWs2 a;
+    try {
+      a = new LookUpWs2().getArtistById(id, i);
+    } catch (MBWS2Exception e) {
+      a = new ArtistWs2();
+      a.setName(e.getMessage());
+    }
+    return a.getReleaseGroups();
+  }
+  
+  public List<ReleaseWs2> printContrib() {
+    id = results.get(0).getArtist().getId();
+    ArtistIncludesWs2 i = new ArtistIncludesWs2();
+    i.setVariousArtists(true);
+    i.setReleases(true);
+    ArtistWs2 a;
+    try {
+      a = new LookUpWs2().getArtistById(id, i);
+    } catch (MBWS2Exception e) {
+      a = new ArtistWs2();
+      a.setName(e.getMessage());
+    }
+    return a.getReleases();
   }
 }

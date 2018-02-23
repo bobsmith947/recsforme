@@ -16,7 +16,7 @@
 
 /**
  * Classes in this package provide functionality to retrieve data used for generating search results and group pages using the appropriate API.
- * All classes capable of performing queries implement the <code>GenericQuery</code> interface.
+ * All classes capable of performing queries extend <code>AbstractQuery</code>.
  * These classes can be interacted with from the frontend in <code>search.jsp</code> where a <code>QueryBean</code> is instantiated.
  */
 

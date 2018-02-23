@@ -15,42 +15,33 @@
  */
 package me.recsfor.search;
 
-import org.musicbrainz.Controller.*;
+//import org.musicbrainz.Controller.*;
 import org.musicbrainz.modelWs2.SearchResult.*;
 import org.musicbrainz.modelWs2.Entity.*;
 //import org.musicbrainz.IncludesWs2.*;
-import org.musicbrainz.FilterWs2.SearchFilter.*;
+//import org.musicbrainz.MBWS2Exception;
+//import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
+import org.musicbrainz.QueryWs2.Search.ReadySearches.*;
 import java.util.List;
 /**
- * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for album search result and group pages.
+ * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for album/EP/single search result and group pages.
  * @author lkitaev
  */
 public class AlbumQuery extends MusicQuery {
-  private List<ReleaseGroupResultWs2> results;
-  private static ReleaseGroup album;
+  private final List<ReleaseGroupResultWs2> results;
 
+  public AlbumQuery() {
+    super();
+    results = null;
+  }
   public AlbumQuery(String query) {
     super(query);
-  }
-
-  @Override
-  protected void search() {
-    album = new ReleaseGroup(); //TODO find something more efficient than making a new ReleaseGroup each time
-    ReleaseGroupSearchFilterWs2 filter = album.getSearchFilter();
-    if (query == null || query.equals("")) {
-      results = null;
-    } else {
-      filter.setMinScore(MIN_SCORE);
-      filter.setLimit(MAX_RESULTS);
-      album.search(query);
-      results = album.getFirstSearchResultPage();
-    }
+    results = new ReleaseGroupSearchbyTitle(query).getFirstPage();
   }
 
   @Override
   public String[] printResults() {
     String[] res;
-    search();
     if (results != null && !results.isEmpty()) {
       res = new String[results.size()];
       for (int i = 0; i < res.length; i++) {
@@ -63,4 +54,22 @@ public class AlbumQuery extends MusicQuery {
       return res;
     }
   }
+  
+  //TODO optimize the below methods
+  
+  public String printType() {
+    String type;
+    try {
+      type = results.get(0).getReleaseGroup().getTypeString();
+    } catch (NullPointerException e) {
+      type = e.getMessage();
+    }
+    return type;
+  }
+  
+  public String printArtist() {
+    return results.get(0).getReleaseGroup().getArtistCreditString();
+  }
+  
+  //TODO print out the available releases
 }

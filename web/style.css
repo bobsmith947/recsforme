@@ -40,9 +40,9 @@ noscript {
   padding-bottom: 10px;
 }
 ul {
-    list-style-position: inside;
-    margin: auto;
-    width: 25%;
+  list-style-position: inside;
+  margin: auto;
+  width: 25%;
 }
 .int {
   display: inline-block;
@@ -63,8 +63,8 @@ ul {
   transition: width 1s;
 }
 #media-search {
-    margin: auto;
-    width: 50%;
+  margin: auto;
+  width: 50%;
 }
 #media-search > * {
   display: block;
