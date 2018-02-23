@@ -77,8 +77,4 @@ public class QueryBean implements Serializable {
   public AlbumQuery sendAlbumQuery() {
       return new AlbumQuery(query);
   }
-  
-  public SongQuery sendSongQuery() {
-      return new SongQuery(query);
-  }
 }

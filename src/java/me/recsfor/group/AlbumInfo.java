@@ -32,10 +32,7 @@ public class AlbumInfo extends HttpServlet {
   private static final long serialVersionUID = 3558291301985484615L; //just in case
   private String title;
   private String type;
-  private String year;
   private String artist;
-  private String desc;
-
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    *
@@ -50,7 +47,7 @@ public class AlbumInfo extends HttpServlet {
       populate(URLDecoder.decode(q, "UTF-8"));
     } catch (UnsupportedEncodingException e) {
       populate();
-      title = e.getMessage();
+      setTitle(e.getMessage());
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
@@ -63,10 +60,9 @@ public class AlbumInfo extends HttpServlet {
       out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + title + "</title></head><body>");
+      out.println("<title>recsforme :: " + getTitle() + "</title></head><body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
-      out.println("<p>" + desc + "</p>");
+      out.println("<h2>" + getTitle() + " (" + getType() + ")" + "</h2>");
       out.println("</body>");
       out.println("</html>");
     }
@@ -111,18 +107,50 @@ public class AlbumInfo extends HttpServlet {
   
   private void populate(String title) {
     AlbumQuery query = new AlbumQuery(title);
-    this.title = title;
-    type = query.printType();
-    year = query.printYear();
-    artist = query.printArtist();
-    desc = query.printDesc();
+    setTitle(title);
+    setType(query.printType());
+    setArtist(query.printArtist());
   }
   
   private void populate() {
-    title = "Unknown title";
-    type = "Unknown type";
-    year = "Unknown year";
-    artist = "Unknown artist";
-    desc = "Unknown description";
+    setTitle("Unknown title");
+    setType("Unknown type");
+    setArtist("Unknown artist");
+  }
+  /**
+   * @return the title
+   */
+  public String getTitle() {
+    return title;
+  }
+  /**
+   * @param title the title to set
+   */
+  public void setTitle(String title) {
+    this.title = title;
+  }
+  /**
+   * @return the type
+   */
+  public String getType() {
+    return type;
+  }
+  /**
+   * @param type the type to set
+   */
+  public void setType(String type) {
+    this.type = type;
+  }
+  /**
+   * @return the artist
+   */
+  public String getArtist() {
+    return artist;
+  }
+  /**
+   * @param artist the artist to set
+   */
+  public void setArtist(String artist) {
+    this.artist = artist;
   }
 }

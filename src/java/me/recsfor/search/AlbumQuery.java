@@ -58,32 +58,18 @@ public class AlbumQuery extends MusicQuery {
   //TODO optimize the below methods
   
   public String printType() {
-    return results.get(0).getReleaseGroup().getTypeString();
-  }
-  
-  public String printYear() {
-    String year;
+    String type;
     try {
-      year = results.get(0).getReleaseGroup().getYear();
+      type = results.get(0).getReleaseGroup().getTypeString();
     } catch (NullPointerException e) {
-      year = e.getMessage();
+      type = e.getMessage();
     }
-    return year;
+    return type;
   }
   
   public String printArtist() {
     return results.get(0).getReleaseGroup().getArtistCreditString();
   }
   
-  public String printDesc() {
-    String desc;
-    try {
-      desc = results.get(0).getReleaseGroup().getComment();
-    } catch (NullPointerException e) {
-      desc = e.getMessage();
-    }
-    return desc;
-  }
-
-  //TODO print out the available recordings/works
+  //TODO print out the available releases
 }
