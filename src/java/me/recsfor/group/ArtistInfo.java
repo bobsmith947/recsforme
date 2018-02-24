@@ -53,7 +53,7 @@ public class ArtistInfo extends HttpServlet {
       populate(decode(q, "UTF-8"));
     } catch (UnsupportedEncodingException e) {
       populate();
-      setName(e.getMessage());
+      name = e.getMessage();
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
@@ -66,16 +66,17 @@ public class ArtistInfo extends HttpServlet {
       out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + getName() + "</title></head><body>");
+      out.println("<title>recsforme :: " + name + "</title></head><body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + getName() + " - " + getType() + "</h2>");
-      out.println("<h3>" + getYears()[0] + " to " + getYears()[1] + "</h3>");
+      out.println("<h2>" + name + " - " + type + "</h2>");
+      out.println("<h3>" + years[0] + " to " + years[1] + "</h3>");
       out.println("<h3>Albums:</h3>");
       out.println("<ul>");
-      getAlbums().forEach(album -> {
+      albums.forEach(album -> {
         String title = album.getTitle();
+        String id = album.getId();
         try {
-          out.print("<li><a href=\"AlbumInfo?" + encode(title + " - " + getName(), "UTF-8") + "\">" + title);
+          out.print("<li><a href=\"AlbumInfo?" + encode(id, "UTF-8") + "\">" + title);
         } catch (UnsupportedEncodingException e) {
           out.print("<li><a href=\"#\">" + e.getMessage());
         }
@@ -84,10 +85,11 @@ public class ArtistInfo extends HttpServlet {
       out.println("</ul>");
       out.println("<h3>Contributions:</h3>");
       out.println("<ul>");
-      getContrib().forEach(cont -> {
+      contrib.forEach(cont -> {
         String title = cont.getTitle();
+        String id = cont.getId();
         try {
-          out.print("<li><a href=\"AlbumInfo?" + encode(title + " - Various Artists", "UTF-8") + "\">" + title);
+          out.print("<li><a href=\"AlbumInfo?" + encode(id, "UTF-8") + "\">" + title);
         } catch (UnsupportedEncodingException e) {
           out.print("<li><a href=\"#\">" + e.getMessage());
         }
@@ -135,80 +137,20 @@ public class ArtistInfo extends HttpServlet {
     return "Provides information for artist groups.";
   }// </editor-fold>
 
-  private void populate(String name) {
-    ArtistQuery query = new ArtistQuery(name);
-    setName(name);
-    setType(query.printType());
-    setYears(query.printYears());
-    setAlbums(query.printAlbums());
-    setContrib(query.printContrib());
+  private void populate(String id) {
+    ArtistQuery query = new ArtistQuery(id, true);
+    name = query.getQuery();
+    type = query.listType();
+    years = query.listYears();
+    albums = query.listAlbums();
+    contrib = query.listContrib();
   }
   
   private void populate() {
-    setName("Unknown name");
-    setType("Unknown type");
-    setYears(new String[2]);
-    setAlbums(null);
-    setContrib(null);
-  }
-  /**
-   * @return the name
-   */
-  public String getName() {
-    return name;
-  }
-  /**
-   * @param name the name to set
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-  /**
-   * @return the type
-   */
-  public String getType() {
-    return type;
-  }
-  /**
-   * @param type the type to set
-   */
-  public void setType(String type) {
-    this.type = type;
-  }
-  /**
-   * @return the years
-   */
-  public String[] getYears() {
-    return years;
-  }
-  /**
-   * @param years the years to set
-   */
-  public void setYears(String[] years) {
-    this.years = years;
-  }
-  /**
-   * @return the albums
-   */
-  public List<ReleaseGroupWs2> getAlbums() {
-    return albums;
-  }
-  /**
-   * @param albums the albums to set
-   */
-  public void setAlbums(List<ReleaseGroupWs2> albums) {
-    this.albums = albums;
-  }
-  /**
-   * @return the contributions
-   */
-  public List<ReleaseWs2> getContrib() {
-    return contrib;
-  }
-  /**
-   * @param contrib the contributions to set
-   */
-  public void setContrib(List<ReleaseWs2> contrib) {
-    this.contrib = contrib;
+    name = "Unknown name";
+    type = "Unknown type";
+    years = new String[2];
+    albums = null;
+    contrib = null;
   }
 }

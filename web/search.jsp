@@ -1,4 +1,6 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" import="java.net.URLEncoder"%>
+<%@page import="me.recsfor.search.AbstractQuery"%>
+<%@page import="java.net.URLEncoder"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="q" scope="request" class="me.recsfor.search.QueryBean" />
 <jsp:setProperty name="q" property="type" />
 <jsp:setProperty name="q" property="query" />
@@ -29,37 +31,42 @@
       <button type="submit">Search</button>
     </form>
     <div id="results">
-      <%  String[] rs;
-          String[] id;
-          String u;
+      <%  String[] nms;
+          String[] ids;
+          String serv;
+          AbstractQuery r;
           switch (t) {
             case "movie":
-              rs = q.sendMovieQuery().printResults();
-              id = null;
-              u = "MovieInfo?";
+              r = q.sendMovieQuery();
+              nms = r.listNames();
+              ids = r.listIds();
+              serv = "MovieInfo?";
               break;
             case "artist":
-              rs = q.sendArtistQuery().printResults();
-              id = null;
-              u = "ArtistInfo?";
+              r = q.sendArtistQuery();
+              nms = r.listNames();
+              ids = r.listIds();
+              serv = "ArtistInfo?";
               break;
             case "album":
-              rs = q.sendAlbumQuery().printResults();
-              id= q.sendAlbumQuery().printIds();
-              u = "AlbumInfo?";
+              r = q.sendAlbumQuery();
+              nms = r.listNames();
+              ids = r.listIds();
+              serv = "AlbumInfo?";
               break;
             default:
-              rs = null;
-              id = null;
-              u = "search.jsp?query=";
+              r = null;
+              nms = null;
+              ids = null;
+              serv = "search.jsp?query=";
               break;
           }
-          if (rs != null) {
-            for (int i = 0; i < rs.length; i++) { %>
-              <a href="<%= u + URLEncoder.encode(id[i], "UTF-8") %>">
-              <%= rs[i] %></a> <%
+          //if (nms != null) {
+            for (int i = 0; i < r.getLen(); i++) { %>
+              <a href="<%= serv + URLEncoder.encode(ids[i], "UTF-8") %>">
+              <%= nms[i] %></a> <%
             }
-          } else out.println("<h3>No results found!</h3>"); %>
+          //} else out.println("<h3>No results found!</h3>"); %>
     </div>
   </body>
 </html>

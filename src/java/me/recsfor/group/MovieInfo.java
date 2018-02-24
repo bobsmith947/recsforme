@@ -35,7 +35,6 @@ public class MovieInfo extends HttpServlet {
   private String year;
   private String type;
   private String plot;
-  private String id;
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    *
@@ -52,7 +51,7 @@ public class MovieInfo extends HttpServlet {
       //info = new MovieInfo(URLDecoder.decode(q.substring(q.indexOf("=")+1), "UTF-8"));
     } catch (UnsupportedEncodingException e) {
       populate();
-      setTitle(e.getMessage());
+      title = e.getMessage();
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
@@ -65,11 +64,11 @@ public class MovieInfo extends HttpServlet {
       out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + getTitle() + "</title></head><body>");
+      out.println("<title>recsforme :: " + title + "</title></head><body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + getTitle() + " (" + getYear() + ") - " + getType() + "</h2>");
-      out.println("<p>" + getPlot() + "</p>");
-      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + id + "\">View on IMDb</a>");
+      out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
+      out.println("<p>" + plot + "</p>");
+      //out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + id + "\">View on IMDb</a>");
       out.println("</body></html>");
     }
   }
@@ -111,80 +110,18 @@ public class MovieInfo extends HttpServlet {
     return "Provides information for movie/TV show groups.";
   }// </editor-fold>
 
-  private void populate(String title) {
-    MovieQuery query = new MovieQuery(title, true);
-    setTitle(title);
-    setYear(query.printYear());
-    setType(query.printType());
-    setPlot(query.printPlot());
-    setId(query.printId());
+  private void populate(String id) {
+    MovieQuery query = new MovieQuery(id, true);
+    title = query.getQuery();
+    year = query.listYear();
+    type = query.listType();
+    plot = query.listPlot();
   }
   
   private void populate() {
-    setTitle("Unknown title");
-    setYear("Unknown year");
-    setType("Unknown type");
-    setPlot("Unknown plot");
-    setId("");
-  }
-  /**
-   * @return the title
-   */
-  public String getTitle() {
-    return title;
-  }
-  /**
-   * @param title the title to set
-   */
-  public void setTitle(String title) {
-    this.title = title;
-  }
-  /**
-   * @return the id
-   */
-  public String getId() {
-    return id;
-  }
-  /**
-   * @param id the id to set
-   */
-  public void setId(String id) {
-    this.id = id;
-  }
-  /**
-   * @return the type
-   */
-  public String getType() {
-    return type;
-  }
-  /**
-   * @param type the type to set
-   */
-  public void setType(String type) {
-    this.type = type;
-  }
-  /**
-   * @return the plot
-   */
-  public String getPlot() {
-    return plot;
-  }
-  /**
-   * @param plot the plot to set
-   */
-  public void setPlot(String plot) {
-    this.plot = plot;
-  }
-  /**
-   * @return the year
-   */
-  public String getYear() {
-    return year;
-  }
-  /**
-   * @param year the year to set
-   */
-  public void setYear(String year) {
-    this.year = year;
+    title = "Unknown title";
+    year = "Unknown year";
+    type = "Unknown type";
+    plot = "Unknown plot";
   }
 }

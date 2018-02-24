@@ -23,8 +23,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import static java.net.URLDecoder.decode;
+import java.util.List;
 //import static java.net.URLEncoder.encode;
 import me.recsfor.search.AlbumQuery;
+import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
 /**
  * A servlet to build group pages for albums. It can be initialized using the request parameter (the title of the album). The request parameter has no associated name. For example, <code>AlbumInfo?Homework</code>.
  * @author lkitaev
@@ -34,6 +36,7 @@ public class AlbumInfo extends HttpServlet {
   private String title;
   private String type;
   private String artist;
+  private List<ReleaseWs2> releases;
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    *
@@ -48,7 +51,7 @@ public class AlbumInfo extends HttpServlet {
       populate(decode(q, "UTF-8"));
     } catch (UnsupportedEncodingException e) {
       populate();
-      setTitle(e.getMessage());
+      title = e.getMessage();
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
@@ -61,9 +64,18 @@ public class AlbumInfo extends HttpServlet {
       out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + getTitle() + "</title></head><body>");
+      out.println("<title>recsforme :: " + title + "</title></head><body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + getTitle() + " (" + getType() + ")" + "</h2>");
+      out.println("<h2>" + title + " (" + type + ")" + "</h2>");
+      out.println("<h2>Release group by: " + artist + "</h2>");
+      out.println("<h3>Releases:</h3>");
+      out.println("<ul>");
+      releases.forEach(rel -> {
+        String title = rel.getTitle();
+        String date = rel.getDateStr();
+        out.println("<li>" + title + " - " + date + "</li>");
+      });
+      //TODO print out recordings
       out.println("</body>");
       out.println("</html>");
     }
@@ -106,52 +118,18 @@ public class AlbumInfo extends HttpServlet {
     return "Provides information for album groups.";
   }// </editor-fold>
   
-  private void populate(String title) {
-    AlbumQuery query = new AlbumQuery(title);
-    setTitle(title);
-    setType(query.printType());
-    setArtist(query.printArtist());
+  private void populate(String id) {
+    AlbumQuery query = new AlbumQuery(id, true);
+    title = query.getQuery();
+    type = query.listType();
+    artist = query.listArtist();
+    releases = query.getAlbums();
   }
   
   private void populate() {
-    setTitle("Unknown title");
-    setType("Unknown type");
-    setArtist("Unknown artist");
-  }
-  /**
-   * @return the title
-   */
-  public String getTitle() {
-    return title;
-  }
-  /**
-   * @param title the title to set
-   */
-  public void setTitle(String title) {
-    this.title = title;
-  }
-  /**
-   * @return the type
-   */
-  public String getType() {
-    return type;
-  }
-  /**
-   * @param type the type to set
-   */
-  public void setType(String type) {
-    this.type = type;
-  }
-  /**
-   * @return the artist
-   */
-  public String getArtist() {
-    return artist;
-  }
-  /**
-   * @param artist the artist to set
-   */
-  public void setArtist(String artist) {
-    this.artist = artist;
+    title = "Unknown title";
+    type = "Unknown type";
+    artist = "Unknown artist";
+    releases = null;
   }
 }
