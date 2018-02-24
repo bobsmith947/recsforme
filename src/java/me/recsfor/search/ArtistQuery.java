@@ -16,7 +16,8 @@
 package me.recsfor.search;
 
 //import org.musicbrainz.Controller.Artist;
-import org.musicbrainz.modelWs2.SearchResult.ArtistResultWs2;
+import java.util.Arrays;
+//import org.musicbrainz.modelWs2.SearchResult.ArtistResultWs2;
 import org.musicbrainz.modelWs2.Entity.*;
 import org.musicbrainz.IncludesWs2.ArtistIncludesWs2;
 import org.musicbrainz.MBWS2Exception;
@@ -27,39 +28,74 @@ import java.util.List;
  * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for artist search result and group pages.
  * @author lkitaev
  */
-public class ArtistQuery extends MusicQuery {
-  private final List<ArtistResultWs2> results;
+public class ArtistQuery extends AbstractQuery {
+  private ArtistWs2 artist;
+  private final ArtistIncludesWs2 INC;
 
   public ArtistQuery() {
     super();
-    results = null;
+    artist = null;
+    INC = null;
   }
   
   public ArtistQuery(String query) {
     super(query);
-    results = new ArtistSearchbyName(query).getFirstPage();
+    artist = new ArtistWs2();
+    INC = null;
+    String replace = query.replace("/", "");
+    new ArtistSearchbyName(replace).getFirstPage().forEach(r -> {
+      results.put(r.getArtist().getId(), r.getArtist().getUniqueName());
+    });
+    len = results.size();
+  }
+  
+  public ArtistQuery(String id, boolean info) {
+    super();
+    INC = new ArtistIncludesWs2();
+    INC.setReleaseGroups(info);
+    INC.setReleases(info);
+    INC.setVariousArtists(info);
+    try {
+      artist = new LookUpWs2().getArtistById(id, INC);
+      query = artist.getUniqueName();
+    } catch (MBWS2Exception e) {
+      query = e.getMessage();
+      artist = null;
+    }
+  }
+
+  /**
+   * @return the artist
+   */
+  public ArtistWs2 getArtist() {
+    return artist;
+  }
+
+  /**
+   * @param artist the artist to set
+   */
+  public void setArtist(ArtistWs2 artist) {
+    this.artist = artist;
   }
 
   @Override
-  public String[] printResults() {
-    String[] res;
-    if (results != null && !results.isEmpty()) {
-      res = new String[results.size()];
-      for (int i = 0; i < res.length; i++) {
-        ArtistWs2 a = results.get(i).getArtist();
-        res[i] = a.getUniqueName();
-      }
-      return res;
-    } else {
-      res = null;
-      return res;
-      }
+  public String[] listNames() {
+    String[] res = new String[0];
+    res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
+    return res;
   }
   
-  public String printType() {
+  @Override
+  public String[] listIds() {
+    String[] ids = new String[0];
+    ids = len >= 1 ? Arrays.copyOf(results.keySet().toArray(ids), len) : null;
+    return ids;
+  }
+  
+  public String listType() {
     String type;
     try {
-      type = results.get(0).getArtist().getType();
+      type = artist.getType();
       type = type.substring(type.indexOf("#")+1);
     } catch (NullPointerException e) {
       type = e.getMessage();
@@ -67,50 +103,26 @@ public class ArtistQuery extends MusicQuery {
     return type;
   }
 
-  //TODO optimize the below methods
-  
-  public String[] printYears() {
+  public String[] listYears() {
     String[] years = new String[2];
-    ArtistWs2 a = results.get(0).getArtist();
     try {
-      years[0] = a.getLifeSpan().getBegin();
+      years[0] = artist.getLifeSpan().getBegin();
     } catch (NullPointerException e) {
       years[0] = e.getMessage();
     } finally {
       try {
-        years[1] = a.getLifeSpan().getEnd();
+        years[1] = artist.getLifeSpan().getEnd();
       } catch (NullPointerException e) {
         years[1] = e.getMessage();
       }
     }
     return years;
   }
-  public List<ReleaseGroupWs2> printAlbums() {
-    id = results.get(0).getArtist().getId();
-    ArtistIncludesWs2 i = new ArtistIncludesWs2();
-    i.setReleaseGroups(true);
-    ArtistWs2 a;
-    try {
-      a = new LookUpWs2().getArtistById(id, i);
-    } catch (MBWS2Exception e) {
-      a = new ArtistWs2();
-      a.setName(e.getMessage());
-    }
-    return a.getReleaseGroups();
+  public List<ReleaseGroupWs2> listAlbums() {
+    return artist.getReleaseGroups();
   }
   
-  public List<ReleaseWs2> printContrib() {
-    id = results.get(0).getArtist().getId();
-    ArtistIncludesWs2 i = new ArtistIncludesWs2();
-    i.setVariousArtists(true);
-    i.setReleases(true);
-    ArtistWs2 a;
-    try {
-      a = new LookUpWs2().getArtistById(id, i);
-    } catch (MBWS2Exception e) {
-      a = new ArtistWs2();
-      a.setName(e.getMessage());
-    }
-    return a.getReleases();
+  public List<ReleaseWs2> listContrib() {
+    return artist.getReleases();
   }
 }

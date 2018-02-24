@@ -21,6 +21,7 @@ import com.omertron.omdbapi.tools.OmdbParameters;
 import com.omertron.omdbapi.tools.Param;
 //import static com.omertron.omdbapi.emumerations.PlotType.SHORT;
 import static com.omertron.omdbapi.emumerations.PlotType.FULL;
+import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.lang3.text.WordUtils;
 /**
@@ -28,105 +29,97 @@ import org.apache.commons.lang3.text.WordUtils;
  * @author lkitaev
  */
 public class MovieQuery extends AbstractQuery {
-  private SearchResults results;
   private OmdbVideoFull info;
   private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
   private final OmdbParameters PARAMS;
 
   public MovieQuery() {
-    query = null;
-    results = null;
+    super();
     info = null;
     PARAMS = null;
   }
 
   public MovieQuery(String query) {
-    this.query = query;
+    super(query);
     info = null;
     PARAMS = null;
     try {
-      results = CLIENT.search(query);
+      CLIENT.search(query).getResults().forEach(res -> {
+        results.put(res.getImdbID(), res.getTitle());
+      });
+      len = results.size();
     } catch (OMDBException e) {
       this.query = e.getMessage();
       results = null;
+      len = 0;
     }
   }
   
-  public MovieQuery(String query, boolean info) {
-    this.query = query;
+  public MovieQuery(String id, boolean info) {
+    super();
     if (!info) {
       this.info = null;
       PARAMS = null;
     } else {
       PARAMS = new OmdbParameters();
-      PARAMS.add(Param.TITLE, query);
+      PARAMS.add(Param.IMDB, id);
       PARAMS.add(Param.PLOT, FULL);
       try {
         this.info = CLIENT.getInfo(PARAMS);
+        query = this.info.getTitle();
       } catch (OMDBException e) {
-        this.query = e.getMessage();
+        query = e.getMessage();
         this.info = null;
       }
     }
-    results = null;
   }
   /**
-   * @return the results
+   * @return the info
    */
-  public SearchResults getResults() {
-    return results;
+  public OmdbVideoFull getInfo() {
+    return info;
   }
   /**
-   * @param results the results to set
+   * @param info the info to set
    */
-  public void setResults(SearchResults results) {
-    this.results = results;
+  public void setInfo(OmdbVideoFull info) {
+    this.info = info;
   }
 
   @Override
-  public String[] printResults() {
-    String[] res;
-    if (results != null && results.getTotalResults() >= 1) {
-      List<OmdbVideoBasic> list = results.getResults();
-      res = new String[list.size()];
-      for (int i = 0; i < res.length; i++) {
-        OmdbVideoBasic o = list.get(i);
-        res[i] = o.getTitle();
-      }
-      return res;
-    } else {
-      res = null;
-      return res;
-    }
+  public String[] listNames() {
+    String[] res = new String[0];
+    res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
+    return res;
+  }
+  
+  @Override
+  public String[] listIds() {
+    String[] ids = new String[0];
+    ids = len >= 1 ? Arrays.copyOf(results.keySet().toArray(ids), len) : null;
+    return ids;
   }
   /**
-   * Gets the year using the defined client and instance query.
+   * Gets the year using the generated info.
    * @return the year
    */
-  public String printYear() {
-    return info.getYear();
+  public String listYear() {
+    return getInfo().getYear();
   }
   /**
-   * Gets the type (movie or series) using the defined client and instance query.
+   * Gets the type (movie or series) using the generated info.
    * @return the type
    */
-  public String printType() {
-    String type = info.getType();
+  public String listType() {
+    String type = getInfo().getType();
     type = WordUtils.capitalize(type); //give it title case because it gets returned lower case
     return type;
   }
   /**
-   * Gets the short plot synopsis using the defined client and instance query.
+   * Gets the short plot synopsis using the generated info.
    * @return the plot 
    */
-  public String printPlot() {
-    return info.getPlot();
-  }
-  /**
-   * Gets the corresponding IMDb ID using the defined client and instance query.
-   * @return the id
-   */
-  public String printId() {
-    return info.getImdbID();
+  public String listPlot() {
+    return getInfo().getPlot();
   }
 }

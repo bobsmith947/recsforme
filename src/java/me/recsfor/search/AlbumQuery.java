@@ -16,60 +16,113 @@
 package me.recsfor.search;
 
 //import org.musicbrainz.Controller.*;
-import org.musicbrainz.modelWs2.SearchResult.*;
+//import org.musicbrainz.modelWs2.SearchResult.*;
 import org.musicbrainz.modelWs2.Entity.*;
-//import org.musicbrainz.IncludesWs2.*;
-//import org.musicbrainz.MBWS2Exception;
-//import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
+import org.musicbrainz.IncludesWs2.*;
+import org.musicbrainz.MBWS2Exception;
+import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
 import org.musicbrainz.QueryWs2.Search.ReadySearches.*;
 import java.util.List;
+import java.util.Arrays;
 /**
  * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for album/EP/single search result and group pages.
  * @author lkitaev
  */
-public class AlbumQuery extends MusicQuery {
-  private final List<ReleaseGroupResultWs2> results;
+public class AlbumQuery extends AbstractQuery {
+  private ReleaseGroupWs2 group;
+  private List<ReleaseWs2> albums;
+  private final ReleaseGroupIncludesWs2 G_INC;
+  private final ReleaseIncludesWs2 A_INC;
 
   public AlbumQuery() {
     super();
-    results = null;
+    group = null;
+    albums = null;
+    G_INC = null;
+    A_INC = null;
   }
+  
   public AlbumQuery(String query) {
     super(query);
-    results = new ReleaseGroupSearchbyTitle(query).getFirstPage();
+    group = new ReleaseGroupWs2();
+    G_INC = null;
+    A_INC = null;
+    String replace = query.replace("/", "");
+    new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r -> {
+      results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - " + r.getReleaseGroup().getArtistCreditString());
+    });
+    len = results.size();
+  }
+  
+  public AlbumQuery(String id, boolean info) {
+    super();
+    G_INC = new ReleaseGroupIncludesWs2();
+    A_INC = new ReleaseIncludesWs2();
+    G_INC.setArtists(info);
+    G_INC.setReleases(info);
+    A_INC.setMedia(info);
+    A_INC.setRecordings(info);
+    //A_INC.setReleaseGroups(info);
+    try {
+      group = new LookUpWs2().getReleaseGroupById(id, G_INC);
+      albums = group.getReleases();
+      query = group.getTitle();
+    } catch (MBWS2Exception e) {
+      query = e.getMessage();
+      group = null;
+      albums = null;
+    }
+  }
+  /**
+   * @return the group
+   */
+  public ReleaseGroupWs2 getGroup() {
+    return group;
+  }
+  /**
+   * @param group the group to set
+   */
+  public void setGroup(ReleaseGroupWs2 group) {
+    this.group = group;
+  }
+  /**
+   * @return the albums
+   */
+  public List<ReleaseWs2> getAlbums() {
+    return albums;
+  }
+  /**
+   * @param albums the albums to set
+   */
+  public void setAlbums(List<ReleaseWs2> albums) {
+    this.albums = albums;
   }
 
   @Override
-  public String[] printResults() {
-    String[] res;
-    if (results != null && !results.isEmpty()) {
-      res = new String[results.size()];
-      for (int i = 0; i < res.length; i++) {
-        ReleaseGroupWs2 a = results.get(i).getReleaseGroup();
-        res[i] = a.getTitle() + " - " + a.getArtistCreditString();
-      }
-      return res;
-    } else {
-      res = null;
-      return res;
-    }
+  public String[] listNames() {
+    String[] res = new String[0];
+    res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
+    return res;
   }
   
-  //TODO optimize the below methods
+  @Override
+  public String[] listIds() {
+    String[] res = new String[0];
+    res = len >= 1 ? Arrays.copyOf(getResults().keySet().toArray(res), getResults().size()) : null;
+    return res;
+  }
   
-  public String printType() {
+  public String listType() {
     String type;
     try {
-      type = results.get(0).getReleaseGroup().getTypeString();
+      type = group.getTypeString();
     } catch (NullPointerException e) {
       type = e.getMessage();
     }
     return type;
   }
   
-  public String printArtist() {
-    return results.get(0).getReleaseGroup().getArtistCreditString();
+  public String listArtist() {
+    return group.getArtistCreditString();
   }
-  
-  //TODO print out the available releases
 }
