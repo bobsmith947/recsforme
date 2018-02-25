@@ -23,17 +23,23 @@ import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
 import org.musicbrainz.QueryWs2.Search.ReadySearches.*;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Arrays;
+import org.musicbrainz.modelWs2.TrackWs2;
 /**
- * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for album/EP/single search result and group pages.
+ * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for albums, EP's, singles, and other types for search result and group pages.
  * @author lkitaev
  */
 public class AlbumQuery extends AbstractQuery {
   private ReleaseGroupWs2 group;
   private List<ReleaseWs2> albums;
+  private LinkedList<List<TrackWs2>> songs;
   private final ReleaseGroupIncludesWs2 G_INC;
   private final ReleaseIncludesWs2 A_INC;
-
+  protected static final String CONTEXT = "AlbumInfo?";
+  /**
+   * Default constructor for if you didn't actually want to query anything.
+   */
   public AlbumQuery() {
     super();
     group = null;
@@ -41,19 +47,25 @@ public class AlbumQuery extends AbstractQuery {
     G_INC = null;
     A_INC = null;
   }
-  
+  /**
+   * Constructor for generating search results.
+   * @param query the query to search for
+   */
   public AlbumQuery(String query) {
     super(query);
     group = new ReleaseGroupWs2();
     G_INC = null;
     A_INC = null;
     String replace = query.replace("/", "");
-    new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r -> {
-      results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - " + r.getReleaseGroup().getArtistCreditString());
-    });
+    new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r -> 
+            results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - " + r.getReleaseGroup().getArtistCreditString()));
     len = results.size();
   }
-  
+  /**
+   * Constructor for generating group info.
+   * @param id the id to generate info for
+   * @param info whether you actually want the info or not
+   */
   public AlbumQuery(String id, boolean info) {
     super();
     G_INC = new ReleaseGroupIncludesWs2();
@@ -63,10 +75,23 @@ public class AlbumQuery extends AbstractQuery {
     A_INC.setMedia(info);
     A_INC.setRecordings(info);
     //A_INC.setReleaseGroups(info);
+    A_INC.setLabel(info);
+    //A_INC.setDiscids(info);
     try {
       group = new LookUpWs2().getReleaseGroupById(id, G_INC);
       albums = group.getReleases();
       query = group.getTitle();
+      songs = new LinkedList<>();
+      //TODO optimize the retrieval of songs
+      albums.forEach(album -> {
+        ReleaseWs2 a;
+        try {
+          a = new LookUpWs2().getReleaseById(album.getId(), A_INC);
+        } catch (MBWS2Exception e) {
+          a = null;
+        }
+        songs.add(a.getMediumList().getCompleteTrackList());
+      });
     } catch (MBWS2Exception e) {
       query = e.getMessage();
       group = null;
@@ -97,6 +122,18 @@ public class AlbumQuery extends AbstractQuery {
   public void setAlbums(List<ReleaseWs2> albums) {
     this.albums = albums;
   }
+  /**
+   * @return the songs
+   */
+  public LinkedList<List<TrackWs2>> getSongs() {
+    return songs;
+  }
+  /**
+   * @param songs the songs to set
+   */
+  public void setSongs(LinkedList<List<TrackWs2>> songs) {
+    this.songs = songs;
+  }
 
   @Override
   public String[] listNames() {
@@ -111,7 +148,10 @@ public class AlbumQuery extends AbstractQuery {
     res = len >= 1 ? Arrays.copyOf(getResults().keySet().toArray(res), getResults().size()) : null;
     return res;
   }
-  
+  /**
+   * Gets the type (Album, EP, Single, and other types) using the generated group.
+   * @return the type
+   */
   public String listType() {
     String type;
     try {
@@ -121,7 +161,10 @@ public class AlbumQuery extends AbstractQuery {
     }
     return type;
   }
-  
+  /**
+   * Gets the artist using the generated group.
+   * @return the artist
+   */
   public String listArtist() {
     return group.getArtistCreditString();
   }

@@ -31,24 +31,33 @@ import java.util.List;
 public class ArtistQuery extends AbstractQuery {
   private ArtistWs2 artist;
   private final ArtistIncludesWs2 INC;
-
+  protected static final String CONTEXT = "ArtistInfo?";
+  /**
+   * Default constructor for if you didn't actually want to query anything.
+   */
   public ArtistQuery() {
     super();
     artist = null;
     INC = null;
   }
-  
+  /**
+   * Constructor for generating search results.
+   * @param query the query to search for
+   */
   public ArtistQuery(String query) {
     super(query);
     artist = new ArtistWs2();
     INC = null;
     String replace = query.replace("/", "");
-    new ArtistSearchbyName(replace).getFirstPage().forEach(r -> {
-      results.put(r.getArtist().getId(), r.getArtist().getUniqueName());
-    });
+    new ArtistSearchbyName(replace).getFirstPage().forEach(r -> 
+            results.put(r.getArtist().getId(), r.getArtist().getUniqueName()));
     len = results.size();
   }
-  
+  /**
+   * Constructor for generating group info.
+   * @param id the id to generate info for
+   * @param info whether you actually want the info or not
+   */
   public ArtistQuery(String id, boolean info) {
     super();
     INC = new ArtistIncludesWs2();
@@ -63,14 +72,12 @@ public class ArtistQuery extends AbstractQuery {
       artist = null;
     }
   }
-
   /**
    * @return the artist
    */
   public ArtistWs2 getArtist() {
     return artist;
   }
-
   /**
    * @param artist the artist to set
    */
@@ -91,7 +98,10 @@ public class ArtistQuery extends AbstractQuery {
     ids = len >= 1 ? Arrays.copyOf(results.keySet().toArray(ids), len) : null;
     return ids;
   }
-  
+  /**
+   * Gets the type (person or group) using the generated artist.
+   * @return the type, potentially null
+   */
   public String listType() {
     String type;
     try {
@@ -102,7 +112,10 @@ public class ArtistQuery extends AbstractQuery {
     }
     return type;
   }
-
+  /**
+   * Gets the start and end years (if available) using the generated artist.
+   * @return the years, potentially with one or both null
+   */
   public String[] listYears() {
     String[] years = new String[2];
     try {
@@ -118,10 +131,17 @@ public class ArtistQuery extends AbstractQuery {
     }
     return years;
   }
+  /**
+   * Gets the available release groups using the generated artist.
+   * @return the release groups
+   */
   public List<ReleaseGroupWs2> listAlbums() {
     return artist.getReleaseGroups();
   }
-  
+  /**
+   * Gets the available release contributions using the generated artist.
+   * @return the releases
+   */
   public List<ReleaseWs2> listContrib() {
     return artist.getReleases();
   }

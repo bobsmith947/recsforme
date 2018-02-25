@@ -29,7 +29,9 @@ import me.recsfor.search.ArtistQuery;
 import org.musicbrainz.modelWs2.Entity.ReleaseGroupWs2;
 import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
 /**
- * A servlet to build group pages for artists. It can be initialized using the request parameter (the name of the artist). The request parameter has no associated name. For example, <code>ArtistInfo?Daft+Punk</code>.
+ * A servlet to build group pages for artists.
+ * It can process HTTP methods by being given a request parameter containing the MusicBrainz ID of the respective artist. The request parameter has no associated name.
+ * For example, <code>ArtistInfo?056e4f3e-d505-4dad-8ec1-d04f521cbb56</code> will generate a page for Daft Punk.
  * @author lkitaev
  */
 public class ArtistInfo extends HttpServlet {

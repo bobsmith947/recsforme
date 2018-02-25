@@ -26,7 +26,9 @@ import static java.net.URLDecoder.decode;
 //import static java.net.URLEncoder.encode;
 import me.recsfor.search.MovieQuery;
 /**
- * A servlet to build group pages for movies and TV shows. It can be initialized using the request parameter (the title of the move/show). The request parameter has no associated name. For example, <code>MovieInfo?Blade+Runner</code>.
+ * A servlet to build group pages for movies and TV shows.
+ * It can process HTTP methods by being given a request parameter containing the IMDb ID of the respective movie/TV show. The request parameter has no associated name.
+ * For example, <code>MovieInfo?tt0083658</code> will generate a page for <i>Blade Runner</i>.
  * @author lkitaev
  */
 public class MovieInfo extends HttpServlet {
@@ -111,7 +113,7 @@ public class MovieInfo extends HttpServlet {
   }// </editor-fold>
 
   private void populate(String id) {
-    MovieQuery query = new MovieQuery(id, true);
+    MovieQuery query = new MovieQuery(id, true, "full");
     title = query.getQuery();
     year = query.listYear();
     type = query.listType();

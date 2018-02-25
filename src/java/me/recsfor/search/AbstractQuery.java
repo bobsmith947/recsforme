@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 lkitaev.
+ * Copyright 2018 Lucas Kitaev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@ package me.recsfor.search;
 
 import java.util.LinkedHashMap;
 /**
- * Parent class for all queries.
+ * Contains basic functionality for how a query should be modeled. Extending classes must implement methods to list the names and ID's of query results.
  * @author lkitaev
  */
 public abstract class AbstractQuery {

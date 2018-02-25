@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="author" content="Lucas Kitaev">
     <meta name="keywords" content="recommendation engine, recommender system, open source, java, web app, web application">
     <meta name="description" content="recsforme (recs for me) is an open source Java web application for media recommendations.">
