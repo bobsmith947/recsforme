@@ -16,13 +16,13 @@
 package me.recsfor.group;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import static java.net.URLDecoder.decode;
+//import java.io.UnsupportedEncodingException;
+//import static java.net.URLDecoder.decode;
 //import static java.net.URLEncoder.encode;
 import me.recsfor.search.MovieQuery;
 /**
@@ -47,14 +47,7 @@ public class MovieInfo extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String q = request.getQueryString();
-    //MovieInfo info;
-    try {
-      populate(decode(q, "UTF-8"));
-      //info = new MovieInfo(URLDecoder.decode(q.substring(q.indexOf("=")+1), "UTF-8"));
-    } catch (UnsupportedEncodingException e) {
-      populate();
-      title = e.getMessage();
-    }
+    populate(q);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html>");
@@ -70,7 +63,8 @@ public class MovieInfo extends HttpServlet {
       out.println("<h1>recsforme</h1>");
       out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
       out.println("<p>" + plot + "</p>");
-      //out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + id + "\">View on IMDb</a>");
+      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" 
+              + q + "\">View on IMDb</a>");
       out.println("</body></html>");
     }
   }
@@ -88,7 +82,6 @@ public class MovieInfo extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     processRequest(request, response);
   }
-
   /**
    * Handles the HTTP <code>POST</code> method.
    *
@@ -101,7 +94,6 @@ public class MovieInfo extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     processRequest(request, response);
   }
-
   /**
    * Returns a short description of the servlet.
    *
@@ -112,18 +104,15 @@ public class MovieInfo extends HttpServlet {
     return "Provides information for movie/TV show groups.";
   }// </editor-fold>
 
+  /**
+   * Gives values to instance variables.
+   * @param id the movie/series id
+   */
   private void populate(String id) {
     MovieQuery query = new MovieQuery(id, true, "full");
     title = query.getQuery();
     year = query.listYear();
     type = query.listType();
     plot = query.listPlot();
-  }
-  
-  private void populate() {
-    title = "Unknown title";
-    year = "Unknown year";
-    type = "Unknown type";
-    plot = "Unknown plot";
   }
 }

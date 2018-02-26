@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" import="java.net.URLEncoder"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <jsp:useBean id="q" scope="request" class="me.recsfor.search.QueryBean" />
 <jsp:setProperty name="q" property="type" />
 <jsp:setProperty name="q" property="query" />
@@ -36,9 +36,12 @@
     <div id="results">
       <%
         if (q.getResults() != null) {
-          for (int i = 0; i < q.getLen(); i++) { %>
-            <a href="<%= con + URLEncoder.encode(ids[i], "UTF-8") %>">
-            <%= nms[i] %></a> <%
+          for (int i = 0; i < q.getLen(); i++) {
+            if (t.equals("album")) ids[i] = ids[i].concat("&");
+      %>
+            <a href="<%= con + ids[i] %>">
+            <%= nms[i] %></a>
+      <%
           }
         } else out.println("<h3>No results found!</h3>");
       %>

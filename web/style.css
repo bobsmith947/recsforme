@@ -39,7 +39,7 @@ noscript {
   color: red;
   padding-bottom: 10px;
 }
-ul {
+ul, ol {
   list-style-position: inside;
   margin: auto;
   width: 25%;

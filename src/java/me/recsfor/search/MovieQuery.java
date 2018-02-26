@@ -33,6 +33,8 @@ public class MovieQuery extends AbstractQuery {
   private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
   private final OmdbParameters PARAMS;
   protected static final String CONTEXT = "MovieInfo?";
+  
+  // <editor-fold desc="Constructors.">
   /**
    * Default constructor for if you didn't actually want to query anything.
    */
@@ -83,6 +85,9 @@ public class MovieQuery extends AbstractQuery {
       }
     }
   }
+  // <editor-fold>
+  
+  // <editor-fold defaultstate="collapsed" desc="Get/set methods.">
   /**
    * @return the info
    */
@@ -95,7 +100,9 @@ public class MovieQuery extends AbstractQuery {
   public void setInfo(OmdbVideoFull info) {
     this.info = info;
   }
+  // </editor-fold>
 
+  // <editor-fold defaultstate="collapsed" desc="List methods.">
   @Override
   public String[] listNames() {
     String[] res = new String[0];
@@ -132,6 +139,8 @@ public class MovieQuery extends AbstractQuery {
   public String listPlot() {
     return getInfo().getPlot();
   }
+  // </editor-fold>
+  
   /**
    * Switches the plot type to the desired enum.
    * @param type the desired plot type

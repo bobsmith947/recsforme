@@ -16,23 +16,25 @@
 package me.recsfor.group;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import static java.net.URLDecoder.decode;
+//import java.io.UnsupportedEncodingException;
+//import static java.net.URLDecoder.decode;
+//import static java.net.URLEncoder.encode;
 import java.util.LinkedList;
 import java.util.List;
-//import static java.net.URLEncoder.encode;
 import me.recsfor.search.AlbumQuery;
 import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
-import org.musicbrainz.modelWs2.TrackWs2;
+import org.musicbrainz.modelWs2.MediumListWs2;
 /**
  * A servlet to build group pages for albums, EP's, singles, and other types, including the available releases and recordings.
  * It can process HTTP methods by being given a request parameter containing the MusicBrainz ID of the respective release group. The request parameter has no associated name.
- * For example, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3</code> generates a page for <i>Homework</i> by Daft Punk.
+ * An "&" MUST be present after the ID. It will grab editions in the group if the <code>full</code> parameter is present after this.
+ * For example, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3&</code> generates a page for <i>Homework</i> by Daft Punk.
+ * Similarly, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3&full</code> generates a page for <i>Homework</i> by Daft Punk, with editions present.
  * @author lkitaev
  */
 public class AlbumInfo extends HttpServlet {
@@ -40,8 +42,12 @@ public class AlbumInfo extends HttpServlet {
   private String title;
   private String type;
   private String artist;
+  private String artistId;
+  private String date;
   private List<ReleaseWs2> releases;
-  private LinkedList<List<TrackWs2>> recordings;
+  private MediumListWs2 info;
+  private LinkedList<MediumListWs2> releaseInfo;
+  private boolean full;
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    *
@@ -52,11 +58,13 @@ public class AlbumInfo extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String q = request.getQueryString();
-    try {
-      populate(decode(q, "UTF-8"));
-    } catch (UnsupportedEncodingException e) {
-      populate();
-      title = e.getMessage();
+    String id = q.substring(q.indexOf("?")+1, q.indexOf("&"));
+    String f = q.substring(q.indexOf("&")+1);
+    full = f.equals("full");
+    if (full) {
+      populate(id, true);
+    } else {
+      populate(id, false);
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
@@ -71,23 +79,29 @@ public class AlbumInfo extends HttpServlet {
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + title + "</title></head><body>");
       out.println("<h1>recsforme</h1>");
-      out.println("<h2>" + title + " (" + type + ")" + "</h2>");
-      out.println("<h2>Release group by: " + artist + "</h2>");
-      out.println("<h3>Releases:</h3>");
-      out.println("<ul>");
-      releases.forEach(rel -> {
-        String name = rel.getTitle();
-        String date = rel.getDateStr();
-        out.println("<li>" + name + " - " + date + "</li>");
-      });
-      //TODO put each set of recordings under the release it belongs to
-      recordings.forEach(rec -> {
-        rec.forEach(r -> {
-          out.println("<p>" + r.getRecording().getTitle() + "</p>");
+      out.println("<h2>" + title + " (" + type + ")</h2>");
+      out.println("<h2>Release group by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h2>");
+      out.println("<h2>Released: " + date + "</h2>");
+      if (full) {
+        //TODO fix ordering
+        out.println("<h3>Editions:</h3><div>");
+        releases.forEach(rel -> {
+          MediumListWs2 list = releaseInfo.pop();
+          out.println("<div><h4>" + rel.getUniqueTitle() + " - " + rel.getDateStr() 
+                  + " (" + list.getFormat() + ")</h4><ol>");
+          printTracks(list).forEach(t -> out.println(t));
+          out.println("</ol><h5>Total length: " + list.getDuration() + "</h5></div>");
         });
-      });
-      out.println("</body>");
-      out.println("</html>");
+        out.println("</div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
+      } else {
+        out.println("<h2>Tracklist:</h2><ol>");
+        printTracks(info).forEach(t -> out.println(t));
+        out.println("</ol><a style=\"display:block;text-align:center;margin:20px\" href=\"AlbumInfo?" 
+                + id + "&full\">Retrieve editions (may take a while)</a>");
+      }
+      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://musicbrainz.org/release-group/" 
+              + q.substring(q.indexOf("=")+1, q.indexOf("&")) + "\">View on MusicBrainz</a>");
+      out.println("</body></html>");
     }
   }
 
@@ -104,7 +118,6 @@ public class AlbumInfo extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     processRequest(request, response);
   }
-
   /**
    * Handles the HTTP <code>POST</code> method.
    *
@@ -117,7 +130,6 @@ public class AlbumInfo extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     processRequest(request, response);
   }
-
   /**
    * Returns a short description of the servlet.
    *
@@ -128,20 +140,31 @@ public class AlbumInfo extends HttpServlet {
     return "Provides information for album groups.";
   }// </editor-fold>
   
-  private void populate(String id) {
-    AlbumQuery query = new AlbumQuery(id, true);
+  /**
+   * Gives values to instance variables.
+   * @param id the release-group id
+   * @param full whether to generate full edition info or not
+   */
+  private void populate(String id, boolean full) {
+    AlbumQuery query = new AlbumQuery(id, true, full);
     title = query.getQuery();
     type = query.listType();
     artist = query.listArtist();
+    artistId = query.listArtistId();
+    date = query.listDate();
     releases = query.getAlbums();
-    recordings = query.getSongs();
+    info = query.getInfo();
+    releaseInfo = query.getFullInfo();
   }
-  
-  private void populate() {
-    title = "Unknown title";
-    type = "Unknown type";
-    artist = "Unknown artist";
-    releases = null;
-    recordings = null;
+  /**
+   * Compiles tracks to be printed out with the servlet's <code>PrintWriter</code>.
+   * @param media the release medium containing the tracks
+   * @return a LinkedList containing the tracks
+   */
+  private LinkedList<String> printTracks(MediumListWs2 media) {
+    LinkedList<String> ret = new LinkedList<>();
+    media.getCompleteTrackList().forEach(track -> ret.add("<li>" + track.getRecording().getTitle() 
+                + " - " + track.getDuration() + "</li>"));
+    return ret;
   }
 }

@@ -16,14 +16,14 @@
 package me.recsfor.group;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import static java.net.URLDecoder.decode;
-import static java.net.URLEncoder.encode;
+//import java.io.UnsupportedEncodingException;
+//import static java.net.URLDecoder.decode;
+//import static java.net.URLEncoder.encode;
 import java.util.List;
 import me.recsfor.search.ArtistQuery;
 import org.musicbrainz.modelWs2.Entity.ReleaseGroupWs2;
@@ -51,12 +51,7 @@ public class ArtistInfo extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String q = request.getQueryString();
-    try {
-      populate(decode(q, "UTF-8"));
-    } catch (UnsupportedEncodingException e) {
-      populate();
-      name = e.getMessage();
-    }
+    populate(q);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html>");
@@ -72,32 +67,19 @@ public class ArtistInfo extends HttpServlet {
       out.println("<h1>recsforme</h1>");
       out.println("<h2>" + name + " - " + type + "</h2>");
       out.println("<h3>" + years[0] + " to " + years[1] + "</h3>");
-      out.println("<h3>Albums:</h3>");
+      //TODO order albums by date
+      out.println("<h3>Discography:</h3>");
       out.println("<ul>");
-      albums.forEach(album -> {
-        String title = album.getTitle();
-        String id = album.getId();
-        try {
-          out.print("<li><a href=\"AlbumInfo?" + encode(id, "UTF-8") + "\">" + title);
-        } catch (UnsupportedEncodingException e) {
-          out.print("<li><a href=\"#\">" + e.getMessage());
-        }
-        out.print("</a></li>");
-      });
+      albums.forEach(album -> out.println("<li><a href=\"AlbumInfo?" 
+              + album.getId() + "&\">" + album.getTitle() + "</a></li>"));
       out.println("</ul>");
-      out.println("<h3>Contributions:</h3>");
+      out.println("<h4>Contributions:</h4>");
       out.println("<ul>");
-      contrib.forEach(cont -> {
-        String title = cont.getTitle();
-        String id = cont.getId();
-        try {
-          out.print("<li><a href=\"AlbumInfo?" + encode(id, "UTF-8") + "\">" + title);
-        } catch (UnsupportedEncodingException e) {
-          out.print("<li><a href=\"#\">" + e.getMessage());
-        }
-        out.print("</a></li>");
-      });
-      out.println("</ul>");
+      contrib.forEach(cont -> out.println("<li><a href=\"AlbumInfo?" 
+              + cont.getId() + "\">" + cont.getTitle() + "</a></li>"));
+      out.println("</ul></div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
+      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://musicbrainz.org/artist/" 
+              + q + "\">View on MusicBrainz</a>");
       out.println("</body></html>");
     }
   }
@@ -115,7 +97,6 @@ public class ArtistInfo extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     processRequest(request, response);
   }
-
   /**
    * Handles the HTTP <code>POST</code> method.
    *
@@ -128,7 +109,6 @@ public class ArtistInfo extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     processRequest(request, response);
   }
-
   /**
    * Returns a short description of the servlet.
    *
@@ -139,6 +119,10 @@ public class ArtistInfo extends HttpServlet {
     return "Provides information for artist groups.";
   }// </editor-fold>
 
+  /**
+   * Gives values to instance variables.
+   * @param id the artist id
+   */
   private void populate(String id) {
     ArtistQuery query = new ArtistQuery(id, true);
     name = query.getQuery();
@@ -146,13 +130,5 @@ public class ArtistInfo extends HttpServlet {
     years = query.listYears();
     albums = query.listAlbums();
     contrib = query.listContrib();
-  }
-  
-  private void populate() {
-    name = "Unknown name";
-    type = "Unknown type";
-    years = new String[2];
-    albums = null;
-    contrib = null;
   }
 }

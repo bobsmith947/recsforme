@@ -32,6 +32,8 @@ public class ArtistQuery extends AbstractQuery {
   private ArtistWs2 artist;
   private final ArtistIncludesWs2 INC;
   protected static final String CONTEXT = "ArtistInfo?";
+  
+  // <editor-fold desc="Constructors.">
   /**
    * Default constructor for if you didn't actually want to query anything.
    */
@@ -72,6 +74,9 @@ public class ArtistQuery extends AbstractQuery {
       artist = null;
     }
   }
+  // </editor-fold>
+  
+  // <editor-fold defaultstate="collapsed" desc="Get/set methods.">
   /**
    * @return the artist
    */
@@ -84,7 +89,9 @@ public class ArtistQuery extends AbstractQuery {
   public void setArtist(ArtistWs2 artist) {
     this.artist = artist;
   }
+  // </editor-fold>
 
+  // <editor-fold defaultstate="collapsed" desc="List methods.">
   @Override
   public String[] listNames() {
     String[] res = new String[0];
@@ -145,4 +152,5 @@ public class ArtistQuery extends AbstractQuery {
   public List<ReleaseWs2> listContrib() {
     return artist.getReleases();
   }
+  // </editor-fold>
 }
