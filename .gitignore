@@ -27,3 +27,5 @@ web/WEB-INF/glassfish-resources.xml
 src/java/hibernate.cfg.xml
 build/
 dist/
+!lib/musicbrainzws2.jar
+!/lib/CopyLibs/org-netbeans-modules-java-j2seproject-copylibstask.jar

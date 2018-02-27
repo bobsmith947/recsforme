@@ -12,9 +12,10 @@
   </head>
   <body>
     <h1>recsforme</h1>
-    <h2>500</h2>
+    <h2>Error 500</h2>
     <h3>Internal Server Error!</h3>
-    <h4>The servlet code threw an error. Consider opening an issue on <a href="https://github.com/bobsmith947/recsforme/issues">GitHub</a>.</h4>
+    <h4>Something went wrong with the servlet code.</h4>
+    <p>If you're the administrator, please look at the server log to see what exception or error was thrown. If you're not the administrator, please consider opening an issue on <a href="https://github.com/bobsmith947/recsforme/issues">GitHub</a>.</p>
     <span>
       <a class="block" href="index.jsp">Return home and pretend this didn't happen.</a>
       <a class="block" href="search.jsp">Search for something to take your mind off of this.</a>

@@ -12,8 +12,9 @@
   </head>
   <body>
     <h1>recsforme</h1>
-    <h2>404</h2>
+    <h2>Error 404</h2>
     <h3>Not found!</h3>
+    <h4>You tried accessing a resource that doesn't exist.</h4>
     <span>
       <a class="block" href="index.jsp">Return home and pretend this didn't happen.</a>
       <a class="block" href="search.jsp">Search for something to take your mind off of this.</a>
