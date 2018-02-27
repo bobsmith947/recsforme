@@ -34,7 +34,7 @@
     </form>
     <div id="results">
       <%
-        if (q.getResults() != null) {
+        if (!q.getResults().isEmpty()) {
           for (int i = 0; i < q.getLen(); i++) {
             if (t.equals("album")) ids[i] = ids[i].concat("&");
       %>

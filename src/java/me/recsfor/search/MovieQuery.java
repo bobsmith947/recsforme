@@ -57,7 +57,6 @@ public class MovieQuery extends AbstractQuery {
       len = results.size();
     } catch (OMDBException | NullPointerException e) {
       this.query = e.getMessage();
-      results = null;
       len = 0;
     }
   }
