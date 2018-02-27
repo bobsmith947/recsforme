@@ -17,45 +17,74 @@ package me.recsfor.search;
 
 import java.beans.*;
 import java.io.Serializable;
-
+import java.util.LinkedHashMap;
+import static org.apache.commons.lang3.text.WordUtils.capitalize;
 /**
  * JavaBeans component to delegate queries to the proper class.
- * This class is not able to perform queries on its own, and therefore doesn't implement <code>GenericQuery</code>.
  * @author lkitaev
  */
-public class QueryBean implements Serializable {
+public class QueryBean extends AbstractQuery implements Serializable {
+  private static final long serialVersionUID = -2224562734989733429L; //just in case
   public static final String PROP_TYPE = "type";
   public static final String PROP_QUERY = "query";
-  private static final long serialVersionUID = -2224562734989733429L; //just in case
+  public static final String PROP_CONTEXT = "context";
+  public static final String PROP_DELEGATION = "delegation";
   private String type;
-  private String query;
-  private PropertyChangeSupport propertySupport;
-  
-  
+  private String context;
+  private AbstractQuery delegation;
+  private final PropertyChangeSupport propertySupport;
+  /**
+   * Default constructor called when instantiated in a JSP.
+   */
   public QueryBean() {
+    super();
     propertySupport = new PropertyChangeSupport(this);
+    //default to a movie type query
     type = "movie";
-    query = "";
+    context = MovieQuery.CONTEXT;
+    delegation = new MovieQuery();
   }
-  
+  /**
+   * @return the type
+   */
   public String getType() {
-    return type;
+    return capitalize(type); //format as title case so it displays nicely
   }
-  
-  public void setType(String value) {
-    String oldValue = type;
-    type = value;
-    propertySupport.firePropertyChange(PROP_TYPE, oldValue, type);
+  /**
+   * @param type the type to set
+   */
+  public void setType(String type) {
+    String oldType = this.type;
+    this.type = type;
+    propertySupport.firePropertyChange(PROP_TYPE, oldType, type);
   }
-  
-  public String getQuery() {
-    return query;
+  /**
+   * @return the context
+   */
+  public String getContext() {
+    return context;
   }
-  
-  public void setQuery(String value) {
-    String oldValue = query;
-    query = value;
-    propertySupport.firePropertyChange(PROP_QUERY, oldValue, query);
+  /**
+   * @param context the context to set
+   */
+  public void setContext(String context) {
+    String oldContext = this.context;
+    this.context = context;
+    propertySupport.firePropertyChange(PROP_CONTEXT, oldContext, context);
+  }
+  /**
+   * @return the delegation
+   */
+  public AbstractQuery getDelegation() {
+    return delegation;
+  }
+  /**
+   * @param delegation the delegation to set
+   */
+  public void setDelegation(AbstractQuery delegation) {
+    AbstractQuery oldDelegation = this.delegation;
+    this.delegation = delegation;
+    propertySupport.firePropertyChange(PROP_DELEGATION, oldDelegation, delegation);
   }
   
   public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -65,20 +94,81 @@ public class QueryBean implements Serializable {
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     propertySupport.removePropertyChangeListener(listener);
   }
-  
+  /**
+   * Creates a MovieQuery that can be referenced from a JSP.
+   * @deprecated
+   * Use delegateQuery() instead
+   * @return a new MovieQuery with the instance query
+   */
+  @Deprecated
   public MovieQuery sendMovieQuery() {
     return new MovieQuery(query);
   }
-  
+  /**
+   * Creates an ArtistQuery that can be referenced from a JSP.
+   * @deprecated
+   * Use delegateQuery() instead
+   * @return a new AlbumQuery with the instance query
+   */
+  @Deprecated
   public ArtistQuery sendArtistQuery() {
-      return new ArtistQuery(query);
+    return new ArtistQuery(query);
   }
-  
+  /**
+   * Creates an AlbumQuery that can be referenced from a JSP.
+   * @deprecated
+   * Use delegateQuery() instead
+   * @return a new AlbumQuery with the instance query
+   */
+  @Deprecated
   public AlbumQuery sendAlbumQuery() {
-      return new AlbumQuery(query);
+    return new AlbumQuery(query);
+  }
+  /**
+   * Creates the proper query based on <code>type</code>.
+   * Can be used to reference queries from a JSP.
+   * @return a new child instance of an AbstractQuery with the instance query
+   */
+  public AbstractQuery delegateQuery() {
+    switch (type) {
+      case "movie":
+        setContext(MovieQuery.CONTEXT);
+        return new MovieQuery(query);
+      case "artist":
+        setContext(ArtistQuery.CONTEXT);
+        return new ArtistQuery(query);
+      case "album":
+        setContext(AlbumQuery.CONTEXT);
+        return new AlbumQuery(query);
+      default:
+        return null;
+    }
   }
   
-  public SongQuery sendSongQuery() {
-      return new SongQuery(query);
+  @Override
+  public void setQuery(String query) {
+    String oldQuery = this.query;
+    this.query = query;
+    propertySupport.firePropertyChange(PROP_QUERY, oldQuery, query);
+  }
+  
+  @Override
+  public LinkedHashMap<String, String> getResults() {
+    return delegation.getResults();
+  }
+  
+  @Override
+  public int getLen() {
+    return delegation.getLen();
+  }
+  
+  @Override
+  public String[] listNames() {
+    return delegation.listNames();
+  }
+
+  @Override
+  public String[] listIds() {
+    return delegation.listIds();
   }
 }

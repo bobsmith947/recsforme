@@ -20,113 +20,140 @@ import com.omertron.omdbapi.model.*;
 import com.omertron.omdbapi.tools.OmdbParameters;
 import com.omertron.omdbapi.tools.Param;
 //import static com.omertron.omdbapi.emumerations.PlotType.SHORT;
-import static com.omertron.omdbapi.emumerations.PlotType.FULL;
-import java.util.List;
-import org.apache.commons.lang3.text.WordUtils;
+//import static com.omertron.omdbapi.emumerations.PlotType.FULL;
+import com.omertron.omdbapi.emumerations.PlotType;
+import java.util.Arrays;
+import static org.apache.commons.lang3.text.WordUtils.capitalize;
 /**
  * Uses the OMDb API (https://omdbapi.com) to gather data for movie/TV show search result and group pages.
  * @author lkitaev
  */
 public class MovieQuery extends AbstractQuery {
-  private SearchResults results;
   private OmdbVideoFull info;
   private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
   private final OmdbParameters PARAMS;
+  protected static final String CONTEXT = "MovieInfo?";
 
+  // <editor-fold desc="Constructors.">
+  /**
+   * Default constructor for if you didn't actually want to query anything.
+   */
   public MovieQuery() {
-    query = null;
-    results = null;
+    super();
     info = null;
     PARAMS = null;
   }
-
+  /**
+   * Constructor for generating search results.
+   * @param query the query to search for
+   */
   public MovieQuery(String query) {
-    this.query = query;
+    super(query);
     info = null;
     PARAMS = null;
     try {
-      results = CLIENT.search(query);
-    } catch (OMDBException e) {
+      CLIENT.search(query).getResults().forEach(res ->
+              results.put(res.getImdbID(), res.getTitle()));
+      len = results.size();
+    } catch (OMDBException | NullPointerException e) {
       this.query = e.getMessage();
       results = null;
+      len = 0;
     }
   }
-  
-  public MovieQuery(String query, boolean info) {
-    this.query = query;
+  /**
+   * Constructor for generating group info.
+   * @param id the id to generate info for
+   * @param info whether you actually want the info or not
+   * @param plot the desired plot return type (short or full)
+   */
+  public MovieQuery(String id, boolean info, String plot) {
+    super();
     if (!info) {
       this.info = null;
       PARAMS = null;
     } else {
       PARAMS = new OmdbParameters();
-      PARAMS.add(Param.TITLE, query);
-      PARAMS.add(Param.PLOT, FULL);
+      PARAMS.add(Param.IMDB, id);
+      PARAMS.add(Param.PLOT, switchPlot(plot));
       try {
         this.info = CLIENT.getInfo(PARAMS);
-      } catch (OMDBException e) {
-        this.query = e.getMessage();
+        query = this.info.getTitle();
+      } catch (OMDBException | NullPointerException e) {
+        query = e.getMessage();
         this.info = null;
       }
     }
-    results = null;
+  }
+  // <editor-fold>
+
+  // <editor-fold defaultstate="collapsed" desc="Get/set methods.">
+  /**
+   * @return the info
+   */
+  public OmdbVideoFull getInfo() {
+    return info;
   }
   /**
-   * @return the results
+   * @param info the info to set
    */
-  public SearchResults getResults() {
-    return results;
+  public void setInfo(OmdbVideoFull info) {
+    this.info = info;
   }
-  /**
-   * @param results the results to set
-   */
-  public void setResults(SearchResults results) {
-    this.results = results;
+  // </editor-fold>
+
+  // <editor-fold defaultstate="collapsed" desc="List methods.">
+  @Override
+  public String[] listNames() {
+    String[] res = new String[0];
+    res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
+    return res;
   }
 
   @Override
-  public String[] printResults() {
-    String[] res;
-    if (results != null && results.getTotalResults() >= 1) {
-      List<OmdbVideoBasic> list = results.getResults();
-      res = new String[list.size()];
-      for (int i = 0; i < res.length; i++) {
-        OmdbVideoBasic o = list.get(i);
-        res[i] = o.getTitle();
-      }
-      return res;
-    } else {
-      res = null;
-      return res;
-    }
+  public String[] listIds() {
+    String[] ids = new String[0];
+    ids = len >= 1 ? Arrays.copyOf(results.keySet().toArray(ids), len) : null;
+    return ids;
   }
   /**
-   * Gets the year using the defined client and instance query.
+   * Gets the year using the generated info.
    * @return the year
    */
-  public String printYear() {
-    return info.getYear();
+  public String listYear() {
+    return getInfo().getYear();
   }
   /**
-   * Gets the type (movie or series) using the defined client and instance query.
+   * Gets the type (movie or series) using the generated info.
    * @return the type
    */
-  public String printType() {
-    String type = info.getType();
-    type = WordUtils.capitalize(type); //give it title case because it gets returned lower case
+  public String listType() {
+    String type = getInfo().getType();
+    type = capitalize(type); //give it title case because it gets returned lower case
     return type;
   }
   /**
-   * Gets the short plot synopsis using the defined client and instance query.
-   * @return the plot 
+   * Gets the plot synopsis (short or full) using the generated info.
+   * @return the plot
    */
-  public String printPlot() {
-    return info.getPlot();
+  public String listPlot() {
+    return getInfo().getPlot();
   }
+  // </editor-fold>
+
   /**
-   * Gets the corresponding IMDb ID using the defined client and instance query.
-   * @return the id
+   * Switches the plot type to the desired enum.
+   * @param type the desired plot type
+   * @return either PlotType.SHORT or PlotType.FULL
    */
-  public String printId() {
-    return info.getImdbID();
+  private PlotType switchPlot(String type) {
+    switch (type.toLowerCase()) {
+      case "full":
+        return PlotType.FULL;
+      case "short":
+        return PlotType.SHORT;
+      default:
+        return PlotType.FULL;
+    }
   }
 }
