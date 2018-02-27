@@ -127,14 +127,10 @@ public class ArtistQuery extends AbstractQuery {
     String[] years = new String[2];
     try {
       years[0] = artist.getLifeSpan().getBegin();
+      years[1] = artist.getLifeSpan().getEnd();
     } catch (NullPointerException e) {
       years[0] = e.getMessage();
-    } finally {
-      try {
-        years[1] = artist.getLifeSpan().getEnd();
-      } catch (NullPointerException e) {
-        years[1] = e.getMessage();
-      }
+      years[1] = e.getMessage();
     }
     return years;
   }

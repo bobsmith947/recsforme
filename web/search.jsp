@@ -16,9 +16,8 @@
     <meta name="keywords" content="<jsp:getProperty name="q" property="query" />">
     <meta name="description" content="recsforme (recs for me) search results for <jsp:getProperty name="q" property="query" /> <jsp:getProperty name="q" property="type" />.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
     <link href="style.css" rel="stylesheet" type="text/css">
-    <script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>
+    <!--<script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>-->
     <title>recsforme :: <jsp:getProperty name="q" property="type" /> Search - <jsp:getProperty name="q" property="query" /></title>
   </head>
   <body>
@@ -39,7 +38,7 @@
           for (int i = 0; i < q.getLen(); i++) {
             if (t.equals("album")) ids[i] = ids[i].concat("&");
       %>
-            <a href="<%= con + ids[i] %>">
+            <a class="block" href="<%= con + ids[i] %>">
             <%= nms[i] %></a>
       <%
           }
