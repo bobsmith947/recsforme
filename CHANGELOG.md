@@ -1,5 +1,30 @@
 # recsforme changelog
 
+## February 28, 2018 - Alpha Release
+
+**Fixed:**
+
+* Info is grabbed by ID rather than name
+
+**Added:**
+
+* `QueryBean` is now able to supply the correct ID and context automatically
+* Albums now print out the correct type, date and tracklist
+* Apache Ivy integration for dependencies
+* JSP Fragments for header and footer using property group
+* Error pages for 404 and 500
+* Test to ensure name and ID arrays are the same length
+
+**Removed:**
+
+* `MusicQuery` becuase it didn't have much use
+* Servlets no longer encapsulate their fields
+
+**Missing:**
+
+* Recommendation engine
+* Database connectivity
+
 ## February 22, 2018 - Alpha Release
 
 **Fixed:**
@@ -17,7 +42,7 @@
 
 * `GenericQuery` because it was kinda redundant.
 
-The release is not meant for production. Notable features missing include:
+**Missing:**
 
 * JSP header/footer
 * JUnit tests

@@ -32,9 +32,9 @@ import org.musicbrainz.modelWs2.MediumListWs2;
 /**
  * A servlet to build group pages for albums, EP's, singles, and other types, including the available releases and recordings.
  * It can process HTTP methods by being given a request parameter containing the MusicBrainz ID of the respective release group. The request parameter has no associated name.
- * An "&" MUST be present after the ID. It will grab editions in the group if the <code>full</code> parameter is present after this.
- * For example, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3&</code> generates a page for <i>Homework</i> by Daft Punk.
- * Similarly, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3&full</code> generates a page for <i>Homework</i> by Daft Punk, with editions present.
+ * An ampersand MUST be present after the ID. It will grab editions in the group if the <code>full</code> parameter is present after this.
+ * For example, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3{ampersand}</code> generates a page for <i>Homework</i> by Daft Punk.
+ * Similarly, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3{ampersand}full</code> generates a page for <i>Homework</i> by Daft Punk, with editions present.
  * @author lkitaev
  */
 public class AlbumInfo extends AbstractInfo {
