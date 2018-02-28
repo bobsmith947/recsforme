@@ -38,7 +38,7 @@ public class AlbumQuery extends AbstractQuery {
   private final ReleaseGroupIncludesWs2 G_INC;
   private final ReleaseIncludesWs2 A_INC;
   protected static final String CONTEXT = "AlbumInfo?";
-  
+
   // <editor-fold desc="Constructors.">
   /**
    * Default constructor for if you didn't actually want to query anything.
@@ -60,8 +60,8 @@ public class AlbumQuery extends AbstractQuery {
     G_INC = null;
     A_INC = null;
     String replace = query.replace("/", "");
-    new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r -> 
-            results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - " 
+    new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r ->
+            results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - "
                     + r.getReleaseGroup().getArtistCreditString()));
     len = results.size();
   }
@@ -108,7 +108,7 @@ public class AlbumQuery extends AbstractQuery {
     }
   }
   // </editor-fold>
-  
+
   // <editor-fold defaultstate="collapsed" desc="Get/set methods.">
   /**
    * @return the group
@@ -159,7 +159,7 @@ public class AlbumQuery extends AbstractQuery {
     this.fullInfo = fullInfo;
   }
   //</editor-fold>
-  
+
   // <editor-fold defaultstate="collapses" desc="List methods.">
   @Override
   public String[] listNames() {
@@ -167,7 +167,7 @@ public class AlbumQuery extends AbstractQuery {
     res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
     return res;
   }
-  
+
   @Override
   public String[] listIds() {
     String[] res = new String[0];
@@ -210,7 +210,7 @@ public class AlbumQuery extends AbstractQuery {
     return group.getFirstReleaseDateStr();
   }
   // </editor-fold>
-  
+
   /**
    * Sets the relevant include requests for group and release lookup.
    * @param inc whether you want to set the includes or not

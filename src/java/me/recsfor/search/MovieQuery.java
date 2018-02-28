@@ -33,7 +33,7 @@ public class MovieQuery extends AbstractQuery {
   private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
   private final OmdbParameters PARAMS;
   protected static final String CONTEXT = "MovieInfo?";
-  
+
   // <editor-fold desc="Constructors.">
   /**
    * Default constructor for if you didn't actually want to query anything.
@@ -52,12 +52,11 @@ public class MovieQuery extends AbstractQuery {
     info = null;
     PARAMS = null;
     try {
-      CLIENT.search(query).getResults().forEach(res -> 
+      CLIENT.search(query).getResults().forEach(res ->
               results.put(res.getImdbID(), res.getTitle()));
       len = results.size();
     } catch (OMDBException | NullPointerException e) {
       this.query = e.getMessage();
-      results = null;
       len = 0;
     }
   }
@@ -86,7 +85,7 @@ public class MovieQuery extends AbstractQuery {
     }
   }
   // <editor-fold>
-  
+
   // <editor-fold defaultstate="collapsed" desc="Get/set methods.">
   /**
    * @return the info
@@ -109,7 +108,7 @@ public class MovieQuery extends AbstractQuery {
     res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
     return res;
   }
-  
+
   @Override
   public String[] listIds() {
     String[] ids = new String[0];
@@ -134,13 +133,13 @@ public class MovieQuery extends AbstractQuery {
   }
   /**
    * Gets the plot synopsis (short or full) using the generated info.
-   * @return the plot 
+   * @return the plot
    */
   public String listPlot() {
     return getInfo().getPlot();
   }
   // </editor-fold>
-  
+
   /**
    * Switches the plot type to the desired enum.
    * @param type the desired plot type

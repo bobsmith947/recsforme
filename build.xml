@@ -7,9 +7,12 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="recsforme" default="default" basedir=".">
+<project name="recsforme" xmlns:ivy="antlib:org.apache.ivy.ant" default="default" basedir=".">
     <description>Builds, tests, and runs the project recsforme.</description>
     <import file="nbproject/build-impl.xml"/>
+    <target name="resolve" description="--> retrieve dependencies with ivy">
+        <ivy:retrieve />
+    </target>
     <!--
 
     There exist several targets which are by default empty and which can be 

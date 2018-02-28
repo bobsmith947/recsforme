@@ -18,7 +18,7 @@ package me.recsfor.group;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+//import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 //import java.io.UnsupportedEncodingException;
@@ -37,30 +37,19 @@ import org.musicbrainz.modelWs2.MediumListWs2;
  * Similarly, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3&full</code> generates a page for <i>Homework</i> by Daft Punk, with editions present.
  * @author lkitaev
  */
-public class AlbumInfo extends HttpServlet {
+public class AlbumInfo extends AbstractInfo {
   private static final long serialVersionUID = 3558291301985484615L; //just in case
-  private String title;
-  private String type;
-  private String artist;
-  private String artistId;
-  private String date;
+  private String title, type, artist, artistId, date;
   private List<ReleaseWs2> releases;
   private MediumListWs2 info;
   private LinkedList<MediumListWs2> releaseInfo;
-  private boolean full;
-  /**
-   * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
+
+  @Override
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String q = request.getQueryString();
     String id = q.substring(q.indexOf("?")+1, q.indexOf("&"));
     String f = q.substring(q.indexOf("&")+1);
-    full = f.equals("full");
+    boolean full = f.equals("full");
     if (full) {
       populate(id, true);
     } else {
@@ -68,17 +57,16 @@ public class AlbumInfo extends HttpServlet {
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
+      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<!DOCTYPE html>");
       out.println("<html><head>");
       out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
       out.println("<meta name=\"keywords\" content=\"\">");
       out.println("<meta name=\"description\" content=\"\">");
       out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-      out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
-      out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
+      //out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + title + "</title></head><body>");
-      out.println("<h1>recsforme</h1>");
       out.println("<h2>" + title + " (" + type + ")</h2>");
       out.println("<h2>Release group by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h2>");
       out.println("<h2>Released: " + date + "</h2>");
@@ -87,7 +75,7 @@ public class AlbumInfo extends HttpServlet {
         out.println("<h3>Editions:</h3><div>");
         releases.forEach(rel -> {
           MediumListWs2 list = releaseInfo.pop();
-          out.println("<div><h4>" + rel.getUniqueTitle() + " - " + rel.getDateStr() 
+          out.println("<div><h4>" + rel.getUniqueTitle() + " - " + rel.getDateStr()
                   + " (" + list.getFormat() + ")</h4><ol>");
           printTracks(list).forEach(t -> out.println(t));
           out.println("</ol><h5>Total length: " + list.getDuration() + "</h5></div>");
@@ -96,39 +84,14 @@ public class AlbumInfo extends HttpServlet {
       } else {
         out.println("<h2>Tracklist:</h2><ol>");
         printTracks(info).forEach(t -> out.println(t));
-        out.println("</ol><a style=\"display:block;text-align:center;margin:20px\" href=\"AlbumInfo?" 
+        out.println("</ol><a class=\"block\" href=\"AlbumInfo?"
                 + id + "&full\">Retrieve editions (may take a while)</a>");
       }
-      out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://musicbrainz.org/release-group/" 
+      out.println("<a class=\"block\" href=\"https://musicbrainz.org/release-group/"
               + q.substring(q.indexOf("=")+1, q.indexOf("&")) + "\">View on MusicBrainz</a>");
       out.println("</body></html>");
+      request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
     }
-  }
-
-  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods.">
-  /**
-   * Handles the HTTP <code>GET</code> method.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    processRequest(request, response);
-  }
-  /**
-   * Handles the HTTP <code>POST</code> method.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    processRequest(request, response);
   }
   /**
    * Returns a short description of the servlet.
@@ -138,8 +101,7 @@ public class AlbumInfo extends HttpServlet {
   @Override
   public String getServletInfo() {
     return "Provides information for album groups.";
-  }// </editor-fold>
-  
+  }
   /**
    * Gives values to instance variables.
    * @param id the release-group id
@@ -163,7 +125,7 @@ public class AlbumInfo extends HttpServlet {
    */
   private LinkedList<String> printTracks(MediumListWs2 media) {
     LinkedList<String> ret = new LinkedList<>();
-    media.getCompleteTrackList().forEach(track -> ret.add("<li>" + track.getRecording().getTitle() 
+    media.getCompleteTrackList().forEach(track -> ret.add("<li>" + track.getRecording().getTitle()
                 + " - " + track.getDuration() + "</li>"));
     return ret;
   }

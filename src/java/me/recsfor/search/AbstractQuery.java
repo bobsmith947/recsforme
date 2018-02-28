@@ -24,13 +24,13 @@ public abstract class AbstractQuery {
   protected String query;
   protected LinkedHashMap<String, String> results;
   protected int len;
-  
+
   public AbstractQuery() {
     query = "";
     results = null;
     len = 0;
   }
-  
+
   public AbstractQuery(String query) {
     this.query = query;
     results = new LinkedHashMap<>();

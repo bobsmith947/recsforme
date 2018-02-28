@@ -1,0 +1,11 @@
+<h1><a href="index.jsp">recsforme</a></h1>
+<h2>Enter a search:</h2>
+<form id="media-search" action="search.jsp">
+  <input type="search" name="query" maxlength="100" autocomplete="off" autofocus>
+  <select name="type">
+    <option value="movie" selected>TV Show/Movie</option>
+    <option value="artist">Artist</option>
+    <option value="album">Album/EP/Single</option>
+  </select>
+  <button type="submit">Search</button>
+</form>

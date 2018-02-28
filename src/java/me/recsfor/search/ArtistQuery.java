@@ -32,7 +32,7 @@ public class ArtistQuery extends AbstractQuery {
   private ArtistWs2 artist;
   private final ArtistIncludesWs2 INC;
   protected static final String CONTEXT = "ArtistInfo?";
-  
+
   // <editor-fold desc="Constructors.">
   /**
    * Default constructor for if you didn't actually want to query anything.
@@ -51,7 +51,7 @@ public class ArtistQuery extends AbstractQuery {
     artist = new ArtistWs2();
     INC = null;
     String replace = query.replace("/", "");
-    new ArtistSearchbyName(replace).getFirstPage().forEach(r -> 
+    new ArtistSearchbyName(replace).getFirstPage().forEach(r ->
             results.put(r.getArtist().getId(), r.getArtist().getUniqueName()));
     len = results.size();
   }
@@ -75,7 +75,7 @@ public class ArtistQuery extends AbstractQuery {
     }
   }
   // </editor-fold>
-  
+
   // <editor-fold defaultstate="collapsed" desc="Get/set methods.">
   /**
    * @return the artist
@@ -98,7 +98,7 @@ public class ArtistQuery extends AbstractQuery {
     res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
     return res;
   }
-  
+
   @Override
   public String[] listIds() {
     String[] ids = new String[0];
@@ -127,14 +127,10 @@ public class ArtistQuery extends AbstractQuery {
     String[] years = new String[2];
     try {
       years[0] = artist.getLifeSpan().getBegin();
+      years[1] = artist.getLifeSpan().getEnd();
     } catch (NullPointerException e) {
       years[0] = e.getMessage();
-    } finally {
-      try {
-        years[1] = artist.getLifeSpan().getEnd();
-      } catch (NullPointerException e) {
-        years[1] = e.getMessage();
-      }
+      years[1] = e.getMessage();
     }
     return years;
   }
