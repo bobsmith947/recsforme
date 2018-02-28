@@ -14,10 +14,9 @@ Want to get recsforme set up on your local machine for development and testing p
 
 * [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 * Java EE 7 API Library and JUnit 4.12 + Hamcrest 1.3 (included in [NetBeans](https://netbeans.org/downloads/))
-* [Apache Tomcat 8.0.x](https://tomcat.apache.org/download-80.cgi) *this will reach end of life soon, but I will upgrade* and [Ant 1.7.1+](http://ant.apache.org/bindownload.cgi) (can also be installed with NetBeans)
+* [Apache Tomcat 8.0.x](https://tomcat.apache.org/download-80.cgi)
+* [Apache Ant 1.7.1+ and Apache Ivy 2.4.0](https://ant.apache.org/)
 * npm (installed with [Node.js](https://nodejs.org/en/download/))
-* [api-omdb](https://github.com/Omertron/api-omdb) + dependencies
-* [musicbrainzws2-java](https://code.google.com/archive/p/musicbrainzws2-java/) + dependencies
 * [oxipng](https://github.com/shssoichiro/oxipng) (optional)
 
 ### Installing
@@ -26,14 +25,13 @@ Want to get recsforme set up on your local machine for development and testing p
     git clone https://github.com/bobsmith947/recsforme.git
     cd recsforme
     npm install
-
-At the moment, I'm not using dependency management for Java, so you'll need to manually copy any JAR's (sorry). You can find the Java dependency package in the [releases](https://github.com/bobsmith947/recsforme/releases) section. Please note, I don't always add new dependencies, so it may not always be under the latest release.
-
-### Running
+    ant resolve
 
 After everything has been installed, you can open recsforme in NetBeans, or the IDE of your choice and begin [contributing](#contributing) to this wonderful project.
 
-recsforme can also be run directly from the command line (be sure to add your GlassFish install directory to your PATH):
+### Running
+
+Once your GlassFish install directory has been added to your PATH, recsforme can be run directly from the command line:
 
     cd glassfish4
     /bin/asadmin start-domain domain1

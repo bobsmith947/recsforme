@@ -2,18 +2,24 @@
 
 ## February 22, 2018 - Alpha Release
 
-This alpha contains added functionality for Artist and Album servlets. Song functionality and the GenericQuery interface were removed, however they may be added back in for future releases (see `java-test`).
+**Fixed:**
 
-Some optimizations for MovieQuery have been made, and it will only grab full info when needed. It also grabs the full plot synopsis by default.
+* Queries will perform searches directly in the constructor now, instead of independently in methods, should give a speed boost.
+* MovieQuery will now grab the full plot synopsis by default.
+* Selection box now reflects that `album` type queries can also include EP's and Singles primarily.
 
-The `album` selection in the JSP form has been updated to reflect that it can also contain EP's and Singles primarily.
+**Added:**
 
-javadoc comments have been improved, including `package-info`.
+* Artist and Album servlets now print out basic info.
+* Better javadoc comments, including `package-info`.
+
+**Removed:**
+
+* `GenericQuery` because it was kinda redundant.
 
 The release is not meant for production. Notable features missing include:
 
 * JSP header/footer
-* Further query optimizations
 * JUnit tests
 * Recommendation engine
 * Database connectivity
