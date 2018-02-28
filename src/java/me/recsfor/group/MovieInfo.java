@@ -35,11 +35,13 @@ public class MovieInfo extends AbstractInfo {
   private static final long serialVersionUID = -4184169288250689262L; //just in case
   private String title, year, type, plot;
 
+  @Override
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String q = request.getQueryString();
     populate(q);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
+      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<!DOCTYPE html>");
       out.println("<html><head>");
       out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
@@ -49,12 +51,12 @@ public class MovieInfo extends AbstractInfo {
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       //out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + title + "</title></head><body>");
-      out.println("<h1>recsforme</h1>");
       out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
       out.println("<p>" + plot + "</p>");
       out.println("<a class=\"block\" href=\"https://imdb.com/title/"
               + q + "\">View on IMDb</a>");
       out.println("</body></html>");
+      request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
     }
   }
   @Override

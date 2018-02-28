@@ -21,17 +21,6 @@
     <title>recsforme :: <jsp:getProperty name="q" property="type" /> Search - <jsp:getProperty name="q" property="query" /></title>
   </head>
   <body>
-    <h1>recsforme</h1>
-    <h2>Enter a search:</h2>
-    <form id="media-search" action="search.jsp">
-      <input type="search" name="query" maxlength="100" autocomplete="off" value="<jsp:getProperty name="q" property="query" />" autofocus>
-      <select name="type">
-        <option value="movie" <% if (t.equals("movie")) out.print("selected"); %> >TV Show/Movie</option>
-        <option value="artist" <% if (t.equals("artist")) out.print("selected"); %> >Artist</option>
-        <option value="album" <% if (t.equals("album")) out.print("selected"); %> >Album/EP/Single</option>
-      </select>
-      <button type="submit">Search</button>
-    </form>
     <div id="results">
       <%
         if (!q.getResults().isEmpty()) {

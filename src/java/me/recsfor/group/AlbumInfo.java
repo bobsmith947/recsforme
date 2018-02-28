@@ -57,6 +57,7 @@ public class AlbumInfo extends AbstractInfo {
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
+      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<!DOCTYPE html>");
       out.println("<html><head>");
       out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
@@ -66,7 +67,6 @@ public class AlbumInfo extends AbstractInfo {
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       //out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + title + "</title></head><body>");
-      out.println("<h1>recsforme</h1>");
       out.println("<h2>" + title + " (" + type + ")</h2>");
       out.println("<h2>Release group by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h2>");
       out.println("<h2>Released: " + date + "</h2>");
@@ -90,6 +90,7 @@ public class AlbumInfo extends AbstractInfo {
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/release-group/"
               + q.substring(q.indexOf("=")+1, q.indexOf("&")) + "\">View on MusicBrainz</a>");
       out.println("</body></html>");
+      request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
     }
   }
   /**

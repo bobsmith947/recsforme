@@ -47,6 +47,7 @@ public class ArtistInfo extends AbstractInfo {
     populate(q);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
+      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<!DOCTYPE html>");
       out.println("<html><head>");
       out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
@@ -56,7 +57,6 @@ public class ArtistInfo extends AbstractInfo {
       out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
       //out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + name + "</title></head><body>");
-      out.println("<h1>recsforme</h1>");
       out.println("<h2>" + name + " - " + type + "</h2>");
       out.println("<h3>" + years[0] + " to " + years[1] + "</h3>");
       //TODO order albums by date
@@ -73,6 +73,7 @@ public class ArtistInfo extends AbstractInfo {
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/artist/"
               + q + "\">View on MusicBrainz</a>");
       out.println("</body></html>");
+      request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
     }
   }
   @Override

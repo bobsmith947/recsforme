@@ -11,17 +11,7 @@
     <title>recsforme :: Home</title>
   </head>
   <body>
-    <h1>recsforme</h1>
     <h3>Welcome to recsforme, a media recommendation web app.</h3>
-    <h2>Enter a search:</h2>
-    <form id="media-search" action="search.jsp">
-      <input type="search" name="query" maxlength="100" autocomplete="off" autofocus>
-      <select name="type">
-        <option value="movie" selected>TV Show/Movie</option>
-        <option value="artist">Artist</option>
-        <option value="album">Album/EP/Single</option>
-      </select>
-      <button type="submit">Search</button>
-    </form>
+    <p>recsforme is an open source project aimed at creating a fast and simple app for providing media recommendations. The source code is available on <a href="https://github.com/bobsmith947/recsforme">GitHub</a> under the <a href="https://github.com/bobsmith947/recsforme/blob/master/LICENSE">Apache License 2.0</a>. If you have a bug report, feature request, or anything else of that nature, be sure to give the <a href="https://github.com/bobsmith947/recsforme/blob/master/CONTRIBUTING.md">contributing guidelines</a> a read and submit an issue with any appropriate labels (and a clear title). If you're a Java/web developer, feel free to contribute code and make recsforme even better. More information on the project itself can be found <a href="http://info.recsfor.me">here</a>.</p>
   </body>
 </html>
