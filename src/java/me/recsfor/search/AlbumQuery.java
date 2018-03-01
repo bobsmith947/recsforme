@@ -160,7 +160,7 @@ public class AlbumQuery extends AbstractQuery {
   }
   //</editor-fold>
 
-  // <editor-fold defaultstate="collapses" desc="List methods.">
+  // <editor-fold defaultstate="collapsed" desc="List methods.">
   @Override
   public String[] listNames() {
     String[] res = new String[0];
