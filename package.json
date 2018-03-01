@@ -22,14 +22,13 @@
     "contributors": [],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "webpack --progress -p",
+        "bundle": "webpack --progress -p",
         "optimize": "for %f in (./web/img/*.png) do oxipng -o 4 -s \"./img/%f\"",
         "autoprefix": "postcss ./web/style.css -o ./web/post.css"
     },
     "browserslist": [
         "last 3 versions",
-        "> 1%",
-        "not ie <= 11"
+        "> 1%"
     ],
     "postcss": {
         "plugins": {
@@ -40,7 +39,6 @@
     "dependencies": {
         "babel-polyfill": "6.26.0",
         "browserslist": "^2.11.3",
-        "jquery": "3.2.1",
         "moment": "^2.20.1"
     },
     "devDependencies": {

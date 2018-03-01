@@ -41,22 +41,22 @@ public class MovieInfo extends AbstractInfo {
     populate(q);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<!DOCTYPE html>");
       out.println("<html><head>");
       out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
       out.println("<meta name=\"keywords\" content=\"\">");
       out.println("<meta name=\"description\" content=\"\">");
       out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-      out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
-      //out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
+      out.println("<link href=\"post.css\" rel=\"stylesheet\" type=\"text/css\">");
+      out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + title + "</title></head><body>");
+      request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
       out.println("<p>" + plot + "</p>");
       out.println("<a class=\"block\" href=\"https://imdb.com/title/"
               + q + "\">View on IMDb</a>");
-      out.println("</body></html>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
+      out.println("</body></html>");
     }
   }
   @Override

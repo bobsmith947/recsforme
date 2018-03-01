@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2018 Lucas Kitaev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 module.exports = {
-    entry: ["babel-polyfill", "./web/script.js"],
+    entry: "./web/script.js",
     output: {
         filename: "./web/bundle.js"
     },
@@ -29,6 +29,6 @@ module.exports = {
                 }
             }
         ]
-        
+
     }
 };

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright 2018 Lucas Kitaev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,25 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import "babel-polyfill";
+import moment from "moment";
+
 document.body.onload = () => {
-  let elems = document.links, len = elems.length, i = undefined;
-  //set link class based on href and add appropriate target
-  for (i = 0; i < len; i++) {
-    if (elems[i].href.includes(`://${document.domain}`)) elems[i].className = "int";
-    else {
-      elems[i].className = "ext";
-      elems[i].target = "_blank";
-    }
+  //set external links to open in a new tab/window
+  let elems = document.links, i = undefined;
+  for (i = 0; i < elems.length; i++) {
+    if (!elems[i].href.includes(`://${document.domain}`)) elems[i].target = "_blank";
   }
   //add listener to expand images on click
   elems = document.images;
-  len = elems.length;
-  for (i = 0; i < len; i++) {
+  for (i = 0; i < elems.length; i++) {
     if (screen.width > 1024 && elems[i].className === "exp") {
       elems[i].addEventListener("click", expandImg);
       elems[i].title = "Click to expand.";
       elems[i].style.width = "15%";
     }
+  }
+  //format dates
+  elems = document.getElementsByClassName("date");
+  let d = null;
+  for (i = 0; i < elems.length; i++) {
+    let d = moment(elems[i].innerHTML);
+    if (d.isValid()) elems[i].innerHTML = d.format("LL");
+    else elems[i].innerHTML = "Unknown date";
+    elems[i].style.display = "inline";
   }
 }
 function expandImg(ev) {

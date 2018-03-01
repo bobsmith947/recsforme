@@ -57,40 +57,42 @@ public class AlbumInfo extends AbstractInfo {
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<!DOCTYPE html>");
       out.println("<html><head>");
       out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
       out.println("<meta name=\"keywords\" content=\"\">");
       out.println("<meta name=\"description\" content=\"\">");
       out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-      out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
-      //out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
+      out.println("<link href=\"post.css\" rel=\"stylesheet\" type=\"text/css\">");
+      out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + title + "</title></head><body>");
+      request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + title + " (" + type + ")</h2>");
-      out.println("<h2>Release group by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h2>");
-      out.println("<h2>Released: " + date + "</h2>");
+      out.println("<h3>Release group by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h3>");
+      out.println("<h3>Released: <span class=\"date\">" + date + "</span></h3>");
       if (full) {
         //TODO fix ordering
+        //TODO fix duration times
         out.println("<h3>Editions:</h3><div>");
         releases.forEach(rel -> {
           MediumListWs2 list = releaseInfo.pop();
-          out.println("<div><h4>" + rel.getUniqueTitle() + " - " + rel.getDateStr()
-                  + " (" + list.getFormat() + ")</h4><ol>");
+          out.println("<div><h4>" + rel.getUniqueTitle() + " - <span class=\"date\">" + rel.getDateStr()
+                  + "</span> (" + list.getFormat() + ")</h4><ol>");
           printTracks(list).forEach(t -> out.println(t));
           out.println("</ol><h5>Total length: " + list.getDuration() + "</h5></div>");
         });
         out.println("</div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
       } else {
-        out.println("<h2>Tracklist:</h2><ol>");
+        out.println("<h3>Tracklist:</h2><ol>");
         printTracks(info).forEach(t -> out.println(t));
-        out.println("</ol><a class=\"block\" href=\"AlbumInfo?"
+        out.println("</ol><h5>Total length: " + info.getDuration() + "</h5>");
+        out.println("<a class=\"block\" href=\"AlbumInfo?"
                 + id + "&full\">Retrieve editions (may take a while)</a>");
       }
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/release-group/"
               + q.substring(q.indexOf("=")+1, q.indexOf("&")) + "\">View on MusicBrainz</a>");
-      out.println("</body></html>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
+      out.println("</body></html>");
     }
   }
   /**

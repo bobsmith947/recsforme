@@ -5,7 +5,7 @@ before_install:
 install:
   - wget http://download.oracle.com/glassfish/4.1.1/release/glassfish-4.1.1.zip
   - unzip glassfish-4.1.1.zip
-  #- npm install
+  - npm install
   - ant resolve -lib ./apache-ivy-2.4.0
 before_script: glassfish4/bin/asadmin start-domain domain1
 script: ant test -Dj2ee.server.home=./glassfish4/glassfish
