@@ -179,13 +179,8 @@ public class AlbumQuery extends AbstractQuery {
    * @return the type
    */
   public String listType() {
-    String type;
-    try {
-      type = group.getTypeString();
-    } catch (NullPointerException e) {
-      type = e.getMessage();
-    }
-    return type;
+    String type = group.getTypeString();
+    return type != null ? type : "Unknown type";
   }
   /**
    * Gets the artist using the generated group.
@@ -199,7 +194,7 @@ public class AlbumQuery extends AbstractQuery {
    * @return the artist id
    */
   public String listArtistId() {
-    //TODO make sure this really works
+    //TODO make sure this actually works
     return group.getArtistCredit().getNameCredits().get(0).getArtist().getId();
   }
   /**
