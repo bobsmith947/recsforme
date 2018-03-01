@@ -21,22 +21,29 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
+import me.recsfor.search.*;
 /**
  *
- * @author Lucas Kitaev
+ * @author lkitaev
  */
 public class QueryJUnitTest {
+  private static MovieQuery movie;
+  private static ArtistQuery artist;
+  private static AlbumQuery album;
   
   public QueryJUnitTest() {
+    System.out.println("Test created!");
   }
   
   @BeforeClass
   public static void setUpClass() {
+    System.out.println("Test started!");
+    movie = new MovieQuery("blade runner");
   }
   
   @AfterClass
   public static void tearDownClass() {
+    System.out.println("Test ended!");
   }
   
   @Before
@@ -47,9 +54,18 @@ public class QueryJUnitTest {
   public void tearDown() {
   }
 
-  // TODO add test methods here.
-  // The methods must be annotated with annotation @Test. For example:
-  //
-  // @Test
-  // public void hello() {}
+  // TODO add more test methods
+  @Test
+  public void hello() {
+    String string = new String();
+    String concat = string.concat("Hello World!");
+    assertNotSame(string, concat);
+  }
+  
+  @Test
+  public void checkResLength() {
+    Integer lenOne = movie.listNames().length;
+    Integer lenTwo = movie.listIds().length;
+    assertEquals(lenOne, lenTwo);
+  }
 }

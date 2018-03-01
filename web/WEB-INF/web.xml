@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <description>A media recommendation web app.</description>
+    <display-name>recsforme</display-name>
     <servlet>
         <servlet-name>MovieInfo</servlet-name>
         <servlet-class>me.recsfor.group.MovieInfo</servlet-class>
@@ -11,10 +13,6 @@
     <servlet>
         <servlet-name>AlbumInfo</servlet-name>
         <servlet-class>me.recsfor.group.AlbumInfo</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>SongInfo</servlet-name>
-        <servlet-class>me.recsfor.group.SongInfo</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>MovieInfo</servlet-name>
@@ -28,13 +26,28 @@
         <servlet-name>AlbumInfo</servlet-name>
         <url-pattern>/AlbumInfo</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>SongInfo</servlet-name>
-        <url-pattern>/SongInfo</url-pattern>
-    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/WEB-INF/404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/WEB-INF/500.jsp</location>
+    </error-page>
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>/search.jsp</url-pattern>
+            <url-pattern>/index.jsp</url-pattern>
+            <url-pattern>/WEB-INF/500.jsp</url-pattern>
+            <url-pattern>/WEB-INF/404.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+            <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
+            <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
+        </jsp-property-group>
+    </jsp-config>
 </web-app>

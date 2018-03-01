@@ -1,36 +1,54 @@
 # recsforme
+
+[![Build Status](https://travis-ci.org/bobsmith947/recsforme.svg?branch=master)](https://travis-ci.org/bobsmith947/recsforme)
+
 A media recommendation web app.
 
-Java/SQL backend + CSS/JS frontend. Focused on as little use of web frameworks as possible, so as to provide a better learning experience.
+Java/SQL backend + CSS/JS frontend. Focused on as little use of frameworks as possible, so as to provide a better learning experience.
 
 ## Getting Started
 
-Want to get recsforme up and running on your local machine for development and testing purposes? Great! This is how to get started:
+Want to get recsforme set up on your local machine for development and testing purposes? Great! This is how to do so:
 
 ### Prerequisites
 
-* [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* Java EE 7 API, and (for testing) JUnit 4.12 + Hamcrest 1.3 (included in [NetBeans](https://netbeans.org/downloads/))
-* [GlassFish Server 4.1.1](https://javaee.github.io/glassfish/download) (can also be installed with NetBeans)
+* [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* [Apache Ant 1.7.1+ and Apache Ivy 2.4.0](https://ant.apache.org/)
+* [GlassFish Server 4.1.1](https://javaee.github.io/glassfish/download)
 * npm (installed with [Node.js](https://nodejs.org/en/download/))
-* [api-omdb](https://github.com/Omertron/api-omdb) + dependencies
-* [musicbrainzws2-java](https://code.google.com/archive/p/musicbrainzws2-java/) + dependencies
 * [oxipng](https://github.com/shssoichiro/oxipng) (optional)
 
 ### Installing
 
-    cd *insert the directory you want to put the files in*
+    cd *directory you want to install recsforme in*
     git clone https://github.com/bobsmith947/recsforme.git
     cd recsforme
     npm install
+    ant resolve
 
-You can then open the project in NetBeans and run. I'm not using a POM, so at the moment you'll need to manually copy any Java dependencies, sorry.
+After everything has been installed, you can open recsforme in NetBeans, or the IDE of your choice and begin [contributing](#contributing) to this wonderful project.
 
-If you don't like NetBeans, feel free to use the IDE of your choice. You can also do it all manually if you're into that.
+### Running
+
+Once your GlassFish install directory has been added to your PATH, recsforme can be run directly from the command line:
+
+    cd glassfish4
+    /bin/asadmin start-domain domain1
+    cd *your recsforme install directory*
+    ant run -Dj2ee.server.home=glassfish4/glassfish
+
+Unit tests can be executed with:
+
+    ant test -Dj2ee.server.home=glassfish4/glassfish
+
+When you're done:
+
+    cd glassfish4
+    /bin/asadmin stop-domain domain1
 
 ## Contributing
 
-Please read the [contributing](./CONTRIBUTING.md) and [code of conduct](./CODE_OF_CONDUCT.md) files for details on the code of conduct, and the process for submitting pull requests and issues.
+Please read [CONTRIBUTING](./CONTRIBUTING.md) and [CODE OF CONDUCT](./CODE_OF_CONDUCT.md) for details on the community guidelines, and the process for submitting pull requests and issues.
 
 ## Authors
 
@@ -40,7 +58,7 @@ Please read the [contributing](./CONTRIBUTING.md) and [code of conduct](./CODE_O
 
 ## License
 
-recsforme is open source, licensed under Apache License 2.0. See the [license](./LICENSE) file for details.
+recsforme is open source, licensed under the Apache License 2.0. See [LICENSE](./LICENSE) for details.
 
 ## Acknowledgments
 

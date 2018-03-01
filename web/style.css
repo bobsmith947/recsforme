@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 @charset "UTF-8";
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500i,700&subset=cyrillic,greek,vietnamese');
 * {box-sizing: border-box}
 /*define semantics as block for compatibility*/
 header, section, footer, aside, nav, main, article, figure {display: block}
@@ -39,11 +40,12 @@ noscript {
   color: red;
   padding-bottom: 10px;
 }
-ul {
-    list-style-position: inside;
-    margin: auto;
-    width: 25%;
+ul, ol {
+  list-style-position: inside;
+  margin: auto;
+  width: 25%;
 }
+/*
 .int {
   display: inline-block;
   text-decoration: none;
@@ -55,6 +57,7 @@ ul {
   transition: background-color 0.5s
 }
 .int:hover {background-color: #111}
+*/
 .exp {
   display: block;
   margin: auto;
@@ -63,8 +66,8 @@ ul {
   transition: width 1s;
 }
 #media-search {
-    margin: auto;
-    width: 50%;
+  margin: auto;
+  width: 50%;
 }
 #media-search > * {
   display: block;
@@ -73,4 +76,9 @@ ul {
 #results > .int {
   display: block;
   margin: 2.5% 25%;
+}
+a.block {
+  display: block;
+  text-align: center;
+  margin: 20px;
 }

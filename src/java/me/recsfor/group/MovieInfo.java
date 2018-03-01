@@ -16,183 +16,62 @@
 package me.recsfor.group;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletException;
 import java.io.PrintWriter;
-import javax.servlet.http.HttpServlet;
+//import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.URLDecoder;
+//import java.io.UnsupportedEncodingException;
+//import static java.net.URLDecoder.decode;
+//import static java.net.URLEncoder.encode;
 import me.recsfor.search.MovieQuery;
 /**
- * A servlet to build group pages for movies and TV shows. It can be initialized using the request parameter (the title of the move/show). The request parameter has no associated name. For example, <code>MovieInfo?Blade+Runner</code>.
+ * A servlet to build group pages for movies and TV shows.
+ * It can process HTTP methods by being given a request parameter containing the IMDb ID of the respective movie/TV show. The request parameter has no associated name.
+ * For example, <code>MovieInfo?tt0083658</code> will generate a page for <i>Blade Runner</i>.
  * @author lkitaev
  */
-public class MovieInfo extends HttpServlet {
-    //TODO implement init() and destroy() support
-    private String title;
-    private String year;
-    private String type;
-    private String plot;
-    private String id;
-    public MovieInfo() {
-        title = null;
-        year = null;
-        type = null;
-        plot = null;
-        id = null;
-    }
-    public MovieInfo(String title) {
-        MovieQuery query = new MovieQuery(title);
-        this.title = query.getQuery();
-        year = query.printYear();
-        type = query.printType();
-        plot = query.printPlot();
-        id = query.printId();
-    }
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String q = request.getQueryString();
-        MovieInfo info;
-        try {
-            info = new MovieInfo(URLDecoder.decode(q, "UTF-8"));
-            //info = new MovieInfo(URLDecoder.decode(q.substring(q.indexOf("=")+1), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            info = new MovieInfo();
-            info.setTitle(e.getMessage());
-        }
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html><head>");
-            out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
-            out.println("<meta name=\"keywords\" content=\"\">");
-            out.println("<meta name=\"description\" content=\"\">");
-            out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-            out.println("<link href=\"https://fonts.googleapis.com/css?family=Roboto:400,700\" rel=\"stylesheet\">");
-            out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
-            out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-            out.println("<title>recsforme :: " + info.getTitle() + "</title></head><body>");
-            out.println("<h1>recsforme</h1>");
-            out.println("<h2>" + info.getTitle() + " (" + info.getYear() + ") - " + info.getType() + "</h2>");
-            out.println("<p>" + info.getPlot() + "</p>");
-            out.println("<a style=\"display:block;text-align:center;margin:20px\" href=\"https://imdb.com/title/" + info.getId() + "\">View on IMDb</a>");
-            out.println("</body></html>");
-        }
-    }
+public class MovieInfo extends AbstractInfo {
+  private static final long serialVersionUID = -4184169288250689262L; //just in case
+  private String title, year, type, plot;
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
+  @Override
+  protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String q = request.getQueryString();
+    populate(q);
+    response.setContentType("text/html;charset=UTF-8");
+    try (PrintWriter out = response.getWriter()) {
+      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
+      out.println("<!DOCTYPE html>");
+      out.println("<html><head>");
+      out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
+      out.println("<meta name=\"keywords\" content=\"\">");
+      out.println("<meta name=\"description\" content=\"\">");
+      out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+      out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
+      //out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
+      out.println("<title>recsforme :: " + title + "</title></head><body>");
+      out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
+      out.println("<p>" + plot + "</p>");
+      out.println("<a class=\"block\" href=\"https://imdb.com/title/"
+              + q + "\">View on IMDb</a>");
+      out.println("</body></html>");
+      request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Provides information for movie/TV show groups.";
-    }// </editor-fold>
-
-    /**
-     * @return the title
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * @param title the title to set
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * @return the plot
-     */
-    public String getPlot() {
-        return plot;
-    }
-
-    /**
-     * @param plot the plot to set
-     */
-    public void setPlot(String plot) {
-        this.plot = plot;
-    }
-
-    /**
-     * @return the year
-     */
-    public String getYear() {
-        return year;
-    }
-
-    /**
-     * @param year the year to set
-     */
-    public void setYear(String year) {
-        this.year = year;
-    }
-
+  }
+  @Override
+  public String getServletInfo() {
+    return "Provides information for movie/TV show groups.";
+  }
+  /**
+   * Gives values to instance variables.
+   * @param id the movie/series id
+   */
+  private void populate(String id) {
+    MovieQuery query = new MovieQuery(id, true, "full");
+    title = query.getQuery();
+    year = query.listYear();
+    type = query.listType();
+    plot = query.listPlot();
+  }
 }

@@ -15,49 +15,138 @@
  */
 package me.recsfor.search;
 
-import org.musicbrainz.Controller.*;
-import org.musicbrainz.modelWs2.SearchResult.*;
+//import org.musicbrainz.Controller.Artist;
+import java.util.Arrays;
+//import org.musicbrainz.modelWs2.SearchResult.ArtistResultWs2;
 import org.musicbrainz.modelWs2.Entity.*;
-//import org.musicbrainz.IncludesWs2.*;
-//import org.musicbrainz.FilterWs2.SearchFilter.*;
+import org.musicbrainz.IncludesWs2.ArtistIncludesWs2;
+import org.musicbrainz.MBWS2Exception;
+import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
+import org.musicbrainz.QueryWs2.Search.ReadySearches.ArtistSearchbyName;
 import java.util.List;
 /**
- *
+ * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for artist search result and group pages.
  * @author lkitaev
  */
 public class ArtistQuery extends AbstractQuery {
-    private List<ArtistResultWs2> results;
-    private static final Artist CLIENT = new Artist();
+  private ArtistWs2 artist;
+  private final ArtistIncludesWs2 INC;
+  protected static final String CONTEXT = "ArtistInfo?";
 
-    public ArtistQuery(String query) {
-        super(query);
+  // <editor-fold desc="Constructors.">
+  /**
+   * Default constructor for if you didn't actually want to query anything.
+   */
+  public ArtistQuery() {
+    super();
+    artist = null;
+    INC = null;
+  }
+  /**
+   * Constructor for generating search results.
+   * @param query the query to search for
+   */
+  public ArtistQuery(String query) {
+    super(query);
+    artist = new ArtistWs2();
+    INC = null;
+    String replace = query.replace("/", "");
+    new ArtistSearchbyName(replace).getFirstPage().forEach(r ->
+            results.put(r.getArtist().getId(), r.getArtist().getUniqueName()));
+    len = results.size();
+  }
+  /**
+   * Constructor for generating group info.
+   * @param id the id to generate info for
+   * @param info whether you actually want the info or not
+   */
+  public ArtistQuery(String id, boolean info) {
+    super();
+    INC = new ArtistIncludesWs2();
+    INC.setReleaseGroups(info);
+    INC.setReleases(info);
+    INC.setVariousArtists(info);
+    try {
+      artist = new LookUpWs2().getArtistById(id, INC);
+      query = artist.getUniqueName();
+    } catch (MBWS2Exception e) {
+      query = e.getMessage();
+      artist = null;
     }
-    
-    //TODO disable pagination
-    @Override
-    protected void search() {
-        if (query == null || query.equals("")) {
-            results = null;
-        } else {
-            CLIENT.search(query);
-            results = CLIENT.getFullSearchResultList();
-        }
-    }
+  }
+  // </editor-fold>
 
-    @Override
-    public String[] printResults() {
-        String[] res;
-        search();
-        if (results != null) {
-            res = new String[results.size()];
-            for (int i = 0; i < res.length; i++) {
-                ArtistWs2 a = results.get(i).getArtist();
-                res[i] = a.getUniqueName();
-            }
-            return res;
-        } else {
-            res = null;
-            return res;
-        }
+  // <editor-fold defaultstate="collapsed" desc="Get/set methods.">
+  /**
+   * @return the artist
+   */
+  public ArtistWs2 getArtist() {
+    return artist;
+  }
+  /**
+   * @param artist the artist to set
+   */
+  public void setArtist(ArtistWs2 artist) {
+    this.artist = artist;
+  }
+  // </editor-fold>
+
+  // <editor-fold defaultstate="collapsed" desc="List methods.">
+  @Override
+  public String[] listNames() {
+    String[] res = new String[0];
+    res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
+    return res;
+  }
+
+  @Override
+  public String[] listIds() {
+    String[] ids = new String[0];
+    ids = len >= 1 ? Arrays.copyOf(results.keySet().toArray(ids), len) : null;
+    return ids;
+  }
+  /**
+   * Gets the type (person or group) using the generated artist.
+   * @return the type, potentially null
+   */
+  public String listType() {
+    String type;
+    try {
+      type = artist.getType();
+      type = type.substring(type.indexOf("#")+1);
+    } catch (NullPointerException e) {
+      type = e.getMessage();
     }
+    return type;
+  }
+  /**
+   * Gets the start and end years (if available) using the generated artist.
+   * @return the years, potentially with one or both null
+   */
+  public String[] listYears() {
+    String[] years = new String[2];
+    try {
+      years[0] = artist.getLifeSpan().getBegin();
+      years[1] = artist.getLifeSpan().getEnd();
+    } catch (NullPointerException e) {
+      years[0] = e.getMessage();
+      years[1] = e.getMessage();
+    }
+    return years;
+  }
+  /**
+   * Gets the available release groups using the generated artist.
+   * @return the release groups
+   */
+  public List<ReleaseGroupWs2> listAlbums() {
+    return artist.getReleaseGroups();
+  }
+  /**
+   * Gets the available release contributions using the generated artist.
+   * @return the releases
+   */
+  public List<ReleaseWs2> listContrib() {
+    return artist.getReleases();
+  }
+  // </editor-fold>
 }

@@ -18,70 +18,81 @@ package me.recsfor.group;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+//import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+//import java.io.UnsupportedEncodingException;
+//import static java.net.URLDecoder.decode;
+//import static java.net.URLEncoder.encode;
+import java.util.LinkedList;
+import java.util.List;
+import me.recsfor.search.AlbumQuery;
+import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
+import org.musicbrainz.modelWs2.MediumListWs2;
 /**
- *
- * @author Lucas Kitaev
+ * A servlet to build group pages for albums, EP's, singles, and other types, including the available releases and recordings.
+ * It can process HTTP methods by being given a request parameter containing the MusicBrainz ID of the respective release group. The request parameter has no associated name.
+ * An ampersand MUST be present after the ID. It will grab editions in the group if the <code>full</code> parameter is present after this.
+ * For example, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3{ampersand}</code> generates a page for <i>Homework</i> by Daft Punk.
+ * Similarly, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3{ampersand}full</code> generates a page for <i>Homework</i> by Daft Punk, with editions present.
+ * @author lkitaev
  */
-public class AlbumInfo extends HttpServlet {
+public class AlbumInfo extends AbstractInfo {
+  private static final long serialVersionUID = 3558291301985484615L; //just in case
+  private String title, type, artist, artistId, date;
+  private List<ReleaseWs2> releases;
+  private MediumListWs2 info;
+  private LinkedList<MediumListWs2> releaseInfo;
 
-  /**
-   * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException {
+  @Override
+  protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String q = request.getQueryString();
+    String id = q.substring(q.indexOf("?")+1, q.indexOf("&"));
+    String f = q.substring(q.indexOf("&")+1);
+    boolean full = f.equals("full");
+    if (full) {
+      populate(id, true);
+    } else {
+      populate(id, false);
+    }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      /* TODO output your page here. You may use following sample code. */
+      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<!DOCTYPE html>");
-      out.println("<html>");
-      out.println("<head>");
-      out.println("<title>Servlet AlbumInfo</title>");      
-      out.println("</head>");
-      out.println("<body>");
-      out.println("<h1>Servlet AlbumInfo at " + request.getContextPath() + "</h1>");
-      out.println("</body>");
-      out.println("</html>");
+      out.println("<html><head>");
+      out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
+      out.println("<meta name=\"keywords\" content=\"\">");
+      out.println("<meta name=\"description\" content=\"\">");
+      out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+      out.println("<link href=\"style.css\" rel=\"stylesheet\" type=\"text/css\">");
+      //out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
+      out.println("<title>recsforme :: " + title + "</title></head><body>");
+      out.println("<h2>" + title + " (" + type + ")</h2>");
+      out.println("<h2>Release group by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h2>");
+      out.println("<h2>Released: " + date + "</h2>");
+      if (full) {
+        //TODO fix ordering
+        out.println("<h3>Editions:</h3><div>");
+        releases.forEach(rel -> {
+          MediumListWs2 list = releaseInfo.pop();
+          out.println("<div><h4>" + rel.getUniqueTitle() + " - " + rel.getDateStr()
+                  + " (" + list.getFormat() + ")</h4><ol>");
+          printTracks(list).forEach(t -> out.println(t));
+          out.println("</ol><h5>Total length: " + list.getDuration() + "</h5></div>");
+        });
+        out.println("</div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
+      } else {
+        out.println("<h2>Tracklist:</h2><ol>");
+        printTracks(info).forEach(t -> out.println(t));
+        out.println("</ol><a class=\"block\" href=\"AlbumInfo?"
+                + id + "&full\">Retrieve editions (may take a while)</a>");
+      }
+      out.println("<a class=\"block\" href=\"https://musicbrainz.org/release-group/"
+              + q.substring(q.indexOf("=")+1, q.indexOf("&")) + "\">View on MusicBrainz</a>");
+      out.println("</body></html>");
+      request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
     }
   }
-
-  // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-  /**
-   * Handles the HTTP <code>GET</code> method.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException {
-    processRequest(request, response);
-  }
-
-  /**
-   * Handles the HTTP <code>POST</code> method.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException {
-    processRequest(request, response);
-  }
-
   /**
    * Returns a short description of the servlet.
    *
@@ -89,7 +100,33 @@ public class AlbumInfo extends HttpServlet {
    */
   @Override
   public String getServletInfo() {
-    return "Short description";
-  }// </editor-fold>
-
+    return "Provides information for album groups.";
+  }
+  /**
+   * Gives values to instance variables.
+   * @param id the release-group id
+   * @param full whether to generate full edition info or not
+   */
+  private void populate(String id, boolean full) {
+    AlbumQuery query = new AlbumQuery(id, true, full);
+    title = query.getQuery();
+    type = query.listType();
+    artist = query.listArtist();
+    artistId = query.listArtistId();
+    date = query.listDate();
+    releases = query.getAlbums();
+    info = query.getInfo();
+    releaseInfo = query.getFullInfo();
+  }
+  /**
+   * Compiles tracks to be printed out with the servlet's <code>PrintWriter</code>.
+   * @param media the release medium containing the tracks
+   * @return a LinkedList containing the tracks
+   */
+  private LinkedList<String> printTracks(MediumListWs2 media) {
+    LinkedList<String> ret = new LinkedList<>();
+    media.getCompleteTrackList().forEach(track -> ret.add("<li>" + track.getRecording().getTitle()
+                + " - " + track.getDuration() + "</li>"));
+    return ret;
+  }
 }
