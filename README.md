@@ -13,8 +13,7 @@ Want to get recsforme set up on your local machine for development and testing p
 ### Prerequisites
 
 * [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* Java EE 7 API Library and JUnit 4.12 + Hamcrest 1.3 (included in [NetBeans](https://netbeans.org/downloads/))
-* [Apache Tomcat 8.0.x](https://tomcat.apache.org/download-80.cgi)
+* [Apache Tomcat 8.5](https://tomcat.apache.org/download-80.cgi)
 * [Apache Ant 1.7.1+ and Apache Ivy 2.4.0](https://ant.apache.org/)
 * npm (installed with [Node.js](https://nodejs.org/en/download/))
 * [oxipng](https://github.com/shssoichiro/oxipng) (optional)

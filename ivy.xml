@@ -9,7 +9,6 @@
   </info>
   <dependencies>
     <dependency org="javax" name="javaee-endorsed-api" rev="7.0"/>
-    <!--<dependency org="org.glassfish.main.distributions" name="glassfish" rev="4.1.1" />-->
     <dependency org="com.omertron" name="API-OMDB" rev="1.5"/>
     <dependency org="jdom" name="jdom" rev="1.0"/>
     <dependency org="commons-codec" name="commons-codec" rev="1.4"/>
