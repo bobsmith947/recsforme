@@ -13,30 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package rec;
-
-import java.util.LinkedHashMap;
 
 /**
- * Abstract class containing the essential fields for recommendations.
- * @author lkitaev
+ * This package provides functionality for generating recommendations based on <code>POST</code> requests made to servlets in the <code>group</code> package.
+ * Recommendations are primarily based on similarities between users' sets of likes and dislikes.
  */
-public abstract class AbstractRec implements GenericRec {
-  protected boolean request;
-  protected LinkedHashMap<String, String> response;
-  
-  public AbstractRec() {
-    request = false;
-    response = null;
-  }
-  
-  @Override
-  public boolean isLike() {
-    return request;
-  }
-  
-  @Override
-  public boolean isDislike() {
-    return !request;
-  }
-}
+
+package me.recsfor.rec;

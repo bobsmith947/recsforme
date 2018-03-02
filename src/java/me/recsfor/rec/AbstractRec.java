@@ -13,21 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package rec;
+package me.recsfor.rec;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.LinkedHashMap;
 
 /**
- * Interface for defining basic functions of a recommendation class.
+ * Abstract class containing the essential fields for recommendations.
  * @author lkitaev
  */
-public interface GenericRec {
-  abstract String parse(HttpServletRequest req);
+public abstract class AbstractRec implements GenericRec {
+  protected boolean request;
+  protected LinkedHashMap<String, String> response;
   
-  abstract boolean isLike();
+  public AbstractRec() {
+    request = false;
+    response = null;
+  }
   
-  abstract boolean isDislike();
+  @Override
+  public boolean isLike() {
+    return request;
+  }
   
-  abstract HttpServletResponse recommend();
+  @Override
+  public boolean isDislike() {
+    return !request;
+  }
 }
