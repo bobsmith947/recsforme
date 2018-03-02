@@ -115,7 +115,8 @@ public class ArtistQuery extends AbstractQuery {
       type = artist.getType();
       type = type.substring(type.indexOf("#")+1);
     } catch (NullPointerException e) {
-      type = e.getMessage();
+      System.err.print(Arrays.toString(e.getStackTrace()));
+      type = "Unknown type";
     }
     return type;
   }
@@ -127,10 +128,14 @@ public class ArtistQuery extends AbstractQuery {
     String[] years = new String[2];
     try {
       years[0] = artist.getLifeSpan().getBegin();
-      years[1] = artist.getLifeSpan().getEnd();
     } catch (NullPointerException e) {
       years[0] = e.getMessage();
-      years[1] = e.getMessage();
+    } finally {
+      try {
+        years[1] = artist.getLifeSpan().getEnd();
+      } catch (NullPointerException e) {
+        years[1] = e.getMessage();
+      }
     }
     return years;
   }

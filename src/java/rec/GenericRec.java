@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = {
-    entry: "./web/script.js",
-    output: {
-        filename: "./web/bundle.js"
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "babel-loader",
-                options: {
-                    presets: ["env"]
-                }
-            }
-        ]
+package rec;
 
-    }
-};
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Interface for defining basic functions of a recommendation class.
+ * @author lkitaev
+ */
+public interface GenericRec {
+  abstract String parse(HttpServletRequest req);
+  
+  abstract boolean isLike();
+  
+  abstract boolean isDislike();
+  
+  abstract HttpServletResponse recommend();
+}

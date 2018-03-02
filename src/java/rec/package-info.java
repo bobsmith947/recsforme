@@ -13,22 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = {
-    entry: "./web/script.js",
-    output: {
-        filename: "./web/bundle.js"
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "babel-loader",
-                options: {
-                    presets: ["env"]
-                }
-            }
-        ]
 
-    }
-};
+/**
+ * This package provides functionality for generating recommendations based on <code>POST</code> requests made to servlets in the <code>group</code> package.
+ * Recommendations are primarily based on similarities between users' sets of likes and dislikes.
+ */
+
+package rec;

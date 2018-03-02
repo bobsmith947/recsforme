@@ -13,22 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = {
-    entry: "./web/script.js",
-    output: {
-        filename: "./web/bundle.js"
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "babel-loader",
-                options: {
-                    presets: ["env"]
-                }
-            }
-        ]
+package rec;
 
-    }
-};
+import java.util.LinkedHashMap;
+
+/**
+ * Abstract class containing the essential fields for recommendations.
+ * @author lkitaev
+ */
+public abstract class AbstractRec implements GenericRec {
+  protected boolean request;
+  protected LinkedHashMap<String, String> response;
+  
+  public AbstractRec() {
+    request = false;
+    response = null;
+  }
+  
+  @Override
+  public boolean isLike() {
+    return request;
+  }
+  
+  @Override
+  public boolean isDislike() {
+    return !request;
+  }
+}

@@ -6,8 +6,8 @@
     <meta name="keywords" content="recommendation engine, recommender system, open source, java, web app, web application">
     <meta name="description" content="recsforme (recs for me) is an open source Java web application for media recommendations.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet" type="text/css">
-    <!--<script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>-->
+    <link href="post.css" rel="stylesheet" type="text/css">
+    <script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>
     <title>recsforme :: Home</title>
   </head>
   <body>
