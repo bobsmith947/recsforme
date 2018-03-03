@@ -1,0 +1,19 @@
+language: java
+cache:
+  directories: ./lib/
+before_install:
+  - wget http://mirrors.ibiblio.org/apache//ant/ivy/2.4.0/apache-ivy-2.4.0-bin.zip
+  - unzip apache-ivy-2.4.0-bin
+install:
+  - wget http://mirrors.advancedhosters.com/apache/tomcat/tomcat-8/v8.5.28/bin/apache-tomcat-8.5.28.zip -O ./tomcat.zip
+  - unzip tomcat.zip
+  - mv ./apache-tomcat-8.5.28 ./tomcat
+  #- npm install
+  - ant resolve -lib ./apache-ivy-2.4.0
+before_script: ./tomcat/bin startup
+script: ant test -Dj2ee.server.home=./apache-tomcat-9.5.28
+after_script: ./tomcat/bin shutdown
+jdk: oraclejdk8
+notifications:
+  slack:
+    secure: aT8Ig6HsAqtfr/TDyJSCgUzoKX7pI4Cd5rsue1C7SSW++AXYJHm6nopRO6lCOPDyeh/kP31UZW+6uO5QXIGZ0t0xlGEGMWl1EAC8mNbQjMYob8Lom96qOF3O5x5XDKNcM7T2ORE+O3lcGmdolPQS98v8hZQsiB/2PKWOL5EwdqTzDrqp3MYyJ08LJRuj5zfIu/oFXBGEXJYz5SwZDhclGkqZWhIn3ieFHfyLFKRDaEmP6wZ9jqwuqj1NyFgEj9aqqcPMZOFvfVU2Yw1w2/IJavhRKBVdiZMh4Xn2lY3mW2XP7dBDMUv7MEhU6JNGW/hLsv0GQ564bgVmx1QPvJdGyAUeQBZuPK47m0x5GMDd62TE+etLgf761xL32+yKIFawRlYiwXyVdjZqFWpOh7nrRwUqfqvqYtBBC5OPDJ6zv61rj1wJYnqSEhZAYmg3c1mNFA29wYsYeiviz2FVhllbdZjq+ZvkTVFdDKANp8N+vfh5No6KFzS/BpTe2EdAuM519FruN+gqsYi/jrLYdcxN+uCRHh4gDwk6sIJ37cM2OA1+uHzzoUWWk74wSEk06jI82RJ5zrZl3dmj2lZX7slUKp5FsJGUdICN+H2PV8FdEOHklut/+BWrZMMQMcwZs67R6MG7H2InMEtuhizAC6VRprUsWk4wHAIHu1iPyFQYvEs=

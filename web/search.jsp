@@ -6,8 +6,8 @@
 <html>
   <head>
     <meta name="author" content="Lucas Kitaev">
-    <meta name="keywords" content="<jsp:getProperty name="q" property="query" />">
-    <meta name="description" content="recsforme (recs for me) search results for <jsp:getProperty name="q" property="query" /> <jsp:getProperty name="q" property="type" />.">
+    <meta name="keywords" content="<jsp:getProperty name="q" property="query" />, <jsp:getProperty name="q" property="type" />, search, query, results">
+    <meta name="description" content="recsforme (recs for me) search results for <jsp:getProperty name="q" property="query" /> in <jsp:getProperty name="q" property="type" />s.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="post.css" rel="stylesheet" type="text/css">
     <script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>
