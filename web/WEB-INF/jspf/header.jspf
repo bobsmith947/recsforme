@@ -7,7 +7,7 @@
 <form id="media-search" action="search.jsp">
   <input type="search" name="query" maxlength="100" autocomplete="off" value="<jsp:getProperty name="q" property="query" />" autofocus>
   <select name="type">
-    <option value="movie" <% if (t.equals("movie")) out.print("selected"); %> >TV Show/Movie</option>
+    <option value="movie" <% if (t.equals("movie")) out.print("selected"); %> >Movie/TV Show</option>
     <option value="artist" <% if (t.equals("artist")) out.print("selected"); %> >Artist</option>
     <option value="album" <% if (t.equals("album")) out.print("selected"); %> >Album/EP/Single</option>
   </select>
