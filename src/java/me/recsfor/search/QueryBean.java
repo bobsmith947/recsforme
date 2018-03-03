@@ -17,18 +17,18 @@ package me.recsfor.search;
 
 import java.beans.*;
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 /**
  * JavaBeans component to delegate queries to the proper class.
  * @author lkitaev
  */
-public class QueryBean extends AbstractQuery implements Serializable {
+public class QueryBean implements Serializable {
   private static final long serialVersionUID = -2224562734989733429L; //just in case
-  public static final String PROP_TYPE = "type";
   public static final String PROP_QUERY = "query";
+  public static final String PROP_TYPE = "type";
   public static final String PROP_CONTEXT = "context";
   public static final String PROP_DELEGATION = "delegation";
+  private String query;
   private String type;
   private String context;
   private AbstractQuery delegation;
@@ -37,12 +37,26 @@ public class QueryBean extends AbstractQuery implements Serializable {
    * Default constructor called when instantiated in a JSP.
    */
   public QueryBean() {
-    super();
+    query = "";
     propertySupport = new PropertyChangeSupport(this);
     //default to a movie type query
     type = "movie";
     context = MovieQuery.CONTEXT;
     delegation = new MovieQuery();
+  }
+  /**
+   * @return the query
+   */
+  public String getQuery() {
+    return query;
+  }
+  /**
+   * @param query the query to set
+   */
+  public void setQuery(String query) {
+    String oldQuery = this.query;
+    this.query = query;
+    propertySupport.firePropertyChange(PROP_QUERY, oldQuery, query);
   }
   /**
    * @return the type
@@ -132,43 +146,16 @@ public class QueryBean extends AbstractQuery implements Serializable {
   public AbstractQuery delegateQuery() {
     switch (type) {
       case "movie":
-        setContext(MovieQuery.CONTEXT);
+        context = MovieQuery.CONTEXT;
         return new MovieQuery(query);
       case "artist":
-        setContext(ArtistQuery.CONTEXT);
+        context = ArtistQuery.CONTEXT;
         return new ArtistQuery(query);
       case "album":
-        setContext(AlbumQuery.CONTEXT);
+        context = AlbumQuery.CONTEXT;
         return new AlbumQuery(query);
       default:
         return null;
     }
-  }
-  
-  @Override
-  public void setQuery(String query) {
-    String oldQuery = this.query;
-    this.query = query;
-    propertySupport.firePropertyChange(PROP_QUERY, oldQuery, query);
-  }
-  
-  @Override
-  public LinkedHashMap<String, String> getResults() {
-    return delegation.getResults();
-  }
-  
-  @Override
-  public int getLen() {
-    return delegation.getLen();
-  }
-  
-  @Override
-  public String[] listNames() {
-    return delegation.listNames();
-  }
-
-  @Override
-  public String[] listIds() {
-    return delegation.listIds();
   }
 }

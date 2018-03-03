@@ -13,8 +13,8 @@ Want to get recsforme set up on your local machine for development and testing p
 ### Prerequisites
 
 * [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+* [Apache Tomcat 8.5](https://tomcat.apache.org/download-80.cgi)
 * [Apache Ant 1.7.1+ and Apache Ivy 2.4.0](https://ant.apache.org/)
-* [GlassFish Server 4.1.1](https://javaee.github.io/glassfish/download)
 * npm (installed with [Node.js](https://nodejs.org/en/download/))
 * [oxipng](https://github.com/shssoichiro/oxipng) (optional)
 
