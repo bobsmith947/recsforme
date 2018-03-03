@@ -1,4 +1,7 @@
 language: java
+jdk: oraclejdk8
+cache:
+  directories: ./lib
 before_install:
   - wget http://mirrors.ibiblio.org/apache//ant/ivy/2.4.0/apache-ivy-2.4.0-bin.zip
   - unzip apache-ivy-2.4.0-bin
@@ -6,17 +9,12 @@ before_install:
   - unzip apache-tomcat-8.5.28.zip
 install:
   - mv ./apache-tomcat-8.5.28 ./tomcat
-  - chmod -R 777 ./tomcat/bin/startup.sh
   - chmod -R 777 ./tomcat/bin/catalina.sh
-  - chmod -R 777 ./tomcat/bin/shutdown.sh
   #- npm install
   - ant resolve -lib ./apache-ivy-2.4.0
-cache:
-  directories: ./lib
-before_script: ./tomcat/bin/startup.sh
+before_script: ./tomcat/bin/catalina.sh start
 script: ant test -Dj2ee.server.home=./tomcat
-after_script: ./tomcat/bin/shutdown.sh
-jdk: oraclejdk8
+after_script: ./tomcat/bin/catalina.sh stop
 notifications:
   slack:
     on_success: never
