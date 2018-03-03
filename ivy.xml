@@ -9,6 +9,8 @@
   </info>
   <dependencies>
     <dependency org="javax" name="javaee-endorsed-api" rev="7.0"/>
+    <dependency org="org.apache.taglibs" name="taglibs-standard-impl" rev="1.2.5" />
+    <dependency org="org.apache.taglibs" name="taglibs-standard-spec" rev="1.2.5" />
     <dependency org="com.omertron" name="API-OMDB" rev="1.5"/>
     <dependency org="jdom" name="jdom" rev="1.0"/>
     <dependency org="commons-codec" name="commons-codec" rev="1.4"/>

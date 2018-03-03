@@ -13,10 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package me.recsfor.rec;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * This package provides functionality for generating recommendations based on <code>POST</code> requests made to servlets in the <code>group</code> package.
- * Recommendations are primarily based on similarities between users' sets of likes and dislikes.
+ * Interface for defining basic functions of a recommendation class.
+ * @author lkitaev
  */
-
-package rec;
+public interface GenericRec {
+  abstract String parse(HttpServletRequest req);
+  
+  abstract boolean isLike();
+  
+  abstract boolean isDislike();
+  
+  abstract HttpServletResponse recommend();
+}

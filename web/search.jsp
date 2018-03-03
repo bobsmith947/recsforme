@@ -1,3 +1,4 @@
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%
   q.setDelegation(q.delegateQuery());
@@ -18,10 +19,14 @@
   </head>
   <body>
     <div id="results">
+      <% if (!q.getResults().isEmpty()) { %>
+        <sql:update var="num" scope="request" dataSource="jdbc/MediaRecom">
+          INSERT INTO qlist (query, qtype)
+          VALUES ('<jsp:getProperty name="q" property="query" />', '<jsp:getProperty name="q" property="type" />')
+        </sql:update>
       <%
-        if (!q.getResults().isEmpty()) {
           for (int i = 0; i < q.getLen(); i++) {
-            if (t.equals("album")) ids[i] = ids[i].concat("&");
+            if (q.getType().toLowerCase().equals("album")) ids[i] = ids[i].concat("&");
       %>
             <a class="block" href="<%= con + ids[i] %>">
             <%= nms[i] %></a>
