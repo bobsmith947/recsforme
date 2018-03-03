@@ -1,11 +1,7 @@
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
-<%
-  q.setDelegation(q.delegateQuery());
-  String[] nms = q.listNames();
-  String[] ids = q.listIds();
-  String con = q.getContext();
-%>
+<c:set var="d" target="q" property="delegation" value="${q.delegateQuery()}" scope="request" />
 <!DOCTYPE html>
 <html>
   <head>
@@ -18,22 +14,23 @@
     <title>recsforme :: <jsp:getProperty name="q" property="type" /> Search - <jsp:getProperty name="q" property="query" /></title>
   </head>
   <body>
+    <c:set var="con" value="${q.context}" />
+    <c:set var="len" value="${d.results.size()}" />
     <div id="results">
-      <% if (!q.getResults().isEmpty()) { %>
-        <sql:update var="num" scope="request" dataSource="jdbc/MediaRecom">
+      <c:if test="${len > 0}" var="hasResults">
+        <sql:update var="added" scope="request" dataSource="jdbc/MediaRecom">
           INSERT INTO qlist (query, qtype)
           VALUES ('<jsp:getProperty name="q" property="query" />', '<jsp:getProperty name="q" property="type" />')
         </sql:update>
-      <%
-          for (int i = 0; i < q.getLen(); i++) {
-            if (q.getType().toLowerCase().equals("album")) ids[i] = ids[i].concat("&");
-      %>
-            <a class="block" href="<%= con + ids[i] %>">
-            <%= nms[i] %></a>
-      <%
-          }
-        } else out.println("<h3>No results found!</h3>");
-      %>
+        <c:forEach var="i" begin="0" end="${len}" step="1">
+          <c:set var="id" value="${d.listIds()[i]}" />
+          <c:set var="name" value="${d.listNames()[i]}" />
+          <a class="block" href="<c:out value="${con.concat(id)}" />"><c:out value="${name}" /></a>
+        </c:forEach>
+      </c:if>
+        <c:if test="${!hasResults && q.query.length() != 0}">
+        <h3>No results found!</h3>
+      </c:if>
     </div>
   </body>
 </html>
