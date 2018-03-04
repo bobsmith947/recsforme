@@ -25,7 +25,8 @@
         <c:forEach var="i" begin="0" end="${len}" step="1">
           <c:set var="id" value="${d.listIds()[i]}" />
           <c:set var="name" value="${d.listNames()[i]}" />
-          <a class="block" href="<c:out value="${con.concat(id)}" />"><c:out value="${name}" /></a>
+          <c:url value="/${con}" var="serv" scope="request" />
+          <a class="block" href="<c:out value="${serv.concat(id)}" />"><c:out value="${name}" /></a>
         </c:forEach>
       </c:if>
         <c:if test="${!hasResults && q.query.length() != 0}">

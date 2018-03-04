@@ -6,7 +6,7 @@
     <meta name="author" content="Lucas Kitaev">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="style.css" rel="stylesheet" type="text/css">
-    <!--<script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>-->
+    <script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>
     <title>recsforme :: Internal Server Error</title>
   </head>
   <body>

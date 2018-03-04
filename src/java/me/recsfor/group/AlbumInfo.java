@@ -80,6 +80,7 @@ public class AlbumInfo extends AbstractInfo {
         out.println("<h4>No tracks!</h4>");
       }
       out.println("<h5>Total length: " + info.getDuration() + "</h5>");
+      request.getRequestDispatcher("WEB-INF/jspf/choose.jspf").include(request, response);
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/release-group/"
               + id + "\">View on MusicBrainz</a>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);

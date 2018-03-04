@@ -4,14 +4,11 @@
   <head>
     <meta name="author" content="Lucas Kitaev">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet" type="text/css">
+    <link href="post.css" rel="stylesheet" type="text/css">
     <script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>
-    <title>recsforme :: Not Found</title>
+    <title>recsforme :: Vote</title>
   </head>
   <body>
-    <h2>Error 404</h2>
-    <h3>Not Found</h3>
-    <h4>A resource that doesn't exist was attempted to be accessed.</h4>
-    <a class="block" href="#" onclick="history.back()">Just go back and rethink your decisions.</a>
+    <h2>Your vote has been received!</h2>
   </body>
 </html>

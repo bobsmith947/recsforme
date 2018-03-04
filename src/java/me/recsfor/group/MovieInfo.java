@@ -53,6 +53,7 @@ public class MovieInfo extends AbstractInfo {
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
       out.println("<p>" + plot + "</p>");
+      request.getRequestDispatcher("WEB-INF/jspf/choose.jspf").include(request, response);
       out.println("<a class=\"block\" href=\"https://imdb.com/title/"
               + q + "\">View on IMDb</a>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);

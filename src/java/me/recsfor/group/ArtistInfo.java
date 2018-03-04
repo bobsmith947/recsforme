@@ -85,6 +85,7 @@ public class ArtistInfo extends AbstractInfo {
               + cont.getId() + "\">" + cont.getTitle() 
               + "</a> - <span class=\"date\">" + cont.getDateStr() + "</span></li>"));
       out.println("</ul></div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
+      request.getRequestDispatcher("WEB-INF/jspf/choose.jspf").include(request, response);
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/artist/"
               + q + "\">View on MusicBrainz</a>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
