@@ -25,10 +25,12 @@ import javax.servlet.http.HttpServletResponse;
 //import static java.net.URLDecoder.decode;
 //import static java.net.URLEncoder.encode;
 //import java.util.LinkedList;
-//import java.util.List;
+import java.util.List;
 import me.recsfor.search.AlbumQuery;
+import org.musicbrainz.MBWS2Exception;
 //import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
 import org.musicbrainz.modelWs2.MediumListWs2;
+import org.musicbrainz.modelWs2.TrackWs2;
 /**
  * A servlet to build group pages for albums, EP's, singles, and other types, including the available releases and recordings.
  * It can process HTTP methods by being given a request parameter containing the MusicBrainz ID of the respective release group. The request parameter has no associated name.
@@ -43,7 +45,13 @@ public class AlbumInfo extends AbstractInfo {
   @Override
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String id = request.getQueryString();
-    populate(id);
+    try {
+      id = checkId(id) ? AlbumQuery.switchId(id) : id;
+      populate(id);
+    } catch (MBWS2Exception | NullPointerException e) {
+      this.log(e.getMessage(), e);
+      populate(id);
+    }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html>");
@@ -57,24 +65,28 @@ public class AlbumInfo extends AbstractInfo {
       out.println("<title>recsforme :: " + title + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + title + " (" + type + ")</h2>");
-      out.println("<h3>Release group by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h3>");
-      out.println("<h3>Released: <span class=\"date\">" + date + "</span></h3>");
+      out.println("<h3>Released by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h3>");
+      out.println("<h3>Released on: <span class=\"date\">" + date + "</span></h3>");
       //TODO fix duration time
-      out.println("<h3>Tracklist:</h2><ol>");
-      info.getCompleteTrackList().forEach(track -> out.println("<li>" + track.getRecording().getTitle()
+      out.println("<h3>Tracklist:</h2>");
+      try {
+        List<TrackWs2> tracks = info.getCompleteTrackList();
+        out.println("<ol>");
+        tracks.forEach(track -> out.println("<li>" + track.getRecording().getTitle()
                 + " - " + track.getDuration() + "</li>"));
-      out.println("</ol><h5>Total length: " + info.getDuration() + "</h5>");
+        out.println("</ol>");
+      } catch (NullPointerException e) {
+        this.log(e.getMessage(), e);
+        out.println("<h4>No tracks!</h4>");
+      }
+      out.println("<h5>Total length: " + info.getDuration() + "</h5>");
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/release-group/"
               + id + "\">View on MusicBrainz</a>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }
   }
-  /**
-   * Returns a short description of the servlet.
-   *
-   * @return a String containing servlet description
-   */
+
   @Override
   public String getServletInfo() {
     return "Provides information for album groups.";
@@ -92,5 +104,13 @@ public class AlbumInfo extends AbstractInfo {
     artistId = query.listArtistId();
     date = query.listDate();
     info = query.getInfo();
+  }
+  /**
+   * Check if the ID needs to be switched.
+   * True if it does, false otherwise.
+   * @param id the id
+   */
+  private boolean checkId(String id) {
+    return new AlbumQuery(id, false).isIsNotGroup();
   }
 }

@@ -33,6 +33,7 @@ import org.musicbrainz.modelWs2.MediumListWs2;
 public class AlbumQuery extends AbstractQuery {
   private ReleaseGroupWs2 group;
   private MediumListWs2 info;
+  private boolean isNotGroup;
   private static final ReleaseGroupIncludesWs2 G_INC = new ReleaseGroupIncludesWs2();
   private static final ReleaseIncludesWs2 R_INC = new ReleaseIncludesWs2();
   protected static final String CONTEXT = "AlbumInfo?";
@@ -45,6 +46,7 @@ public class AlbumQuery extends AbstractQuery {
     super();
     group = null;
     info = null;
+    isNotGroup = false;
   }
   /**
    * Constructor for generating search results.
@@ -58,6 +60,7 @@ public class AlbumQuery extends AbstractQuery {
             results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - "
                     + r.getReleaseGroup().getArtistCreditString()));
     len = results.size();
+    isNotGroup = false;
   }
   /**
    * Constructor for generating group info.
@@ -71,10 +74,21 @@ public class AlbumQuery extends AbstractQuery {
       group = new LookUpWs2().getReleaseGroupById(id, G_INC);
       query = group.getTitle();
       this.info = new LookUpWs2().getReleaseById(group.getReleases().get(0).getId(), R_INC).getMediumList();
-    } catch (MBWS2Exception e) {
-      query = e.getMessage();
-      group = null;
-      this.info = null;
+      isNotGroup = false;
+    } catch (MBWS2Exception | IndexOutOfBoundsException e) {
+      try {
+        //resort to regular release lookup
+        ReleaseWs2 rel = new LookUpWs2().getReleaseById(id, R_INC);
+        group = rel.getReleaseGroup();
+        query = rel.getTitle();
+        this.info = rel.getMediumList();
+        isNotGroup = true;
+      } catch (MBWS2Exception ex) {
+        query = e.getMessage().concat(ex.getMessage());
+        group = null;
+        this.info = null;
+        isNotGroup = false;
+      }
     }
   }
   // </editor-fold>
@@ -104,6 +118,19 @@ public class AlbumQuery extends AbstractQuery {
   public void setInfo(MediumListWs2 info) {
     this.info = info;
   }
+  /**
+   * @return the isNotGroup
+   */
+  public boolean isIsNotGroup() {
+    return isNotGroup;
+  }
+
+  /**
+   * @param isNotGroup the isNotGroup to set
+   */
+  public void setIsNotGroup(boolean isNotGroup) {
+    this.isNotGroup = isNotGroup;
+  }
   //</editor-fold>
 
   // <editor-fold defaultstate="collapsed" desc="List methods.">
@@ -125,7 +152,14 @@ public class AlbumQuery extends AbstractQuery {
    * @return the type
    */
   public String listType() {
-    String type = group.getTypeString();
+    String type;
+    try {
+      type = group.getTypeString();
+    } catch (NullPointerException e) {
+      System.err.print(Arrays.toString(e.getStackTrace()));
+      type = "Unknown type";
+    }
+    //check if it's null again because this method is weird
     return type != null ? type : "Unknown type";
   }
   /**
@@ -133,27 +167,54 @@ public class AlbumQuery extends AbstractQuery {
    * @return the artist
    */
   public String listArtist() {
-    return group.getArtistCreditString();
+    String artist;
+    //get the first credit if possible
+    try {
+      artist = group.getArtistCreditString();
+    } catch (NullPointerException e) {
+      System.err.print(Arrays.toString(e.getStackTrace()));
+      //otherwise return [unknown]
+      artist = "[unknown]";
+      //or return Various Artists
+      //artist = "Various Artists";
+    }
+    return artist;
   }
   /**
    * Gets the artist's ID using the generated group.
    * @return the artist id
    */
   public String listArtistId() {
-    //TODO make sure this actually works
-    return group.getArtistCredit().getNameCredits().get(0).getArtist().getId();
+    String id;
+    //get the first credit if possible
+    try {
+      id = group.getArtistCredit().getNameCredits().get(0).getArtist().getId();
+    } catch (NullPointerException e) {
+      System.err.print(Arrays.toString(e.getStackTrace()));
+      //otherwise return ID for [unknown] artist
+      id = "125ec42a-7229-4250-afc5-e057484327fe";
+      //or return ID for Various Artists
+      //return "89ad4ac3-39f7-470e-963a-56509c546377";
+    }
+    return id;
   }
   /**
    * Gets the date of the album (date of the first release) using the generated group.
    * @return a string representing the date
    */
   public String listDate() {
-    return group.getFirstReleaseDateStr();
+    String date;
+    try {
+      date = group.getFirstReleaseDateStr();
+    } catch (NullPointerException e) {
+      date = e.getMessage();
+    }
+    return date;
   }
   // </editor-fold>
   
   /**
-   * Sets the relevant include requests for group and release lookup.
+   * Sets the relevant <code>include</code> parameters for <code>release-group</code> and <code>release</code> lookup.
    * @param inc whether you want to set the includes or not
    */
   private void createIncludes(boolean inc) {
@@ -161,8 +222,19 @@ public class AlbumQuery extends AbstractQuery {
     G_INC.setReleases(inc);
     R_INC.setMedia(inc);
     R_INC.setRecordings(inc);
-    //R_INC.setReleaseGroups(inc);
+    R_INC.setReleaseGroups(inc);
     //R_INC.setLabel(inc);
     //R_INC.setDiscids(inc);
+  }
+  /**
+   * Switches a <code>release</code> ID to the ID of its <code>release-group</code>.
+   * @param id the id of a release
+   * @return the id of the release-group
+   * @throws MBWS2Exception if the lookup fails
+   * @throws NullPointerException if no id could be found
+   */
+  public static String switchId(String id) throws MBWS2Exception, NullPointerException {
+    R_INC.setReleaseGroups(true);
+    return new LookUpWs2().getReleaseById(id, R_INC).getReleaseGroup().getId();
   }
 }
