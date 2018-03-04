@@ -59,6 +59,7 @@ public class MovieInfo extends AbstractInfo {
       out.println("</body></html>");
     }
   }
+  
   @Override
   public String getServletInfo() {
     return "Provides information for movie/TV show groups.";

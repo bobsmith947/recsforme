@@ -58,7 +58,19 @@ public class ArtistInfo extends AbstractInfo {
       out.println("<title>recsforme :: " + name + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + name + " - " + type + "</h2>");
-      out.println("<h3>Active: <span class=\"date\">" + years[0] 
+      String term;
+      switch (type) {
+        case "Person":
+          term = "Alive";
+          break;
+        case "Group":
+          term = "Active";
+          break;
+        default:
+          term = "Alive/Active";
+          break;
+      }
+      out.println("<h3>" + term + ": <span class=\"date\">" + years[0] 
               + "</span> to <span class=\"date\"" + years[1] + "</span></h3>");
       //TODO order release groups by date
       out.println("<h3>Discography:</h3>");
@@ -70,7 +82,7 @@ public class ArtistInfo extends AbstractInfo {
       out.println("<h4>Contributions:</h4>");
       out.println("<ul>");
       contrib.forEach(cont -> out.println("<li><a href=\"AlbumInfo?"
-              + cont.getId() + "&\">" + cont.getTitle() 
+              + cont.getId() + "\">" + cont.getTitle() 
               + "</a> - <span class=\"date\">" + cont.getDateStr() + "</span></li>"));
       out.println("</ul></div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/artist/"
@@ -79,6 +91,7 @@ public class ArtistInfo extends AbstractInfo {
       out.println("</body></html>");
     }
   }
+  
   @Override
   public String getServletInfo() {
     return "Provides information for artist groups.";
