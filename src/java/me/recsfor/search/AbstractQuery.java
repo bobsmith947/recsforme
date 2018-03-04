@@ -87,10 +87,7 @@ public abstract class AbstractQuery {
    * @return true if the query has changed, false otherwise
    */
   public boolean changed(String newQuery) {
-    if (query != null) {
-      return newQuery.equals(query);
-    } else {
-      return false;
-    }
+    //TODO use this method
+    return (query != null) ? newQuery.equals(query) : false;
   }
 }

@@ -32,11 +32,9 @@ import org.musicbrainz.modelWs2.MediumListWs2;
  */
 public class AlbumQuery extends AbstractQuery {
   private ReleaseGroupWs2 group;
-  private List<ReleaseWs2> albums;
   private MediumListWs2 info;
-  private LinkedList<MediumListWs2> fullInfo;
-  private final ReleaseGroupIncludesWs2 G_INC;
-  private final ReleaseIncludesWs2 A_INC;
+  private static final ReleaseGroupIncludesWs2 G_INC = new ReleaseGroupIncludesWs2();
+  private static final ReleaseIncludesWs2 R_INC = new ReleaseIncludesWs2();
   protected static final String CONTEXT = "AlbumInfo?";
 
   // <editor-fold desc="Constructors.">
@@ -46,9 +44,7 @@ public class AlbumQuery extends AbstractQuery {
   public AlbumQuery() {
     super();
     group = null;
-    albums = null;
-    G_INC = null;
-    A_INC = null;
+    info = null;
   }
   /**
    * Constructor for generating search results.
@@ -57,8 +53,6 @@ public class AlbumQuery extends AbstractQuery {
   public AlbumQuery(String query) {
     super(query);
     group = new ReleaseGroupWs2();
-    G_INC = null;
-    A_INC = null;
     String replace = query.replace("/", "");
     new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r ->
             results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - "
@@ -69,42 +63,18 @@ public class AlbumQuery extends AbstractQuery {
    * Constructor for generating group info.
    * @param id the id to generate info for
    * @param info whether you actually want the info or not
-   * @param full whether you want to get extra info or not
    */
-  public AlbumQuery(String id, boolean info, boolean full) {
+  public AlbumQuery(String id, boolean info) {
     super();
-    G_INC = new ReleaseGroupIncludesWs2();
-    A_INC = new ReleaseIncludesWs2();
     createIncludes(info);
     try {
       group = new LookUpWs2().getReleaseGroupById(id, G_INC);
-      albums = group.getReleases();
       query = group.getTitle();
-      if (full) {
-        fullInfo = new LinkedList<>();
-        this.info = null;
-        albums.forEach(album -> {
-          try {
-            fullInfo.add(new LookUpWs2().getReleaseById(album.getId(), A_INC).getMediumList());
-          } catch (MBWS2Exception e) {
-            query = e.getMessage();
-          }
-        });
-      } else {
-        fullInfo = null;
-        try {
-          this.info = new LookUpWs2().getReleaseById(albums.get(0).getId(), A_INC).getMediumList();
-        } catch (MBWS2Exception e) {
-          this.info = null;
-          query = e.getMessage();
-        }
-      }
+      this.info = new LookUpWs2().getReleaseById(group.getReleases().get(0).getId(), R_INC).getMediumList();
     } catch (MBWS2Exception e) {
       query = e.getMessage();
       group = null;
-      albums = null;
       this.info = null;
-      fullInfo = null;
     }
   }
   // </editor-fold>
@@ -123,18 +93,6 @@ public class AlbumQuery extends AbstractQuery {
     this.group = group;
   }
   /**
-   * @return the albums
-   */
-  public List<ReleaseWs2> getAlbums() {
-    return albums;
-  }
-  /**
-   * @param albums the albums to set
-   */
-  public void setAlbums(List<ReleaseWs2> albums) {
-    this.albums = albums;
-  }
-  /**
    * @return the info
    */
   public MediumListWs2 getInfo() {
@@ -145,18 +103,6 @@ public class AlbumQuery extends AbstractQuery {
    */
   public void setInfo(MediumListWs2 info) {
     this.info = info;
-  }
-  /**
-   * @return the fullInfo
-   */
-  public LinkedList<MediumListWs2> getFullInfo() {
-    return fullInfo;
-  }
-  /**
-   * @param fullInfo the fullInfo to set
-   */
-  public void setFullInfo(LinkedList<MediumListWs2> fullInfo) {
-    this.fullInfo = fullInfo;
   }
   //</editor-fold>
 
@@ -205,7 +151,7 @@ public class AlbumQuery extends AbstractQuery {
     return group.getFirstReleaseDateStr();
   }
   // </editor-fold>
-
+  
   /**
    * Sets the relevant include requests for group and release lookup.
    * @param inc whether you want to set the includes or not
@@ -213,10 +159,10 @@ public class AlbumQuery extends AbstractQuery {
   private void createIncludes(boolean inc) {
     G_INC.setArtists(inc);
     G_INC.setReleases(inc);
-    A_INC.setMedia(inc);
-    A_INC.setRecordings(inc);
-    //A_INC.setReleaseGroups(inc);
-    //A_INC.setLabel(inc);
-    //A_INC.setDiscids(inc);
+    R_INC.setMedia(inc);
+    R_INC.setRecordings(inc);
+    //R_INC.setReleaseGroups(inc);
+    //R_INC.setLabel(inc);
+    //R_INC.setDiscids(inc);
   }
 }

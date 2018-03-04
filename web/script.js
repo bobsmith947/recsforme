@@ -34,12 +34,12 @@ document.body.onload = () => {
   }
   //format dates
   elems = document.getElementsByClassName("date");
-  let d = null;
   for (i = 0; i < elems.length; i++) {
-    let d = moment(elems[i].innerHTML);
+    const s = elems[i].innerHTML;
+    const d = moment(s, "YYYY-MM-DD", true);
     if (d.isValid()) elems[i].innerHTML = d.format("LL");
-    else elems[i].innerHTML = "Unknown date";
-    elems[i].style.display = "inline";
+    else if (s === "null") elems[i].innerHTML = "Unknown date";
+    else elems[i].innerHTML = s;
   }
 }
 function expandImg(ev) {

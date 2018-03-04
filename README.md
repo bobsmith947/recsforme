@@ -18,6 +18,8 @@ Want to get recsforme set up on your local machine for development and testing p
 * npm (installed with [Node.js](https://nodejs.org/en/download/))
 * [oxipng](https://github.com/shssoichiro/oxipng) (optional)
 
+**Some features require access to a SQL database, so you must either comment out any SQL code, or create your own connection pool in `context.xml`.**
+
 ### Installing
 
     cd *directory you want to install recsforme in*
@@ -26,11 +28,11 @@ Want to get recsforme set up on your local machine for development and testing p
     npm install
     ant resolve
 
-After everything has been installed, you can open recsforme in NetBeans, or the IDE of your choice and begin [contributing](#contributing) to this wonderful project.
+After everything has been installed, you can open recsforme in NetBeans, or the IDE of your choice, and begin [contributing](#contributing) to this wonderful project.
 
 ### Running
 
-It's possible to run recsforme without an IDE. Make sure you have CATALINA_HOME set, and that your user has proper permissions.
+It's possible to run recsforme without an IDE. Make sure you have `CATALINA_HOME` set, and that your user has proper permissions.
 
     $CATALINA_HOME/bin/catalina start
     ant run -Dj2ee.server.home=$CATALINA_HOME

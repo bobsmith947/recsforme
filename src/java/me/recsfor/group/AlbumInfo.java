@@ -40,21 +40,12 @@ import org.musicbrainz.modelWs2.MediumListWs2;
 public class AlbumInfo extends AbstractInfo {
   private static final long serialVersionUID = 3558291301985484615L; //just in case
   private String title, type, artist, artistId, date;
-  private List<ReleaseWs2> releases;
   private MediumListWs2 info;
-  private LinkedList<MediumListWs2> releaseInfo;
 
   @Override
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String q = request.getQueryString();
-    String id = q.substring(q.indexOf("?")+1, q.indexOf("&"));
-    String f = q.substring(q.indexOf("&")+1);
-    boolean full = f.equals("full");
-    if (full) {
-      populate(id, true);
-    } else {
-      populate(id, false);
-    }
+    String id = request.getQueryString();
+    populate(id);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html>");
@@ -70,27 +61,13 @@ public class AlbumInfo extends AbstractInfo {
       out.println("<h2>" + title + " (" + type + ")</h2>");
       out.println("<h3>Release group by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h3>");
       out.println("<h3>Released: <span class=\"date\">" + date + "</span></h3>");
-      if (full) {
-        //TODO fix ordering
-        //TODO fix duration times
-        out.println("<h3>Editions:</h3><div>");
-        releases.forEach(rel -> {
-          MediumListWs2 list = releaseInfo.pop();
-          out.println("<div><h4>" + rel.getUniqueTitle() + " - <span class=\"date\">" + rel.getDateStr()
-                  + "</span> (" + list.getFormat() + ")</h4><ol>");
-          printTracks(list).forEach(t -> out.println(t));
-          out.println("</ol><h5>Total length: " + list.getDuration() + "</h5></div>");
-        });
-        out.println("</div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
-      } else {
-        out.println("<h3>Tracklist:</h2><ol>");
-        printTracks(info).forEach(t -> out.println(t));
-        out.println("</ol><h5>Total length: " + info.getDuration() + "</h5>");
-        out.println("<a class=\"block\" href=\"AlbumInfo?"
-                + id + "&full\">Retrieve editions (may take a while)</a>");
-      }
+      //TODO fix duration time
+      out.println("<h3>Tracklist:</h2><ol>");
+      info.getCompleteTrackList().forEach(track -> out.println("<li>" + track.getRecording().getTitle()
+                + " - " + track.getDuration() + "</li>"));
+      out.println("</ol><h5>Total length: " + info.getDuration() + "</h5>");
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/release-group/"
-              + q.substring(q.indexOf("=")+1, q.indexOf("&")) + "\">View on MusicBrainz</a>");
+              + id + "\">View on MusicBrainz</a>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }
@@ -109,26 +86,13 @@ public class AlbumInfo extends AbstractInfo {
    * @param id the release-group id
    * @param full whether to generate full edition info or not
    */
-  private void populate(String id, boolean full) {
-    AlbumQuery query = new AlbumQuery(id, true, full);
+  private void populate(String id) {
+    AlbumQuery query = new AlbumQuery(id, true);
     title = query.getQuery();
     type = query.listType();
     artist = query.listArtist();
     artistId = query.listArtistId();
     date = query.listDate();
-    releases = query.getAlbums();
     info = query.getInfo();
-    releaseInfo = query.getFullInfo();
-  }
-  /**
-   * Compiles tracks to be printed out with the servlet's <code>PrintWriter</code>.
-   * @param media the release medium containing the tracks
-   * @return a LinkedList containing the tracks
-   */
-  private LinkedList<String> printTracks(MediumListWs2 media) {
-    LinkedList<String> ret = new LinkedList<>();
-    media.getCompleteTrackList().forEach(track -> ret.add("<li>" + track.getRecording().getTitle()
-                + " - " + track.getDuration() + "</li>"));
-    return ret;
   }
 }
