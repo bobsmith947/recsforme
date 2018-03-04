@@ -30,8 +30,8 @@ import static org.apache.commons.lang3.text.WordUtils.capitalize;
  */
 public class MovieQuery extends AbstractQuery {
   private OmdbVideoFull info;
-  private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
   private final OmdbParameters PARAMS;
+  private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
   protected static final String CONTEXT = "MovieInfo?";
 
   // <editor-fold desc="Constructors.">
@@ -99,6 +99,12 @@ public class MovieQuery extends AbstractQuery {
   public void setInfo(OmdbVideoFull info) {
     this.info = info;
   }
+  /**
+   * @return the PARAMS
+   */
+  public final OmdbParameters getPARAMS() {
+    return PARAMS;
+  }
   // </editor-fold>
 
   // <editor-fold defaultstate="collapsed" desc="List methods.">
@@ -146,6 +152,7 @@ public class MovieQuery extends AbstractQuery {
    * @return either PlotType.SHORT or PlotType.FULL
    */
   private PlotType switchPlot(String type) {
+    //TODO use this method
     switch (type.toLowerCase()) {
       case "full":
         return PlotType.FULL;

@@ -18,6 +18,8 @@ Want to get recsforme set up on your local machine for development and testing p
 * npm (installed with [Node.js](https://nodejs.org/en/download/))
 * [oxipng](https://github.com/shssoichiro/oxipng) (optional)
 
+**Some features require access to a SQL database, so you must either comment out any SQL code, or create your own connection pool in `context.xml`.**
+
 ### Installing
 
     cd *directory you want to install recsforme in*
@@ -26,25 +28,24 @@ Want to get recsforme set up on your local machine for development and testing p
     npm install
     ant resolve
 
-After everything has been installed, you can open recsforme in NetBeans, or the IDE of your choice and begin [contributing](#contributing) to this wonderful project.
+After everything has been installed, you can open recsforme in NetBeans, or the IDE of your choice, and begin [contributing](#contributing) to this wonderful project.
 
 ### Running
 
-Once your GlassFish install directory has been added to your PATH, recsforme can be run directly from the command line:
+It's possible to run recsforme without an IDE. Make sure you have `CATALINA_HOME` set, and that your user has proper permissions.
 
-    cd glassfish4
-    /bin/asadmin start-domain domain1
-    cd *your recsforme install directory*
-    ant run -Dj2ee.server.home=glassfish4/glassfish
+    $CATALINA_HOME/bin/catalina start
+    ant run -Dj2ee.server.home=$CATALINA_HOME
 
 Unit tests can be executed with:
 
-    ant test -Dj2ee.server.home=glassfish4/glassfish
+    ant test -Dj2ee.server.home=$CATALINA_HOME
 
 When you're done:
 
-    cd glassfish4
-    /bin/asadmin stop-domain domain1
+    $CATALINA_HOME/bin/catalina stop
+
+*Please note, it may be necessary to specify .bat or .sh depending on your OS.*
 
 ## Contributing
 

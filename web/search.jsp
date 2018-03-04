@@ -15,7 +15,7 @@
   </head>
   <body>
     <c:set var="con" value="${q.context}" />
-    <c:set var="len" value="${d.results.size()}" />
+    <c:set var="len" value="${d.len}" />
     <div id="results">
       <c:if test="${len > 0}" var="hasResults">
         <sql:update var="added" scope="request" dataSource="jdbc/MediaRecom">
