@@ -36,7 +36,7 @@ public class AlbumQuery extends AbstractQuery {
   private boolean isNotGroup;
   private static final ReleaseGroupIncludesWs2 G_INC = new ReleaseGroupIncludesWs2();
   private static final ReleaseIncludesWs2 R_INC = new ReleaseIncludesWs2();
-  protected static final String CONTEXT = "AlbumInfo?";
+  protected static final String CONTEXT = "AlbumInfo?id=";
 
   // <editor-fold desc="Constructors.">
   /**

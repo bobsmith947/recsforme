@@ -31,7 +31,7 @@ import java.util.List;
 public class ArtistQuery extends AbstractQuery {
   private ArtistWs2 artist;
   private final ArtistIncludesWs2 INC;
-  protected static final String CONTEXT = "ArtistInfo?";
+  protected static final String CONTEXT = "ArtistInfo?id=";
 
   // <editor-fold desc="Constructors.">
   /**

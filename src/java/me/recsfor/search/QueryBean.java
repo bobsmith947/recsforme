@@ -23,7 +23,7 @@ import static org.apache.commons.lang3.text.WordUtils.capitalize;
  * @author lkitaev
  */
 public class QueryBean implements Serializable {
-  private static final long serialVersionUID = -2224562734989733429L; //just in case
+  private static final long serialVersionUID = -2224562734989733429L;
   public static final String PROP_QUERY = "query";
   public static final String PROP_TYPE = "type";
   public static final String PROP_CONTEXT = "context";
