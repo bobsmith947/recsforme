@@ -37,8 +37,8 @@ public class QueryBean implements Serializable {
    * Default constructor called when instantiated in a JSP.
    */
   public QueryBean() {
-    query = "";
     propertySupport = new PropertyChangeSupport(this);
+    query = "";
     //default to a movie type query
     type = "movie";
     context = MovieQuery.CONTEXT;

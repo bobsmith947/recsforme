@@ -1,4 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="r" scope="request" class="me.recsfor.rec.RecBean" />
+<jsp:setProperty name="r" property="id" />
+<jsp:setProperty name="r" property="name" />
+<jsp:setProperty name="r" property="like" value='<%= Boolean.parseBoolean(request.getParameter("like")) %>' />
 <!DOCTYPE html>
 <html>
   <head>
