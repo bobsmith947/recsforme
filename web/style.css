@@ -65,11 +65,11 @@ ul, ol {
   width: 15%;
   transition: width 1s;
 }
-#media-search {
+#media-search, #vote-form {
   margin: auto;
   width: 50%;
 }
-#media-search > * {
+#media-search, #vote-form > * {
   display: block;
   margin: 5px auto;
 }
@@ -81,4 +81,8 @@ a.block {
   display: block;
   text-align: center;
   margin: 20px;
+}
+#vote-form > label {
+  display: inline;
+  margin: 0 auto;
 }

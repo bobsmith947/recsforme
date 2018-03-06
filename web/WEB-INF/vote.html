@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Voting page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <form id="vote-form" data-bind="submit: sendVote">
+      <label for="yes">Yes</label>
+      <input id="yes" type="radio" value="true" name="like">
+      <label for="no">No</label>
+      <input id="no" type="radio" value="false" name="like">
+      <input type="hidden" name="name" value="">
+      <input type="hidden" name="id" value="">
+      <button>Submit</button>
+    </form>
+    <div data-bind="visible: confirmation">
+      <h2>Your vote has been received!</h2>
+      <h3>Added to <span data-bind="text: type"></span>s.</h3>
+    </div>
+  </body>
+</html>
