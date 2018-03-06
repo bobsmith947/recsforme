@@ -4,6 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Voting page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+            type="text/javascript" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"
+            type="text/javascript" async></script>
   </head>
   <body>
     <form id="vote-form" data-bind="submit: sendVote">
@@ -13,11 +17,20 @@
       <input id="no" type="radio" value="false" name="like">
       <input type="hidden" name="name" value="">
       <input type="hidden" name="id" value="">
-      <button>Submit</button>
+      <button type="submit">Submit</button>
     </form>
     <div data-bind="visible: confirmation">
       <h2>Your vote has been received!</h2>
       <h3>Added to <span data-bind="text: type"></span>s.</h3>
     </div>
+    <script type="text/javascript">
+      var viewModel = {
+        confirmation: ko.observable(false),
+        sendVote: function(form) {
+          $.post("vote.jsp", $(form).serialize());
+          viewModel.confirmation(true);
+        }
+      };
+    </script>
   </body>
 </html>
