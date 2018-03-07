@@ -52,12 +52,8 @@ public class ArtistInfo extends AbstractInfo {
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html>");
       out.println("<html><head>");
-      out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
       out.println("<meta name=\"keywords\" content=\"\">");
       out.println("<meta name=\"description\" content=\"\">");
-      out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-      out.println("<link href=\"post.css\" rel=\"stylesheet\" type=\"text/css\">");
-      out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + name + " - " + GROUP_TYPE + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + name + " - " + type + "</h2>");

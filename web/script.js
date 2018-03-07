@@ -18,7 +18,7 @@
 import $ from "jquery";
 import moment from "moment/min/moment.min.js";
 
-document.body.onload = () => {
+$(() => {
   //set external links to open in a new tab/window
   let elems = document.links, i = undefined;
   for (i = 0; i < elems.length; i++) {
@@ -42,34 +42,38 @@ document.body.onload = () => {
     else if (s === "null") elems[i].innerHTML = "Unknown date";
     else elems[i].innerHTML = s;
   }
-}
-
-if(!ko) $("#vote-div").remove();
-else {
-  const title = document.title;
-  $("input[name=name]").val(title.substring(title.indexOf(": ")+2, title.indexOf(" - ")));
-  $("input[name=type]").val(title.substring(title.indexOf("- ")+2));
-  $("input[name=id]").val(location.search.substring(4));
-  let viewModel = {
-    confirmation: ko.observable(false),
-    type: ko.observable(""),
-    name: ko.observable(""),
-    status: ko.observable(""),
-    //TODO add form validation
-    sendVote: form => {
-      let voteData = new FormData(form);
-      this.type(voteData.get("type"));
-      this.name(voteData.get("name"));
-      this.status(isLike(voteData.get("like")));
-      this.confirmation(true);
-      $.post("GroupVote", $(form).serialize(), (data, status) => {
-        if (status === "success") $("#response").append(data);
-        else alert("Failed to send data to server.");
-      });
-    }
-  };
-  ko.applyBindings(viewModel);
-}
+  //knockout bindings
+  try {
+    const title = document.title;
+    $("input[name=name]").val(title.substring(title.indexOf(": ")+2, title.indexOf(" - ")));
+    $("input[name=type]").val(title.substring(title.indexOf("- ")+2));
+    $("input[name=id]").val(location.search.substring(4));
+    let viewModel = {
+      confirmation: ko.observable(false),
+      type: ko.observable(""),
+      name: ko.observable(""),
+      status: ko.observable(""),
+      //TODO add form validation
+      sendVote: function(form) {
+        let voteData = new FormData(form);
+        this.type(voteData.get("type"));
+        this.name(voteData.get("name"));
+        this.status(isLike(voteData.get("like")));
+        this.confirmation(true);
+        $.post("GroupVote", $(form).serialize(), (data, status) => {
+          if (status === "success") $("#response").append(data);
+          else alert("Failed to send data to server.");
+        });
+      }
+    };
+    ko.applyBindings(viewModel);
+  } catch (e) {
+    $("#button[type=submit]").submit(function(e) {
+      e.preventDefault();
+      alert("You need to allow scripts from cloudflare.com.");
+    });
+  }
+});
 
 function expandImg(ev) {
   const elem = ev.target, w = elem.naturalWidth;

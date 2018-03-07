@@ -22,8 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 /**
- * Servlet for sending vote information to <code>vote.jsp</code>.
- * It should not be accessed on its own. Instead, it should be included in another servlet's response using <code>getRequestDispatcher</code>.
+ * Servlet for processing vote information.
  * @author lkitaev
  */
 public class GroupVote extends AbstractInfo {
@@ -50,6 +49,6 @@ public class GroupVote extends AbstractInfo {
 
   @Override
   public String getServletInfo() {
-    return "Included with Info servlets to send vote information.";
+    return "Processes vote information.";
   }
 }

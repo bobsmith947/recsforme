@@ -1,5 +1,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js" type="text/javascript"></script>
-<form id="vote-form" data-bind="submit: sendVote">
+<h2>Do you like this?</h2>
+<form id="vote-form" data-bind="submit:sendVote">
   <label for="yes">Yes</label>
   <input id="yes" type="radio" value="true" name="like">
   <label for="no">No</label>
@@ -9,9 +10,9 @@
   <input type="hidden" name="id" value="">
   <button type="submit">Submit</button>
 </form>
-<div id="vote-div" data-bind="visible: confirmation">
+<div id="vote-div" style="display:none" data-bind="visible:confirmation">
   <h2>Your vote has been received!</h2>
-  <h3>Added <span data-bind="text: name"></span> to <span data-bind="text: type"></span> list.</h3>
-  <h3>You <span style="text-decoration:underline" data-bind="text: status"></span> this.</h3>
+  <h3>Added <span data-bind="text:name"></span> to <span data-bind="text:type"></span> list.</h3>
+  <h3>You <span style="text-decoration:underline" data-bind="text:status"></span> this.</h3>
 </div>
 <div id="response"></div>
