@@ -29,7 +29,7 @@
           <a class="block" href="<c:out value="${serv.concat(id)}" />"><c:out value="${name}" /></a>
         </c:forEach>
       </c:if>
-        <c:if test="${!hasResults && q.query.length() != 0}">
+      <c:if test="${!hasResults && q.query.length() != 0}">
         <h3>No results found!</h3>
       </c:if>
     </div>
