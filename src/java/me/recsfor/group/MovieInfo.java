@@ -33,15 +33,15 @@ import me.recsfor.search.MovieQuery;
  */
 public class MovieInfo extends AbstractInfo {
   private static final long serialVersionUID = -4184169288250689262L;
-  private static final String GROUP_TYPE = "movie";
+  private static final String GROUP_TYPE = "Movie";
   private String title, year, type, plot;
 
   @Override
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String id = request.getParameter("id");
     populate(id);
-    request.setAttribute("name", title);
-    request.setAttribute("type", GROUP_TYPE);
+    //request.setAttribute("name", title);
+    //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html>");
@@ -52,13 +52,13 @@ public class MovieInfo extends AbstractInfo {
       out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
       out.println("<link href=\"post.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + title + "</title></head><body>");
+      out.println("<title>recsforme :: " + title + " - " + GROUP_TYPE + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
       out.println("<p>" + plot + "</p>");
-      request.getRequestDispatcher("/GroupVote").include(request, response);
       out.println("<a class=\"block\" href=\"https://imdb.com/title/"
               + id + "\">View on IMDb</a>");
+      request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }

@@ -68,8 +68,9 @@ ul, ol {
 #media-search, #vote-form {
   margin: auto;
   width: 50%;
+  text-align: center;
 }
-#media-search, #vote-form > * {
+form > input, button, select {
   display: block;
   margin: 5px auto;
 }
@@ -82,7 +83,7 @@ a.block {
   text-align: center;
   margin: 20px;
 }
-#vote-form > label {
-  display: inline;
-  margin: 0 auto;
+#vote-form > input[type=radio], label {
+  display: inline-block;
+  margin: auto;
 }

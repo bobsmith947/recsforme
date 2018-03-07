@@ -33,26 +33,18 @@ public class GroupVote extends AbstractInfo {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String name, id, type;
     try {
-      name = (String) request.getAttribute("name");
+      name = request.getParameter("name");
       id = request.getParameter("id");
-      type = (String) request.getAttribute("type");
+      type = request.getParameter("type");
     } catch (NullPointerException e) {
+      this.log(e.getMessage(), e);
       name = "";
       id = "";
       type = "";
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      out.println("<h2>Do you like this?</h2>");
-      out.println("<form style=\"margin:0 45%\" action=\"vote.jsp\" method=\"POST\">");
-      out.println("<label for=\"yes\">Yes</label>");
-      out.println("<input id=\"yes\" type=\"radio\" value=\"true\" name=\"like\">");      
-      out.println("<label for=\"no\">No</label>");
-      out.println("<input id=\"no\" type=\"radio\" value=\"false\" name=\"like\">");
-      out.println("<input type=\"hidden\" name=\"name\" value=\"" + name + "\">");
-      out.println("<input type=\"hidden\" name=\"id\" value=\"" + id + "\">");
-      out.println("<input type=\"hidden\" name=\"type\" value=\"" + type + "\">");
-      out.println("<input type=\"submit\" value=\"Submit\"></form>");
+      out.println("<p>" + name + id + type + "</p>");
     }
   }
 

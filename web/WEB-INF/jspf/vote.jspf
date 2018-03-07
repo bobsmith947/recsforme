@@ -2,18 +2,15 @@
         type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"
         type="text/javascript"></script>
+<script src="ajax.js" type="text/javascript" defer></script>
 <form id="vote-form" data-bind="submit: sendVote">
   <label for="yes">Yes</label>
   <input id="yes" type="radio" value="true" name="like">
   <label for="no">No</label>
   <input id="no" type="radio" value="false" name="like">
-  <input type="text" name="name" value="">
-  <select name="type">
-    <option value="movie">Movie/TV Show</option>
-    <option value="artist">Artist</option>
-    <option value="album">Album/EP/Single</option>
-  </select>
-  <!--<input type="hidden" name="id" value="">-->
+  <input type="hidden" name="name" value="">
+  <input type="hidden" name="type" value="">
+  <input type="hidden" name="id" value="">
   <button type="submit">Submit</button>
 </form>
 <div data-bind="visible: confirmation">
@@ -21,37 +18,4 @@
   <h3>Added <span data-bind="text: name"></span> to <span data-bind="text: type"></span> list.</h3>
   <h3>You <span style="text-decoration:underline" data-bind="text: status"></span> this.</h3>
 </div>
-<script type="text/javascript">
-  ko.applyBindings(viewModel);
-  var viewModel = {
-    confirmation: ko.observable(false),
-    type: ko.observable(""),
-    name: ko.observable(""),
-    status: ko.observable(""),
-    sendVote: function (form) {
-      var voteData = new FormData(form);
-      this.type(voteData.get("type"));
-      this.name(voteData.get("name"));
-      this.status(isLike(voteData.get("like")));
-      this.confirmation(true);
-      $.post("/GroupVote", voteData, function() {
-        alert("Sent to server.");
-      });
-    }
-  };
-  if (!FormData.prototype.get) {
-    FormData.prototype.get = function(key) {
-      var arr = $("#vote-form").serializeArray();
-      arr.reduce(function(red, item) {
-        red[item.name] = item.value;
-        return red;
-      });
-      return red[key];
-    };
-  }
-  function isLike(str) {
-    if (str === "true") return "like";
-    else if (str === "false") return "dislike";
-    else return "either like or dislike";
-  }
-</script>
+<div id="response"></div>

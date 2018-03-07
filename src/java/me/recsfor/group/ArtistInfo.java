@@ -36,7 +36,7 @@ import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
  */
 public class ArtistInfo extends AbstractInfo {
   private static final long serialVersionUID = -8210213618927548383L;
-  private static final String GROUP_TYPE = "artist";
+  private static final String GROUP_TYPE = "Artist";
   private String name, type;
   private String[] years;
   private List<ReleaseGroupWs2> albums;
@@ -46,8 +46,8 @@ public class ArtistInfo extends AbstractInfo {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String id = request.getParameter("id");
     populate(id);
-    request.setAttribute("name", name);
-    request.setAttribute("type", GROUP_TYPE);
+    //request.setAttribute("name", name);
+    //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html>");
@@ -58,7 +58,7 @@ public class ArtistInfo extends AbstractInfo {
       out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
       out.println("<link href=\"post.css\" rel=\"stylesheet\" type=\"text/css\">");
       out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
-      out.println("<title>recsforme :: " + name + "</title></head><body>");
+      out.println("<title>recsforme :: " + name + " - " + GROUP_TYPE + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + name + " - " + type + "</h2>");
       String term;
@@ -88,9 +88,9 @@ public class ArtistInfo extends AbstractInfo {
               + cont.getId() + "\">" + cont.getTitle() 
               + "</a> - <span class=\"date\">" + cont.getDateStr() + "</span></li>"));
       out.println("</ul></div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
-      request.getRequestDispatcher("/GroupVote").include(request, response);
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/artist/"
               + id + "\">View on MusicBrainz</a>");
+      request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }
