@@ -15,6 +15,7 @@
  */
 
 //import "babel-polyfill";
+import $ from "jquery";
 import moment from "moment/min/moment.min.js";
 
 document.body.onload = () => {
@@ -43,6 +44,33 @@ document.body.onload = () => {
   }
 }
 
+if(!ko) $("#vote-div").remove();
+else {
+  const title = document.title;
+  $("input[name=name]").val(title.substring(title.indexOf(": ")+2, title.indexOf(" - ")));
+  $("input[name=type]").val(title.substring(title.indexOf("- ")+2));
+  $("input[name=id]").val(location.search.substring(4));
+  let viewModel = {
+    confirmation: ko.observable(false),
+    type: ko.observable(""),
+    name: ko.observable(""),
+    status: ko.observable(""),
+    //TODO add form validation
+    sendVote: form => {
+      let voteData = new FormData(form);
+      this.type(voteData.get("type"));
+      this.name(voteData.get("name"));
+      this.status(isLike(voteData.get("like")));
+      this.confirmation(true);
+      $.post("GroupVote", $(form).serialize(), (data, status) => {
+        if (status === "success") $("#response").append(data);
+        else alert("Failed to send data to server.");
+      });
+    }
+  };
+  ko.applyBindings(viewModel);
+}
+
 function expandImg(ev) {
   const elem = ev.target, w = elem.naturalWidth;
   switch(elem.style.width) {
@@ -58,19 +86,18 @@ function expandImg(ev) {
   }
 }
 
+function isLike(str) {
+  if (str === "true") return "like";
+  else if (str === "false") return "dislike";
+  else return "either like or dislike";
+}
+
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
 if (!String.prototype.includes) {
   String.prototype.includes = function(search, start) {
-    'use strict';
-    if (typeof start !== 'number') {
-      start = 0;
-    }
-
-    if (start + search.length > this.length) {
-      return false;
-    } else {
-      return this.indexOf(search, start) !== -1;
-    }
+    if (typeof start !== 'number') start = 0;
+    if (start + search.length > this.length) return false;
+    else return this.indexOf(search, start) !== -1;
   };
 }
 
@@ -78,50 +105,49 @@ if (!String.prototype.includes) {
 if (!Array.prototype.includes) {
   Object.defineProperty(Array.prototype, 'includes', {
     value: function(searchElement, fromIndex) {
-
       if (this == null) {
         throw new TypeError('"this" is null or not defined');
       }
-
       // 1. Let O be ? ToObject(this value).
       var o = Object(this);
-
       // 2. Let len be ? ToLength(? Get(O, "length")).
       var len = o.length >>> 0;
-
       // 3. If len is 0, return false.
-      if (len === 0) {
-        return false;
-      }
-
+      if (len === 0) return false;
       // 4. Let n be ? ToInteger(fromIndex).
       //    (If fromIndex is undefined, this step produces the value 0.)
       var n = fromIndex | 0;
-
       // 5. If n ≥ 0, then
       //  a. Let k be n.
       // 6. Else n < 0,
       //  a. Let k be len + n.
       //  b. If k < 0, let k be 0.
       var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
-
       function sameValueZero(x, y) {
         return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
       }
-
       // 7. Repeat, while k < len
       while (k < len) {
         // a. Let elementK be the result of ? Get(O, ! ToString(k)).
         // b. If SameValueZero(searchElement, elementK) is true, return true.
-        if (sameValueZero(o[k], searchElement)) {
-          return true;
-        }
+        if (sameValueZero(o[k], searchElement)) return true;
         // c. Increase k by 1.
         k++;
       }
-
       // 8. Return false
       return false;
     }
   });
+}
+
+//TODO check if this works
+if (!FormData.prototype.get) {
+  FormData.prototype.get = function(key) {
+    var arr = $(this).serializeArray();
+    var red = arr.reduce(function (obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    });
+    return red[key];
+  };
 }

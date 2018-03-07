@@ -2,14 +2,17 @@
 <jsp:setProperty name="q" property="type" />
 <jsp:setProperty name="q" property="query" />
 <% String t = q.getType().toLowerCase(); %>
-<h1><a href="index.jsp">recsforme</a></h1>
-<h2>Search for something:</h2>
-<form id="media-search" action="search.jsp">
-  <input type="search" name="query" maxlength="100" autocomplete="off" value="<jsp:getProperty name="q" property="query" />" autofocus>
-  <select name="type">
-    <option value="movie" <% if (t.equals("movie")) out.print("selected"); %> >Movie/TV Show</option>
-    <option value="artist" <% if (t.equals("artist")) out.print("selected"); %> >Artist</option>
-    <option value="album" <% if (t.equals("album")) out.print("selected"); %> >Album/EP/Single</option>
-  </select>
-  <button type="submit">Search</button>
-</form>
+<body>
+  <noscript>Scripts have been disabled. Some features may not work.</noscript>
+  <h1><a href="index.jsp">recsforme</a></h1>
+  <h2>Search for something:</h2>
+  <form id="media-search" action="search.jsp">
+    <input type="search" name="query" maxlength="100" autocomplete="off" value="<jsp:getProperty name="q" property="query" />" autofocus>
+    <select name="type">
+      <option value="movie" <% if (t.equals("movie")) out.print("selected"); %> >Movie/TV Show</option>
+      <option value="artist" <% if (t.equals("artist")) out.print("selected"); %> >Artist</option>
+      <option value="album" <% if (t.equals("album")) out.print("selected"); %> >Album/EP/Single</option>
+    </select>
+    <button type="submit">Search</button>
+  </form>
+</body>

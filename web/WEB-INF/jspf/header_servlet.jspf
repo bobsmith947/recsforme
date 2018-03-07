@@ -1,11 +1,14 @@
-<h1><a href="index.jsp">recsforme</a></h1>
-<h2>Search for something:</h2>
-<form id="media-search" action="search.jsp">
-  <input type="search" name="query" maxlength="100" autocomplete="off">
-  <select name="type">
-    <option value="movie" selected >Movie/TV Show</option>
-    <option value="artist">Artist</option>
-    <option value="album">Album/EP/Single</option>
-  </select>
-  <button type="submit">Search</button>
-</form>
+<body>
+  <noscript>Scripts have been disabled. Some features may not work.</noscript>
+  <h1><a href="index.jsp">recsforme</a></h1>
+  <h2>Search for something:</h2>
+  <form id="media-search" action="search.jsp">
+    <input type="search" name="query" maxlength="100" autocomplete="off">
+    <select name="type">
+      <option value="movie" selected >Movie/TV Show</option>
+      <option value="artist">Artist</option>
+      <option value="album">Album/EP/Single</option>
+    </select>
+    <button type="submit">Search</button>
+  </form>
+</body>
