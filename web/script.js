@@ -43,7 +43,7 @@ $(() => {
     $("input[name=type]").val(title.substring(title.indexOf("- ")+2));
     $("input[name=id]").val(location.search.substring(4));
     //$("#vote-form").submit(e => e.preventDefault());
-    let viewModel = {
+    let voteModel = {
       confirmation: ko.observable(false),
       hasSelected: ko.observable(false),
       type: ko.observable(""),
@@ -59,10 +59,12 @@ $(() => {
           if (status === "success") $("#response").append(data);
           else alert("Failed to send data to server.");
         });
+        localStorage.setItem(this.name(), this.status());
       },
       undoVote: function() {
         this.confirmation(false);
         this.hasSelected(false);
+        localStorage.removeItem(this.name());
       }
     };
     ko.applyBindings(viewModel);
