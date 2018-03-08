@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.recsfor.search;
+package me.recsfor.engine.search;
 
 //import org.musicbrainz.Controller.Artist;
 import java.util.Arrays;

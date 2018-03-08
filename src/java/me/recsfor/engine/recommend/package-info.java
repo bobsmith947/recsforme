@@ -19,4 +19,4 @@
  * Recommendations are primarily based on similarities between users' sets of likes and dislikes.
  */
 
-package me.recsfor.rec;
+package me.recsfor.engine.recommend;

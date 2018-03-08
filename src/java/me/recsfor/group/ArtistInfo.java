@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 //import static java.net.URLDecoder.decode;
 //import static java.net.URLEncoder.encode;
 import java.util.List;
-import me.recsfor.search.ArtistQuery;
+import me.recsfor.engine.search.ArtistQuery;
 import org.musicbrainz.modelWs2.Entity.ReleaseGroupWs2;
 import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
 /**

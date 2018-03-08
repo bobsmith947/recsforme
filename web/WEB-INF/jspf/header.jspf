@@ -1,4 +1,4 @@
-<jsp:useBean id="q" scope="request" class="me.recsfor.search.QueryBean" />
+<jsp:useBean id="q" scope="request" class="me.recsfor.engine.search.QueryBean" />
 <jsp:setProperty name="q" property="type" />
 <jsp:setProperty name="q" property="query" />
 <% String t = q.getType().toLowerCase(); %>
