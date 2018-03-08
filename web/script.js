@@ -20,28 +20,21 @@ import moment from "moment/min/moment.min.js";
 import ko from "knockout";
 
 $(() => {
-  //set external links to open in a new tab/window
-  $("a").each(() => {
-    const el = $(this);
-    if (el.attr("href").includes(`://${document.domain}`)) el.attr("target", "_blank");
-  });
   //add listener to expand images on click
   /*if (screen.width > 1024) {
-    $(".exp").each(() => {
-      const el = $(this);
-      el.click(expandImg);
-      el.attr("title", "Click to expand.");
-      el.css("width", "15%");
+    $(".exp").each((ind, cur) => {
+      $(cur).click(expandImg);
+      $(cur).attr("title", "Click to expand.");
+      $(cur).css("width", "15%");
     });
   }*/
   //format dates
-  $(".date").each(() => {
-    const el = $(this);
-    const str = t.text();
-    const date = moment(s, "YYYY-MM-DD", true);
-    if (date.isValid()) el.text(format("LL"));
-    else if (str === "null") el.text("Unknown date");
-    else el.text(str);
+  $(".date").each((ind, cur) => {
+    const str = $(cur).text();
+    const date = moment(str, "YYYY-MM-DD", true);
+    if (date.isValid()) $(cur).text(date.format("LL"));
+    else if (str === "null") $(cur).text("Unknown date");
+    else $(cur).text(str);
   });
   //knockout bindings for group page
   try {
@@ -49,13 +42,13 @@ $(() => {
     $("input[name=name]").val(title.substring(title.indexOf(": ")+2, title.indexOf(" - ")));
     $("input[name=type]").val(title.substring(title.indexOf("- ")+2));
     $("input[name=id]").val(location.search.substring(4));
-    $("#vote-form").submit(e => e.preventDefault());
+    //$("#vote-form").submit(e => e.preventDefault());
     let viewModel = {
       confirmation: ko.observable(false),
+      hasSelected: ko.observable(false),
       type: ko.observable(""),
       name: ko.observable(""),
       status: ko.observable(""),
-      //TODO add form validation
       sendVote: function(form) {
         let voteData = new FormData(form);
         this.type(voteData.get("type"));
@@ -66,6 +59,10 @@ $(() => {
           if (status === "success") $("#response").append(data);
           else alert("Failed to send data to server.");
         });
+      },
+      undoVote: function() {
+        this.confirmation(false);
+        this.hasSelected(false);
       }
     };
     ko.applyBindings(viewModel);
@@ -91,9 +88,17 @@ function expandImg(ev) {
 }
 
 function isLike(str) {
-  if (str === "true") return "like";
-  else if (str === "false") return "dislike";
-  else return "either like or dislike";
+  switch (str) {
+    case "true" :
+      return "like";
+      break;
+    case "false" :
+      return "dislike";
+      break;
+    default :
+      return "either like or dislike";
+      break;
+  }
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes

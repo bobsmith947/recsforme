@@ -70,17 +70,17 @@ public class ArtistInfo extends AbstractInfo {
           break;
       }
       out.println("<h3>" + term + ": <span class=\"date\">" + years[0] 
-              + "</span> to <span class=\"date\"" + years[1] + "</span></h3>");
+              + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");
       //TODO order release groups by date
       out.println("<h3>Discography:</h3>");
       out.println("<ul>");
-      albums.forEach(album -> out.println("<li><a href=\"AlbumInfo?"
+      albums.forEach(album -> out.println("<li><a href=\"AlbumInfo?id="
               + album.getId() + "\">" + album.getTitle() + 
               "</a> - <span class=\"date\">" + album.getFirstReleaseDateStr() + "</span></li>"));
       out.println("</ul>");
       out.println("<h4>Contributions:</h4>");
       out.println("<ul>");
-      contrib.forEach(cont -> out.println("<li><a href=\"AlbumInfo?"
+      contrib.forEach(cont -> out.println("<li><a href=\"AlbumInfo?id="
               + cont.getId() + "\">" + cont.getTitle() 
               + "</a> - <span class=\"date\">" + cont.getDateStr() + "</span></li>"));
       out.println("</ul></div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");

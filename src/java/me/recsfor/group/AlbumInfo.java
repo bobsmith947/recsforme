@@ -64,7 +64,7 @@ public class AlbumInfo extends AbstractInfo {
       out.println("<title>recsforme :: " + title + " - " + GROUP_TYPE + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + title + " (" + type + ")</h2>");
-      out.println("<h3>Released by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h3>");
+      out.println("<h3>Released by: <a href=\"ArtistInfo?id=" + artistId + "\">" + artist + "</a></h3>");
       out.println("<h3>Released on: <span class=\"date\">" + date + "</span></h3>");
       //TODO fix duration time
       out.println("<h3>Tracklist:</h2>");

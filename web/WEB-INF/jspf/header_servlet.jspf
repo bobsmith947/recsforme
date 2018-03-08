@@ -9,9 +9,9 @@
   <h1><a href="index.jsp">recsforme</a></h1>
   <h2>Search for something:</h2>
   <form id="media-search" action="search.jsp">
-    <input type="search" name="query" maxlength="100" autocomplete="off">
+    <input type="search" name="query" maxlength="100" autocomplete="off" required>
     <select name="type">
-      <option value="movie" selected >Movie/TV Show</option>
+      <option value="movie" selected>Movie/TV Show/Game</option>
       <option value="artist">Artist</option>
       <option value="album">Album/EP/Single</option>
     </select>

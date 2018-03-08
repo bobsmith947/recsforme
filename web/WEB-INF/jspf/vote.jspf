@@ -1,17 +1,20 @@
-<h2>Do you like this?</h2>
-<form id="vote-form" data-bind="submit:sendVote" method="POST" action="GroupVote">
-  <label for="yes">Yes</label>
-  <input id="yes" type="radio" value="true" name="like">
-  <label for="no">No</label>
-  <input id="no" type="radio" value="false" name="like">
-  <input type="hidden" name="name" value="">
-  <input type="hidden" name="type" value="">
-  <input type="hidden" name="id" value="">
-  <button type="submit">Submit</button>
-</form>
+<div data-bind="visible:!confirmation()">
+  <h2>Do you like this?</h2>
+  <form id="vote-form" data-bind="submit:sendVote" method="POST" action="GroupVote">
+    <label for="yes">Yes</label>
+    <input id="yes" type="radio" value="true" name="like" data-bind="checked:hasSelected">
+    <label for="no">No</label>
+    <input id="no" type="radio" value="false" name="like" data-bind="checked:hasSelected">
+    <input type="hidden" name="name" value="">
+    <input type="hidden" name="type" value="">
+    <input type="hidden" name="id" value="">
+    <button type="submit" data-bind="enable:hasSelected">Submit</button>
+  </form>
+</div>
 <div id="vote-div" style="display:none" data-bind="visible:confirmation">
   <h2>Your vote has been received!</h2>
   <h3>Added <span data-bind="text:name"></span> to <span data-bind="text:type"></span> list.</h3>
   <h3>You <span style="text-decoration:underline" data-bind="text:status"></span> this.</h3>
+  <button type="reset" data-bind="click:undoVote">Reset</button>
 </div>
 <div id="response"></div>

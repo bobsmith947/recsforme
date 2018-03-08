@@ -50,7 +50,7 @@ public class ArtistQuery extends AbstractQuery {
     super(query);
     artist = new ArtistWs2();
     INC = null;
-    String replace = query.replace("/", "");
+    String replace = query.replace("[/\\?&+]", "");
     new ArtistSearchbyName(replace).getFirstPage().forEach(r ->
             results.put(r.getArtist().getId(), r.getArtist().getUniqueName()));
     len = results.size();
