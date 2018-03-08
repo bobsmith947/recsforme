@@ -1,6 +1,5 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js" type="text/javascript"></script>
 <h2>Do you like this?</h2>
-<form id="vote-form" data-bind="submit:sendVote">
+<form id="vote-form" data-bind="submit:sendVote" method="POST" action="GroupVote">
   <label for="yes">Yes</label>
   <input id="yes" type="radio" value="true" name="like">
   <label for="no">No</label>

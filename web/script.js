@@ -17,37 +17,39 @@
 //import "babel-polyfill";
 import $ from "jquery";
 import moment from "moment/min/moment.min.js";
+import ko from "knockout";
 
 $(() => {
   //set external links to open in a new tab/window
-  let elems = document.links, i = undefined;
-  for (i = 0; i < elems.length; i++) {
-    if (!elems[i].href.includes(`://${document.domain}`)) elems[i].target = "_blank";
-  }
+  $("a").each(() => {
+    const el = $(this);
+    if (el.attr("href").includes(`://${document.domain}`)) el.attr("target", "_blank");
+  });
   //add listener to expand images on click
-  elems = document.images;
-  for (i = 0; i < elems.length; i++) {
-    if (screen.width > 1024 && elems[i].className === "exp") {
-      elems[i].addEventListener("click", expandImg);
-      elems[i].title = "Click to expand.";
-      elems[i].style.width = "15%";
-    }
-  }
+  /*if (screen.width > 1024) {
+    $(".exp").each(() => {
+      const el = $(this);
+      el.click(expandImg);
+      el.attr("title", "Click to expand.");
+      el.css("width", "15%");
+    });
+  }*/
   //format dates
-  elems = document.getElementsByClassName("date");
-  for (i = 0; i < elems.length; i++) {
-    const s = elems[i].innerHTML;
-    const d = moment(s, "YYYY-MM-DD", true);
-    if (d.isValid()) elems[i].innerHTML = d.format("LL");
-    else if (s === "null") elems[i].innerHTML = "Unknown date";
-    else elems[i].innerHTML = s;
-  }
-  //knockout bindings
+  $(".date").each(() => {
+    const el = $(this);
+    const str = t.text();
+    const date = moment(s, "YYYY-MM-DD", true);
+    if (date.isValid()) el.text(format("LL"));
+    else if (str === "null") el.text("Unknown date");
+    else el.text(str);
+  });
+  //knockout bindings for group page
   try {
     const title = document.title;
     $("input[name=name]").val(title.substring(title.indexOf(": ")+2, title.indexOf(" - ")));
     $("input[name=type]").val(title.substring(title.indexOf("- ")+2));
     $("input[name=id]").val(location.search.substring(4));
+    $("#vote-form").submit(e => e.preventDefault());
     let viewModel = {
       confirmation: ko.observable(false),
       type: ko.observable(""),
@@ -67,11 +69,9 @@ $(() => {
       }
     };
     ko.applyBindings(viewModel);
-  } catch (e) {
-    $("#button[type=submit]").submit(function(e) {
-      e.preventDefault();
-      alert("You need to allow scripts from cloudflare.com.");
-    });
+  } catch (ex) {
+    console.log(ex);
+    console.log("Knockout bindings not applied.");
   }
 });
 
