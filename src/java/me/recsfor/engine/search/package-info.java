@@ -13,30 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.recsfor.rec;
-
-import java.util.LinkedHashMap;
 
 /**
- * Abstract class containing the essential fields for recommendations.
- * @author lkitaev
+ * Classes in this package provide functionality to retrieve data used for generating search results and group pages using the appropriate API.
+ * These classes can be interacted with from the frontend in <code>search.jsp</code> where a <code>QueryBean</code> is instantiated.
  */
-public abstract class AbstractRec implements GenericRec {
-  protected boolean request;
-  protected LinkedHashMap<String, String> response;
-  
-  public AbstractRec() {
-    request = false;
-    response = null;
-  }
-  
-  @Override
-  public boolean isLike() {
-    return request;
-  }
-  
-  @Override
-  public boolean isDislike() {
-    return !request;
-  }
-}
+
+package me.recsfor.engine.search;

@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 //import static java.net.URLEncoder.encode;
 //import java.util.LinkedList;
 import java.util.List;
-import me.recsfor.search.AlbumQuery;
+import me.recsfor.engine.search.AlbumQuery;
 import org.musicbrainz.MBWS2Exception;
 //import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
 import org.musicbrainz.modelWs2.MediumListWs2;

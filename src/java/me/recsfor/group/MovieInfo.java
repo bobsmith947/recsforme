@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 //import java.io.UnsupportedEncodingException;
 //import static java.net.URLDecoder.decode;
 //import static java.net.URLEncoder.encode;
-import me.recsfor.search.MovieQuery;
+import me.recsfor.engine.search.MovieQuery;
 /**
  * A servlet to build group pages for movies and TV shows.
  * It can process HTTP methods by being given a request parameter containing the IMDb ID of the respective movie/TV show. The request parameter has no associated name.

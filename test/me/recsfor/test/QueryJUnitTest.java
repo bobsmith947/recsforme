@@ -15,13 +15,15 @@
  */
 package me.recsfor.test;
 
+import me.recsfor.engine.search.MovieQuery;
+import me.recsfor.engine.search.AlbumQuery;
+import me.recsfor.engine.search.ArtistQuery;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import me.recsfor.search.*;
 /**
  *
  * @author lkitaev
