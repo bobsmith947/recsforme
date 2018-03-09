@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-//import "babel-polyfill";
+import "babel-polyfill";
 import $ from "jquery";
 import moment from "moment/min/moment.min.js";
 import ko from "knockout";
@@ -38,51 +38,78 @@ $(() => {
   });
   //knockout bindings for group page
   try {
-    const title = document.title;
-    $("input[name=name]").val(title.substring(title.indexOf(": ")+2, title.indexOf(" - ")));
-    $("input[name=type]").val(title.substring(title.indexOf("- ")+2));
-    $("input[name=id]").val(location.search.substring(4));
+    const group = document.title.substring(document.title.indexOf(": ")+2);
+    const id = location.search.substring(4);
+    let vote;
+    function checkVote() {
+      try {
+        const val = localStorage.getItem(group);
+        vote = val;
+        return val !== null;
+      } catch (ex) {
+        console.log(ex);
+        console.log("Not found in list.");
+        return false;
+      }
+    }
     //$("#vote-form").submit(e => e.preventDefault());
     let voteModel = {
-      confirmation: ko.observable(false),
       hasSelected: ko.observable(false),
-      type: ko.observable(""),
-      name: ko.observable(""),
-      status: ko.observable(""),
+      hasVoted: ko.observable(checkVote()),
+      name: ko.observable(group),
+      status: ko.observable(vote),
       sendVote: function(form) {
         let voteData = new FormData(form);
-        this.type(voteData.get("type"));
-        this.name(voteData.get("name"));
+        voteData.append("name", group);
+        voteData.append("id", id);
         this.status(isLike(voteData.get("like")));
-        this.confirmation(true);
-        $.post("GroupVote", $(form).serialize(), (data, status) => {
-          if (status === "success") $("#response").append(data);
+        this.hasVoted(true);
+        $.post("GroupVote", $(form).serialize(), (response, message) => {
+          if (message === "success") $("#response").append(response);
           else alert("Failed to send data to server.");
         });
-        localStorage.setItem(this.name(), this.status());
+        localStorage.setItem(group, this.status());
       },
       undoVote: function() {
-        this.confirmation(false);
+        this.hasVoted(false);
         this.hasSelected(false);
-        localStorage.removeItem(this.name());
+        localStorage.removeItem(group);
+        $("#response").empty();
       }
     };
-    ko.applyBindings(viewModel);
+    ko.applyBindings(voteModel);
   } catch (ex) {
     console.log(ex);
     console.log("Knockout bindings not applied.");
+  }
+  //user page populate
+  if (location.pathname.includes("user.jsp")) {
+    for (var i = 0; i < localStorage.length; i++) {
+      const group = localStorage.key(i);
+      switch (localStorage.getItem(group)) {
+        case "like":
+          $("#likes").append(`<li>${group}</li>`);
+          break;
+        case "dislike":
+          $("#dislikes").append(`<li>${group}</li>`);
+          break;
+        default:
+          console.log("Group not found.");
+          break;
+      }
+    }
   }
 });
 
 function expandImg(ev) {
   const elem = ev.target, w = elem.naturalWidth;
-  switch(elem.style.width) {
-    case "15%" :
+  switch (elem.style.width) {
+    case "15%":
       if (w > 0.9 * screen.width) elem.style.width = "90%";
       else elem.style.width = `${w}px`;
       elem.title = "Click to shrink."
       break;
-    default :
+    default:
       elem.style.width = "15%";
       elem.title = "Click to expand.";
       break;
@@ -91,74 +118,14 @@ function expandImg(ev) {
 
 function isLike(str) {
   switch (str) {
-    case "true" :
+    case "true":
       return "like";
       break;
-    case "false" :
+    case "false":
       return "dislike";
       break;
-    default :
+    default:
       return "either like or dislike";
       break;
   }
-}
-
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
-if (!String.prototype.includes) {
-  String.prototype.includes = function(search, start) {
-    if (typeof start !== 'number') start = 0;
-    if (start + search.length > this.length) return false;
-    else return this.indexOf(search, start) !== -1;
-  };
-}
-
-// https://tc39.github.io/ecma262/#sec-array.prototype.includes
-if (!Array.prototype.includes) {
-  Object.defineProperty(Array.prototype, 'includes', {
-    value: function(searchElement, fromIndex) {
-      if (this == null) {
-        throw new TypeError('"this" is null or not defined');
-      }
-      // 1. Let O be ? ToObject(this value).
-      var o = Object(this);
-      // 2. Let len be ? ToLength(? Get(O, "length")).
-      var len = o.length >>> 0;
-      // 3. If len is 0, return false.
-      if (len === 0) return false;
-      // 4. Let n be ? ToInteger(fromIndex).
-      //    (If fromIndex is undefined, this step produces the value 0.)
-      var n = fromIndex | 0;
-      // 5. If n ≥ 0, then
-      //  a. Let k be n.
-      // 6. Else n < 0,
-      //  a. Let k be len + n.
-      //  b. If k < 0, let k be 0.
-      var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
-      function sameValueZero(x, y) {
-        return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
-      }
-      // 7. Repeat, while k < len
-      while (k < len) {
-        // a. Let elementK be the result of ? Get(O, ! ToString(k)).
-        // b. If SameValueZero(searchElement, elementK) is true, return true.
-        if (sameValueZero(o[k], searchElement)) return true;
-        // c. Increase k by 1.
-        k++;
-      }
-      // 8. Return false
-      return false;
-    }
-  });
-}
-
-//TODO check if this works
-if (!FormData.prototype.get) {
-  FormData.prototype.get = function(key) {
-    var arr = $(this).serializeArray();
-    var red = arr.reduce(function (obj, item) {
-      obj[item.name] = item.value;
-      return obj;
-    });
-    return red[key];
-  };
 }

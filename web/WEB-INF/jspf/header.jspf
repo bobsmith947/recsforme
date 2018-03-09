@@ -11,6 +11,7 @@
 <body>
   <noscript>Scripts have been disabled. Some features may not work.</noscript>
   <h1><a href="index.jsp">recsforme</a></h1>
+  <a href="user.jsp" style="position:absolute;top:5%;left:5%">Your List</a>
   <h2>Search for something:</h2>
   <form id="media-search" action="search.jsp">
     <input type="search" name="query" maxlength="100" autocomplete="off" value="<jsp:getProperty name="q" property="query" />" autofocus required>

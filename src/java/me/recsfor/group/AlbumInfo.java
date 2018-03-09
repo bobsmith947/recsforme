@@ -39,7 +39,6 @@ import org.musicbrainz.modelWs2.TrackWs2;
  */
 public class AlbumInfo extends AbstractInfo {
   private static final long serialVersionUID = 3558291301985484615L;
-  private static final String GROUP_TYPE = "Album";
   private String title, type, artist, artistId, date;
   private MediumListWs2 info;
 
@@ -61,7 +60,7 @@ public class AlbumInfo extends AbstractInfo {
       out.println("<html><head>");
       out.println("<meta name=\"keywords\" content=\"\">");
       out.println("<meta name=\"description\" content=\"\">");
-      out.println("<title>recsforme :: " + title + " - " + GROUP_TYPE + "</title></head><body>");
+      out.println("<title>recsforme :: " + title + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + title + " (" + type + ")</h2>");
       out.println("<h3>Released by: <a href=\"ArtistInfo?id=" + artistId + "\">" + artist + "</a></h3>");

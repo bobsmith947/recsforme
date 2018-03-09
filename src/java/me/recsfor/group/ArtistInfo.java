@@ -36,7 +36,6 @@ import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
  */
 public class ArtistInfo extends AbstractInfo {
   private static final long serialVersionUID = -8210213618927548383L;
-  private static final String GROUP_TYPE = "Artist";
   private String name, type;
   private String[] years;
   private List<ReleaseGroupWs2> albums;
@@ -54,7 +53,7 @@ public class ArtistInfo extends AbstractInfo {
       out.println("<html><head>");
       out.println("<meta name=\"keywords\" content=\"\">");
       out.println("<meta name=\"description\" content=\"\">");
-      out.println("<title>recsforme :: " + name + " - " + GROUP_TYPE + "</title></head><body>");
+      out.println("<title>recsforme :: " + name + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + name + " - " + type + "</h2>");
       String term;

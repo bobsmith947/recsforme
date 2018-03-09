@@ -33,7 +33,6 @@ import me.recsfor.engine.search.MovieQuery;
  */
 public class MovieInfo extends AbstractInfo {
   private static final long serialVersionUID = -4184169288250689262L;
-  private static final String GROUP_TYPE = "Movie";
   private String title, year, type, plot;
 
   @Override
@@ -48,7 +47,7 @@ public class MovieInfo extends AbstractInfo {
       out.println("<html><head>");
       out.println("<meta name=\"keywords\" content=\"\">");
       out.println("<meta name=\"description\" content=\"\">");
-      out.println("<title>recsforme :: " + title + " - " + GROUP_TYPE + "</title></head><body>");
+      out.println("<title>recsforme :: " + title + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
       out.println("<p>" + plot + "</p>");

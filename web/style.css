@@ -34,6 +34,12 @@ p {
   margin: 0 25%;
   text-indent: 50px;
 }
+@media (max-width: 768px) {
+  p {
+    margin: 0 5%;
+    text-indent: 25px;
+  }
+}
 noscript {
   display: block;
   font-weight: bold;
@@ -43,7 +49,7 @@ noscript {
 ul, ol {
   list-style-position: inside;
   margin: auto;
-  width: 25%;
+  width: fit-content;
 }
 /*
 .int {

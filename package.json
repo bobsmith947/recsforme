@@ -24,7 +24,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "bundle": "webpack --progress -p",
         "optimize": "for %f in (./web/img/*.png) do oxipng -o 4 -s \"./img/%f\"",
-        "autoprefix": "postcss ./web/style.css -o ./web/post.css"
+        "autoprefix": "postcss ./web/style.css -o ./web/auto.css"
     },
     "browserslist": [
         "last 3 versions",
@@ -53,6 +53,7 @@
         "webpack": "3.10.0"
     },
     "optionalDependencies": {
-        "babel-polyfill": "6.26.0"
+        "babel-polyfill": "6.26.0",
+        "ssri": "5.2.2"
     }
 }
