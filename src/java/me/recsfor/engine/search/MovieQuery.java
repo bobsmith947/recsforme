@@ -31,7 +31,7 @@ import static org.apache.commons.lang3.text.WordUtils.capitalize;
 public class MovieQuery extends AbstractQuery {
   private OmdbVideoFull info;
   private final OmdbParameters PARAMS;
-  private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
+  private static final OmdbApi CLIENT = new OmdbApi(System.getenv("OMDB_KEY"));
   protected static final String CONTEXT = "MovieInfo?id=";
 
   // <editor-fold desc="Constructors.">
