@@ -30,12 +30,12 @@ import org.musicbrainz.modelWs2.Entity.ReleaseGroupWs2;
 import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
 /**
  * A servlet to build group pages for artists.
- * It can process HTTP methods by being given a request parameter containing the MusicBrainz ID of the respective artist. The request parameter has no associated name.
- * For example, <code>ArtistInfo?056e4f3e-d505-4dad-8ec1-d04f521cbb56</code> will generate a page for Daft Punk.
+ * It can process <code>HTTP GET</code> and <code>POST</code> by being given a request parameter (named <code>id</code>) containing the MusicBrainz ID of the respective <code>artist</code>.
+ * For example, <code>ArtistInfo?id=056e4f3e-d505-4dad-8ec1-d04f521cbb56</code> will generate a page for Daft Punk.
  * @author lkitaev
  */
 public class ArtistInfo extends AbstractInfo {
-  private static final long serialVersionUID = -8210213618927548383L; //just in case
+  private static final long serialVersionUID = -8210213618927548383L;
   private String name, type;
   private String[] years;
   private List<ReleaseGroupWs2> albums;
@@ -43,18 +43,16 @@ public class ArtistInfo extends AbstractInfo {
 
   @Override
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String q = request.getQueryString();
-    populate(q);
+    String id = request.getParameter("id");
+    populate(id);
+    //request.setAttribute("name", name);
+    //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html>");
       out.println("<html><head>");
-      out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
       out.println("<meta name=\"keywords\" content=\"\">");
       out.println("<meta name=\"description\" content=\"\">");
-      out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-      out.println("<link href=\"post.css\" rel=\"stylesheet\" type=\"text/css\">");
-      out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + name + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + name + " - " + type + "</h2>");
@@ -71,22 +69,23 @@ public class ArtistInfo extends AbstractInfo {
           break;
       }
       out.println("<h3>" + term + ": <span class=\"date\">" + years[0] 
-              + "</span> to <span class=\"date\"" + years[1] + "</span></h3>");
+              + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");
       //TODO order release groups by date
       out.println("<h3>Discography:</h3>");
       out.println("<ul>");
-      albums.forEach(album -> out.println("<li><a href=\"AlbumInfo?"
+      albums.forEach(album -> out.println("<li><a href=\"AlbumInfo?id="
               + album.getId() + "\">" + album.getTitle() + 
               "</a> - <span class=\"date\">" + album.getFirstReleaseDateStr() + "</span></li>"));
       out.println("</ul>");
       out.println("<h4>Contributions:</h4>");
       out.println("<ul>");
-      contrib.forEach(cont -> out.println("<li><a href=\"AlbumInfo?"
+      contrib.forEach(cont -> out.println("<li><a href=\"AlbumInfo?id="
               + cont.getId() + "\">" + cont.getTitle() 
               + "</a> - <span class=\"date\">" + cont.getDateStr() + "</span></li>"));
       out.println("</ul></div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/artist/"
-              + q + "\">View on MusicBrainz</a>");
+              + id + "\">View on MusicBrainz</a>");
+      request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }

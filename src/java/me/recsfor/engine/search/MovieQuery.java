@@ -32,7 +32,7 @@ public class MovieQuery extends AbstractQuery {
   private OmdbVideoFull info;
   private final OmdbParameters PARAMS;
   private static final OmdbApi CLIENT = new OmdbApi("357b2b79"); //please don't use this
-  protected static final String CONTEXT = "MovieInfo?";
+  protected static final String CONTEXT = "MovieInfo?id=";
 
   // <editor-fold desc="Constructors.">
   /**

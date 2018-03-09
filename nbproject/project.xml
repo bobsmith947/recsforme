@@ -56,7 +56,6 @@
                 </library>
                 <library dirs="200">
                     <file>${file.reference.slf4j-jdk14-1.7.24.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
                     <file>${file.reference.jdom-1.0.jar}</file>
@@ -82,6 +81,11 @@
         <libraries xmlns="http://www.netbeans.org/ns/ant-project-libraries/1">
             <definitions>.\lib\nblibraries.properties</definitions>
         </libraries>
-        <libraries xmlns="http://www.netbeans.org/ns/cdnjs-libraries/1"/>
+        <libraries xmlns="http://www.netbeans.org/ns/cdnjs-libraries/1">
+            <library name="knockout" version="3.4.2">
+                <file localPath="lib/js/knockout/knockout-debug.js" path="knockout-debug.js"/>
+                <file localPath="lib/js/knockout/knockout-min.js" path="knockout-min.js"/>
+            </library>
+        </libraries>
     </configuration>
 </project>

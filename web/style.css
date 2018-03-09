@@ -34,6 +34,12 @@ p {
   margin: 0 25%;
   text-indent: 50px;
 }
+@media (max-width: 768px) {
+  p {
+    margin: 0 5%;
+    text-indent: 25px;
+  }
+}
 noscript {
   display: block;
   font-weight: bold;
@@ -43,7 +49,7 @@ noscript {
 ul, ol {
   list-style-position: inside;
   margin: auto;
-  width: 25%;
+  width: fit-content;
 }
 /*
 .int {
@@ -65,11 +71,12 @@ ul, ol {
   width: 15%;
   transition: width 1s;
 }
-#media-search {
+#media-search, #vote-form {
   margin: auto;
   width: 50%;
+  text-align: center;
 }
-#media-search > * {
+form > input, button, select {
   display: block;
   margin: 5px auto;
 }
@@ -81,4 +88,8 @@ a.block {
   display: block;
   text-align: center;
   margin: 20px;
+}
+#vote-form > input[type=radio], label {
+  display: inline-block;
+  margin: auto;
 }

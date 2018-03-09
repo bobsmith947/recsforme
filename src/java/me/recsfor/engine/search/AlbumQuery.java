@@ -36,7 +36,7 @@ public class AlbumQuery extends AbstractQuery {
   private boolean isNotGroup;
   private static final ReleaseGroupIncludesWs2 G_INC = new ReleaseGroupIncludesWs2();
   private static final ReleaseIncludesWs2 R_INC = new ReleaseIncludesWs2();
-  protected static final String CONTEXT = "AlbumInfo?";
+  protected static final String CONTEXT = "AlbumInfo?id=";
 
   // <editor-fold desc="Constructors.">
   /**
@@ -55,7 +55,7 @@ public class AlbumQuery extends AbstractQuery {
   public AlbumQuery(String query) {
     super(query);
     group = new ReleaseGroupWs2();
-    String replace = query.replace("/", "");
+    String replace = query.replace("[/\\?&=:]", "");
     new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r ->
             results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - "
                     + r.getReleaseGroup().getArtistCreditString()));

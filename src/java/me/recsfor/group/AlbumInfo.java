@@ -32,19 +32,19 @@ import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.modelWs2.MediumListWs2;
 import org.musicbrainz.modelWs2.TrackWs2;
 /**
- * A servlet to build group pages for albums, EP's, singles, and other types, including the available releases and recordings.
- * It can process HTTP methods by being given a request parameter containing the MusicBrainz ID of the respective release group. The request parameter has no associated name.
- * For example, <code>AlbumInfo?00054665-89fa-33d5-a8f0-1728ea8c32c3</code> will generate a page for <i>Homework</i> by Daft Punk.
+ * A servlet to build group pages for albums, EP's, singles, and other types, including the available tracklist.
+ * It can process <code>HTTP GET</code> and <code>POST</code> by being given a request parameter (named <code>id</code>) containing the MusicBrainz ID of the respective <code>release-group</code>.
+ * For example, <code>AlbumInfo?id=00054665-89fa-33d5-a8f0-1728ea8c32c3</code> will generate a page for <i>Homework</i> by Daft Punk.
  * @author lkitaev
  */
 public class AlbumInfo extends AbstractInfo {
-  private static final long serialVersionUID = 3558291301985484615L; //just in case
+  private static final long serialVersionUID = 3558291301985484615L;
   private String title, type, artist, artistId, date;
   private MediumListWs2 info;
 
   @Override
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String id = request.getQueryString();
+    String id = request.getParameter("id");
     try {
       id = checkId(id) ? AlbumQuery.switchId(id) : id;
       populate(id);
@@ -52,20 +52,18 @@ public class AlbumInfo extends AbstractInfo {
       this.log(e.getMessage(), e);
       populate(id);
     }
+    //request.setAttribute("name", title);
+    //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html>");
       out.println("<html><head>");
-      out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
       out.println("<meta name=\"keywords\" content=\"\">");
       out.println("<meta name=\"description\" content=\"\">");
-      out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-      out.println("<link href=\"post.css\" rel=\"stylesheet\" type=\"text/css\">");
-      out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + title + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + title + " (" + type + ")</h2>");
-      out.println("<h3>Released by: <a href=\"ArtistInfo?" + artistId + "\">" + artist + "</a></h3>");
+      out.println("<h3>Released by: <a href=\"ArtistInfo?id=" + artistId + "\">" + artist + "</a></h3>");
       out.println("<h3>Released on: <span class=\"date\">" + date + "</span></h3>");
       //TODO fix duration time
       out.println("<h3>Tracklist:</h2>");
@@ -82,6 +80,7 @@ public class AlbumInfo extends AbstractInfo {
       out.println("<h5>Total length: " + info.getDuration() + "</h5>");
       out.println("<a class=\"block\" href=\"https://musicbrainz.org/release-group/"
               + id + "\">View on MusicBrainz</a>");
+      request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }

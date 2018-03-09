@@ -15,44 +15,117 @@
  */
 
 import "babel-polyfill";
-import moment from "moment";
+import $ from "jquery";
+import moment from "moment/min/moment.min.js";
+import ko from "knockout";
 
-document.body.onload = () => {
-  //set external links to open in a new tab/window
-  let elems = document.links, i = undefined;
-  for (i = 0; i < elems.length; i++) {
-    if (!elems[i].href.includes(`://${document.domain}`)) elems[i].target = "_blank";
-  }
+$(() => {
   //add listener to expand images on click
-  elems = document.images;
-  for (i = 0; i < elems.length; i++) {
-    if (screen.width > 1024 && elems[i].className === "exp") {
-      elems[i].addEventListener("click", expandImg);
-      elems[i].title = "Click to expand.";
-      elems[i].style.width = "15%";
+  /*if (screen.width > 1024) {
+    $(".exp").each((ind, cur) => {
+      $(cur).click(expandImg);
+      $(cur).attr("title", "Click to expand.");
+      $(cur).css("width", "15%");
+    });
+  }*/
+  //format dates
+  $(".date").each((ind, cur) => {
+    const str = $(cur).text();
+    const date = moment(str, "YYYY-MM-DD", true);
+    if (date.isValid()) $(cur).text(date.format("LL"));
+    else if (str === "null") $(cur).text("Unknown date");
+    else $(cur).text(str);
+  });
+  //knockout bindings for group page
+  try {
+    const group = document.title.substring(document.title.indexOf(": ")+2);
+    const id = location.search.substring(4);
+    let vote;
+    function checkVote() {
+      try {
+        const val = localStorage.getItem(group);
+        vote = val;
+        return val !== null;
+      } catch (ex) {
+        console.log(ex);
+        console.log("Not found in list.");
+        return false;
+      }
+    }
+    //$("#vote-form").submit(e => e.preventDefault());
+    let voteModel = {
+      hasSelected: ko.observable(false),
+      hasVoted: ko.observable(checkVote()),
+      name: ko.observable(group),
+      status: ko.observable(vote),
+      sendVote: function(form) {
+        let voteData = new FormData(form);
+        voteData.append("name", group);
+        voteData.append("id", id);
+        this.status(isLike(voteData.get("like")));
+        this.hasVoted(true);
+        $.post("GroupVote", $(form).serialize(), (response, message) => {
+          if (message === "success") $("#response").append(response);
+          else alert("Failed to send data to server.");
+        });
+        localStorage.setItem(group, this.status());
+      },
+      undoVote: function() {
+        this.hasVoted(false);
+        this.hasSelected(false);
+        localStorage.removeItem(group);
+        $("#response").empty();
+      }
+    };
+    ko.applyBindings(voteModel);
+  } catch (ex) {
+    console.log(ex);
+    console.log("Knockout bindings not applied.");
+  }
+  //user page populate
+  if (location.pathname.includes("user.jsp")) {
+    for (var i = 0; i < localStorage.length; i++) {
+      const group = localStorage.key(i);
+      switch (localStorage.getItem(group)) {
+        case "like":
+          $("#likes").append(`<li>${group}</li>`);
+          break;
+        case "dislike":
+          $("#dislikes").append(`<li>${group}</li>`);
+          break;
+        default:
+          console.log("Group not found.");
+          break;
+      }
     }
   }
-  //format dates
-  elems = document.getElementsByClassName("date");
-  for (i = 0; i < elems.length; i++) {
-    const s = elems[i].innerHTML;
-    const d = moment(s, "YYYY-MM-DD", true);
-    if (d.isValid()) elems[i].innerHTML = d.format("LL");
-    else if (s === "null") elems[i].innerHTML = "Unknown date";
-    else elems[i].innerHTML = s;
-  }
-}
+});
+
 function expandImg(ev) {
   const elem = ev.target, w = elem.naturalWidth;
-  switch(elem.style.width) {
-    case "15%" :
+  switch (elem.style.width) {
+    case "15%":
       if (w > 0.9 * screen.width) elem.style.width = "90%";
       else elem.style.width = `${w}px`;
       elem.title = "Click to shrink."
       break;
-    default :
+    default:
       elem.style.width = "15%";
       elem.title = "Click to expand.";
+      break;
+  }
+}
+
+function isLike(str) {
+  switch (str) {
+    case "true":
+      return "like";
+      break;
+    case "false":
+      return "dislike";
+      break;
+    default:
+      return "either like or dislike";
       break;
   }
 }

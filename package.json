@@ -24,7 +24,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "bundle": "webpack --progress -p",
         "optimize": "for %f in (./web/img/*.png) do oxipng -o 4 -s \"./img/%f\"",
-        "autoprefix": "postcss ./web/style.css -o ./web/post.css"
+        "autoprefix": "postcss ./web/style.css -o ./web/auto.css"
     },
     "browserslist": [
         "last 3 versions",
@@ -37,8 +37,9 @@
         }
     },
     "dependencies": {
-        "babel-polyfill": "6.26.0",
         "browserslist": "^2.11.3",
+        "jquery": "3.3.1",
+        "knockout": "3.4.2",
         "moment": "^2.20.1"
     },
     "devDependencies": {
@@ -50,5 +51,9 @@
         "postcss-cli": "5.0.0",
         "uglifyjs-webpack-plugin": "1.1.8",
         "webpack": "3.10.0"
+    },
+    "optionalDependencies": {
+        "babel-polyfill": "6.26.0",
+        "ssri": "5.2.2"
     }
 }

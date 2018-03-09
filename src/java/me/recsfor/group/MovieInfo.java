@@ -27,34 +27,33 @@ import javax.servlet.http.HttpServletResponse;
 import me.recsfor.engine.search.MovieQuery;
 /**
  * A servlet to build group pages for movies and TV shows.
- * It can process HTTP methods by being given a request parameter containing the IMDb ID of the respective movie/TV show. The request parameter has no associated name.
- * For example, <code>MovieInfo?tt0083658</code> will generate a page for <i>Blade Runner</i>.
+ * It can process <code>HTTP GET</code> and <code>POST</code> by being given a request parameter (named <code>id</code>) containing the IMDb ID of the respective movie/TV show.
+ * For example, <code>MovieInfo?id=tt0083658</code> will generate a page for <i>Blade Runner</i>.
  * @author lkitaev
  */
 public class MovieInfo extends AbstractInfo {
-  private static final long serialVersionUID = -4184169288250689262L; //just in case
+  private static final long serialVersionUID = -4184169288250689262L;
   private String title, year, type, plot;
 
   @Override
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String q = request.getQueryString();
-    populate(q);
+    String id = request.getParameter("id");
+    populate(id);
+    //request.setAttribute("name", title);
+    //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html>");
       out.println("<html><head>");
-      out.println("<meta name=\"author\" content=\"Lucas Kitaev\">");
       out.println("<meta name=\"keywords\" content=\"\">");
       out.println("<meta name=\"description\" content=\"\">");
-      out.println("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
-      out.println("<link href=\"post.css\" rel=\"stylesheet\" type=\"text/css\">");
-      out.println("<script src=\"bundle.js\" type=\"text/javascript\" charset=\"UTF-8\" async></script>");
       out.println("<title>recsforme :: " + title + "</title></head><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
       out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
       out.println("<p>" + plot + "</p>");
       out.println("<a class=\"block\" href=\"https://imdb.com/title/"
-              + q + "\">View on IMDb</a>");
+              + id + "\">View on IMDb</a>");
+      request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }

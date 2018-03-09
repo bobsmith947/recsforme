@@ -5,12 +5,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="author" content="Lucas Kitaev">
     <meta name="keywords" content="<jsp:getProperty name="q" property="query" />, <jsp:getProperty name="q" property="type" />, search, query, results">
     <meta name="description" content="recsforme (recs for me) search results for <jsp:getProperty name="q" property="query" /> in <jsp:getProperty name="q" property="type" />s.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="post.css" rel="stylesheet" type="text/css">
-    <script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>
     <title>recsforme :: <jsp:getProperty name="q" property="type" /> Search - <jsp:getProperty name="q" property="query" /></title>
   </head>
   <body>
@@ -28,9 +24,17 @@
           <a class="block" href="<c:out value="${con.concat(id)}" />"><c:out value="${name}" /></a>
         </c:forEach>
       </c:if>
-        <c:if test="${!hasResults && q.query.length() != 0}">
+      <c:if test="${!hasResults && q.query.length() != 0}">
         <h3>No results found!</h3>
       </c:if>
     </div>
+    <c:choose>
+      <c:when test='${q.type == "Movie"}'>
+        <h6>Search results provided by <a href="https://www.omdbapi.com/">OMDb</a>.</h6>
+      </c:when>
+      <c:otherwise>
+        <h6>Search results provided by <a href="https://musicbrainz.org/">MusicBrainz</a>.</h6>
+      </c:otherwise>
+    </c:choose>
   </body>
 </html>

@@ -2,13 +2,7 @@
 <!DOCTYPE html>
 <!--Handle HTTP 500 Error-->
 <html>
-  <head>
-    <meta name="author" content="Lucas Kitaev">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="style.css" rel="stylesheet" type="text/css">
-    <!--<script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>-->
-    <title>recsforme :: Internal Server Error</title>
-  </head>
+  <title>recsforme :: Internal Server Error</title>
   <body>
     <h2>Error 500</h2>
     <h3>Internal Server Error</h3>
