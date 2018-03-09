@@ -100,11 +100,11 @@ public class QueryBean implements Serializable {
     this.delegation = delegation;
     propertySupport.firePropertyChange(PROP_DELEGATION, oldDelegation, delegation);
   }
-  
+
   public void addPropertyChangeListener(PropertyChangeListener listener) {
     propertySupport.addPropertyChangeListener(listener);
   }
-  
+
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     propertySupport.removePropertyChangeListener(listener);
   }
