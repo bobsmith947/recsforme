@@ -51,6 +51,7 @@
         <jsp-property-group>
             <url-pattern>/search.jsp</url-pattern>
             <url-pattern>/index.jsp</url-pattern>
+            <url-pattern>/group.jsp</url-pattern>
             <url-pattern>/WEB-INF/500.jsp</url-pattern>
             <url-pattern>/WEB-INF/404.jsp</url-pattern>
             <url-pattern>/user.jsp</url-pattern>
