@@ -73,6 +73,7 @@
             <web-module-additional-libraries/>
             <source-roots>
                 <root id="src.dir"/>
+                <root id="src.web.dir" name="Web Sources"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>
@@ -82,6 +83,15 @@
             <definitions>.\lib\nblibraries.properties</definitions>
         </libraries>
         <libraries xmlns="http://www.netbeans.org/ns/cdnjs-libraries/1">
+            <library name="jquery" version="3.3.1">
+                <file localPath="lib/js/jquery/core.js" path="core.js"/>
+                <file localPath="lib/js/jquery/jquery.js" path="jquery.js"/>
+                <file localPath="lib/js/jquery/jquery.min.js" path="jquery.min.js"/>
+                <file localPath="lib/js/jquery/jquery.min.map" path="jquery.min.map"/>
+                <file localPath="lib/js/jquery/jquery.slim.js" path="jquery.slim.js"/>
+                <file localPath="lib/js/jquery/jquery.slim.min.js" path="jquery.slim.min.js"/>
+                <file localPath="lib/js/jquery/jquery.slim.min.map" path="jquery.slim.min.map"/>
+            </library>
             <library name="knockout" version="3.4.2">
                 <file localPath="lib/js/knockout/knockout-debug.js" path="knockout-debug.js"/>
                 <file localPath="lib/js/knockout/knockout-min.js" path="knockout-min.js"/>

@@ -100,8 +100,7 @@ $(() => {
     }
     const entries = $("#likes,#dislikes").children();
     $(entries).wrapInner(ind => {
-      return '<a href="group.jsp?name=' 
-              + encodeURIComponent($(entries).eq(ind).text()) + '"></a>';
+      return `<a href="group.jsp?name=${encodeURIComponent($(entries).eq(ind).text())}"></a>`;
     });
   }
 });

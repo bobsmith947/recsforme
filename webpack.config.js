@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 module.exports = {
-    entry: "./web/script.js",
+    entry: "./src/web/script.js",
     output: {
         filename: "./web/bundle.js"
     },
