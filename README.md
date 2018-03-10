@@ -4,7 +4,7 @@
 
 A media recommendation web app.
 
-Java/SQL backend + CSS/JS frontend. Focused on as little use of frameworks as possible, so as to provide a better learning experience.
+Java/SQL backend + CSS/JS frontend. Focused on as little use of frameworks as possible, so as to provide a better learning experience. Documentation can be viewed [here](http://recsfor.me/javadoc/).
 
 ## Getting Started
 
@@ -46,6 +46,8 @@ When you're done:
     $CATALINA_HOME/bin/catalina stop
 
 *Please note, it may be necessary to specify .bat or .sh depending on your OS.*
+
+Alternatively, you can directly deploy the WAR (can be downloaded from the [releases](https://github.com/bobsmith947/recsforme/releases) section) using the Tomcat Manager. Keep in mind, the latest release isn't the latest build, so you'll be missing any hot new features. On the other hand, it'll probably be more stable, so pick your poison.
 
 ## Contributing
 
