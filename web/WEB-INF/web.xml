@@ -49,13 +49,19 @@
     </error-page>
     <jsp-config>
         <jsp-property-group>
-            <url-pattern>/search.jsp</url-pattern>
             <url-pattern>/index.jsp</url-pattern>
             <url-pattern>/WEB-INF/500.jsp</url-pattern>
             <url-pattern>/WEB-INF/404.jsp</url-pattern>
             <url-pattern>/user.jsp</url-pattern>
             <page-encoding>UTF-8</page-encoding>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
+            <include-prelude>/WEB-INF/jspf/resources.jspf</include-prelude>
+            <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
+        </jsp-property-group>
+        <jsp-property-group>
+            <url-pattern>/search.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+            <include-prelude>/WEB-INF/jspf/resources.jspf</include-prelude>
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>
     </jsp-config>

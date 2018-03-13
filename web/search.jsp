@@ -1,15 +1,28 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
+<jsp:useBean id="q" scope="request" class="me.recsfor.engine.search.QueryBean" />
+<jsp:setProperty name="q" property="type" />
+<jsp:setProperty name="q" property="query" />
+<% String t = q.getType().toLowerCase(); %>
 <c:set var="d" target="q" property="delegation" value="${q.delegateQuery()}" scope="request" />
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="keywords" content="<jsp:getProperty name="q" property="query" />, <jsp:getProperty name="q" property="type" />, search, query, results">
-    <meta name="description" content="recsforme (recs for me) search results for <jsp:getProperty name="q" property="query" /> in <jsp:getProperty name="q" property="type" />s.">
-    <title>recsforme :: <jsp:getProperty name="q" property="type" /> Search - <jsp:getProperty name="q" property="query" /></title>
-  </head>
+  <title>recsforme :: <jsp:getProperty name="q" property="type" /> Search - <jsp:getProperty name="q" property="query" /></title>
   <body>
+    <noscript class="alert alert-danger">Scripts have been disabled. Some features may not work.</noscript>
+    <h1><a href="index.jsp">recsforme</a></h1>
+    <a href="user.jsp" style="position:absolute;top:5%;left:5%">Your List</a>
+    <h2>Search for something:</h2>
+    <form id="media-search" action="search.jsp">
+      <input type="search" name="query" maxlength="100" autocomplete="off" value="<jsp:getProperty name="q" property="query" />" autofocus required>
+      <select name="type">
+        <option value="movie" <% if (t.equals("movie")) out.print("selected"); %>>Movie/TV Show/Game</option>
+        <option value="artist" <% if (t.equals("artist")) out.print("selected"); %>>Artist</option>
+        <option value="album" <% if (t.equals("album")) out.print("selected"); %>>Album/EP/Single</option>
+      </select>
+      <button type="submit">Search</button>
+    </form>
     <c:set var="con" value="${q.context}" />
     <c:set var="len" value="${d.len}" />
     <div id="results">
@@ -29,7 +42,7 @@
       </c:if>
     </div>
     <c:choose>
-      <c:when test='${q.type == "Movie"}'>
+      <c:when test='${t.equals("movie")}'>
         <h6>Search results provided by <a href="https://www.omdbapi.com/">OMDb</a>.</h6>
       </c:when>
       <c:otherwise>

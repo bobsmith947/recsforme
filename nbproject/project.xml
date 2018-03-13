@@ -96,6 +96,32 @@
                 <file localPath="lib/js/knockout/knockout-debug.js" path="knockout-debug.js"/>
                 <file localPath="lib/js/knockout/knockout-min.js" path="knockout-min.js"/>
             </library>
+            <library name="popper.js" version="1.13.0">
+                <file localPath="lib/js/popper.js/esm/popper-utils.js" path="esm/popper-utils.js"/>
+                <file localPath="lib/js/popper.js/esm/popper-utils.js.map" path="esm/popper-utils.js.map"/>
+                <file localPath="lib/js/popper.js/esm/popper-utils.min.js" path="esm/popper-utils.min.js"/>
+                <file localPath="lib/js/popper.js/esm/popper-utils.min.js.map" path="esm/popper-utils.min.js.map"/>
+                <file localPath="lib/js/popper.js/esm/popper.js" path="esm/popper.js"/>
+                <file localPath="lib/js/popper.js/esm/popper.js.map" path="esm/popper.js.map"/>
+                <file localPath="lib/js/popper.js/esm/popper.min.js" path="esm/popper.min.js"/>
+                <file localPath="lib/js/popper.js/esm/popper.min.js.map" path="esm/popper.min.js.map"/>
+                <file localPath="lib/js/popper.js/popper-utils.js" path="popper-utils.js"/>
+                <file localPath="lib/js/popper.js/popper-utils.js.map" path="popper-utils.js.map"/>
+                <file localPath="lib/js/popper.js/popper-utils.min.js" path="popper-utils.min.js"/>
+                <file localPath="lib/js/popper.js/popper-utils.min.js.map" path="popper-utils.min.js.map"/>
+                <file localPath="lib/js/popper.js/popper.js" path="popper.js"/>
+                <file localPath="lib/js/popper.js/popper.js.map" path="popper.js.map"/>
+                <file localPath="lib/js/popper.js/popper.min.js" path="popper.min.js"/>
+                <file localPath="lib/js/popper.js/popper.min.js.map" path="popper.min.js.map"/>
+                <file localPath="lib/js/popper.js/umd/popper-utils.js" path="umd/popper-utils.js"/>
+                <file localPath="lib/js/popper.js/umd/popper-utils.js.map" path="umd/popper-utils.js.map"/>
+                <file localPath="lib/js/popper.js/umd/popper-utils.min.js" path="umd/popper-utils.min.js"/>
+                <file localPath="lib/js/popper.js/umd/popper-utils.min.js.map" path="umd/popper-utils.min.js.map"/>
+                <file localPath="lib/js/popper.js/umd/popper.js" path="umd/popper.js"/>
+                <file localPath="lib/js/popper.js/umd/popper.js.map" path="umd/popper.js.map"/>
+                <file localPath="lib/js/popper.js/umd/popper.min.js" path="umd/popper.min.js"/>
+                <file localPath="lib/js/popper.js/umd/popper.min.js.map" path="umd/popper.min.js.map"/>
+            </library>
         </libraries>
     </configuration>
 </project>

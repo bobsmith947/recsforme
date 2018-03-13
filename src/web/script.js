@@ -15,11 +15,10 @@
  */
 
 import "babel-polyfill";
-import $ from "jquery";
 import moment from "moment/min/moment.min.js";
-import ko from "knockout";
 
 $(() => {
+  $("body").addClass("bg-dark text-light m-5");
   //add listener to expand images on click
   /*if (screen.width > 1024) {
     $(".exp").each((ind, cur) => {
