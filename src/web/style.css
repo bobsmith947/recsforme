@@ -19,15 +19,17 @@ limitations under the License.
 * {box-sizing: border-box}
 /*define semantics as block for compatibility*/
 header, section, footer, aside, nav, main, article, figure {display: block}
-/*links won't change color*/
-a {color: inherit}
 /*set font*/
 body {font-family: 'Roboto', sans-serif}
 /*center headings*/
 h1, h2, h3, h4, h5, h6 {text-align: center}
 /*indent paragraphs*/
 p {text-indent: 50px}
+@media (max-width: 768px) {
+  p {text-indent: 25px}
+}
 /*other styles*/
+/*
 .exp {
   display: block;
   margin: auto;
@@ -57,3 +59,4 @@ a.block {
   display: inline-block;
   margin: auto;
 }
+*/

@@ -18,7 +18,8 @@ import "babel-polyfill";
 import moment from "moment/min/moment.min.js";
 
 $(() => {
-  $("body").addClass("bg-dark text-light m-5");
+  $("body").addClass("bg-dark text-light");
+  #("main").addClass("m-5");
   //add listener to expand images on click
   /*if (screen.width > 1024) {
     $(".exp").each((ind, cur) => {

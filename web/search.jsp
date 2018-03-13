@@ -23,31 +23,33 @@
       </select>
       <button type="submit">Search</button>
     </form>
-    <c:set var="con" value="${q.context}" />
-    <c:set var="len" value="${d.len}" />
-    <div id="results">
-      <c:if test="${len > 0}" var="hasResults">
-        <sql:update var="added" scope="request" dataSource="jdbc/MediaRecom">
-          INSERT INTO qlist (query, qtype)
-          VALUES ('<jsp:getProperty name="q" property="query" />', '<jsp:getProperty name="q" property="type" />')
-        </sql:update>
-        <c:forEach var="i" begin="0" end="${len}" step="1">
-          <c:set var="id" value="${d.listIds()[i]}" />
-          <c:set var="name" value="${d.listNames()[i]}" />
-          <a class="block" href="<c:out value="${con.concat(id)}" />"><c:out value="${name}" /></a>
-        </c:forEach>
-      </c:if>
-      <c:if test="${!hasResults && q.query.length() != 0}">
-        <h3>No results found!</h3>
-      </c:if>
-    </div>
-    <c:choose>
-      <c:when test='${t.equals("movie")}'>
-        <h6>Search results provided by <a href="https://www.omdbapi.com/">OMDb</a>.</h6>
-      </c:when>
-      <c:otherwise>
-        <h6>Search results provided by <a href="https://musicbrainz.org/">MusicBrainz</a>.</h6>
-      </c:otherwise>
-    </c:choose>
+    <main>
+      <c:set var="con" value="${q.context}" />
+      <c:set var="len" value="${d.len}" />
+      <div id="results">
+        <c:if test="${len > 0}" var="hasResults">
+          <sql:update var="added" scope="request" dataSource="jdbc/MediaRecom">
+            INSERT INTO qlist (query, qtype)
+            VALUES ('<jsp:getProperty name="q" property="query" />', '<jsp:getProperty name="q" property="type" />')
+          </sql:update>
+          <c:forEach var="i" begin="0" end="${len}" step="1">
+            <c:set var="id" value="${d.listIds()[i]}" />
+            <c:set var="name" value="${d.listNames()[i]}" />
+            <a class="block" href="<c:out value="${con.concat(id)}" />"><c:out value="${name}" /></a>
+          </c:forEach>
+        </c:if>
+        <c:if test="${!hasResults && q.query.length() != 0}">
+          <h3>No results found!</h3>
+        </c:if>
+      </div>
+      <c:choose>
+        <c:when test='${t.equals("movie")}'>
+          <h6>Search results provided by <a href="https://www.omdbapi.com/">OMDb</a>.</h6>
+        </c:when>
+        <c:otherwise>
+          <h6>Search results provided by <a href="https://musicbrainz.org/">MusicBrainz</a>.</h6>
+        </c:otherwise>
+      </c:choose>
+    </main>
   </body>
 </html>
