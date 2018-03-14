@@ -23,13 +23,14 @@ header, section, footer, aside, nav, main, article, figure {display: block}
 body {font-family: 'Roboto', sans-serif}
 /*center headings*/
 h1, h2, h3, h4, h5, h6 {text-align: center}
-/*indent paragraphs*/
+/*custom spacing*/
 p {text-indent: 50px}
-@media (max-width: 768px) {
+main {margin: 1% 25%}
+@media (max-width: 1024px) {
   p {text-indent: 25px}
+  main {margin: 1% 5%}
 }
-/*other styles*/
-/*
+/*expandable images*/
 .exp {
   display: block;
   margin: auto;
@@ -37,26 +38,3 @@ p {text-indent: 50px}
   width: 15%;
   transition: width 1s;
 }
-#media-search, #vote-form {
-  margin: auto;
-  width: 50%;
-  text-align: center;
-}
-form > input, button, select {
-  display: block;
-  margin: 5px auto;
-}
-#results > .int {
-  display: block;
-  margin: 2.5% 25%;
-}
-a.block {
-  display: block;
-  text-align: center;
-  margin: 20px;
-}
-#vote-form > input[type=radio], label {
-  display: inline-block;
-  margin: auto;
-}
-*/

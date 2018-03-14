@@ -19,7 +19,6 @@ import moment from "moment/min/moment.min.js";
 
 $(() => {
   $("body").addClass("bg-dark text-light");
-  #("main").addClass("m-5");
   //add listener to expand images on click
   /*if (screen.width > 1024) {
     $(".exp").each((ind, cur) => {
@@ -88,10 +87,10 @@ $(() => {
       const group = localStorage.key(i);
       switch (localStorage.getItem(group)) {
         case "like":
-          $("#likes").append(`<li>${group}</li>`);
+          $("#likes").append(`<a href="#" class="list-group-item list-group-item-action">${group}</a>`);
           break;
         case "dislike":
-          $("#dislikes").append(`<li>${group}</li>`);
+          $("#dislikes").append(`<a href="x" class="list-group-item list-group-item-action">${group}</a>`);
           break;
         default:
           console.log("Group not found.");

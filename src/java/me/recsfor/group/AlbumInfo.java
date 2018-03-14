@@ -56,10 +56,7 @@ public class AlbumInfo extends AbstractInfo {
     //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      out.println("<!DOCTYPE html>");
-      out.println("<html>");
-      request.getRequestDispatcher("WEB-INF/jspf/resources.jspf").include(request, response);
-      out.println("<title>recsforme :: " + title + "</title><body>");
+      out.println("<!DOCTYPE html><htmml><title>recsforme :: " + title + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<h2>" + title + " (" + type + ")</h2>");
       out.println("<h3>Released by: <a href=\"ArtistInfo?id=" + artistId + "\">" + artist + "</a></h3>");

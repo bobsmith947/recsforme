@@ -49,10 +49,7 @@ public class ArtistInfo extends AbstractInfo {
     //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      out.println("<!DOCTYPE html>");
-      out.println("<html>");
-      request.getRequestDispatcher("WEB-INF/jspf/resources.jspf").include(request, response);
-      out.println("<title>recsforme :: " + name + "</title><body>");
+      out.println("<!DOCTYPE html><html><title>recsforme :: " + name + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<h2>" + name + " - " + type + "</h2>");
       String term;

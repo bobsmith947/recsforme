@@ -158,4 +158,16 @@ public class QueryBean implements Serializable {
         return null;
     }
   }
+  /**
+   * Checks if one query string is different from another.
+   * @param oldQuery the old query
+   * @param newQuery the new query
+   * @return true if the two are different, false otherwise
+   */
+  public static boolean changed(String oldQuery, String newQuery) {
+    String rep = "(([:\\-.,/])|(\\bthe\\b)|(\\ba\\b|\\ban\\b))+";
+    oldQuery = oldQuery.toLowerCase().replaceAll(rep, "").trim();
+    newQuery = newQuery.toLowerCase().replaceAll(rep, "").trim();
+    return !oldQuery.equals(newQuery);
+  }
 }
