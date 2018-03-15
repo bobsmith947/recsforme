@@ -49,12 +49,9 @@ public class ArtistInfo extends AbstractInfo {
     //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      out.println("<!DOCTYPE html>");
-      out.println("<html><head>");
-      out.println("<meta name=\"keywords\" content=\"\">");
-      out.println("<meta name=\"description\" content=\"\">");
-      out.println("<title>recsforme :: " + name + "</title></head><body>");
-      request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
+      out.println("<!DOCTYPE html><html><title>recsforme :: " + name + "</title><body>");
+      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
+      out.println("<noscript class=\"alert alert-danger\">Scripts have been disabled. Some features may not work.</noscript><main>");
       out.println("<h2>" + name + " - " + type + "</h2>");
       String term;
       switch (type) {
@@ -71,21 +68,19 @@ public class ArtistInfo extends AbstractInfo {
       out.println("<h3>" + term + ": <span class=\"date\">" + years[0] 
               + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");
       //TODO order release groups by date
-      out.println("<h3>Discography:</h3>");
-      out.println("<ul>");
-      albums.forEach(album -> out.println("<li><a href=\"AlbumInfo?id="
-              + album.getId() + "\">" + album.getTitle() + 
-              "</a> - <span class=\"date\">" + album.getFirstReleaseDateStr() + "</span></li>"));
-      out.println("</ul>");
-      out.println("<h4>Contributions:</h4>");
-      out.println("<ul>");
-      contrib.forEach(cont -> out.println("<li><a href=\"AlbumInfo?id="
-              + cont.getId() + "\">" + cont.getTitle() 
-              + "</a> - <span class=\"date\">" + cont.getDateStr() + "</span></li>"));
+      out.println("<h3>Discography:</h3><div class=\"list-group text-right my-2\">");
+      albums.forEach(album -> out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
+              + album.getId() + "\"><h5 class=\"mb-0\">" + album.getTitle()  
+              + "</h5><small class=\"date\">" + album.getFirstReleaseDateStr() + "</small></a>"));
+      out.println("</div><h4>Contributions:</h4><div class=\"list-group text-right my-2\">");
+      contrib.forEach(cont -> out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
+              + cont.getId() + "\"><h5 class=\"mb-0\">" + cont.getTitle() 
+              + "</h5><small class=\"date\">" + cont.getDateStr() + "</small></a>"));
       out.println("</ul></div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
-      out.println("<a class=\"block\" href=\"https://musicbrainz.org/artist/"
+      out.println("<a class=\"d-block text-center\" href=\"https://musicbrainz.org/artist/"
               + id + "\">View on MusicBrainz</a>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
+      out.println("</main>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }

@@ -15,11 +15,20 @@
  */
 
 import "babel-polyfill";
-import $ from "jquery";
 import moment from "moment/min/moment.min.js";
-import ko from "knockout";
 
 $(() => {
+  $("body").addClass("bg-dark text-light");
+  $("#listreset").click(ev => {
+    if (confirm("Are you sure you want to clear your list?")) {
+      localStorage.clear();
+      alert("List cleared.");
+      location.reload();
+    } else {
+      alert("List not cleared.");
+      ev.target.blur();
+    }
+  });
   //add listener to expand images on click
   /*if (screen.width > 1024) {
     $(".exp").each((ind, cur) => {
@@ -88,23 +97,26 @@ $(() => {
       const group = localStorage.key(i);
       switch (localStorage.getItem(group)) {
         case "like":
-          $("#likes").append(`<li>${group}</li>`);
+          $("#likes").append(`<a href="group.jsp?name=${encodeURIComponent(group)}" class="list-group-item list-group-item-action">${group}</a>`);
           break;
         case "dislike":
-          $("#dislikes").append(`<li>${group}</li>`);
+          $("#dislikes").append(`<a href="group.jsp?name=${encodeURIComponent(group)}" class="list-group-item list-group-item-action">${group}</a>`);
           break;
         default:
           console.log("Group not found.");
           break;
       }
     }
-    const entries = $("#likes,#dislikes").children();
-    $(entries).wrapInner(ind => {
-      return `<a href="group.jsp?name=${encodeURIComponent($(entries).eq(ind).text())}"></a>`;
-    });
+    if (localStorage.length === 0) {
+      $("#listreset").prop("disabled", true);
+      $("#list").empty();
+      $("#list").append("<h6>Your list is empty!</h6>");
+      $("#list").append("<a class='d-block text-center mb-3' href='search.jsp'>Click here to go to the search page.</a>");
+      $("#resetprompt").addClass("text-muted");
+    }
   }
 });
-
+/*
 function expandImg(ev) {
   const elem = ev.target, w = elem.naturalWidth;
   switch (elem.style.width) {
@@ -119,7 +131,7 @@ function expandImg(ev) {
       break;
   }
 }
-
+*/
 function isLike(str) {
   switch (str) {
     case "true":

@@ -31,7 +31,7 @@ public class QueryBean implements Serializable {
   private String query;
   private String type;
   private String context;
-  private AbstractQuery delegation;
+  private transient AbstractQuery delegation;
   private final PropertyChangeSupport propertySupport;
   /**
    * Default constructor called when instantiated in a JSP.
@@ -157,5 +157,17 @@ public class QueryBean implements Serializable {
       default:
         return null;
     }
+  }
+  /**
+   * Checks if one query string is different from another.
+   * @param oldQuery the old query
+   * @param newQuery the new query
+   * @return true if the two are different, false otherwise
+   */
+  public static boolean changed(String oldQuery, String newQuery) {
+    String rep = "(([:\\-.,/])|(\\bthe\\b)|(\\ba\\b|\\ban\\b))+";
+    oldQuery = oldQuery.toLowerCase().replaceAll(rep, "").trim();
+    newQuery = newQuery.toLowerCase().replaceAll(rep, "").trim();
+    return !oldQuery.equals(newQuery);
   }
 }

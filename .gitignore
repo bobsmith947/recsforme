@@ -22,10 +22,11 @@
 hs_err_pid*
 
 nbproject/private
-node_modules/
 src/java/hibernate.cfg.xml
 build/
 dist/
+node_modules/
 lib/
+!lib/nblibraries.properties
 !lib/musicbrainzws2.jar
-!/lib/CopyLibs/org-netbeans-modules-java-j2seproject-copylibstask.jar
+!lib/CopyLibs/org-netbeans-modules-java-j2seproject-copylibstask.jar

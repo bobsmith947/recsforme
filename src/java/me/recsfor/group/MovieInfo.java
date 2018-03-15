@@ -43,17 +43,15 @@ public class MovieInfo extends AbstractInfo {
     //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      out.println("<!DOCTYPE html>");
-      out.println("<html><head>");
-      out.println("<meta name=\"keywords\" content=\"\">");
-      out.println("<meta name=\"description\" content=\"\">");
-      out.println("<title>recsforme :: " + title + "</title></head><body>");
-      request.getRequestDispatcher("WEB-INF/jspf/header_servlet.jspf").include(request, response);
+      out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
+      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
+      out.println("<noscript class=\"alert alert-danger\">Scripts have been disabled. Some features may not work.</noscript><main>");
       out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
       out.println("<p>" + plot + "</p>");
-      out.println("<a class=\"block\" href=\"https://imdb.com/title/"
-              + id + "\">View on IMDb</a>");
+      out.println("<a class=\"d-block text-center\" href=\"https://imdb.com/title/"
+              + id + "\"><span class=\"fab fa-imdb fa-2x\"></span></a>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
+      out.println("</main>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }
