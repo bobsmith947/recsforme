@@ -31,7 +31,7 @@ public class QueryBean implements Serializable {
   private String query;
   private String type;
   private String context;
-  private AbstractQuery delegation;
+  private transient AbstractQuery delegation;
   private final PropertyChangeSupport propertySupport;
   /**
    * Default constructor called when instantiated in a JSP.

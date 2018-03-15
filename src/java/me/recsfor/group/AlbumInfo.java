@@ -56,8 +56,9 @@ public class AlbumInfo extends AbstractInfo {
     //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      out.println("<!DOCTYPE html><htmml><title>recsforme :: " + title + "</title><body>");
+      out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
+      out.println("<noscript class=\"alert alert-danger\">Scripts have been disabled. Some features may not work.</noscript><main>");
       out.println("<h2>" + title + " (" + type + ")</h2>");
       out.println("<h3>Released by: <a href=\"ArtistInfo?id=" + artistId + "\">" + artist + "</a></h3>");
       out.println("<h3>Released on: <span class=\"date\">" + date + "</span></h3>");
@@ -65,18 +66,19 @@ public class AlbumInfo extends AbstractInfo {
       out.println("<h3>Tracklist:</h2>");
       try {
         List<TrackWs2> tracks = info.getCompleteTrackList();
-        out.println("<ol>");
+        out.println("<ol id=\"tracklist\">");
         tracks.forEach(track -> out.println("<li>" + track.getRecording().getTitle()
                 + " - " + track.getDuration() + "</li>"));
         out.println("</ol>");
       } catch (NullPointerException e) {
         this.log(e.getMessage(), e);
-        out.println("<h4>No tracks!</h4>");
+        out.println("<h4>No tracks found!</h4>");
       }
       out.println("<h5>Total length: " + info.getDuration() + "</h5>");
-      out.println("<a class=\"block\" href=\"https://musicbrainz.org/release-group/"
+      out.println("<a class=\"d-block text-center\" href=\"https://musicbrainz.org/release-group/"
               + id + "\">View on MusicBrainz</a>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
+      out.println("</main>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }

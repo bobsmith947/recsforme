@@ -29,11 +29,11 @@
             <option value="artist" <% if (t.equals("artist")) out.print("selected"); %>>Artist</option>
             <option value="album" <% if (t.equals("album")) out.print("selected"); %>>Album/EP/Single</option>
           </select>
-          <div class="input-group-appaned">
+          <div class="input-group-append">
             <span class="input-group-text">category</span>
           </div>
         </div>
-        <button class="btn btn-outline-light" type="submit">Search</button>
+        <button class="btn btn-light btn-block" type="submit">Search</button>
       </form>
       <c:set var="con" value="${q.context}" />
       <c:set var="len" value="${d.len}" />
@@ -46,13 +46,13 @@
             </sql:update>
               changed
           </c:if>
-          <ul class="list-group text-center">
+          <div class="list-group text-center">
             <c:forEach var="i" begin="0" end="${len-1}" step="1">
               <c:set var="id" value="${d.listIds()[i]}" />
               <c:set var="name" value="${d.listNames()[i]}" />
               <a class="list-group-item list-group-item-action" href="<c:out value="${con.concat(id)}" />"><c:out value="${name}" /></a>
             </c:forEach>
-          </ul>
+          </div>
         </c:if>
         <c:if test="${!hasResults && q.query.length() != 0}">
           <h3>No results found!</h3>

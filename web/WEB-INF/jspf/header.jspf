@@ -1,5 +1,4 @@
-<!--head-->
-<meta charset="UTF-8">
+<!--resources-->
 <meta name="author" content="Lucas Kitaev">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="keywords" content="recommendation engine, recommender system, open source, java, web app, web application, movies, shows, tv, music, games">
@@ -11,7 +10,7 @@
 <script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 <link href="auto.css" rel="stylesheet" type="text/css">
-<!--body-->
+<!--navbar-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
   <div class="container">
     <a class="navbar-brand" href="./">recsforme</a>
@@ -27,7 +26,7 @@
           <a class="nav-link" href="user.jsp">Profile</a>
         </li>
       </ul>
-      <form class="form-inline mt-lg-3 ml-lg-3" id="nav-search" action="search.jsp">
+      <form class="form-inline m-lg-3" id="nav-search" action="search.jsp">
         <input class="form-control mr-lg-2" type="search" name="query" maxlength="100" autocomplete="off" placeholder="Search" required>
         <div class="input-group">
           <div class="input-group-prepend">

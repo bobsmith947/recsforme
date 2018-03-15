@@ -20,21 +20,31 @@ limitations under the License.
 /*define semantics as block for compatibility*/
 header, section, footer, aside, nav, main, article, figure {display: block}
 /*set font*/
-body {font-family: 'Roboto', sans-serif}
+body {font-family: 'Roboto', sans-serif !important}
 /*center headings*/
-h1, h2, h3, h4, h5, h6 {text-align: center}
+h1, h2, h3, h4, h5, h6 {text-align: center !important}
 /*custom spacing*/
-p {text-indent: 50px}
-main {margin: 1% 25%}
+p {text-indent: 50px !important}
+main {margin: 1% 25% !important}
 @media (max-width: 1024px) {
-  p {text-indent: 25px}
-  main {margin: 1% 5%}
+  p {text-indent: 25px !important}
+  main {margin: 5% 5% !important}
 }
-/*expandable images*/
 .exp {
   display: block;
   margin: auto;
   padding: 15px;
   width: 15%;
   transition: width 1s;
+}
+#tracklist {
+  list-style-position: inside;
+  margin: auto;
+  width: fit-content;
+  -ms-width: 50%;
+}
+#vote-radio {
+  margin: auto;
+  width: fit-content;
+  -ms-width: 25%;
 }

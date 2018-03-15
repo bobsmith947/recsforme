@@ -45,11 +45,13 @@ public class MovieInfo extends AbstractInfo {
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
+      out.println("<noscript class=\"alert alert-danger\">Scripts have been disabled. Some features may not work.</noscript><main>");
       out.println("<h2>" + title + " (" + year + ") - " + type + "</h2>");
       out.println("<p>" + plot + "</p>");
-      out.println("<a class=\"block\" href=\"https://imdb.com/title/"
+      out.println("<a class=\"d-block text-center\" href=\"https://imdb.com/title/"
               + id + "\">View on IMDb</a>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
+      out.println("</main>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
     }

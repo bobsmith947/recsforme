@@ -6,13 +6,15 @@
     <noscript class="alert alert-danger">Scripts have been disabled. Some features may not work.</noscript>
     <main>
       <h2>Welcome to your user page!</h2>
-      <p>This page is unique to your browser, and is automatically populated with any groups added to your likes or dislikes. Please note that entries are stored in <code>localStorage</code>, so if you clear that, everything will be lost! Naturally, this is only a temporary solution. In the future, there will be full user functionality tied to a remote database.</p>
-      <div>
+      <p>This page is unique to your browser, and is automatically populated with any groups added to your likes or dislikes. Please note that entries are stored in <code>localStorage</code>, so if you clear <code>localStorage</code> accidentally, everything will be lost! Naturally, this is only a temporary solution. In the future, there will be full user functionality tied to a remote database.</p>
+      <div id="list">
         <h3>Your likes:</h3>
-        <ul class="list-group text-center" id="likes"></ul>
+        <div class="list-group text-center my-2" id="likes"></div>
         <h3>Your dislikes:</h3>
-        <ul class="list-group text-center" id="dislikes"></ul>
+        <div class="list-group text-center my-2" id="dislikes"></div>
       </div>
+      <h6 id="resetprompt">If you want to clear <code>localStorage</code>, you can use the below button to do so.</h6>
+      <button class="btn btn-danger btn-block" type="reset" id="listreset">Reset your list</button>
     </main>
   </body>
 </html>
