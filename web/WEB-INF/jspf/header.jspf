@@ -44,15 +44,12 @@
         </div>
         <button class="btn btn-outline-light" type="submit">Go!</button>
       </form>
-      <div class="mt-2 mt-lg-0">
+      <div id="icons" class="mt-2 mt-lg-0">
         <a class="text-light mr-2" href="https://twitter.com/champred69">
           <span class="fab fa-twitter"></span>
         </a>
         <a class="text-light mr-2" href="https://github.com/bobsmith947/recsforme">
           <span class="fab fa-github"></span>
-        </a>
-        <a href="https://travis-ci.org/bobsmith947/recsforme">
-          <img src="https://travis-ci.org/bobsmith947/recsforme.svg?branch=master" alt="Travis CI build status.">
         </a>
       </div>
     </div>

@@ -58,6 +58,7 @@
         </c:if>
       </div>
       <c:choose>
+        <%--for some reason JSTL doesn't support .equals()?--%>
         <c:when test='${q.type == "Movie"}'>
           <h6>Search results provided by <a href="https://www.omdbapi.com/">OMDb</a>.</h6>
         </c:when>

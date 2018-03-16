@@ -55,9 +55,6 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.slf4j-jdk14-1.7.24.jar}</file>
-                </library>
-                <library dirs="200">
                     <file>${file.reference.jdom-1.0.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>

@@ -13,7 +13,7 @@
         <h3>Your dislikes:</h3>
         <div class="list-group text-center my-2" id="dislikes"></div>
       </div>
-      <h6 id="resetprompt">If you want to clear <code>localStorage</code>, you can use the below button to do so.</h6>
+      <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear <code>localStorage</code>, you can use the below button to do so.</h6>
       <button class="btn btn-danger btn-block" type="reset" id="listreset">Reset your list</button>
     </main>
   </body>
