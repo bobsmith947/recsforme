@@ -19,6 +19,21 @@ import moment from "moment/min/moment.min.js";
 
 $(() => {
   $("body").addClass("bg-dark text-light");
+  $("#removegroup").click(function(ev) {
+    if (confirm("Are you sure you want to remove this group?")) {
+      localStorage.removeItem($(this).data("name"));
+      alert("Group removed.");
+      window.open("user.jsp", "_self");
+    } else {
+      alert("Group not removed.");
+      if ($("#info").length > 0) 
+        console.log("You already tried removing this!");
+      else
+        $("main").append("<h5 id='info' class='mt-3'>This group is still in your <span style='text-decoration:underline'>"
+                + localStorage.getItem($(this).data("name")) + "</span> list.</h5>");
+      $(this).blur();
+    }
+  });
   //add listener to expand images on click
   /*if (screen.width > 1024) {
     $(".exp").each((ind, cur) => {
