@@ -16,54 +16,16 @@ limitations under the License.
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,500i,700&subset=cyrillic,greek,vietnamese');
 * {box-sizing: border-box}
-/*define semantics as block for compatibility*/
 header, section, footer, aside, nav, main, article, figure {display: block}
-a {color: inherit}
-nav {margin: 1em 0}
-body {
-  background-color: gainsboro;
-  color: black;
-  font-family: 'Roboto', sans-serif;
+body {font-family: 'Roboto', sans-serif !important}
+h1, h2, h3, h4, h5, h6 {text-align: center !important}
+a:hover {text-decoration: none !important}
+p {text-indent: 50px !important}
+main {margin: 1% 25% !important}
+@media (max-width: 1024px) {
+  p {text-indent: 25px !important}
+  main {margin: 5% 5% !important}
 }
-h1, h2, h3, h4, h5, h6 {
-  text-align: center;
-  margin: 10px;
-}
-p {
-  text-align: left;
-  margin: 0 25%;
-  text-indent: 50px;
-}
-@media (max-width: 768px) {
-  p {
-    margin: 0 5%;
-    text-indent: 25px;
-  }
-}
-noscript {
-  display: block;
-  font-weight: bold;
-  color: red;
-  padding-bottom: 10px;
-}
-ul, ol {
-  list-style-position: inside;
-  margin: auto;
-  width: fit-content;
-}
-/*
-.int {
-  display: inline-block;
-  text-decoration: none;
-  text-align: center;
-  color: white;
-  background-color: #333;
-  padding: 8px;
-  margin: 0 -5px;
-  transition: background-color 0.5s
-}
-.int:hover {background-color: #111}
-*/
 .exp {
   display: block;
   margin: auto;
@@ -71,25 +33,14 @@ ul, ol {
   width: 15%;
   transition: width 1s;
 }
-#media-search, #vote-form {
+.list-group-ordered {
+  list-style-position: inside;
   margin: auto;
-  width: 50%;
-  text-align: center;
+  width: fit-content;
+  -ms-width: 50%;
 }
-form > input, button, select {
-  display: block;
-  margin: 5px auto;
-}
-#results > .int {
-  display: block;
-  margin: 2.5% 25%;
-}
-a.block {
-  display: block;
-  text-align: center;
-  margin: 20px;
-}
-#vote-form > input[type=radio], label {
-  display: inline-block;
+#vote-radio {
   margin: auto;
+  width: fit-content;
+  -ms-width: 25%;
 }

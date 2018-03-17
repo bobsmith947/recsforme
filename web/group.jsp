@@ -1,0 +1,14 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+  <title>recsforme :: Group</title>
+  <body>
+    <noscript class="alert alert-danger">Scripts have been disabled. Some features may not work.</noscript>
+    <main>
+      <h1><%= request.getParameter("name")%></h1>
+      <button id="removegroup" class="btn btn-danger btn-lg btn-block" data-name='<%= request.getParameter("name")%>' type="reset">
+        Remove from list
+      </button>
+    </main>
+  </body>
+</html>

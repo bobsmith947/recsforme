@@ -32,23 +32,23 @@ public class GroupVote extends AbstractInfo {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String name;
     String id;
-    //String type;
+    String like;
     try {
       name = request.getParameter("name");
       id = request.getParameter("id");
-      //type = request.getParameter("type");
+      like = request.getParameter("like");
     } catch (NullPointerException e) {
       this.log(e.getMessage(), e);
-      name = "";
-      id = "";
-      //type = "";
+      name = "N/A";
+      id = "N/A";
+      like = "Unknown";
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
-      //out.println("<p>" + name + "</p>");
-      //out.println("<p>" + id + "</p>");
-      //out.println("<p>" + type + "</p>");
-      out.println("<p>Data has successfully been sent to server.</p>");
+      out.println("<h5>Data has successfully been sent to server.</h5>");
+      out.println("<h6><code>name: '" + name 
+              + "'; id: " + id 
+              + "; like: " + like + "</code></h6>");
     }
   }
 
