@@ -18,7 +18,7 @@ package me.recsfor.group;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-//import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 //import java.io.UnsupportedEncodingException;
@@ -34,14 +34,19 @@ import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
  * For example, <code>ArtistInfo?id=056e4f3e-d505-4dad-8ec1-d04f521cbb56</code> will generate a page for Daft Punk.
  * @author lkitaev
  */
-public class ArtistInfo extends AbstractInfo {
+public class ArtistInfo extends HttpServlet {
   private static final long serialVersionUID = -8210213618927548383L;
   private String name, type;
   private String[] years;
   private List<ReleaseGroupWs2> albums;
   private List<ReleaseWs2> contrib;
-
-  @Override
+  /**
+   * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String id = request.getParameter("id");
     populate(id);
@@ -85,7 +90,32 @@ public class ArtistInfo extends AbstractInfo {
       out.println("</body></html>");
     }
   }
-  
+  /**
+   * Handles the HTTP <code>GET</code> method.
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    processRequest(request, response);
+  }
+  /**
+   * Handles the HTTP <code>POST</code> method.
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    processRequest(request, response);
+  }
+  /**
+   * Returns a short description of the servlet.
+   * @return a String containing servlet description
+   */
   @Override
   public String getServletInfo() {
     return "Provides information for artist groups.";

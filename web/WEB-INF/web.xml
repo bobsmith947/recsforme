@@ -18,6 +18,10 @@
         <servlet-name>GroupVote</servlet-name>
         <servlet-class>me.recsfor.group.GroupVote</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UserAuth</servlet-name>
+        <servlet-class>me.recsfor.app.UserAuth</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MovieInfo</servlet-name>
         <url-pattern>/MovieInfo</url-pattern>
@@ -33,6 +37,10 @@
     <servlet-mapping>
         <servlet-name>GroupVote</servlet-name>
         <url-pattern>/GroupVote</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UserAuth</servlet-name>
+        <url-pattern>/UserAuth</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
