@@ -81,13 +81,4 @@ public abstract class AbstractQuery {
    * @return an array either containing the ID's or null
    */
   public abstract String[] listIds();
-  /**
-   * Checks if the current query is different from the last query.
-   * @param newQuery the new query
-   * @return true if the query has changed, false otherwise
-   */
-  public boolean changed(String newQuery) {
-    //TODO use this method
-    return (query != null) ? newQuery.equals(query) : false;
-  }
 }

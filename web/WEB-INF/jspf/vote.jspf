@@ -1,17 +1,23 @@
 <div data-bind="visible:!hasVoted()">
-  <h2>Do you like this?</h2>
+  <h2 class="text-warning">Do you like this?</h2>
   <form id="vote-form" data-bind="submit:sendVote" method="POST" action="GroupVote">
-    <label for="yes">Yes</label>
-    <input id="yes" type="radio" value="true" name="like" data-bind="checked:hasSelected">
-    <label for="no">No</label>
-    <input id="no" type="radio" value="false" name="like" data-bind="checked:hasSelected">
-    <button type="submit" data-bind="enable:hasSelected">Submit</button>
+    <div id="vote-radio">
+      <div class="form-check form-check-inline mx-3">
+        <label class="form-check-label" for="yes">Yes</label>
+        <input class="form-check-input m-0" id="yes" type="radio" value="true" name="like" data-bind="checked:hasSelected">
+      </div>
+      <div class="form-check form-check-inline mx-3">
+        <label class="form-check-label" for="no">No</label>
+        <input class="form-check-input m-0" id="no" type="radio" value="false" name="like" data-bind="checked:hasSelected">
+      </div>
+    </div>
+    <button class="btn btn-success btn-block mt-2" type="submit" data-bind="enable:hasSelected">Submit</button>
   </form>
 </div>
 <div id="vote-div" style="display:none" data-bind="visible:hasVoted">
-  <h2>Your vote has been received!</h2>
+  <h2 class="text-success">Your vote has been received!</h2>
   <h3>Added <i data-bind="text:name"></i> to <a href="user.jsp">your list</a>.</h3>
   <h3>You <span style="text-decoration:underline" data-bind="text:status"></span> this.</h3>
-  <button type="reset" data-bind="click:undoVote">Reset</button>
+  <button class="btn btn-warning btn-block my-2" type="reset" data-bind="click:undoVote">Reset</button>
 </div>
 <div id="response"></div>

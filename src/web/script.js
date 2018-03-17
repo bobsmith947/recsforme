@@ -15,11 +15,10 @@
  */
 
 import "babel-polyfill";
-import $ from "jquery";
 import moment from "moment/min/moment.min.js";
-import ko from "knockout";
 
 $(() => {
+  $("body").addClass("bg-dark text-light");
   //add listener to expand images on click
   /*if (screen.width > 1024) {
     $(".exp").each((ind, cur) => {
@@ -38,7 +37,7 @@ $(() => {
   });
   //knockout bindings for group page
   try {
-    const group = document.title.substring(document.title.indexOf(": ")+2);
+    const group = $("#name").text();
     const id = location.search.substring(4);
     let vote;
     function checkVote() {
@@ -64,10 +63,9 @@ $(() => {
         voteData.append("id", id);
         this.status(isLike(voteData.get("like")));
         this.hasVoted(true);
-        $.post("GroupVote", $(form).serialize(), (response, message) => {
-          if (message === "success") $("#response").append(response);
-          else alert("Failed to send data to server.");
-        });
+        $.post("GroupVote", 
+        {name: voteData.get("name"), id: voteData.get("id"), like: voteData.get("like")}, 
+        response => $("#response").append(response));
         localStorage.setItem(group, this.status());
       },
       undoVote: function() {
@@ -84,23 +82,49 @@ $(() => {
   }
   //user page populate
   if (location.pathname.includes("user.jsp")) {
+    //add groups
     for (var i = 0; i < localStorage.length; i++) {
       const group = localStorage.key(i);
       switch (localStorage.getItem(group)) {
         case "like":
-          $("#likes").append(`<li>${group}</li>`);
+          $("#likes").append(`<a href="group.jsp?name=${encodeURIComponent(group)}" class="list-group-item list-group-item-action">${group}</a>`);
           break;
         case "dislike":
-          $("#dislikes").append(`<li>${group}</li>`);
+          $("#dislikes").append(`<a href="group.jsp?name=${encodeURIComponent(group)}" class="list-group-item list-group-item-action">${group}</a>`);
           break;
         default:
           console.log("Group not found.");
           break;
       }
     }
+    //notify if nothing could be added
+    if (localStorage.length === 0) {
+      $("#listreset").prop("disabled", true);
+      $("#list").empty();
+      $("#list").append("<h6>Your list is empty!</h6>");
+      $("#list").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
+      $("#resetprompt").addClass("text-muted");
+    } else if ($("#likes").children().length === 0) {
+      $("#likes").append("<h6>You haven't added any likes!</h6>");
+      $("#likes").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
+    } else if ($("#dislikes").children().length === 0) {
+      $("#dislikes").append("<h6>You haven't added any dislikes!</h6>");
+      $("#dislikes").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
+    }
+    //clear the list
+    $("#listreset").click(ev => {
+      if (confirm("Are you sure you want to clear your list?")) {
+        localStorage.clear();
+        alert("List cleared.");
+        location.reload();
+      } else {
+        alert("List not cleared.");
+        ev.target.blur();
+      }
+    });
   }
 });
-
+/*
 function expandImg(ev) {
   const elem = ev.target, w = elem.naturalWidth;
   switch (elem.style.width) {
@@ -115,7 +139,7 @@ function expandImg(ev) {
       break;
   }
 }
-
+*/
 function isLike(str) {
   switch (str) {
     case "true":

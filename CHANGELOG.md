@@ -1,5 +1,27 @@
 # recsforme changelog
 
+## March 9, 2018 - Alpha release
+
+**Fixed:**
+
+* `AlbumInfo` will search in `release` if it cannot resolve a `release-group`
+* `AlbumInfo` and `ArtistInfo` now escape all dangerous characters
+* Switched the server to Apache Tomcat. This is a more lightweight solution (only the basic features of the Java EE spec are needed) that also allows for database connectivity due to difficulties with GlassFish
+* JSTL core tags are used instead of JSP scriptlets. Hopefully the source for JSP's is more readable now
+
+**Added:**
+
+* Vote data for groups is sent to the server using AJAX, and stored using `localStorage`. jQuery and Knockout were added as JavaScript dependencies
+* Refactored most of the client-side script with jQuery code
+
+**Removed:**
+
+* Functionality for `AlbumQuery` to grab information on release editions. It wasn't really needed and could make the page load much slower if I didn't add a separate parameter, but I didn't really like that anyway, so I just got rid of it entirely
+
+**Missing:**
+
+* Recommendation engine. I added a package and an interface, but that's about it. No real functionality
+
 ## February 28, 2018 - Alpha Release
 
 **Fixed:**
