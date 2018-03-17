@@ -5,6 +5,14 @@
   <body>
     <noscript class="alert alert-danger">Scripts have been disabled. Some features may not work.</noscript>
     <main>
+      <ul class="nav justify-content-center">
+        <li class="nav-item">
+          <a class="nav-link" href="login.jsp">Log in</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="signup.jsp">Sign up</a>
+        </li>
+      </ul>
       <h2>Welcome to your user page!</h2>
       <p>This page is unique to your browser, and is automatically populated with any groups added to your likes or dislikes. Please note that entries are stored in <code>localStorage</code>, so if you clear <code>localStorage</code> accidentally, everything will be lost! Naturally, this is only a temporary solution. In the future, there will be full user functionality tied to a remote database.</p>
       <div id="list">
