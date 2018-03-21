@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * This servlet will be called whenever a login attempt fails, as specified in <code>web.xml</code>.
+ * Servlet to be called whenever a login attempt fails, as specified in <code>web.xml</code>.
  * @author lkitaev
  */
 public class LoginFailed extends HttpServlet {
