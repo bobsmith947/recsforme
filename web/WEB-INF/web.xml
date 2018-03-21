@@ -19,10 +19,6 @@
         <servlet-class>me.recsfor.group.GroupVote</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>UserAuth</servlet-name>
-        <servlet-class>me.recsfor.app.UserAuth</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>LoginFailed</servlet-name>
         <servlet-class>me.recsfor.app.LoginFailed</servlet-class>
     </servlet>
@@ -41,10 +37,6 @@
     <servlet-mapping>
         <servlet-name>GroupVote</servlet-name>
         <url-pattern>/GroupVote</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UserAuth</servlet-name>
-        <url-pattern>/UserAuth</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>LoginFailed</servlet-name>
