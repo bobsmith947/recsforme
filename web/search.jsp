@@ -40,7 +40,7 @@
       <div class="mb-2" id="results">
         <c:if test="${len > 0}" var="hasResults" scope="request">
           <c:if test="${q.changed(old, q.query)}">
-            <sql:update var="added" scope="request" dataSource="jdbc/MediaRecom">
+            <sql:update dataSource="jdbc/MediaRecom">
               INSERT INTO query_log (query, qtype)
               VALUES ('<jsp:getProperty name="q" property="query" />', '<jsp:getProperty name="q" property="type" />')
             </sql:update>

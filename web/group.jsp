@@ -6,7 +6,7 @@
     <noscript class="alert alert-danger">Scripts have been disabled. Some features may not work.</noscript>
     <main>
       <h1><%= request.getParameter("name")%></h1>
-      <button id="removegroup" class="btn btn-danger btn-lg btn-block" data-name='<%= request.getParameter("name")%>' type="reset">
+      <button id="removegroup" class="btn btn-danger btn-lg btn-block my-4" data-name='<%= request.getParameter("name")%>' type="reset">
         Remove from list
       </button>
     </main>

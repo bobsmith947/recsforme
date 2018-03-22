@@ -9,11 +9,11 @@
       <form action="auth.jsp" method="POST">
         <div class="form-group">
           <label for="uname">Username</label>
-          <input type="text" class="form-control" id="uname" name="j_username" maxlength="36" required>
+          <input type="text" class="form-control" id="uname" name="uname" maxlength="36" required>
         </div>
         <div class="form-group">
           <label for="pw">Password</label>
-          <input type="password" class="form-control" id="pw" name="j_password" required>
+          <input type="password" class="form-control" id="pw" name="pw" maxlength="36" required>
         </div>
         <button type="submit" class="btn btn-primary btn-lg btn-block">Log In</button>
       </form>

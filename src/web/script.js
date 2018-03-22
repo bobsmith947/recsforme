@@ -50,8 +50,29 @@ $(() => {
     else if (str === "null") $(cur).text("Unknown date");
     else $(cur).text(str);
   });
-  //knockout bindings for group page
+  //knockout bindings
   try {
+    //signup.jsp
+    let signUpModel = {
+      uname: ko.observable(""),
+      pw: ko.observable(""),
+      pwc: ko.observable(""),
+      email: ko.observable(""),
+      dob: ko.observable(""),
+      age: ko.computed(function() {
+        const date = moment(this.dob());
+        if (date.isValid()) return date.fromNow();
+        else return "unknown";
+      }, this),
+      sex: ko.observable(false),
+      completed: ko.computed(function() {
+        return (this.uname().length > 0) && this.pw() === this.pwc();
+      }, this),
+      sendInfo: function(form) {
+        let infoDate = new FormData(form);
+      }
+    };
+    //vote.jspf
     const group = $("#name").text();
     const id = location.search.substring(4);
     let vote;
@@ -66,7 +87,6 @@ $(() => {
         return false;
       }
     }
-    //$("#vote-form").submit(e => e.preventDefault());
     let voteModel = {
       hasSelected: ko.observable(false),
       hasVoted: ko.observable(checkVote()),
@@ -90,6 +110,7 @@ $(() => {
         $("#response").empty();
       }
     };
+    ko.applyBindings(signUpModel);
     ko.applyBindings(voteModel);
   } catch (ex) {
     console.log(ex);
