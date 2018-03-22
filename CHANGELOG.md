@@ -1,6 +1,6 @@
 # recsforme changelog
 
-## March 9, 2018 - Alpha release
+## March 9, 2018 - Alpha Release
 
 **Fixed:**
 

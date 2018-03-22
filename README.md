@@ -18,7 +18,9 @@ Want to get recsforme set up on your local machine for development and testing p
 * npm (installed with [Node.js](https://nodejs.org/en/download/))
 * [oxipng](https://github.com/shssoichiro/oxipng) (optional)
 
-**Some features require access to a SQL database, so you must either comment out any SQL code, or create your own connection pool in `context.xml`.**
+**Some features require access to a SQL database, so you must either comment out any SQL code, or create your own connection pool in `context.xml` with the reference `jdbc/MediaRecom`.**
+
+**You may also want to get your own API key from https://www.omdbapi.com/.**
 
 ### Installing
 
@@ -45,9 +47,7 @@ When you're done:
 
     $CATALINA_HOME/bin/catalina stop
 
-*Please note, it may be necessary to specify .bat or .sh depending on your OS.*
-
-Alternatively, you can directly deploy the WAR (can be downloaded from the [releases](https://github.com/bobsmith947/recsforme/releases) section) using the Tomcat Manager. Keep in mind, the latest release isn't the latest build, so you'll be missing any hot new features. On the other hand, it'll probably be more stable, so pick your poison.
+Alternatively, you can directly deploy the WAR (can be downloaded from the [releases](https://github.com/bobsmith947/recsforme/releases) section) using the Tomcat Manager (you will need to set up a user with the `manager-gui` permission). Keep in mind, the latest release isn't the latest build, so you'll be missing any hot new features.
 
 ## Contributing
 
@@ -55,7 +55,7 @@ Please read [CONTRIBUTING](./CONTRIBUTING.md) and [CODE OF CONDUCT](./CODE_OF_CO
 
 ## Authors
 
-* **[Lucas Kitaev](https://github.com/bobsmith947)** - *Lead Developer and Designer*
+* **Lucas Kitaev** - *Lead Developer and Designer*
 * **Oleg Kitaev** - *Expert Advisor*
 * **Sai Donepudi** - *Code Support Advisor*
 
