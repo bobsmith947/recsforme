@@ -120,5 +120,9 @@
                 <file localPath="lib/js/popper.js/umd/popper.min.js.map" path="umd/popper.min.js.map"/>
             </library>
         </libraries>
+        <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>recsforme</word>
+            <word>servlet</word>
+        </spellchecker-wordlist>
     </configuration>
 </project>

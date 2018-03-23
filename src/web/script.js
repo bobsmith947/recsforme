@@ -52,71 +52,77 @@ $(() => {
   });
   //knockout bindings
   try {
-    //signup.jsp
-    let signUpModel = {
-      uname: ko.observable(""),
-      pw: ko.observable(""),
-      pwc: ko.observable(""),
-      email: ko.observable(""),
-      dob: ko.observable(""),
-      age: ko.computed(function() {
-        const date = moment(this.dob());
-        if (date.isValid()) return date.fromNow();
-        else return "unknown";
-      }, this),
-      sex: ko.observable(false),
-      completed: ko.computed(function() {
-        return (this.uname().length > 0) && this.pw() === this.pwc();
-      }, this),
-      sendInfo: function(form) {
-        let infoDate = new FormData(form);
-      }
-    };
-    //vote.jspf
-    const group = $("#name").text();
-    const id = location.search.substring(4);
-    let vote;
-    function checkVote() {
-      try {
-        const val = localStorage.getItem(group);
-        vote = val;
-        return val !== null;
-      } catch (ex) {
-        console.log(ex);
-        console.log("Not found in list.");
-        return false;
-      }
+    if (location.pathname.includes("signup.jsp")) {
+      let signUpModel = {
+        uname: ko.observable(""),
+        pw: ko.observable(""),
+        pwc: ko.observable(""),
+        email: ko.observable(""),
+        sex: ko.observable(false),
+        read: ko.observable(false),
+        accepted: ko.observable(false),
+        notRobot: ko.observable(false),
+        dob: ko.observable(""),
+        age: function() {
+          const date = moment(this.dob());
+          if (date.isValid()) return date.fromNow();
+          else return "unknown";
+        },
+        completed: function() {
+          return (this.read() && this.accepted() && this.notRobot()) 
+                  && (this.uname() !== "") 
+                  && (this.pw() !== "" && this.pw() === this.pwc());
+        },
+        sendInfo: function(form) {
+          let infoDate = new FormData(form);
+        }
+      };
+      ko.applyBindings(signUpModel);
     }
-    let voteModel = {
-      hasSelected: ko.observable(false),
-      hasVoted: ko.observable(checkVote()),
-      name: ko.observable(group),
-      status: ko.observable(vote),
-      sendVote: function(form) {
-        let voteData = new FormData(form);
-        voteData.append("name", group);
-        voteData.append("id", id);
-        this.status(isLike(voteData.get("like")));
-        this.hasVoted(true);
-        $.post("GroupVote", 
-        {name: voteData.get("name"), id: voteData.get("id"), like: voteData.get("like")}, 
-        response => $("#response").append(response));
-        localStorage.setItem(group, this.status());
-      },
-      undoVote: function() {
-        this.hasVoted(false);
-        this.hasSelected(false);
-        localStorage.removeItem(group);
-        $("#response").empty();
+    if (location.pathname.includes("Info")) {
+      const group = $("#name").text();
+      const id = location.search.substring(4);
+      let vote;
+      function checkVote() {
+        try {
+          const val = localStorage.getItem(group);
+          vote = val;
+          return val !== null;
+        } catch (ex) {
+          console.log(ex);
+          console.log("Not found in list.");
+          return false;
+        }
       }
-    };
-    ko.applyBindings(signUpModel);
-    ko.applyBindings(voteModel);
+      let voteModel = {
+        hasSelected: ko.observable(false),
+        hasVoted: ko.observable(checkVote()),
+        name: ko.observable(group),
+        status: ko.observable(vote),
+        sendVote: function(form) {
+          let voteData = new FormData(form);
+          voteData.append("name", group);
+          voteData.append("id", id);
+          this.status(isLike(voteData.get("like")));
+          this.hasVoted(true);
+          $.post("GroupVote", 
+          {name: voteData.get("name"), id: voteData.get("id"), like: voteData.get("like")}, 
+          response => $("#response").append(response));
+          localStorage.setItem(group, this.status());
+        },
+        undoVote: function() {
+          this.hasVoted(false);
+          this.hasSelected(false);
+          localStorage.removeItem(group);
+          $("#response").empty();
+        }
+      };
+      ko.applyBindings(voteModel);
+    }
   } catch (ex) {
     console.log(ex);
     console.log("Knockout bindings not applied.");
   }
-  //user page populate
   if (location.pathname.includes("user.jsp")) {
     //add groups
     for (var i = 0; i < localStorage.length; i++) {

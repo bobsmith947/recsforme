@@ -11,7 +11,7 @@
         <input class="form-check-input m-0" id="no" type="radio" value="false" name="like" data-bind="checked:hasSelected" required>
       </div>
     </div>
-    <button class="btn btn-success btn-block mt-2" type="submit" data-bind="enable:hasSelected">Submit</button>
+    <button class="btn btn-success btn-block mt-2" type="submit" data-bind="enable:hasSelected" disabled>Submit</button>
   </form>
 </div>
 <div id="vote-div" style="display:none" data-bind="visible:hasVoted">
