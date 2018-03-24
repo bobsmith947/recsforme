@@ -8,7 +8,7 @@
 <html>
   <title>Logging in...</title>
   <body>
-    <em>Logging in...</em>
+    <em>Authenticating your user...</em>
     <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
       SELECT * FROM users
       WHERE uname='<jsp:getProperty name="u" property="name" />'

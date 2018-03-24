@@ -50,10 +50,12 @@ public class GroupVote extends HttpServlet {
     }
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
+      out.println("<div id=\"response\">");
       out.println("<h5>Data has successfully been sent to server.</h5>");
       out.println("<h6><code>name: '" + name 
               + "'; id: " + id 
               + "; like: " + like + "</code></h6>");
+      out.println("</div>");
     }
   }
   /**

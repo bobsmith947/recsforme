@@ -57,7 +57,7 @@ public class ArtistInfo extends HttpServlet {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + name + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<noscript class=\"alert alert-danger\">Scripts have been disabled. Some features may not work.</noscript><main>");
-      out.println("<h2>" + name + " - " + type + "</h2>");
+      out.println("<h2 id=\"name\">" + name + " - " + type + "</h2>");
       String term;
       switch (type) {
         case "Person":

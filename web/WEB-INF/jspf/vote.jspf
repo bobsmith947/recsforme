@@ -20,4 +20,3 @@
   <h3>You <span style="text-decoration:underline" data-bind="text:status"></span> this.</h3>
   <button class="btn btn-warning btn-block my-2" type="reset" data-bind="click:undoVote">Reset</button>
 </div>
-<div id="response"></div>

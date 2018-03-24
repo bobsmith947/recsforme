@@ -58,8 +58,7 @@ $(() => {
         pw: ko.observable(""),
         pwc: ko.observable(""),
         email: ko.observable(""),
-        sex: ko.observable(false),
-        read: ko.observable(false),
+        sex: ko.observable(""),
         accepted: ko.observable(false),
         notRobot: ko.observable(false),
         dob: ko.observable(""),
@@ -69,12 +68,24 @@ $(() => {
           else return "unknown";
         },
         completed: function() {
-          return (this.read() && this.accepted() && this.notRobot()) 
+          return (this.accepted() && this.notRobot()) 
                   && (this.uname() !== "") 
                   && (this.pw() !== "" && this.pw() === this.pwc());
         },
-        sendInfo: function(form) {
-          let infoDate = new FormData(form);
+        sendInfo: function() {
+          $("#subres").empty();
+          $.post("register.jsp", 
+                $("#info-form").serialize(), 
+                response => $("#subres").append(response));
+          $("button[form=info-form]").prop("disabled", true);
+        },
+        nameCheck: function() {
+          $("#checkres").empty();
+          if (this.uname() !== "") {
+            $.get("register.jsp",
+                 {name: this.uname()},
+                 response => $("#checkres").append(response));
+          } else $("#checkres").append("You have not entered a username to check.");
         }
       };
       ko.applyBindings(signUpModel);
@@ -106,15 +117,15 @@ $(() => {
           this.status(isLike(voteData.get("like")));
           this.hasVoted(true);
           $.post("GroupVote", 
-          {name: voteData.get("name"), id: voteData.get("id"), like: voteData.get("like")}, 
-          response => $("#response").append(response));
+                {name: voteData.get("name"), id: voteData.get("id"), like: voteData.get("like")}, 
+                response => $("#vote-div").append(response));
           localStorage.setItem(group, this.status());
         },
         undoVote: function() {
           this.hasVoted(false);
           this.hasSelected(false);
           localStorage.removeItem(group);
-          $("#response").empty();
+          $("#response").remove();
         }
       };
       ko.applyBindings(voteModel);
