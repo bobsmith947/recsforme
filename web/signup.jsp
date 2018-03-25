@@ -55,14 +55,13 @@
         <strong class="d-block mb-2">By accepting these terms, you agree to be bound be them.</strong>
         <em class="d-block mb-2">"The service" refers to this application, recsforme.</em>
         <ol class="list-group-ordered mb-2">
-          <li>You can only have one (1) account. Anyone found in possession of multiple accounts will have their access to the service revoked.</li>
           <li>The information you submit must be entirely accurate. Submitting false information only harms the service provided to you.</li>
-          <li>The service will retain your information even if your account is deleted, in order to improve the service itself.</li>
-          <li>The service will not profit off of your information, in exchange, you must not profit off of the service.</li>
-          <li>You are to be held liable for the information you submit, and will not take legal action against the owner of the service under any circumstance.</li>
+          <li>Unless specifically opted-against, the service will retain your information after your account is deleted, in order to improve the service itself.</li>
+          <li>The service will not profit off of or share your information, in exchange, you must not profit off of the service by any means.</li>
+          <li>You are to be held liable for your usage of the service, and will not take legal action against the owner of the service under any circumstance.</li>
           <li>Information stored by the service is not guaranteed to be completely safe, although necessary steps are taken to minimize the risk of data theft.</li>
           <li>Only passwords are stored in a hashed/salted format. Your username should not contain any sensitive information.</li>
-          <li>Sensitive information includes your full name, home/work address, or other details you wouldn't want given out to strangers.<li>
+          <li>Sensitive information includes your full name, home/work address, or other details you would not want given out to strangers.<li>
           <li>The service is to be provided to you as is, with no warranty or insurance.</li>
           <li>The owner of the service reserves all rights in accordance with the Apache License 2.0 (below).</li>
         </ol>

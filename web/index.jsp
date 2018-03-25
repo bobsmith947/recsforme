@@ -1,18 +1,9 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
 <!DOCTYPE html>
 <html>
   <title>recsforme :: Home</title>
   <body>
     <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
-    <c:if test="${u.message != null && !u.message.isEmpty()}">
-      <div class="alert alert-success alert-dismissable fade show">
-        <jsp:getProperty name="u" property="message" />
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-      </div>
-      <jsp:setProperty name="u" property="message" value="" />
-    </c:if>
     <main>
       <h3>Welcome to recsforme, a media recommendation web app.</h3>
       <h4 class="mt-4">How to use:</h4>

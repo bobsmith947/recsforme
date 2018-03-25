@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 module.exports = {
-    entry: "./src/web/script.js",
+    entry: ["babel-polyfill", "./src/web/page.js", "./src/web/bindings.js"],
     output: {
         filename: "./web/bundle.js"
     },

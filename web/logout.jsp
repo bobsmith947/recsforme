@@ -14,6 +14,6 @@
       localStorage.clear();
       console.log("localStorage cleared");
     </script>
-    <c:redirect url="index.jsp" />
+    <c:redirect url="user.jsp" />
   </body>
 </html>
