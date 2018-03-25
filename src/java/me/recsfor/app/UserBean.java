@@ -25,11 +25,19 @@ public class UserBean implements Serializable {
   private static final long serialVersionUID = 2857157327400526226L;
   public static final String PROP_NAME = "name";
   public static final String PROP_PASS = "pass";
+  public static final String PROP_LOGGEDIN = "loggedIn";
+  public static final String PROP_MESSAGE = "message";
   private String name;
   private String pass;
+  private boolean loggedIn;
+  private String message;
   private final PropertyChangeSupport propertySupport;
   
   public UserBean() {
+    this.name = "";
+    this.pass = "";
+    this.loggedIn = false;
+    this.message = "";
     propertySupport = new PropertyChangeSupport(this);
   }
   /**
@@ -59,6 +67,34 @@ public class UserBean implements Serializable {
     java.lang.String oldPass = this.pass;
     this.pass = pass;
     propertySupport.firePropertyChange(PROP_PASS, oldPass, pass);
+  }
+  /**
+   * @return the loggedIn status
+   */
+  public boolean isLoggedIn() {
+    return loggedIn;
+  }
+  /**
+   * @param loggedIn the loggedIn status to set
+   */
+  public void setLoggedIn(boolean loggedIn) {
+    boolean oldLoggedIn = this.loggedIn;
+    this.loggedIn = loggedIn;
+    propertySupport.firePropertyChange(PROP_LOGGEDIN, oldLoggedIn, loggedIn);
+  }
+  /**
+   * @return the message
+   */
+  public String getMessage() {
+    return message;
+  }
+  /**
+   * @param message the message to set
+   */
+  public void setMessage(String message) {
+    java.lang.String oldMessage = this.message;
+    this.message = message;
+    propertySupport.firePropertyChange(PROP_MESSAGE, oldMessage, message);
   }
   
   public void addPropertyChangeListener(PropertyChangeListener listener) {

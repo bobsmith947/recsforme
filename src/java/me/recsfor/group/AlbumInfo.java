@@ -63,7 +63,7 @@ public class AlbumInfo extends HttpServlet {
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
-      out.println("<noscript class=\"alert alert-danger\">Scripts have been disabled. Some features may not work.</noscript><main>");
+      out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
       out.println("<h2 id=\"name\">" + title + " (" + type + ")</h2>");
       out.println("<h3>Released by: <a href=\"ArtistInfo?id=" + artistId + "\">" + artist + "</a></h3>");
       out.println("<h3>Released on: <span class=\"date\">" + date + "</span></h3>");

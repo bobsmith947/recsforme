@@ -18,7 +18,7 @@
           <div class="text-success">The username you entered is available.</div>
         </c:when>
         <c:otherwise>
-          <div class="text-danger">Something went wrong. Try refreshing the page. If the issue persists, please contact the administrator.</div>
+          <div class="text-danger">Something went wrong. If the issue persists, please contact the administrator.</div>
         </c:otherwise>
       </c:choose>
     </c:if>

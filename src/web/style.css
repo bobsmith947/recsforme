@@ -13,10 +13,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,500i,700&subset=cyrillic,greek,vietnamese');
+
 * {box-sizing: border-box}
-header, section, footer, aside, nav, main, article, figure {display: block}
 body {font-family: 'Roboto', sans-serif !important}
 h1, h2, h3, h4, h5, h6 {text-align: center !important}
 a:hover {text-decoration: none !important}

@@ -3,7 +3,7 @@
 <html>
   <title>recsforme :: Sign Up</title>
   <body>
-    <noscript class="alert alert-danger">Scripts have been disabled. Some features may not work.</noscript>
+    <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <main>
       <form id="info-form">
         <div class="form-group">
@@ -30,8 +30,8 @@
         <h5>Optional Fields</h5>
         <div class="form-group">
           <label for="email">Email address</label>
-          <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" placeholder="Enter your email">
-          <small class="form-text text-muted">You can use your email to reset your password if you ever forget it.</small>
+          <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" placeholder="Enter your email address">
+          <small class="form-text text-muted">Your email is used to reset your password in case you forget it. We will never email you.</small>
         </div>
         <div class="form-group">
           <label for="dob">Date of birth</label>
@@ -53,13 +53,18 @@
       <h5 class="mb-4">Privacy Policy and Terms</h5>
       <div class="border p-2 p-lg-4 mb-4" style="height:50%;overflow-y:scroll">
         <strong class="d-block mb-2">By accepting these terms, you agree to be bound be them.</strong>
+        <em class="d-block mb-2">"The service" refers to this application, recsforme.</em>
         <ol class="list-group-ordered mb-2">
-          <li>You will hold one (1) account. Anyone found in possession of multiple accounts will have their access revoked.</li>
-          <li>The information you submit is entirely accurate. Submitting false information only harms the service provided to you.</li>
-          <li>You hold all liability for the information you submit, and will not take legal action against the owner of recsforme under any circumstance.</li>
-          <li>Information stored by recsforme is not guaranteed to be completely safe, although all necessary steps are taken to minimize the risk of data theft.</li>
-          <li>The service is provided to you as is, with no warranty or insurance.</li>
-          <li>The owner of recsforme reserves all rights in accordance with the Apache License 2.0 (below).</li>
+          <li>You can only have one (1) account. Anyone found in possession of multiple accounts will have their access to the service revoked.</li>
+          <li>The information you submit must be entirely accurate. Submitting false information only harms the service provided to you.</li>
+          <li>The service will retain your information even if your account is deleted, in order to improve the service itself.</li>
+          <li>The service will not profit off of your information, in exchange, you must not profit off of the service.</li>
+          <li>You are to be held liable for the information you submit, and will not take legal action against the owner of the service under any circumstance.</li>
+          <li>Information stored by the service is not guaranteed to be completely safe, although necessary steps are taken to minimize the risk of data theft.</li>
+          <li>Only passwords are stored in a hashed/salted format. Your username should not contain any sensitive information.</li>
+          <li>Sensitive information includes your full name, home/work address, or other details you wouldn't want given out to strangers.<li>
+          <li>The service is to be provided to you as is, with no warranty or insurance.</li>
+          <li>The owner of the service reserves all rights in accordance with the Apache License 2.0 (below).</li>
         </ol>
         <pre class="text-light">
                                  Apache License
@@ -266,11 +271,13 @@
         </label>
       </div>
       <div data-bind="visible:completed()" id="info-div" class="mt-3 text-info" style="display:none">
-        <h5 class="text-info">Your Info</h5>
-        <h6 class="text-muted">Changes can be made at any time.</h6>
+        <h5 class="text-warning">This is what you are submitting. <small>Changes cannot be made after signing up.</small></h5>
         <h6>Username: <span data-bind="text:uname"></span></h6>
         <span data-bind="visible:email()!==''">
           <h6>Email: <span data-bind="text:email"></span></h6>
+        </span>
+        <span data-bind="visible:email()===''">
+          <h6 class="text-danger">You will be unable to reset your password if you do not supply an email address.</h6>
         </span>
         <span data-bind="visible:dob()!==''">
           <h6>Age: <span data-bind="text:age()"></span></h6>

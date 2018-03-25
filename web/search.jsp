@@ -10,7 +10,7 @@
 <html>
   <title>recsforme :: <jsp:getProperty name="q" property="type" /> Search - <jsp:getProperty name="q" property="query" /></title>
   <body>
-    <noscript class="alert alert-danger">Scripts have been disabled. Some features may not work.</noscript>
+    <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <main>
       <form id="adv-search" action="search.jsp">
         <div class="input-group">

@@ -50,7 +50,7 @@ public class MovieInfo extends HttpServlet {
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
-      out.println("<noscript class=\"alert alert-danger\">Scripts have been disabled. Some features may not work.</noscript><main>");
+      out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
       out.println("<h2 id=\"name\">" + title + " (" + year + ") - " + type 
               + "<a class=\"ml-2\" href=\"https://imdb.com/title/"
               + id + "\"><span class=\"fab fa-imdb\"></span></a></h2>");

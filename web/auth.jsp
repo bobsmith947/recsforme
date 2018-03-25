@@ -16,13 +16,17 @@
     </sql:query>
     <c:choose>
       <c:when test="${matches.getRowCount() == 1}">
-        <c:redirect url="user.jsp"></c:redirect>
+        <jsp:setProperty name="u" property="loggedIn" value="true" />
+        <jsp:setProperty name="u" property="message" value="Successfully logged in." />
+        <c:redirect url="user.jsp" />
       </c:when>
       <c:when test="${matches.getRowCount() == 0}">
-        <c:redirect url="signup.jsp"></c:redirect>
+        <jsp:setProperty name="u" property="message" value="Unable to find a matching username/password." />
+        <c:redirect url="login.jsp" />
       </c:when>
       <c:otherwise>
-        <c:redirect url="login.jsp"></c:redirect>
+        <jsp:setProperty name="u" property="message" value="Something has gone wrong. If the issue persists, please contact the administrator." />
+        <c:redirect url="login.jsp" />
       </c:otherwise>
     </c:choose>
   </body>
