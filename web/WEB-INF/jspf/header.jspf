@@ -1,18 +1,14 @@
-<!--resources-->
 <meta name="author" content="Lucas Kitaev">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="keywords" content="recommendation engine, recommender system, open source, java, web app, web application, movies, shows, tv, music, games">
-<meta name="description" content="recsforme (recs for me) is an open source Java web application for media recommendations. It's completely free to use and contains no advertisements or tracking.">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript" charset="UTF-8"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" type="text/javascript" charset="UTF-8" async></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js" type="text/javascript" charset="UTF-8" async></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" type="text/javascript" charset="UTF-8" async></script>
-<script src="bundle.js" type="text/javascript" charset="UTF-8" async></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" type="text/css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/fontawesome.css" type="text/css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/brands.css" type="text/css">
-<link rel="stylesheet" href="auto.css" type="text/css">
-<!--navbar-->
+<meta name="description" content="recsforme (recs for me) is an open source Java web application for media recommendations. It's free to use and contains no advertisements.">
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.1/umd/popper.min.js" async></script>-->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" async></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="bundle.js" charset="UTF-8" async></script>
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
   <div class="container">
     <a class="navbar-brand" href="./">recsforme</a>

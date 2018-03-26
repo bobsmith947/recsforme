@@ -13,7 +13,7 @@
     <script type="text/javascript">
       localStorage.clear();
       console.log("localStorage cleared");
+      window.open("user.jsp", "_self");
     </script>
-    <c:redirect url="user.jsp" />
   </body>
 </html>

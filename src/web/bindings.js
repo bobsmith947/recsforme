@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import ko from "knockout/build/output/knockout-latest.js";
+
 $(() => {
   try {
     if (location.pathname.includes("signup.jsp")) {

@@ -60,7 +60,6 @@
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>
         <jsp-property-group>
-            <url-pattern>/WEB-INF/403.jsp</url-pattern>
             <url-pattern>/WEB-INF/500.jsp</url-pattern>
             <url-pattern>/WEB-INF/404.jsp</url-pattern>
             <el-ignored>true</el-ignored>

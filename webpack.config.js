@@ -13,22 +13,59 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-module.exports = {
-    entry: ["babel-polyfill", "./src/web/page.js", "./src/web/bindings.js"],
-    output: {
-        filename: "./web/bundle.js"
-    },
-    module: {
-        rules: [
-            {
-                test: /\.js$/,
-                exclude: /node_modules/,
-                loader: "babel-loader",
-                options: {
-                    presets: ["env"]
-                }
-            }
-        ]
 
-    }
+var path = require("path");
+var faMin = require("font-awesome-minify-plugin");
+
+module.exports = {
+  entry: ["babel-polyfill", "./src/web/page.js", "./src/web/bindings.js"],
+  output: {
+    filename: "bundle.js",
+    path: path.resolve(__dirname, "web")
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "babel-loader",
+        options: {
+          presets: ["env"]
+        }
+      },
+      {
+        test: /\.css$/,
+        exclude: /node_modules/,
+        use: [
+          "style-loader",
+          "css-loader",
+          "postcss-loader"
+        ]
+      },
+      {
+        test: /\.css$/,
+        include: /@fortawesome|fontAwesomeMinify/,
+        use: [
+          "style-loader",
+          "css-loader"
+        ]
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        include: /@fortawesome|fontAwesomeMinify/,
+        loader: "file-loader"
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        include: /@fortawesome|fontAwesomeMinify/,
+        loader: "file-loader"
+      }
+    ]
+  },
+  plugins: [
+    new faMin({
+      globPattern: "**/*(*.jsp|*.jspf|*.java)",
+      debug: true
+    })
+  ]
 };

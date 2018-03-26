@@ -89,11 +89,7 @@
                 <file localPath="lib/js/jquery/jquery.slim.min.js" path="jquery.slim.min.js"/>
                 <file localPath="lib/js/jquery/jquery.slim.min.map" path="jquery.slim.min.map"/>
             </library>
-            <library name="knockout" version="3.4.2">
-                <file localPath="lib/js/knockout/knockout-debug.js" path="knockout-debug.js"/>
-                <file localPath="lib/js/knockout/knockout-min.js" path="knockout-min.js"/>
-            </library>
-            <library name="popper.js" version="1.13.0">
+            <library name="popper.js" version="1.14.1">
                 <file localPath="lib/js/popper.js/esm/popper-utils.js" path="esm/popper-utils.js"/>
                 <file localPath="lib/js/popper.js/esm/popper-utils.js.map" path="esm/popper-utils.js.map"/>
                 <file localPath="lib/js/popper.js/esm/popper-utils.min.js" path="esm/popper-utils.min.js"/>

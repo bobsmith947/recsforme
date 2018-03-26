@@ -15,6 +15,9 @@
  */
 
 import moment from "moment/min/moment.min.js";
+import "./style.css";
+import "@fortawesome/fontawesome-free-webfonts/css/fontawesome.css";
+import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 
 $(() => {
   $("body").addClass("bg-dark text-light");

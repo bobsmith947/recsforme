@@ -7,7 +7,7 @@
   <body>
     <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <c:if test="${u.message != null && !u.message.isEmpty()}">
-      <div class="alert alert-success alert-dismissable fade show">
+      <div class="alert alert-success alert-dismissable fade show text-center">
         <jsp:getProperty name="u" property="message" />
         <button type="button" class="close" data-dismiss="alert">&times;</button>
       </div>
