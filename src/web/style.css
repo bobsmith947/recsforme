@@ -15,7 +15,9 @@ limitations under the License.
 */
 
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700&subset=cyrillic,cyrillic-ext,latin-ext');
+
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,400i,700&subset=cyrillic,cyrillic-ext,latin-ext");
+@import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css");
 
 * {
   box-sizing: border-box;
