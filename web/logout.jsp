@@ -10,6 +10,7 @@
     <jsp:setProperty name="u" property="pass" value="" />
     <jsp:setProperty name="u" property="loggedIn" value="false" />
     <jsp:setProperty name="u" property="message" value="Successfully logged out." />
+    <jsp:setProperty name="u" property="tries" value="0" />
     <script type="text/javascript">
       localStorage.clear();
       console.log("localStorage cleared");

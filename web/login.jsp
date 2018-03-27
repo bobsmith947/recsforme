@@ -17,17 +17,62 @@
       <div class="alert alert-info">
         Don't have an account? <a class="alert-link" href="signup.jsp">Sign up here.</a>
       </div>
-      <form action="auth.jsp" method="POST">
-        <div class="form-group">
-          <label for="uname">Username</label>
-          <input type="text" class="form-control" id="uname" name="uname" maxlength="36" required>
+      <c:if test="${u.tries < 6}" scope="session" var="notLocked">
+        <form data-bind="visible:!resetForm()" action="auth.jsp" method="POST">
+          <div class="form-group">
+            <label for="uname">Username</label>
+            <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" autofocus required>
+          </div>
+          <div class="form-group">
+            <label for="pw">Password</label>
+            <input type="password" class="form-control" id="pw" name="pw" required>
+            <small class="form-text text-muted">
+              Forgot your password?
+              <span data-bind="visible:name()===''">First, enter your username to be able request a password reset.</span>
+              <a data-bind="visible:name()!=='',click:resetForm" href="#">Reset it.</a>
+            </small>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block">Log In</button>
+        </form>
+        <div class="alert alert-warning">
+          You have <strong><c:out value="${6-u.tries}" /> tries</strong> left before you will be locked out.
         </div>
-        <div class="form-group">
-          <label for="pw">Password</label>
-          <input type="password" class="form-control" id="pw" name="pw" maxlength="36" required>
+        <form data-bind="visible:resetForm(),submit:requestReset" id="reset-form" method="POST">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" required>
+            <small class="form-text text-muted">
+              Enter the email address that you signed up for the account named <strong data-bind="text:name()"></strong> with.
+            </small>
+            <small class="form-text text-muted">If you did not sign up with an email, you'll be unable to reset your password.</small>
+          </div>
+          <div data-bind="visible:email()!==''" class="form-group">
+            <label for="npw">New Password</label>
+            <input data-bind="textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" maxlength="36" required>
+            <small class="form-text text-muted">Don't use the same password you use elsewhere!</small>
+            <div class="text-info">
+              <span>Your password must:</span>
+              <ul>
+                <li>Be between 8 and 36 characters</li>
+                <li>Contain at least one uppercase, one lowercase, one numeric, and one special character</li>
+                <li>Not contain your username</li>
+                <li>Not contain your date of birth</li>
+              </ul>
+            </div>
+            <label for="cpw">Confirm Password</label>
+            <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
+          </div>
+          <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block">Reset Password</button>
+        </form>
+      </c:if>
+      <c:if test="${!notLocked}">
+        <div class="alert alert-danger">
+          You have been locked out from being able to log in for this session. Please wait a minimum of <strong>30 minutes</strong> before trying again.
         </div>
-        <button type="submit" class="btn btn-primary btn-lg btn-block">Log In</button>
-      </form>
+        <div class="alert alert-info">
+          If you think this has been an error, consider <a class="alert-link" href="https://github.com/bobsmith947/recsforme/issues"> opening an issue on GitHub</a>.
+        </div>
+      </c:if>
     </main>
   </body>
 </html>

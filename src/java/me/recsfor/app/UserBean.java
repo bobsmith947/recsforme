@@ -27,9 +27,11 @@ public class UserBean implements Serializable {
   public static final String PROP_PASS = "pass";
   public static final String PROP_LOGGEDIN = "loggedIn";
   public static final String PROP_MESSAGE = "message";
+  public static final String PROP_TRIES = "tries";
   private String name;
   private String pass;
   private boolean loggedIn;
+  private byte tries;
   private String message;
   private final PropertyChangeSupport propertySupport;
   
@@ -38,6 +40,7 @@ public class UserBean implements Serializable {
     this.pass = "";
     this.loggedIn = false;
     this.message = "";
+    this.tries = 0;
     propertySupport = new PropertyChangeSupport(this);
   }
   /**
@@ -95,6 +98,20 @@ public class UserBean implements Serializable {
     java.lang.String oldMessage = this.message;
     this.message = message;
     propertySupport.firePropertyChange(PROP_MESSAGE, oldMessage, message);
+  }
+  /**
+   * @return the tries
+   */
+  public byte getTries() {
+    return tries;
+  }
+  /**
+   * @param tries the tries to set
+   */
+  public void setTries(byte tries) {
+    byte oldTries = this.tries;
+    this.tries = tries;
+    propertySupport.firePropertyChange(PROP_TRIES, oldTries, tries);
   }
   
   public void addPropertyChangeListener(PropertyChangeListener listener) {

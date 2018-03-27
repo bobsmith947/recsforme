@@ -36,7 +36,7 @@ $(() => {
         completed: function() {
           return (this.accepted() && this.notRobot()) 
                   && (this.uname() !== "") 
-                  && (this.pw() !== "" && this.pw() === this.pwc());
+                  && (this.pw().length >= 8 && this.pw() === this.pwc());
         },
         sendInfo: function() {
           $("#subres").empty();
@@ -55,6 +55,25 @@ $(() => {
         }
       };
       ko.applyBindings(signUpModel);
+    }
+    if (location.pathname.includes("login.jsp")) {
+      let logInModel = {
+        name: ko.observable(""),
+        resetForm: ko.observable(false),
+        email: ko.observable(""),
+        pass: ko.observable(""),
+        passCheck: ko.observable(""),
+        requestReset: function(form) {
+          let requestData = new FormData(form);
+          requestData.append("type", "reset");
+          requestData.append("name", this.name());
+          this.resetForm(false);
+          $.post("auth.jsp",
+                encodeFormData(requestData),
+                response => $("main").append(response));
+        }
+      };
+      ko.applyBindings(logInModel);
     }
     if (location.pathname.includes("Info")) {
       const group = $("#name").text();
@@ -83,7 +102,7 @@ $(() => {
           this.status(isLike(voteData.get("like")));
           this.hasVoted(true);
           $.post("GroupVote", 
-                {name: voteData.get("name"), id: voteData.get("id"), like: voteData.get("like")}, 
+                encodeFormData(voteData), 
                 response => $("#vote-div").append(response));
           localStorage.setItem(group, this.status());
         },
@@ -114,4 +133,12 @@ function isLike(str) {
       return "either like or dislike";
       break;
   }
+}
+
+//https://stackoverflow.com/questions/7542586/new-formdata-application-x-www-form-urlencoded
+function encodeFormData(fd) {
+  let params = new URLSearchParams();
+  for (let pair of fd.entries())
+    params.append(pair[0], pair[1]);
+  return params.toString();
 }

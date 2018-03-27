@@ -8,7 +8,7 @@
       <form id="info-form">
         <div class="form-group">
           <label for="uname">Username</label>
-          <input data-bind="textInput:uname,event:{blur:nameCheck}" type="text" class="form-control" id="uname" name="uname" placeholder="Enter your desired username" maxlength="36" required>
+          <input data-bind="textInput:uname,event:{blur:nameCheck}" type="text" class="form-control" id="uname" name="uname" placeholder="Enter your desired username" maxlength="36" autofocus required>
           <small class="form-text text-muted">Maximum 36 alphanumeric characters.</small>
           <div id="checkres"></div>
         </div>
@@ -25,13 +25,14 @@
               <li>Not contain your date of birth</li>
             </ul>
           </div>
-          <input data-bind="enable:pw().length>0,textInput:pwc" type="password" class="form-control" placeholder="Confirm your password" required>
+          <input data-bind="enable:pw().length>=8,textInput:pwc" type="password" class="form-control" placeholder="Confirm your password" required>
         </div>
         <h5>Optional Fields</h5>
         <div class="form-group">
           <label for="email">Email address</label>
           <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" placeholder="Enter your email address">
           <small class="form-text text-muted">Your email is used to reset your password in case you forget it. We will never email you.</small>
+          <small class="form-text text-muted">The email address you use should not be similar to your username for this site.</small>
         </div>
         <div class="form-group">
           <label for="dob">Date of birth</label>
@@ -61,8 +62,7 @@
           <li>You are to be held liable for your usage of the service, and will not take legal action against the owner of the service under any circumstance.</li>
           <li>Information stored by the service is not guaranteed to be completely safe, although necessary steps are taken to minimize the risk of data theft.</li>
           <li>Only passwords are stored in a hashed/salted format. Your username should not contain any sensitive information.</li>
-          <li>Sensitive information includes your full name, home/work address, or other details you would not want given out to strangers.<li>
-          <li>The service is to be provided to you as is, with no warranty or insurance.</li>
+          <li>Sensitive information includes your full name, home/work address, or other details you would not want given out to strangers.</li>
           <li>The owner of the service reserves all rights in accordance with the Apache License 2.0 (below).</li>
         </ol>
         <pre class="text-light">
