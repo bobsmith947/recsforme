@@ -24,7 +24,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "del .\\web\\*.eot & del .\\web\\*.ttf & del .\\web\\*.woff & del .\\web\\*.woff2 && webpack --progress -p",
         "watch": "webpack --progress -p -w",
-        "optimize": "for %f in (./web/img/*.png) do oxipng -o 4 -s \"./img/%f\""
+        "optimize": "for %f in (./web/img/*.png) do oxipng -o 4 -s \"./web/img/%f\""
     },
     "browserslist": [
         "last 3 versions",
