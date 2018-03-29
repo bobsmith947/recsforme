@@ -10,5 +10,6 @@
         Remove from list
       </button>
     </main>
+    <%-- TODO implement urlencoded -> JSON for vote data to add to database --%>
   </body>
 </html>

@@ -101,16 +101,14 @@ $(() => {
           voteData.append("id", id);
           this.status(isLike(voteData.get("like")));
           this.hasVoted(true);
-          $.post("GroupVote", 
-                encodeFormData(voteData), 
-                response => $("#vote-div").append(response));
+          $.post("group.jsp", 
+                encodeFormData(voteData));
           localStorage.setItem(group, this.status());
         },
         undoVote: function() {
           this.hasVoted(false);
           this.hasSelected(false);
           localStorage.removeItem(group);
-          $("#response").remove();
         }
       };
       ko.applyBindings(voteModel);
