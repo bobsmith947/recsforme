@@ -28,12 +28,12 @@
         <sql:update dataSource="jdbc/MediaRecom">
           INSERT INTO users (uname, pw, joined, sex, dob, email, salt)
           VALUES ('<%= request.getParameter("uname") %>', 
-                  '<%= cred.getHASH() %>', 
+                  '<%= cred.getHash() %>', 
                   '<%= java.time.LocalDate.now() %>', 
                   '<%= request.getParameter("sex") %>', 
                   '<%= request.getParameter("dob") %>', 
                   '<%= request.getParameter("email") %>',
-                  '<%= cred.getSALT() %>')
+                  '<%= cred.getSalt() %>')
         </sql:update>
       </c:catch>
       <c:if test="${ex == null}">
