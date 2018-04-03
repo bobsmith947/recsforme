@@ -18,7 +18,7 @@ var path = require("path");
 var faMin = require("font-awesome-minify-plugin");
 
 module.exports = {
-  entry: ["babel-polyfill", "./src/web/page.js", "./src/web/bindings.js"],
+  entry: ["./src/web/page.js", "./src/web/bindings.js"],
   output: {
     filename: "bundle.js",
     path: path.resolve(__dirname, "web")

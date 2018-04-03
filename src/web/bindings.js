@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import "babel-polyfill";
+import moment from "moment/min/moment.min.js";
 import ko from "knockout/build/output/knockout-latest.js";
 
 $(() => {

@@ -1,6 +1,6 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption"%>
 <!DOCTYPE html>
 <html>
   <title>Registration Page</title>
@@ -24,14 +24,16 @@
     </c:if>
     <c:if test='${pageContext.request.getMethod() == "POST"}'>
       <c:catch var="ex">
+        <% CredentialEncryption cred = new CredentialEncryption(request.getParameter("pw")); %>
         <sql:update dataSource="jdbc/MediaRecom">
-          INSERT INTO users (uname, pw, joined, sex, dob, email)
+          INSERT INTO users (uname, pw, joined, sex, dob, email, salt)
           VALUES ('<%= request.getParameter("uname") %>', 
-                  '<%= request.getParameter("pw") %>', 
+                  '<%= cred.getHASH() %>', 
                   '<%= java.time.LocalDate.now() %>', 
                   '<%= request.getParameter("sex") %>', 
                   '<%= request.getParameter("dob") %>', 
-                  '<%= request.getParameter("email") %>')
+                  '<%= request.getParameter("email") %>',
+                  '<%= cred.getSALT() %>')
         </sql:update>
       </c:catch>
       <c:if test="${ex == null}">

@@ -5,6 +5,7 @@
 <html>
   <title>Logging in...</title>
   <body>
+    <%-- TODO validate password --%>
     <c:if test='${pageContext.request.getParameter("type") == null}'>
       <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
       <jsp:setProperty name="u" property="name" value='<%= request.getParameter("uname") %>' />

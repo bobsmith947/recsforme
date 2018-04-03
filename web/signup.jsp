@@ -3,6 +3,7 @@
 <html>
   <title>recsforme :: Sign Up</title>
   <body>
+    <%-- TODO add validation --%>
     <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <main>
       <form id="info-form">
