@@ -91,9 +91,8 @@ $(() => {
         }
       }
       let voteModel = {
-        hasSelected: ko.observable(false),
-        hasVoted: ko.observable(checkVote()),
-        name: ko.observable(group),
+        selected: ko.observable(false),
+        voted: ko.observable(checkVote()),
         status: ko.observable(vote),
         sendVote: function(form) {
           let voteData = new FormData(form);

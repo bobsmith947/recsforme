@@ -25,11 +25,13 @@ public class UserBean implements Serializable {
   private static final long serialVersionUID = 2857157327400526226L;
   public static final String PROP_NAME = "name";
   public static final String PROP_PASS = "pass";
+  public static final String PROP_ID = "id";
   public static final String PROP_LOGGEDIN = "loggedIn";
   public static final String PROP_MESSAGE = "message";
   public static final String PROP_TRIES = "tries";
   private String name;
   private String pass;
+  private String id;
   private boolean loggedIn;
   private byte tries;
   private String message;
@@ -112,6 +114,20 @@ public class UserBean implements Serializable {
     byte oldTries = this.tries;
     this.tries = tries;
     propertySupport.firePropertyChange(PROP_TRIES, oldTries, tries);
+  }
+  /**
+   * @return the id
+   */
+  public String getId() {
+    return id;
+  }
+  /**
+   * @param id the id to set
+   */
+  public void setId(String id) {
+    java.lang.String oldId = this.id;
+    this.id = id;
+    propertySupport.firePropertyChange(PROP_ID, oldId, id);
   }
   
   public void addPropertyChangeListener(PropertyChangeListener listener) {
