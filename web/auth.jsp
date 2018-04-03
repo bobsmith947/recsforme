@@ -1,29 +1,34 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption"%>
 <!DOCTYPE html>
 <html>
   <title>Logging in...</title>
   <body>
-    <%-- TODO validate password --%>
     <c:if test='${pageContext.request.getParameter("type") == null}'>
       <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
       <jsp:setProperty name="u" property="name" value='<%= request.getParameter("uname") %>' />
       <jsp:setProperty name="u" property="pass" value='<%= request.getParameter("pw") %>' />
       <em>Authenticating your user...</em>
       <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
-        SELECT * FROM users
+        SELECT pw, salt FROM users
         WHERE uname='<jsp:getProperty name="u" property="name" />'
-        AND pw='<jsp:getProperty name="u" property="pass" />'
       </sql:query>
       <c:choose>
         <c:when test="${matches.getRowCount() == 1}">
-          <jsp:setProperty name="u" property="loggedIn" value="true" />
-          <jsp:setProperty name="u" property="message" value="Successfully logged in." />
-          <c:redirect url="user.jsp" />
+          <c:if test="${CredentialEncryption.validatePassword(u.pass, matches.getRowsByIndex()[0][0], matches.getRowsByIndex()[0][1])}" var="correct">
+            <jsp:setProperty name="u" property="loggedIn" value="true" />
+            <jsp:setProperty name="u" property="message" value="Successfully logged in." />
+            <c:redirect url="user.jsp" />
+          </c:if>
+          <c:if test="${!correct}">
+            <jsp:setProperty name="u" property="message" value="The password you entered is incorrect." />
+            <jsp:setProperty name="u" property="tries" value="${u.tries + 1}" />
+            <c:redirect url="login.jsp" />
+          </c:if>
         </c:when>
         <c:when test="${matches.getRowCount() == 0}">
-          <jsp:setProperty name="u" property="message" value="Unable to find a matching username/password." />
+          <jsp:setProperty name="u" property="message" value="Unable to find a matching username." />
           <jsp:setProperty name="u" property="tries" value="${u.tries + 1}" />
           <c:redirect url="login.jsp" />
         </c:when>

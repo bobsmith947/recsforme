@@ -9,18 +9,18 @@
       <form id="info-form">
         <div class="form-group">
           <label for="uname">Username</label>
-          <input data-bind="textInput:uname,event:{blur:nameCheck}" type="text" class="form-control" id="uname" name="uname" placeholder="Enter your desired username" maxlength="36" autofocus required>
-          <small class="form-text text-muted">Maximum 36 alphanumeric characters.</small>
+          <input data-bind="textInput:uname,event:{blur:nameCheck}" type="text" class="form-control" id="uname" name="uname" placeholder="Enter your desired username" maxlength="18" autofocus required>
+          <small class="form-text text-muted">Only alphanumeric characters are allowed.</small>
           <div id="checkres"></div>
         </div>
         <div class="form-group">
           <label for="pw">Password</label>
-          <input data-bind="textInput:pw" type="password" class="form-control" id="pw" name="pw" placeholder="Enter a secure password" minlength="8" maxlength="36" required>
+          <input data-bind="textInput:pw" type="password" class="form-control" id="pw" name="pw" placeholder="Enter a secure password" minlength="8" required>
           <small class="form-text text-muted">Don't use the same password you use elsewhere!</small>
           <div class="text-info">
             <span>Your password must:</span>
             <ul>
-              <li>Be between 8 and 36 characters</li>
+              <li>Be at least 8 characters</li>
               <li>Contain at least one uppercase, one lowercase, one numeric, and one special character</li>
               <li>Not contain your username</li>
               <li>Not contain your date of birth</li>
