@@ -99,14 +99,14 @@ $(() => {
           voteData.append("name", group);
           voteData.append("id", id);
           this.status(isLike(voteData.get("like")));
-          this.hasVoted(true);
+          this.voted(true);
           $.post("group.jsp", 
                 encodeFormData(voteData));
           localStorage.setItem(group, this.status());
         },
         undoVote: function() {
-          this.hasVoted(false);
-          this.hasSelected(false);
+          this.voted(false);
+          this.selected(false);
           localStorage.removeItem(group);
         }
       };
