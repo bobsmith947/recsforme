@@ -93,23 +93,22 @@ $(() => {
         }
       }
       let voteModel = {
-        hasSelected: ko.observable(false),
-        hasVoted: ko.observable(checkVote()),
-        name: ko.observable(group),
+        selected: ko.observable(false),
+        voted: ko.observable(checkVote()),
         status: ko.observable(vote),
         sendVote: function(form) {
           let voteData = new FormData(form);
           voteData.append("name", group);
           voteData.append("id", id);
           this.status(isLike(voteData.get("like")));
-          this.hasVoted(true);
+          this.voted(true);
           $.post("group.jsp", 
                 encodeFormData(voteData));
           localStorage.setItem(group, this.status());
         },
         undoVote: function() {
-          this.hasVoted(false);
-          this.hasSelected(false);
+          this.voted(false);
+          this.selected(false);
           localStorage.removeItem(group);
         }
       };
