@@ -11,13 +11,13 @@
       <jsp:setProperty name="u" property="pass" value='<%= request.getParameter("pw") %>' />
       <em>Authenticating your user...</em>
       <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
-        SELECT pw, salt FROM users
+        SELECT id, pw, salt FROM users
         WHERE uname='<jsp:getProperty name="u" property="name" />'
       </sql:query>
       <c:choose>
         <c:when test="${matches.getRowCount() == 1}">
-          <c:if test="${CredentialEncryption.validatePassword(u.pass, matches.getRowsByIndex()[0][0], matches.getRowsByIndex()[0][1])}" var="correct">
-            <jsp:setProperty name="u" property="id" value='${matches.getRowsByIndex()[0][1]}' />
+          <c:if test="${CredentialEncryption.validatePassword(u.pass, matches.getRowsByIndex()[0][1], matches.getRowsByIndex()[0][2])}" var="correct">
+            <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
             <jsp:setProperty name="u" property="loggedIn" value="true" />
             <jsp:setProperty name="u" property="message" value="Successfully logged in." />
             <c:redirect url="user.jsp" />
