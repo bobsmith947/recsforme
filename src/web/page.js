@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import "babel-polyfill";
 import moment from "moment/min/moment.min.js";
 import "./style.css";
 import "@fortawesome/fontawesome-free-webfonts/css/fontawesome.css";

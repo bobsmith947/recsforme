@@ -21,11 +21,11 @@
         <form data-bind="visible:!resetForm()" action="auth.jsp" method="POST">
           <div class="form-group">
             <label for="uname">Username</label>
-            <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" autofocus required>
+            <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" maxlength="18" autofocus required>
           </div>
           <div class="form-group">
             <label for="pw">Password</label>
-            <input type="password" class="form-control" id="pw" name="pw" required>
+            <input type="password" class="form-control" id="pw" name="pw" minlength="8" required>
             <small class="form-text text-muted">
               Forgot your password?
               <span data-bind="visible:name()===''">First, enter your username to be able request a password reset.</span>
