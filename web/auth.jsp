@@ -1,6 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption, me.recsfor.app.ListData"%>
 <!DOCTYPE html>
 <html>
   <title>Logging in...</title>
@@ -18,28 +18,29 @@
         <c:when test="${matches.getRowCount() == 1}">
           <c:if test="${CredentialEncryption.validatePassword(u.pass, matches.getRowsByIndex()[0][1], matches.getRowsByIndex()[0][2])}" var="correct">
             <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
-            <sql:query var="likes" dataSource="jdbc/MediaRecom">
+            <sql:query var="likesList" dataSource="jdbc/MediaRecom">
               SELECT items FROM user_likes
               WHERE uid = ${u.id}
             </sql:query>
-            <sql:query var="dislikes" dataSource="jdbc/MediaRecom">
+            <sql:query var="dislikesList" dataSource="jdbc/MediaRecom">
               SELECT items FROM user_dislikes
               WHERE uid = ${u.id}
             </sql:query>
-            <script type="text/javascript">
+            <c:set scope="session" var="data" value='${ListData.createData(likesList.getRowsByIndex()[0][0], dislikesList.getRowsByIndex()[0][0])}' />
+<!--            <script type="text/javascript">
               var i;
-              var likes = JSON.parse('${likes.getRowsByIndex()[0][0].replace("'", "\\'")}').list;
-              var dislikes = JSON.parse('${dislikes.getRowsByIndex()[0][0].replace("'", "\\'")}').list;
+              var likes = JSON.parse('${likes.replace("'", "\\'")}').list;
+              var dislikes = JSON.parse('${dislikes.replace("'", "\\'")}').list;
               for (i = 0; i < likes.length; i++)
                 localStorage.setItem(likes[i].name, "like");
               for (i = 0; i < dislikes.length; i++)
-                localStorage.setItem(dislikes[i], "dislike");
+                localStorage.setItem(dislikes[i].name, "dislike");
               console.log("localStorage populated.");
               window.open("user.jsp", "_self");
-            </script>
+            </script>-->
             <jsp:setProperty name="u" property="loggedIn" value="true" />
             <jsp:setProperty name="u" property="message" value="Successfully logged in." />
-            <%--<c:redirect url="user.jsp" />--%>
+            <c:redirect url="user.jsp" />
           </c:if>
           <c:if test="${!correct}">
             <jsp:setProperty name="u" property="message" value="The password you entered is incorrect." />

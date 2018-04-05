@@ -11,16 +11,24 @@
     <c:if test='${pageContext.request.getParameter("like") == "true"}'>
       <sql:update dataSource="jdbc/MediaRecom">
         UPDATE user_likes
-        SET items = LEFT(items, LEN(items)-2) 
-        + ',{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
+        IF LEN(items) > 11
+          SET items = LEFT(items, LEN(items)-2) 
+          + ',{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
+        ELSE
+          SET items = LEFT(items, LEN(items)-2) 
+          + '{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
         WHERE uid = ${u.id}
       </sql:update>
     </c:if>
     <c:if test='${pageContext.request.getParameter("like") == "false"}'>
       <sql:update dataSource="jdbc/MediaRecom">
         UPDATE user_dislikes
-        SET items = LEFT(items, LEN(items)-2) 
-        + ',{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
+        IF LEN(items) > 11
+          SET items = LEFT(items, LEN(items)-2) 
+          + ',{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
+        ELSE
+          SET items = LEFT(items, LEN(items)-2) +
+          + '{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
         WHERE uid = ${u.id}
       </sql:update>
     </c:if>
