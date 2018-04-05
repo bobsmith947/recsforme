@@ -25,7 +25,7 @@
     <c:if test='${pageContext.request.getMethod() == "POST"}'>
       <c:catch var="ex">
         <% CredentialEncryption cred = new CredentialEncryption(request.getParameter("pw")); %>
-        <sql:update var="newUser" dataSource="jdbc/MediaRecom">
+        <sql:update dataSource="jdbc/MediaRecom">
           INSERT INTO users (uname, pw, joined, sex, dob, email, salt)
           VALUES ('<%= request.getParameter("uname") %>', 
                   '<%= cred.getHash() %>', 
@@ -35,12 +35,16 @@
                   '<%= request.getParameter("email") %>',
                   '<%= cred.getSalt() %>')
         </sql:update>
+        <sql:query var="newUser" dataSource="jdbc/MediaRecom">
+          SELECT id FROM users
+          WHERE uname = '<%= request.getParameter("uname") %>'
+        </sql:query>
         <sql:update dataSource="jdbc/MediaRecom">
-          INSERT INTO users_likes (uid)
+          INSERT INTO user_likes (uid)
           VALUES (${newUser.getRowsByIndex()[0][0]})
         </sql:update>
         <sql:update dataSource="jdbc/MediaRecom">
-          INSERT INTO users_dislikes (uid)
+          INSERT INTO user_dislikes (uid)
           VALUES (${newUser.getRowsByIndex()[0][0]})
         </sql:update>
       </c:catch>

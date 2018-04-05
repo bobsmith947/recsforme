@@ -6,18 +6,21 @@
 <html>
   <title>recsforme :: Group</title>
   <body>
-    <%-- TODO escape ' characters --%>
+    <%-- TODO add ability to remove items --%>
+    <c:set var="name" value='${pageContext.request.getParameter("name").replace("\'", "\'\'")}' />
     <c:if test='${pageContext.request.getParameter("like") == "true"}'>
       <sql:update dataSource="jdbc/MediaRecom">
         UPDATE user_likes
-        SET items += '{"name": "${pageContext.request.getParameter("name")}", "id": "${pageContext.request.getParameter("id")}"}'
+        SET items = LEFT(items, LEN(items)-2) 
+        + ',{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
         WHERE uid = ${u.id}
       </sql:update>
     </c:if>
     <c:if test='${pageContext.request.getParameter("like") == "false"}'>
       <sql:update dataSource="jdbc/MediaRecom">
         UPDATE user_dislikes
-        SET items += '{"name": "${pageContext.request.getParameter("name")}", "id": "${pageContext.request.getParameter("id")}"}'
+        SET items = LEFT(items, LEN(items)-2) 
+        + ',{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
         WHERE uid = ${u.id}
       </sql:update>
     </c:if>

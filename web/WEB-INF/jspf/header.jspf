@@ -27,12 +27,12 @@
         <input class="form-control mb-2 mb-lg-0 mr-lg-2" type="search" name="query" maxlength="100" autocomplete="off" placeholder="Search" required>
         <div class="input-group mb-2 mb-lg-0">
           <div class="input-group-prepend">
-            <span class="input-group-text">Category</span>
+            <span class="input-group-text">Type</span>
           </div>
           <select class="form-control mr-lg-2" name="type">
-            <option value="movie" selected>Movie/TV Show/Video Game</option>
-            <option value="artist">Artist</option>
-            <option value="album">Album/EP/Single</option>
+            <option value="movie" selected>Movies/Series/Games</option>
+            <option value="artist">Artists</option>
+            <option value="album">Albums</option>
           </select>
         </div>
         <button class="btn btn-outline-light" type="submit">Go!</button>
