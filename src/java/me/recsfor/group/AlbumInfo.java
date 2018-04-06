@@ -32,14 +32,16 @@ import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.modelWs2.MediumListWs2;
 import org.musicbrainz.modelWs2.TrackWs2;
 /**
- * A servlet to build group pages for albums, EP's, singles, and other types, including the available tracklist.
- * It can process <code>HTTP GET</code> and <code>POST</code> by being given a request parameter (named <code>id</code>) containing the MusicBrainz ID of the respective <code>release-group</code>.
+ * A servlet to build group pages for albums, EP's, singles, and other types, including the available track listing.
+ * It can process <code>HTTP GET</code> and <code>POST</code> requests by being given a request parameter (named <code>id</code>) containing the MusicBrainz ID of the respective <code>release group</code>.
+ * If the ID of a <code>release</code> is given instead, it will attempt to change it to the matching <code>release group</code>.
  * For example, <code>AlbumInfo?id=00054665-89fa-33d5-a8f0-1728ea8c32c3</code> will generate a page for <i>Homework</i> by Daft Punk.
  * @author lkitaev
  */
 public class AlbumInfo extends HttpServlet {
   private static final long serialVersionUID = 3558291301985484615L;
-  private String title, type, artist, artistId, date;
+  private String title, type, date;
+  private String[] artist;
   private MediumListWs2 info;
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -57,15 +59,13 @@ public class AlbumInfo extends HttpServlet {
       this.log(e.getMessage(), e);
       populate(id);
     }
-    //request.setAttribute("name", title);
-    //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
       out.println("<h2 id=\"name\">" + title + " (" + type + ")</h2>");
-      out.println("<h3>Released by: <a href=\"ArtistInfo?id=" + artistId + "\">" + artist + "</a></h3>");
+      out.println("<h3>Released by: <a href=\"ArtistInfo?id=" + artist[1] + "\">" + artist[0] + "</a></h3>");
       out.println("<h3>Released on: <span class=\"date\">" + date + "</span></h3>");
       //TODO fix duration time
       out.println("<h3>Tracklist:</h2>");
@@ -119,25 +119,23 @@ public class AlbumInfo extends HttpServlet {
     return "Provides information for album groups.";
   }
   /**
-   * Gives values to instance variables.
-   * @param id the release-group id
-   * @param full whether to generate full edition info or not
+   * Gives values to instance variables using an album query.
+   * @param id the id of the release group
    */
   private void populate(String id) {
     AlbumQuery query = new AlbumQuery(id, true);
     title = query.getQuery();
     type = query.listType();
     artist = query.listArtist();
-    artistId = query.listArtistId();
     date = query.listDate();
     info = query.getInfo();
   }
   /**
    * Check if the ID needs to be switched.
    * True if it does, false otherwise.
-   * @param id the id
+   * @param id the id to check
    */
-  private boolean checkId(String id) {
+  private static boolean checkId(String id) {
     return new AlbumQuery(id, false).isIsNotGroup();
   }
 }

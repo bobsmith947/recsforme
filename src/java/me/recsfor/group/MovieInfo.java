@@ -44,8 +44,6 @@ public class MovieInfo extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String id = request.getParameter("id");
     populate(id);
-    //request.setAttribute("name", title);
-    //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
@@ -92,8 +90,8 @@ public class MovieInfo extends HttpServlet {
     return "Provides information for movie/TV show groups.";
   }
   /**
-   * Gives values to instance variables.
-   * @param id the movie/series id
+   * Gives values to instance variables using a movie query.
+   * @param id the id of the movie
    */
   private void populate(String id) {
     MovieQuery query = new MovieQuery(id, true, "full");

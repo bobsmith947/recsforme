@@ -15,72 +15,65 @@
  */
 package me.recsfor.app;
 
-import java.util.LinkedHashMap;
+import java.io.Serializable;
 import java.io.IOException;
 //import com.fasterxml.jackson.core.JsonGenerationException;
-//import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Converts JSON data of user likes/dislikes in Java objects.
+ * Converts user like and dislike data from JavaScript Object Notation (JSON) to a Java object.
  * @author lkitaev
  */
-public class ListData {
-  private ListType likeData;
-  private ListType dislikeData;
+public class ListData implements Serializable {
+  private static final long serialVersionUID = 177281769747262676L;
+  private ListModel[] list;
   
   public ListData() {
-    likeData = null;
-    dislikeData = null;
+    list = new ListModel[0];
   }
-  
-  public ListData(String likeList, String dislikeList) {
-    //likeList = likeList.replace("'", "\\'");
-    //dislikeList = dislikeList.replace("'", "\\'");
-    map(likeList, dislikeList);
-  }
-  
-  private void map(String likes, String dislikes) {
+  /**
+   * Maps parsed JSON data to an instance of a <code>ListData</code> object.
+   * @param json the data to parse
+   * @return a Java representation of the data
+   * @throws IOException if a problem occurs when reading the input
+   */  
+  public static ListData mapData(String json) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
+    ListData data;
     try {
-      likeData = mapper.readValue(likes, ListType.class);
-      dislikeData = mapper.readValue(dislikes, ListType.class);
-      System.out.println(likeData);
-      System.out.println(dislikeData);
-    } catch (IOException e) {
+      data = mapper.readValue(json, ListData.class);
+      System.out.println(data.toString());
+    } catch (JsonMappingException | JsonParseException e) {
+      data = new ListData();
       System.out.println(e.getMessage());
     }
+    return data;
+  }
+  /**
+   * @return the list
+   */
+  public ListModel[] getList() {
+    return list;
+  }
+  /**
+   * @param list the list to set
+   */
+  public void setList(ListModel[] list) {
+    this.list = list;
   }
   
-  public static ListData createData(String likeList, String dislikeList) {
-    return new ListData(likeList, dislikeList);
-  }
-
-  /**
-   * @return the likeData
-   */
-  public ListType getLikeData() {
-    return likeData;
-  }
-
-  /**
-   * @param likeData the likeData to set
-   */
-  public void setLikeData(ListType likeData) {
-    this.likeData = likeData;
-  }
-
-  /**
-   * @return the dislikeData
-   */
-  public ListType getDislikeData() {
-    return dislikeData;
-  }
-
-  /**
-   * @param dislikeData the dislikeData to set
-   */
-  public void setDislikeData(ListType dislikeData) {
-    this.dislikeData = dislikeData;
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for (ListModel entry : list) {
+      sb.append("name: ")
+              .append(entry.getName())
+              .append("\t id: ")
+              .append(entry.getId())
+              .append("\n");
+    }
+    return sb.toString();
   }
 }

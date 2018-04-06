@@ -16,7 +16,7 @@
 package me.recsfor.app;
 
 /**
- * Class to define the contents within a user list.
+ * Defines the content of user like and dislike lists.
  * @author lkitaev
  */
 public class ListModel {

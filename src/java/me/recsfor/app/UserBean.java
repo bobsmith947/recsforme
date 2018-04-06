@@ -18,7 +18,7 @@ package me.recsfor.app;
 import java.beans.*;
 import java.io.Serializable;
 /**
- * JavaBeans component to track user sessions.
+ * JavaBeans component to store data of logged in users.
  * @author lkitaev
  */
 public class UserBean implements Serializable {
@@ -45,6 +45,14 @@ public class UserBean implements Serializable {
     message = null;
     tries = 0;
     propertySupport = new PropertyChangeSupport(this);
+  }
+  
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    propertySupport.addPropertyChangeListener(listener);
+  }
+  
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    propertySupport.removePropertyChangeListener(listener);
   }
   /**
    * @return the name
@@ -129,13 +137,5 @@ public class UserBean implements Serializable {
     int oldId = this.id;
     this.id = id;
     propertySupport.firePropertyChange(PROP_ID, oldId, id);
-  }
-  
-  public void addPropertyChangeListener(PropertyChangeListener listener) {
-    propertySupport.addPropertyChangeListener(listener);
-  }
-  
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
-    propertySupport.removePropertyChangeListener(listener);
   }
 }

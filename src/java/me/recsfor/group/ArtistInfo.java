@@ -30,7 +30,7 @@ import org.musicbrainz.modelWs2.Entity.ReleaseGroupWs2;
 import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
 /**
  * A servlet to build group pages for artists.
- * It can process <code>HTTP GET</code> and <code>POST</code> by being given a request parameter (named <code>id</code>) containing the MusicBrainz ID of the respective <code>artist</code>.
+ * It can process <code>HTTP GET</code> and <code>POST</code> requests by being given a request parameter (named <code>id</code>) containing the MusicBrainz ID of the respective <code>artist</code>.
  * For example, <code>ArtistInfo?id=056e4f3e-d505-4dad-8ec1-d04f521cbb56</code> will generate a page for Daft Punk.
  * @author lkitaev
  */
@@ -50,8 +50,6 @@ public class ArtistInfo extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String id = request.getParameter("id");
     populate(id);
-    //request.setAttribute("name", name);
-    //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + name + "</title><body>");
@@ -121,8 +119,8 @@ public class ArtistInfo extends HttpServlet {
     return "Provides information for artist groups.";
   }
   /**
-   * Gives values to instance variables.
-   * @param id the artist id
+   * Gives values to instance variables using an artist query.
+   * @param id the id of the artist
    */
   private void populate(String id) {
     ArtistQuery query = new ArtistQuery(id, true);

@@ -25,22 +25,18 @@ import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
 import org.musicbrainz.QueryWs2.Search.ReadySearches.ArtistSearchbyName;
 import java.util.List;
 /**
- * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather data for artist search result and group pages.
+ * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather <code>artist</code> data for search results and group pages.
  * @author lkitaev
  */
 public class ArtistQuery extends AbstractQuery {
   private ArtistWs2 artist;
-  private final ArtistIncludesWs2 INC;
+  private final ArtistIncludesWs2 inc;
   protected static final String CONTEXT = "ArtistInfo?id=";
 
-  // <editor-fold desc="Constructors.">
-  /**
-   * Default constructor for if you didn't actually want to query anything.
-   */
   public ArtistQuery() {
     super();
     artist = null;
-    INC = null;
+    inc = null;
   }
   /**
    * Constructor for generating search results.
@@ -49,7 +45,7 @@ public class ArtistQuery extends AbstractQuery {
   public ArtistQuery(String query) {
     super(query);
     artist = new ArtistWs2();
-    INC = null;
+    inc = null;
     String replace = query.replace("[/\\?&=:]", " ");
     new ArtistSearchbyName(replace).getFirstPage().forEach(r ->
             results.put(r.getArtist().getId(), r.getArtist().getUniqueName()));
@@ -58,25 +54,22 @@ public class ArtistQuery extends AbstractQuery {
   /**
    * Constructor for generating group info.
    * @param id the id to generate info for
-   * @param info whether you actually want the info or not
+   * @param info whether extra info is to be gathered or not
    */
   public ArtistQuery(String id, boolean info) {
     super();
-    INC = new ArtistIncludesWs2();
-    INC.setReleaseGroups(info);
-    INC.setReleases(info);
-    INC.setVariousArtists(info);
+    inc = new ArtistIncludesWs2();
+    inc.setReleaseGroups(info);
+    inc.setReleases(info);
+    inc.setVariousArtists(info);
     try {
-      artist = new LookUpWs2().getArtistById(id, INC);
+      artist = new LookUpWs2().getArtistById(id, inc);
       query = artist.getUniqueName();
     } catch (MBWS2Exception e) {
       query = e.getMessage();
       artist = null;
     }
   }
-  // </editor-fold>
-
-  // <editor-fold defaultstate="collapsed" desc="Get/set methods.">
   /**
    * @return the artist
    */
@@ -89,9 +82,7 @@ public class ArtistQuery extends AbstractQuery {
   public void setArtist(ArtistWs2 artist) {
     this.artist = artist;
   }
-  // </editor-fold>
 
-  // <editor-fold defaultstate="collapsed" desc="List methods.">
   @Override
   public String[] listNames() {
     String[] res = new String[0];
@@ -106,8 +97,8 @@ public class ArtistQuery extends AbstractQuery {
     return ids;
   }
   /**
-   * Gets the type (person or group) using the generated artist.
-   * @return the type, potentially null
+   * Gets the type (person or group) of the artist (if available).
+   * @return the type
    */
   public String listType() {
     String type;
@@ -121,8 +112,8 @@ public class ArtistQuery extends AbstractQuery {
     return type;
   }
   /**
-   * Gets the start and end years (if available) using the generated artist.
-   * @return the years, potentially with one or both null
+   * Gets the active years of the artist (if available).
+   * @return a length 2 array containing the start and end years
    */
   public String[] listYears() {
     String[] years = new String[2];
@@ -140,18 +131,17 @@ public class ArtistQuery extends AbstractQuery {
     return years;
   }
   /**
-   * Gets the available release groups using the generated artist.
+   * Gets the available release groups associated with the artist.
    * @return the release groups
    */
   public List<ReleaseGroupWs2> listAlbums() {
     return artist.getReleaseGroups();
   }
   /**
-   * Gets the available release contributions using the generated artist.
+   * Gets the available release contributions associated with the artist.
    * @return the releases
    */
   public List<ReleaseWs2> listContrib() {
     return artist.getReleases();
   }
-  // </editor-fold>
 }

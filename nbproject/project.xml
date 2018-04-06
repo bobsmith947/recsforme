@@ -117,11 +117,13 @@
             </library>
         </libraries>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
+            <word>enum</word>
             <word>frontend</word>
             <word>localStorage</word>
             <word>recsforme</word>
             <word>servlet</word>
             <word>servlets</word>
+            <word>Soundtrack</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

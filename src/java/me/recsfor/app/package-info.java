@@ -15,7 +15,8 @@
  */
 
 /**
- * This package provides functionality for application logic. Handles user login/logout and database interaction.
+ * This package provides functionality for application logic.
+ * Handles user login/logout and database interaction.
  */
 
 package me.recsfor.app;

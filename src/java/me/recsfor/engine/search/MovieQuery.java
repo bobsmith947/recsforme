@@ -25,23 +25,19 @@ import com.omertron.omdbapi.emumerations.PlotType;
 import java.util.Arrays;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 /**
- * Uses the OMDb API (https://omdbapi.com) to gather data for movie/TV show search result and group pages.
+ * Uses the OMDb API (https://omdbapi.com) to gather <code>movie</code>, <code>series</code>, and <code>game</code> data for search results and group pages.
  * @author lkitaev
  */
 public class MovieQuery extends AbstractQuery {
   private OmdbVideoFull info;
-  private final OmdbParameters PARAMS;
+  private final OmdbParameters params;
   private static final OmdbApi CLIENT = new OmdbApi(System.getenv("OMDB_KEY"));
   protected static final String CONTEXT = "MovieInfo?id=";
 
-  // <editor-fold desc="Constructors.">
-  /**
-   * Default constructor for if you didn't actually want to query anything.
-   */
   public MovieQuery() {
     super();
     info = null;
-    PARAMS = null;
+    params = null;
   }
   /**
    * Constructor for generating search results.
@@ -50,7 +46,7 @@ public class MovieQuery extends AbstractQuery {
   public MovieQuery(String query) {
     super(query);
     info = null;
-    PARAMS = null;
+    params = null;
     try {
       CLIENT.search(query).getResults().forEach(res ->
               results.put(res.getImdbID(), res.getTitle() + " ("
@@ -64,20 +60,20 @@ public class MovieQuery extends AbstractQuery {
   /**
    * Constructor for generating group info.
    * @param id the id to generate info for
-   * @param info whether you actually want the info or not
+   * @param info whether to get full info or not
    * @param plot the desired plot return type (short or full)
    */
   public MovieQuery(String id, boolean info, String plot) {
     super();
     if (!info) {
       this.info = null;
-      PARAMS = null;
+      params = null;
     } else {
-      PARAMS = new OmdbParameters();
-      PARAMS.add(Param.IMDB, id);
-      PARAMS.add(Param.PLOT, switchPlot(plot));
+      params = new OmdbParameters();
+      params.add(Param.IMDB, id);
+      params.add(Param.PLOT, parsePlot(plot));
       try {
-        this.info = CLIENT.getInfo(PARAMS);
+        this.info = CLIENT.getInfo(params);
         query = this.info.getTitle();
       } catch (OMDBException | NullPointerException e) {
         query = e.getMessage();
@@ -85,9 +81,6 @@ public class MovieQuery extends AbstractQuery {
       }
     }
   }
-  // <editor-fold>
-
-  // <editor-fold defaultstate="collapsed" desc="Get/set methods.">
   /**
    * @return the info
    */
@@ -101,14 +94,12 @@ public class MovieQuery extends AbstractQuery {
     this.info = info;
   }
   /**
-   * @return the PARAMS
+   * @return the params
    */
-  public final OmdbParameters getPARAMS() {
-    return PARAMS;
+  public final OmdbParameters getParams() {
+    return params;
   }
-  // </editor-fold>
 
-  // <editor-fold defaultstate="collapsed" desc="List methods.">
   @Override
   public String[] listNames() {
     String[] res = new String[0];
@@ -123,14 +114,14 @@ public class MovieQuery extends AbstractQuery {
     return ids;
   }
   /**
-   * Gets the year using the generated info.
+   * Gets the year of the movie.
    * @return the year
    */
   public String listYear() {
     return getInfo().getYear();
   }
   /**
-   * Gets the type (movie or series) using the generated info.
+   * Gets the type (movie, series, or game) of the movie.
    * @return the type
    */
   public String listType() {
@@ -139,21 +130,18 @@ public class MovieQuery extends AbstractQuery {
     return type;
   }
   /**
-   * Gets the plot synopsis (short or full) using the generated info.
+   * Gets the plot synopsis of the movie, based on the specified plot type.
    * @return the plot
    */
   public String listPlot() {
     return getInfo().getPlot();
   }
-  // </editor-fold>
-
   /**
-   * Switches the plot type to the desired enum.
-   * @param type the desired plot type
-   * @return either PlotType.SHORT or PlotType.FULL
+   * Retrieves the value of the desired plot type.
+   * @param type the plot type
+   * @return the corresponding enum values of the plot type
    */
-  private PlotType switchPlot(String type) {
-    //TODO use this method
+  private PlotType parsePlot(String type) {
     switch (type.toLowerCase()) {
       case "full":
         return PlotType.FULL;

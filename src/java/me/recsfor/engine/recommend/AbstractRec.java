@@ -23,35 +23,21 @@ import java.util.LinkedHashMap;
  */
 public abstract class AbstractRec {
   protected String name, id;
-  protected final boolean STATUS;
+  protected boolean status;
   protected LinkedHashMap<String, String> recs;
   
   public AbstractRec() {
     name = "";
     id = "";
-    STATUS = false;
+    status = false;
     recs = null;
   }
   
   public AbstractRec(String name, String id, boolean like) {
     this.name = name;
     this.id = id;
-    STATUS = like;
+    status = like;
     recs = new LinkedHashMap<>();
-  }
-  /**
-   * Determines if the status is a like.
-   * @return if it is a like
-   */
-  public final boolean isLike() {
-    return STATUS == true;
-  }
-  /**
-   * Determines if the status is a dislike.
-   * @return if it is a dislike
-   */
-  public final boolean isDislike() {
-    return STATUS == false;
   }
   /**
    * @return the name
@@ -78,10 +64,10 @@ public abstract class AbstractRec {
     this.id = id;
   }
   /**
-   * @return the STATUS
+   * @return the status
    */
   public boolean getStatus() {
-    return STATUS;
+    return status;
   }
   /**
    * @return the recs

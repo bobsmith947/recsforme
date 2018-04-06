@@ -17,7 +17,8 @@ package me.recsfor.engine.search;
 
 import java.util.LinkedHashMap;
 /**
- * Contains basic functionality for how a query should be modeled. Extending classes must implement methods to list the names and ID's of query results.
+ * Contains basic functionality for how a query should be modeled.
+ * Extending classes must implement methods to list the names and ID's of query results.
  * @author lkitaev
  */
 public abstract class AbstractQuery {
@@ -72,12 +73,12 @@ public abstract class AbstractQuery {
     this.len = len;
   }
   /**
-   * Compiles the associated name of search results as a string array.
+   * Gets the associated name of search results as a string array.
    * @return an array either containing the results or null
    */
   public abstract String[] listNames();
   /**
-   * Compiles the associated ID of search results as a string array.
+   * Gets the associated ID of search results as a string array.
    * @return an array either containing the ID's or null
    */
   public abstract String[] listIds();
