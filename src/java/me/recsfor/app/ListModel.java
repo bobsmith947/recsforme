@@ -15,11 +15,14 @@
  */
 package me.recsfor.app;
 
+import java.io.Serializable;
+
 /**
  * Defines the content of user like and dislike lists.
  * @author lkitaev
  */
-public class ListModel {
+public class ListModel implements Serializable {
+  private static final long serialVersionUID = -3414177256146753331L;
   private String name;
   private String id;
   

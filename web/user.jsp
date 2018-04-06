@@ -31,8 +31,6 @@
           <h3>Your dislikes:</h3>
           <div class="list-group text-center my-2" id="dislikes"></div>
         </div>
-        <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear <code>localStorage</code>, you can use the below button to do so.</h6>
-        <button class="btn btn-danger btn-block my-3" type="reset" id="listreset">Reset your list</button>
       </c:if>
       <c:if test="${u.loggedIn}">
         <ul class="nav justify-content-center">
@@ -45,17 +43,19 @@
       <%-- TODO add function to sync to cloud --%>
       <h3>Your likes:</h3>
       <div class="list-group text-center my-2">
-        <c:forEach var="ld" items="${data.getLikeData()}">
-          
+        <c:forEach var="ld" items="${u.likeData.list}">
+          <a href="#" class="list-group-item list-group-item-action">${ld.getName()}</a>
         </c:forEach>
       </div>
       <h3>Your dislikes:</h3>
       <div class="list-group text-center my-2">
-        <c:forEach var="dld" items="${data.getDislikeData()}">
-          
+        <c:forEach var="dld" items="${u.dislikeData.list}">
+          <a href="#" class="list-group-item list-group-item-action">${dld.getName()}</a>
         </c:forEach>
       </div>
       </c:if>
+      <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear <code>localStorage</code>, you can use the below button to do so.</h6>
+      <button class="btn btn-danger btn-block my-3" type="reset" id="listreset">Reset your list</button>
     </main>
   </body>
 </html>

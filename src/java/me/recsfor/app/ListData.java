@@ -21,6 +21,7 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
 
 /**
  * Converts user like and dislike data from JavaScript Object Notation (JSON) to a Java object.
@@ -47,7 +48,7 @@ public class ListData implements Serializable {
       System.out.println(data.toString());
     } catch (JsonMappingException | JsonParseException e) {
       data = new ListData();
-      System.out.println(e.getMessage());
+      System.err.println(Arrays.toString(e.getStackTrace()));
     }
     return data;
   }

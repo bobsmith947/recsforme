@@ -5,7 +5,7 @@
 <html>
   <title>Logging in...</title>
   <body>
-    <c:if test='${pageContext.request.getParameter("type") == null}'>
+    <c:if test='${pageContext.request.getParameter("action") == null}'>
       <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
       <jsp:setProperty name="u" property="name" value='<%= request.getParameter("uname") %>' />
       <jsp:setProperty name="u" property="pass" value='<%= request.getParameter("pw") %>' />
@@ -26,18 +26,8 @@
               SELECT items FROM user_dislikes
               WHERE uid = ${u.id}
             </sql:query>
-            <c:set scope="session" var="data" value='${ListData.createData(likesList.getRowsByIndex()[0][0], dislikesList.getRowsByIndex()[0][0])}' />
-<!--            <script type="text/javascript">
-              var i;
-              var likes = JSON.parse('${likes.replace("'", "\\'")}').list;
-              var dislikes = JSON.parse('${dislikes.replace("'", "\\'")}').list;
-              for (i = 0; i < likes.length; i++)
-                localStorage.setItem(likes[i].name, "like");
-              for (i = 0; i < dislikes.length; i++)
-                localStorage.setItem(dislikes[i].name, "dislike");
-              console.log("localStorage populated.");
-              window.open("user.jsp", "_self");
-            </script>-->
+            <jsp:setProperty name="u" property="likeData" value="${ListData.mapData(likesList.getRowsByIndex()[0][0])}" />
+            <jsp:setProperty name="u" property="dislikeData" value="${ListData.mapData(dislikesList.getRowsByIndex()[0][0])}" />
             <jsp:setProperty name="u" property="loggedIn" value="true" />
             <jsp:setProperty name="u" property="message" value="Successfully logged in." />
             <c:redirect url="user.jsp" />
@@ -60,12 +50,14 @@
         </c:otherwise>
       </c:choose>
     </c:if>
-    <c:if test='${pageContext.request.getParameter("type") == "reset"}'>
+    <c:if test='${pageContext.request.getParameter("action") == "reset"}'>
+      <% CredentialEncryption cred = new CredentialEncryption(request.getParameter("pass")); %>
       <sql:update var="updated" dataSource="jdbc/MediaRecom">
         UPDATE users
-        SET pw='<c:out value='${pageContext.request.getParameter("pass")}' />'
-        WHERE uname='<c:out value='${pageContext.request.getParameter("name")}' />'
-        AND email='<c:out value='${pageContext.request.getParameter("email")}' />'
+        SET pw = '<%= cred.getHash() %>', 
+          salt = '<%= cred.getSalt() %>'
+        WHERE uname = '<c:out value='${pageContext.request.getParameter("name")}' />'
+        AND email = '<c:out value='${pageContext.request.getParameter("email")}' />'
       </sql:update>
       <c:choose>
         <c:when test="${updated == 1}">

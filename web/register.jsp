@@ -1,6 +1,6 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption, java.time.LocalDate"%>
 <!DOCTYPE html>
 <html>
   <title>Registration Page</title>
@@ -27,12 +27,12 @@
         <% CredentialEncryption cred = new CredentialEncryption(request.getParameter("pw")); %>
         <sql:update dataSource="jdbc/MediaRecom">
           INSERT INTO users (uname, pw, joined, sex, dob, email, salt)
-          VALUES ('<%= request.getParameter("uname") %>', 
+          VALUES ('<c:out value='${pageContext.request.getParameter("uname")}' />', 
                   '<%= cred.getHash() %>', 
-                  '<%= java.time.LocalDate.now() %>', 
-                  '<%= request.getParameter("sex") %>', 
-                  '<%= request.getParameter("dob") %>', 
-                  '<%= request.getParameter("email") %>',
+                  '<c:out value='${LocalDate.now()}' />', 
+                  '<c:out value='${pageContext.request.getParameter("sex")}' />', 
+                  '<c:out value='${pageContext.request.getParameter("dob")}' />', 
+                  '<c:out value='${pageContext.request.getParameter("email")}' />',
                   '<%= cred.getSalt() %>')
         </sql:update>
         <sql:query var="newUser" dataSource="jdbc/MediaRecom">
@@ -53,6 +53,7 @@
         <h6 class="text-success">You can now <a href="login.jsp">log in</a>.</h6>
       </c:if>
       <c:if test="${ex != null}">
+        <% this.log("An error occurred."); %>
         <h5 class="text-warning">Unable to register. Please ensure all form fields are valid.</h5>
       </c:if>
     </c:if>

@@ -67,7 +67,7 @@ $(() => {
         passCheck: ko.observable(""),
         requestReset: function(form) {
           let requestData = new FormData(form);
-          requestData.append("type", "reset");
+          requestData.append("action", "reset");
           requestData.append("name", this.name());
           this.resetForm(false);
           $.post("auth.jsp",

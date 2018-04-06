@@ -29,12 +29,16 @@ public class UserBean implements Serializable {
   public static final String PROP_LOGGEDIN = "loggedIn";
   public static final String PROP_MESSAGE = "message";
   public static final String PROP_TRIES = "tries";
+  public static final String PROP_LIKEDATA = "likeData";
+  public static final String PROP_DISLIKEDATA = "dislikeData";
   private String name;
   private String pass;
   private int id;
   private boolean loggedIn;
   private short tries;
   private String message;
+  private ListData likeData;
+  private ListData dislikeData;
   private final PropertyChangeSupport propertySupport;
   
   public UserBean() {
@@ -44,6 +48,8 @@ public class UserBean implements Serializable {
     loggedIn = false;
     message = null;
     tries = 0;
+    likeData = null;
+    dislikeData = null;
     propertySupport = new PropertyChangeSupport(this);
   }
   
@@ -81,6 +87,20 @@ public class UserBean implements Serializable {
     String oldPass = this.pass;
     this.pass = pass;
     propertySupport.firePropertyChange(PROP_PASS, oldPass, pass);
+  }
+  /**
+   * @return the id
+   */
+  public int getId() {
+    return id;
+  }
+  /**
+   * @param id the id to set
+   */
+  public void setId(int id) {
+    int oldId = this.id;
+    this.id = id;
+    propertySupport.firePropertyChange(PROP_ID, oldId, id);
   }
   /**
    * @return the loggedIn status
@@ -125,17 +145,31 @@ public class UserBean implements Serializable {
     propertySupport.firePropertyChange(PROP_TRIES, oldTries, tries);
   }
   /**
-   * @return the id
+   * @return the likeData
    */
-  public int getId() {
-    return id;
+  public ListData getLikeData() {
+    return likeData;
   }
   /**
-   * @param id the id to set
+   * @param likeData the likeData to set
    */
-  public void setId(int id) {
-    int oldId = this.id;
-    this.id = id;
-    propertySupport.firePropertyChange(PROP_ID, oldId, id);
+  public void setLikeData(ListData likeData) {
+    ListData oldLikeData = this.likeData;
+    this.likeData = likeData;
+    propertySupport.firePropertyChange(PROP_LIKEDATA, oldLikeData, likeData);
+  }
+  /**
+   * @return the dislikeData
+   */
+  public ListData getDislikeData() {
+    return dislikeData;
+  }
+  /**
+   * @param dislikeData the dislikeData to set
+   */
+  public void setDislikeData(ListData dislikeData) {
+    ListData oldDislikeData = this.dislikeData;
+    this.dislikeData = dislikeData;
+    propertySupport.firePropertyChange(PROP_DISLIKEDATA, oldDislikeData, dislikeData);
   }
 }

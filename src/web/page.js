@@ -22,21 +22,6 @@ import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 
 $(() => {
   $("body").addClass("bg-dark text-light");
-  $("#removegroup").click(function(ev) {
-    if (confirm("Are you sure you want to remove this group?")) {
-      localStorage.removeItem($(this).data("name"));
-      alert("Group removed.");
-      window.open("user.jsp", "_self");
-    } else {
-      alert("Group not removed.");
-      if ($("#info").length > 0) 
-        console.log("You already tried removing this!");
-      else
-        $("main").append("<h5 id='info' class='mt-3'>This group is still in your <span style='text-decoration:underline'>"
-                + localStorage.getItem($(this).data("name")) + "</span> list.</h5>");
-      $(this).blur();
-    }
-  });
   //add listener to expand images on click
   /*if (screen.width > 1024) {
     $(".exp").each((ind, cur) => {
@@ -59,10 +44,10 @@ $(() => {
       const group = localStorage.key(i);
       switch (localStorage.getItem(group)) {
         case "like":
-          $("#likes").append(`<a href="group.jsp?name=${encodeURIComponent(group)}" class="list-group-item list-group-item-action">${group}</a>`);
+          $("#likes").append('<a href="#" class="list-group-item list-group-item-action bg-warning">${group}</a>');
           break;
         case "dislike":
-          $("#dislikes").append(`<a href="group.jsp?name=${encodeURIComponent(group)}" class="list-group-item list-group-item-action">${group}</a>`);
+          $("#dislikes").append('<a href="#" class="list-group-item list-group-item-action bg-warning">${group}</a>');
           break;
         default:
           console.log("Group not found.");
@@ -70,16 +55,18 @@ $(() => {
       }
     }
     //notify if nothing could be added
-    if (localStorage.length === 0) {
+    const nolikes = $("#likes").children().length === 0;
+    const nodislikes = $("#dislikes").children().length === 0;
+    if (nolikes && nodislikes) {
       $("#listreset").prop("disabled", true);
       $("#list").empty();
       $("#list").append("<h6>Your list is empty!</h6>");
       $("#list").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
       $("#resetprompt").addClass("text-muted");
-    } else if ($("#likes").children().length === 0) {
+    } else if (nolikes) {
       $("#likes").append("<h6>You haven't added any likes!</h6>");
       $("#likes").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
-    } else if ($("#dislikes").children().length === 0) {
+    } else if (nodislikes) {
       $("#dislikes").append("<h6>You haven't added any dislikes!</h6>");
       $("#dislikes").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
     }
@@ -87,6 +74,10 @@ $(() => {
     $("#listreset").click(ev => {
       if (confirm("Are you sure you want to clear your list?")) {
         localStorage.clear();
+        $.get("group.jsp", 
+              {
+                action:"reset"
+              });
         alert("List cleared.");
         location.reload();
       } else {
