@@ -67,3 +67,6 @@ pre {
   width: fit-content;
   -ms-width: 25%;
 }
+:disabled {
+  cursor: not-allowed;
+}

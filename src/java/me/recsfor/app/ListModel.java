@@ -25,6 +25,7 @@ public class ListModel implements Serializable {
   private static final long serialVersionUID = -3414177256146753331L;
   private String name;
   private String id;
+  private String type;
   
   public ListModel() {
     name = "";
@@ -54,4 +55,16 @@ public class ListModel implements Serializable {
   public void setId(String id) {
     this.id = id;
   }  
+  /**
+   * @return the type
+   */
+  public String getType() {
+    return type;
+  }
+  /**
+   * @param type the type to set
+   */
+  public void setType(String type) {
+    this.type = type;
+  }
 }

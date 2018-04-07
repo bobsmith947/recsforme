@@ -55,7 +55,8 @@ public class ArtistInfo extends HttpServlet {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + name + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
-      out.println("<h2 id=\"name\">" + name + " - " + type + "</h2>");
+      out.println("<h2 id=\"name\">" + name + "</h2>");
+      out.println("<h3 id=\"type\">" + type + "</h3>");
       String term;
       switch (type) {
         case "Person":
@@ -71,6 +72,7 @@ public class ArtistInfo extends HttpServlet {
       out.println("<h3>" + term + ": <span class=\"date\">" + years[0] 
               + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");
       //TODO order release groups by date
+      //TODO print out more entries
       out.println("<h3>Discography:</h3><div class=\"list-group text-right my-2\">");
       albums.forEach(album -> out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
               + album.getId() + "\"><h5 class=\"mb-0\">" + album.getTitle()  

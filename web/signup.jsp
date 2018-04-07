@@ -55,14 +55,16 @@
       <h5 class="mb-4">Privacy Policy and Terms</h5>
       <div class="border p-2 p-lg-4 mb-4" style="height:50%;overflow-y:scroll">
         <strong class="d-block mb-2">By accepting these terms, you agree to be bound be them.</strong>
-        <em class="d-block mb-2">"The service" refers to this application, recsforme.</em>
+        <em class="d-block mb-2">The "service" refers to this application, recsforme.</em>
         <ol class="list-group-ordered mb-2">
-          <li>The information you submit must be entirely accurate. Submitting false information only harms the service provided to you.</li>
-          <li>Unless specifically opted-against, the service will retain your information after your account is deleted, in order to improve the service itself.</li>
-          <li>The service will not profit off of or share your information, in exchange, you must not profit off of the service by any means.</li>
-          <li>You are to be held liable for your usage of the service, and will not take legal action against the owner of the service under any circumstance.</li>
-          <li>Information stored by the service is not guaranteed to be completely safe, although necessary steps are taken to minimize the risk of data theft.</li>
-          <li>Only passwords are stored in a hashed/salted format. Your username should not contain any sensitive information.</li>
+          <li>The information you submit should be entirely accurate. Submitting false information only harms the service provided to you.</li>
+          <li>The service will not profit off of your information in any way, shape, or form.</li>
+          <li>The service will not share your information with any other group or person.</li>
+          <li>You are to be held liable for your usage of the service.</li>
+          <li>You will not take legal action against the owner of the service under any circumstance.</li>
+          <li>Information stored by the service is not guaranteed to be completely safe, although necessary steps are taken to minimize the risk of data loss.</li>
+          <li>In the unlikely event of data loss, the service will not assume responsibility for the information you have submitted.</li>
+          <li>Only passwords are stored in an encrypted format. Any other information submitted should not be sensitive.</li>
           <li>Sensitive information includes your full name, home/work address, or other details you would not want given out to strangers.</li>
           <li>The owner of the service reserves all rights in accordance with the Apache License 2.0 (below).</li>
         </ol>
@@ -271,7 +273,6 @@
         </label>
       </div>
       <div data-bind="visible:completed()" id="info-div" class="mt-3 text-info" style="display:none">
-        <h5 class="text-warning">This is what you are submitting. <small>Changes cannot be made after signing up.</small></h5>
         <h6>Username: <span data-bind="text:uname"></span></h6>
         <span data-bind="visible:email()!==''">
           <h6>Email: <span data-bind="text:email"></span></h6>

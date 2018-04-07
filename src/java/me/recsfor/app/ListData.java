@@ -17,11 +17,13 @@ package me.recsfor.app;
 
 import java.io.Serializable;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
 //import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Arrays;
+import me.recsfor.engine.search.*;
 
 /**
  * Converts user like and dislike data from JavaScript Object Notation (JSON) to a Java object.
@@ -29,10 +31,10 @@ import java.util.Arrays;
  */
 public class ListData implements Serializable {
   private static final long serialVersionUID = 177281769747262676L;
-  private ListModel[] list;
+  private LinkedList<ListModel> list;
   
   public ListData() {
-    list = new ListModel[0];
+    list = null;
   }
   /**
    * Maps parsed JSON data to an instance of a <code>ListData</code> object.
@@ -53,28 +55,84 @@ public class ListData implements Serializable {
     return data;
   }
   /**
+   * Creates a string representing the context path of a group, based on its type.
+   * @param groupType the type of the group
+   * @return the context
+   */
+  public static String generateContext(String groupType) {
+    String movie = MovieQuery.CONTEXT;
+    String artist = ArtistQuery.CONTEXT;
+    String album = AlbumQuery.CONTEXT;
+    switch (groupType.toLowerCase()) {
+      case "movie":
+        return movie;
+      case "series":
+        return movie;
+      case "game":
+        return movie;
+      case "person":
+        return artist;
+      case "group":
+        return artist;
+      case "orchestra":
+        return artist;
+      case "choir":
+        return artist;
+      case "character":
+        return artist;
+      case "album":
+        return album;
+      case "single":
+        return album;
+      case "ep":
+        return album;
+      case "broadcast":
+        return album;
+      case "compilation":
+        return album;
+      case "soundtrack":
+        return album;
+      case "spokenword":
+        return album;
+      case "interview":
+        return album;
+      case "audiobook":
+        return album;
+      case "live":
+        return album;
+      case "remix":
+        return album;
+      case "dj-mix":
+        return album;
+      case "mixtape/street":
+        return album;
+      default:
+        return "search.jsp?query=";
+    }
+  }
+  /**
    * @return the list
    */
-  public ListModel[] getList() {
+  public LinkedList<ListModel> getList() {
     return list;
   }
   /**
    * @param list the list to set
    */
-  public void setList(ListModel[] list) {
+  public void setList(LinkedList<ListModel> list) {
     this.list = list;
   }
   
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    for (ListModel entry : list) {
+    list.stream().forEach(item -> {
       sb.append("name: ")
-              .append(entry.getName())
+              .append(item.getName())
               .append("\t id: ")
-              .append(entry.getId())
+              .append(item.getId())
               .append("\n");
-    }
+    });
     return sb.toString();
   }
 }

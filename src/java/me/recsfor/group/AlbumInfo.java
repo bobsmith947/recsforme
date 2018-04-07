@@ -64,8 +64,8 @@ public class AlbumInfo extends HttpServlet {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
-      out.println("<h2 id=\"name\">" + title + " (" + type + ")</h2>");
-      out.println("<h3>Released by: <a href=\"ArtistInfo?id=" + artist[1] + "\">" + artist[0] + "</a></h3>");
+      out.println("<h2 id=\"name\">" + title + " - <a href=\"ArtistInfo?id=" + artist[1] + "\">" + artist[0] + "</a></h2>");
+      out.println("<h3 id=\"type\">" + type + "</h3>");
       out.println("<h3>Released on: <span class=\"date\">" + date + "</span></h3>");
       //TODO fix duration time
       out.println("<h3>Tracklist:</h2>");

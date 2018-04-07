@@ -18,6 +18,7 @@ import "babel-polyfill";
 import moment from "moment/min/moment.min.js";
 import "./style.css";
 import "@fortawesome/fontawesome-free-webfonts/css/fontawesome.css";
+import "@fortawesome/fontawesome-free-webfonts/css/fa-solid.css"
 import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 
 $(() => {
@@ -34,9 +35,12 @@ $(() => {
   $(".date").each((ind, cur) => {
     const str = $(cur).text();
     const date = moment(str, "YYYY-MM-DD", true);
-    if (date.isValid()) $(cur).text(date.format("LL"));
-    else if (str === "null") $(cur).text("Unknown date");
-    else $(cur).text(str);
+    if (date.isValid())
+      $(cur).text(date.format("LL"));
+    else if (str === "null")
+      $(cur).text("Unknown date");
+    else
+      $(cur).text(str);
   });
   if (location.pathname.includes("user.jsp")) {
     //add groups
@@ -44,10 +48,10 @@ $(() => {
       const group = localStorage.key(i);
       switch (localStorage.getItem(group)) {
         case "like":
-          $("#likes").append('<a href="#" class="list-group-item list-group-item-action bg-warning">${group}</a>');
+          $("#likes").append(`<a href="#" class="list-group-item list-group-item-action">${group}</a>`);
           break;
         case "dislike":
-          $("#dislikes").append('<a href="#" class="list-group-item list-group-item-action bg-warning">${group}</a>');
+          $("#dislikes").append(`<a href="#" class="list-group-item list-group-item-action">${group}</a>`);
           break;
         default:
           console.log("Group not found.");
@@ -75,9 +79,7 @@ $(() => {
       if (confirm("Are you sure you want to clear your list?")) {
         localStorage.clear();
         $.get("group.jsp", 
-              {
-                action:"reset"
-              });
+              {action: "reset"});
         alert("List cleared.");
         location.reload();
       } else {
@@ -89,11 +91,14 @@ $(() => {
 });
 /*
 function expandImg(ev) {
-  const elem = ev.target, w = elem.naturalWidth;
+  const elem = ev.target;
+  const w = elem.naturalWidth;
   switch (elem.style.width) {
     case "15%":
-      if (w > 0.9 * screen.width) elem.style.width = "90%";
-      else elem.style.width = `${w}px`;
+      if (w > 0.9 * screen.width)
+        elem.style.width = "90%";
+      else
+        elem.style.width = `${w}px`;
       elem.title = "Click to shrink."
       break;
     default:

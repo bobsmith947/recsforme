@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import "babel-polyfill";
-import moment from "moment/min/moment.min.js";
 import ko from "knockout/build/output/knockout-latest.js";
 
 $(() => {
@@ -32,7 +30,8 @@ $(() => {
         dob: ko.observable(""),
         age: function() {
           const date = moment(this.dob());
-          if (date.isValid()) return date.fromNow();
+          if (date.isValid())
+            return date.fromNow();
           else return "unknown";
         },
         completed: function() {
@@ -66,7 +65,7 @@ $(() => {
         pass: ko.observable(""),
         passCheck: ko.observable(""),
         requestReset: function(form) {
-          let requestData = new FormData(form);
+          const requestData = new FormData(form);
           requestData.append("action", "reset");
           requestData.append("name", this.name());
           this.resetForm(false);
@@ -79,37 +78,36 @@ $(() => {
     }
     if (location.pathname.includes("Info")) {
       const group = $("#name").text();
+      const type = $("#type").text();
       const id = location.search.substring(4);
-      let vote;
-      function checkVote() {
-        try {
-          const val = localStorage.getItem(group);
-          vote = val;
-          return val !== null;
-        } catch (ex) {
-          console.log(ex);
-          console.log("Not found in list.");
-          return false;
-        }
-      }
       let voteModel = {
         selected: ko.observable(false),
-        voted: ko.observable(checkVote()),
-        status: ko.observable(vote),
+        voted: ko.observable(checkGroup(group)),
         sendVote: function(form) {
-          let voteData = new FormData(form);
+          const voteData = new FormData(form);
           voteData.append("name", group);
+          voteData.append("type", type);
           voteData.append("id", id);
-          this.status(isLike(voteData.get("like")));
           this.voted(true);
           $.post("group.jsp", 
                 encodeFormData(voteData));
           localStorage.setItem(group, this.status());
         },
         undoVote: function() {
+          try {
+            localStorage.removeItem(group);
+          } catch (ex) {
+            console.log(ex);
+            console.log("Group not found.");
+          } finally {
+            $.get("group.jsp", 
+              {
+                action: "remove",
+                name: group
+              });
+          }
           this.voted(false);
           this.selected(false);
-          localStorage.removeItem(group);
         }
       };
       ko.applyBindings(voteModel);
@@ -120,7 +118,7 @@ $(() => {
   }
 });
 
-function isLike(str) {
+/*function isLike(str) {
   switch (str) {
     case "true":
       return "like";
@@ -131,6 +129,32 @@ function isLike(str) {
     default:
       return "either like or dislike";
       break;
+  }
+}*/
+
+function checkGroup(group) {
+  if (localStorage.getItem(group) !== null)
+    return true;
+  else {
+    let res;
+    $.get("group.jsp",
+          {
+            action: "check",
+            name: group
+          },
+          response => res = $(response).text());
+    switch (res) {
+      case "exists":
+        return true;
+        break;
+      case "does not exist":
+        return false;
+        break;
+      default:
+        console.log("Something went wrong.");
+        return false;
+        break;
+    }
   }
 }
 

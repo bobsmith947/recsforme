@@ -172,4 +172,20 @@ public class UserBean implements Serializable {
     this.dislikeData = dislikeData;
     propertySupport.firePropertyChange(PROP_DISLIKEDATA, oldDislikeData, dislikeData);
   }
+  
+  public String checkList(String name) {
+    ListModel[] likes = new ListModel[0];
+    ListModel[] dislikes = new ListModel[0];
+    likes = likeData.getList().toArray(likes);
+    dislikes = dislikeData.getList().toArray(dislikes);
+    for (ListModel item : likes) {
+      if (item.getName().equals(name))
+        return "exists";
+    }
+    for (ListModel item : dislikes) {
+      if (item.getName().equals(name))
+        return "exists";
+    }
+    return "does not exist";
+  }
 }

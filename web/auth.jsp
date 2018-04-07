@@ -1,6 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption, me.recsfor.app.ListData"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption"%>
 <!DOCTYPE html>
 <html>
   <title>Logging in...</title>
@@ -18,16 +18,6 @@
         <c:when test="${matches.getRowCount() == 1}">
           <c:if test="${CredentialEncryption.validatePassword(u.pass, matches.getRowsByIndex()[0][1], matches.getRowsByIndex()[0][2])}" var="correct">
             <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
-            <sql:query var="likesList" dataSource="jdbc/MediaRecom">
-              SELECT items FROM user_likes
-              WHERE uid = ${u.id}
-            </sql:query>
-            <sql:query var="dislikesList" dataSource="jdbc/MediaRecom">
-              SELECT items FROM user_dislikes
-              WHERE uid = ${u.id}
-            </sql:query>
-            <jsp:setProperty name="u" property="likeData" value="${ListData.mapData(likesList.getRowsByIndex()[0][0])}" />
-            <jsp:setProperty name="u" property="dislikeData" value="${ListData.mapData(dislikesList.getRowsByIndex()[0][0])}" />
             <jsp:setProperty name="u" property="loggedIn" value="true" />
             <jsp:setProperty name="u" property="message" value="Successfully logged in." />
             <c:redirect url="user.jsp" />

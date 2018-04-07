@@ -11,29 +11,30 @@
       <c:if test='${pageContext.request.getParameter("like") == "true"}'>
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_likes
-          IF LEN(items) > 11
-            SET items = LEFT(items, LEN(items)-2) 
+          SET items = LEFT(items, LEN(items)-2) 
             + ',{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
-          ELSE
-            SET items = LEFT(items, LEN(items)-2) 
-            + '{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
-          WHERE uid = ${u.id}
+          WHERE uid = ${u.id} AND LEN(items) > 11;
+          -- for first entry
+          UPDATE user_likes
+          SET items = LEFT(items, LEN(items)-2) 
+            + '{"name":"${name}","id":"${pageContext.request.getParameter("id")}","type":"${pageContext.request.getParameter("type")}}]}'
+          WHERE uid = ${u.id} AND LEN(items) <= 11;
         </sql:update>
       </c:if>
       <c:if test='${pageContext.request.getParameter("like") == "false"}'>
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_dislikes
-          IF LEN(items) > 11
-            SET items = LEFT(items, LEN(items)-2) 
+          SET items = LEFT(items, LEN(items)-2) 
             + ',{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
-          ELSE
-            SET items = LEFT(items, LEN(items)-2) +
+          WHERE uid = ${u.id} AND LEN(items) > 11
+          -- for first entry
+          UPDATE user_dislikes
+          SET items = LEFT(items, LEN(items)-2) +
             + '{"name":"${name}","id":"${pageContext.request.getParameter("id")}"}]}'
-          WHERE uid = ${u.id}
+          WHERE uid = ${u.id} AND LEN(items) <= 11;
         </sql:update>
       </c:if>
     </c:if>
-    <%-- TODO add ability to remove items --%>
     <c:if test='${pageContext.request.getParameter("action") == "reset" && u.loggedIn}'>
       <sql:update dataSource="jdbc/MediaRecom">
         UPDATE user_likes
@@ -47,6 +48,12 @@
       </sql:update>
       <jsp:setProperty name="u" property="likeData" value="${null}" />
       <jsp:setProperty name="u" property="dislikeData" value="${null}" />
+    </c:if>
+    <c:if test='${pageContext.request.getParameter("action") == "remove" && u.loggedIn}'>
+      <%-- TODO implement group removal --%>
+    </c:if>
+    <c:if test='${pageContext.request.getParameter("action") == "check" && u.loggedIn}'>
+      <span id="checkres"><% out.println(u.checkList(request.getParameter("name"))); %></span>
     </c:if>
   </body>
 </html>

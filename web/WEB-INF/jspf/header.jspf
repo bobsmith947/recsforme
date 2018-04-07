@@ -30,9 +30,9 @@
             <span class="input-group-text">Type</span>
           </div>
           <select class="form-control mr-lg-2" name="type">
-            <option value="movie" selected>Movies/Series/Games</option>
-            <option value="artist">Artists</option>
-            <option value="album">Albums</option>
+            <option value="movie" selected>Movie/Show/Game</option>
+            <option value="artist">Artist</option>
+            <option value="album">Album</option>
           </select>
         </div>
         <button class="btn btn-outline-light" type="submit">Go!</button>
@@ -40,6 +40,9 @@
       <div id="icons" class="mt-2 mt-lg-0">
         <a class="text-light mr-2" href="https://twitter.com/champred69">
           <span class="fab fa-twitter"></span>
+        </a>
+        <a class="text-light mr-2" href="mailto:contact@recsfor.me">
+          <span class="fas fa-envelope"></span>
         </a>
         <a class="text-light mr-2" href="https://github.com/bobsmith947/recsforme">
           <span class="fab fa-github"></span>

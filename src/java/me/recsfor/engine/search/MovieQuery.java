@@ -32,7 +32,7 @@ public class MovieQuery extends AbstractQuery {
   private OmdbVideoFull info;
   private final OmdbParameters params;
   private static final OmdbApi CLIENT = new OmdbApi(System.getenv("OMDB_KEY"));
-  protected static final String CONTEXT = "MovieInfo?id=";
+  public static final String CONTEXT = "MovieInfo?id=";
 
   public MovieQuery() {
     super();

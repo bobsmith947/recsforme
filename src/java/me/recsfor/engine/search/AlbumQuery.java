@@ -36,7 +36,7 @@ public class AlbumQuery extends AbstractQuery {
   private boolean isNotGroup;
   private final ReleaseGroupIncludesWs2 groupInc;
   private final ReleaseIncludesWs2 releaseInc;
-  protected static final String CONTEXT = "AlbumInfo?id=";
+  public static final String CONTEXT = "AlbumInfo?id=";
 
   public AlbumQuery() {
     super();
