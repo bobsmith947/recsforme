@@ -45,7 +45,6 @@
             <url-pattern>/login.jsp</url-pattern>
             <url-pattern>/index.jsp</url-pattern>
             <url-pattern>/signup.jsp</url-pattern>
-            <url-pattern>/group.jsp</url-pattern>
             <url-pattern>/user.jsp</url-pattern>
             <page-encoding>UTF-8</page-encoding>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>

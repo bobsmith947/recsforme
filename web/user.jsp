@@ -25,7 +25,7 @@
           </li>
         </ul>
         <h2>Welcome to your temporary page.</h2>
-        <p>This page is unique to your browser, and is automatically populated with groups added to your likes or dislikes. If you sign up with an account, your lists will be saved in the cloud, able to be accessed anytime, anywhere.<p>
+        <p>This page is unique to your browser. If you sign up with an account, your lists will be saved in the cloud, able to be accessed anytime, anywhere.<p>
       </c:if>
       <c:if test="${u.loggedIn}">
         <ul class="nav justify-content-center">
@@ -34,7 +34,7 @@
           </li>
         </ul>
         <h2>Welcome to your page, <jsp:getProperty name="u" property="name" />.</h2>
-        <p>This page contains your cloud lists. If you have previously saved items locally, you will have to re-add them in order to be save them in the cloud. <code>localStorage</code> will be cleared upon logout, so be sure to be sure to add anything missing before logging out. The contents of <code>localStorage</code> can be viewed in your browser's developer console <kbd>F12</kbd>.</p>
+        <p>This page contains your cloud lists. Items that were saved prior to logging in were automatically synced with the cloud.</p>
       </c:if>
       <div id="list">
         <h3>Your likes:</h3>
@@ -42,8 +42,8 @@
         <h3>Your dislikes:</h3>
         <div class="list-group text-center my-2" id="dislikes"></div>
       </div>
-      <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear <code>localStorage</code>, you can use the below button to do so.</h6>
-      <button class="btn btn-danger btn-block my-3" type="reset" id="listreset">Reset your list</button>
+      <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear your lists, you can use the below button to do so.</h6>
+      <button class="btn btn-danger btn-block my-3" type="reset" id="listreset">Reset your lists</button>
     </main>
   </body>
 </html>

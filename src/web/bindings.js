@@ -89,8 +89,8 @@ $(() => {
         sendVote: function(form) {
           const voteData = new FormData(form);
           voteData.append("name", name);
-          voteData.append("type", type);
           voteData.append("id", id);
+          voteData.append("type", type);
           this.voted(true);
           this.status(voteData.get("status"));
           $.post("group.jsp", 
@@ -118,7 +118,11 @@ $(() => {
 
 function generateItem(name, id, type) {
   name = name.replace("'", "''");
-  return `{"name":"${name}","id":"${id}","type":"${type}"}`;
+  return JSON.stringify({
+    name: name,
+    id: id,
+    type: type
+  });
 }
   
 //https://stackoverflow.com/questions/7542586/new-formdata-application-x-www-form-urlencoded

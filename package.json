@@ -39,7 +39,9 @@
     "dependencies": {
         "@fortawesome/fontawesome-free-webfonts": "^1.0.4",
         "babel-polyfill": "6.26.0",
+        "bootstrap": "4.0.0",
         "browserslist": "^2.11.3",
+        "exports-loader": "^0.7.0",
         "knockout": "3.4.2",
         "moment": "^2.20.1"
     },

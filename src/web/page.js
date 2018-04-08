@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-import "babel-polyfill";
+//import "babel-polyfill";
 import moment from "moment/min/moment.min.js";
 import "./style.css";
+window.Util = require("exports-loader?Util!bootstrap/js/dist/util");
+import "bootstrap/js/dist/alert";
+import "bootstrap/js/dist/button";
+import "bootstrap/js/dist/collapse";
 import "@fortawesome/fontawesome-free-webfonts/css/fontawesome.css";
 import "@fortawesome/fontawesome-free-webfonts/css/fa-solid.css"
 import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 
 $(() => {
+  $("#warning").css("display", "none");
   $("body").addClass("bg-dark text-light");
   //add listener to expand images on click
   /*if (screen.width > 1024) {

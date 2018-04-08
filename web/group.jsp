@@ -14,12 +14,12 @@
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_likes
           SET items = LEFT(items, LEN(items)-2) 
-            + ',{${json}}]}'
+            + ',${json}]}'
           WHERE uid = ${u.id} AND LEN(items) > 11;
           -- for first entry
           UPDATE user_likes
           SET items = LEFT(items, LEN(items)-2) 
-            + '{${json}}]}'
+            + '${json}]}'
           WHERE uid = ${u.id} AND LEN(items) <= 11;
         </sql:update>
       </c:if>
@@ -27,12 +27,12 @@
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_dislikes
           SET items = LEFT(items, LEN(items)-2) 
-            + ',{${json}}]}'
+            + ',${json}]}'
           WHERE uid = ${u.id} AND LEN(items) > 11
           -- for first entry
           UPDATE user_dislikes
           SET items = LEFT(items, LEN(items)-2) +
-            + '{${json}}]}'
+            + '${json}]}'
           WHERE uid = ${u.id} AND LEN(items) <= 11;
         </sql:update>
       </c:if>
@@ -52,5 +52,6 @@
     <c:if test='${pageContext.request.getParameter("action") == "remove" && u.loggedIn}'>
       <%-- TODO implement group removal --%>
     </c:if>
+    <%-- TODO check for duplicates --%>
   </body>
 </html>

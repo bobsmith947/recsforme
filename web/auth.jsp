@@ -19,6 +19,39 @@
             <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
             <jsp:setProperty name="u" property="loggedIn" value="true" />
             <jsp:setProperty name="u" property="message" value="Successfully logged in." />
+            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+            <script type="text/javascript">
+              var i;
+              for (i = 0; i < localStorage.length; i++) {
+                var item = localStorage.key(i);
+                var group = JSON.parse(item);
+                switch (localStorage.getItem(item)) {
+                  case "like":
+                    Object.defineProperty(group, "status", 
+                                          {
+                                            configurable: false,
+                                            enumerable: true,
+                                            value: "like",
+                                            writable: false
+                                          });
+                    $.post("group.jsp", group);
+                    break;
+                  case "dislike":
+                    Object.defineProperty(group, "status", 
+                                          {
+                                            configurable: false,
+                                            enumerable: true,
+                                            value: "dislike",
+                                            writable: false
+                                          });
+                    $.post("group.jsp", group);
+                    break;
+                  default:
+                    console.log("Group not found.");
+                    break;
+                }
+              }
+            </script>
             <sql:query var="likesList" dataSource="jdbc/MediaRecom">
               SELECT items FROM user_likes
               WHERE uid = ${u.id}
@@ -28,7 +61,6 @@
               WHERE uid = ${u.id}
             </sql:query>
             <script type="text/javascript">
-              var i;
               var likes = JSON.parse('${likesList.getRowsByIndex()[0][0].replace("'", "\\'")}').list;
               var dislikes = JSON.parse('${dislikesList.getRowsByIndex()[0][0].replace("'", "\\'")}').list;
               for (i = 0; i < likes.length; i++)
