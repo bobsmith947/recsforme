@@ -13,18 +13,41 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 @charset "UTF-8";
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,500i,700&subset=cyrillic,greek,vietnamese');
-* {box-sizing: border-box}
-header, section, footer, aside, nav, main, article, figure {display: block}
-body {font-family: 'Roboto', sans-serif !important}
-h1, h2, h3, h4, h5, h6 {text-align: center !important}
-a:hover {text-decoration: none !important}
-p {text-indent: 50px !important}
-main {margin: 1% 25% !important}
+
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,400i,700&subset=cyrillic,cyrillic-ext,latin-ext");
+@import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css");
+
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Roboto', sans-serif !important;
+}
+h1, h2, h3, h4, h5, h6 {
+  text-align: center;
+}
+a:hover {
+  text-decoration: none !important;
+}
+p {
+  text-indent: 50px;
+}
+main {
+  margin: 1% 25%;
+}
 @media (max-width: 1024px) {
-  p {text-indent: 25px !important}
-  main {margin: 5% 5% !important}
+  p {
+    text-indent: 25px;
+  }
+  main {
+    margin: 5% 5%;
+  }
+}
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 .exp {
   display: block;
@@ -43,4 +66,7 @@ main {margin: 1% 25% !important}
   margin: auto;
   width: fit-content;
   -ms-width: 25%;
+}
+:disabled {
+  cursor: not-allowed;
 }

@@ -18,7 +18,7 @@ package me.recsfor.group;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import java.io.PrintWriter;
-//import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 //import java.io.UnsupportedEncodingException;
@@ -31,24 +31,27 @@ import me.recsfor.engine.search.MovieQuery;
  * For example, <code>MovieInfo?id=tt0083658</code> will generate a page for <i>Blade Runner</i>.
  * @author lkitaev
  */
-public class MovieInfo extends AbstractInfo {
+public class MovieInfo extends HttpServlet {
   private static final long serialVersionUID = -4184169288250689262L;
   private String title, year, type, plot;
-
-  @Override
+  /**
+   * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String id = request.getParameter("id");
     populate(id);
-    //request.setAttribute("name", title);
-    //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
-      out.println("<noscript class=\"alert alert-danger\">Scripts have been disabled. Some features may not work.</noscript><main>");
-      out.println("<h2 id=\"name\">" + title + " (" + year + ") - " + type 
-              + "<a class=\"ml-2\" href=\"https://imdb.com/title/"
-              + id + "\"><span class=\"fab fa-imdb\"></span></a></h2>");
+      out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
+      out.println("<h2 id=\"name\">" + title + " (" + year + ")</h2>");
+      out.println("<h3 id=\"type\">" + type + "<a class=\"ml-2\" href=\"https://imdb.com/title/"
+              + id + "\"><span class=\"fab fa-imdb\"></span></a></h3>");
       out.println("<p>" + plot + "</p>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       out.println("</main>");
@@ -56,14 +59,39 @@ public class MovieInfo extends AbstractInfo {
       out.println("</body></html>");
     }
   }
-  
+  /**
+   * Handles the HTTP <code>GET</code> method.
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    processRequest(request, response);
+  }
+  /**
+   * Handles the HTTP <code>POST</code> method.
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    processRequest(request, response);
+  }
+  /**
+   * Returns a short description of the servlet.
+   * @return a String containing servlet description
+   */
   @Override
   public String getServletInfo() {
     return "Provides information for movie/TV show groups.";
   }
   /**
-   * Gives values to instance variables.
-   * @param id the movie/series id
+   * Gives values to instance variables using a movie query.
+   * @param id the id of the movie
    */
   private void populate(String id) {
     MovieQuery query = new MovieQuery(id, true, "full");

@@ -13,31 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.recsfor.engine.recommend;
+package me.recsfor.app;
 
-import java.util.LinkedHashMap;
+import java.io.Serializable;
 
 /**
- * Abstract class containing the essential fields for recommendations.
+ * Defines the content of user like and dislike lists.
  * @author lkitaev
  */
-public abstract class AbstractRec {
-  protected String name, id;
-  protected boolean status;
-  protected LinkedHashMap<String, String> recs;
+public class ListModel implements Serializable {
+  private static final long serialVersionUID = -3414177256146753331L;
+  private String name;
+  private String id;
+  private String type;
   
-  public AbstractRec() {
+  public ListModel() {
     name = "";
     id = "";
-    status = false;
-    recs = null;
+    type = "";
   }
   
-  public AbstractRec(String name, String id, boolean like) {
+  public ListModel(String name, String id, String type) {
     this.name = name;
     this.id = id;
-    status = like;
-    recs = new LinkedHashMap<>();
+    this.type = type;
   }
   /**
    * @return the name
@@ -62,23 +61,17 @@ public abstract class AbstractRec {
    */
   public void setId(String id) {
     this.id = id;
+  }  
+  /**
+   * @return the type
+   */
+  public String getType() {
+    return type;
   }
   /**
-   * @return the status
+   * @param type the type to set
    */
-  public boolean getStatus() {
-    return status;
-  }
-  /**
-   * @return the recs
-   */
-  public LinkedHashMap<String, String> getRecs() {
-    return recs;
-  }
-  /**
-   * @param recs the recs to set
-   */
-  public void setRecs(LinkedHashMap<String, String> recs) {
-    this.recs = recs;
+  public void setType(String type) {
+    this.type = type;
   }
 }

@@ -14,10 +14,6 @@
         <servlet-name>AlbumInfo</servlet-name>
         <servlet-class>me.recsfor.group.AlbumInfo</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>GroupVote</servlet-name>
-        <servlet-class>me.recsfor.group.GroupVote</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>MovieInfo</servlet-name>
         <url-pattern>/MovieInfo</url-pattern>
@@ -29,10 +25,6 @@
     <servlet-mapping>
         <servlet-name>AlbumInfo</servlet-name>
         <url-pattern>/AlbumInfo</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>GroupVote</servlet-name>
-        <url-pattern>/GroupVote</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -50,12 +42,19 @@
     <jsp-config>
         <jsp-property-group>
             <url-pattern>/search.jsp</url-pattern>
+            <url-pattern>/login.jsp</url-pattern>
             <url-pattern>/index.jsp</url-pattern>
-            <url-pattern>/group.jsp</url-pattern>
-            <url-pattern>/WEB-INF/500.jsp</url-pattern>
-            <url-pattern>/WEB-INF/404.jsp</url-pattern>
+            <url-pattern>/signup.jsp</url-pattern>
             <url-pattern>/user.jsp</url-pattern>
             <page-encoding>UTF-8</page-encoding>
+            <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
+            <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
+        </jsp-property-group>
+        <jsp-property-group>
+            <url-pattern>/WEB-INF/500.jsp</url-pattern>
+            <url-pattern>/WEB-INF/404.jsp</url-pattern>
+            <el-ignored>true</el-ignored>
+            <scripting-invalid>true</scripting-invalid>
             <include-prelude>/WEB-INF/jspf/header.jspf</include-prelude>
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>

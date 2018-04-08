@@ -15,8 +15,8 @@
  */
 
 /**
- * This package provides functionality to retrieve data using the appropriate API (OMDb or MusicBrainz) for generating search results and group pages.
- * Classes can be interacted with from the frontend in <code>search.jsp</code> where a <code>QueryBean</code> is instantiated.
+ * This package provides functionality for application logic.
+ * Handles user login/logout and database interaction.
  */
 
-package me.recsfor.engine.search;
+package me.recsfor.app;

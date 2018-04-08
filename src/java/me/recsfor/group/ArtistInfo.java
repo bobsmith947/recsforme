@@ -18,7 +18,7 @@ package me.recsfor.group;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-//import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 //import java.io.UnsupportedEncodingException;
@@ -30,29 +30,33 @@ import org.musicbrainz.modelWs2.Entity.ReleaseGroupWs2;
 import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
 /**
  * A servlet to build group pages for artists.
- * It can process <code>HTTP GET</code> and <code>POST</code> by being given a request parameter (named <code>id</code>) containing the MusicBrainz ID of the respective <code>artist</code>.
+ * It can process <code>HTTP GET</code> and <code>POST</code> requests by being given a request parameter (named <code>id</code>) containing the MusicBrainz ID of the respective <code>artist</code>.
  * For example, <code>ArtistInfo?id=056e4f3e-d505-4dad-8ec1-d04f521cbb56</code> will generate a page for Daft Punk.
  * @author lkitaev
  */
-public class ArtistInfo extends AbstractInfo {
+public class ArtistInfo extends HttpServlet {
   private static final long serialVersionUID = -8210213618927548383L;
   private String name, type;
   private String[] years;
   private List<ReleaseGroupWs2> albums;
   private List<ReleaseWs2> contrib;
-
-  @Override
+  /**
+   * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     String id = request.getParameter("id");
     populate(id);
-    //request.setAttribute("name", name);
-    //request.setAttribute("type", GROUP_TYPE);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + name + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
-      out.println("<noscript class=\"alert alert-danger\">Scripts have been disabled. Some features may not work.</noscript><main>");
-      out.println("<h2>" + name + " - " + type + "</h2>");
+      out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
+      out.println("<h2 id=\"name\">" + name + "</h2>");
+      out.println("<h3 id=\"type\">" + type + "</h3>");
       String term;
       switch (type) {
         case "Person":
@@ -68,6 +72,7 @@ public class ArtistInfo extends AbstractInfo {
       out.println("<h3>" + term + ": <span class=\"date\">" + years[0] 
               + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");
       //TODO order release groups by date
+      //TODO print out more entries
       out.println("<h3>Discography:</h3><div class=\"list-group text-right my-2\">");
       albums.forEach(album -> out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
               + album.getId() + "\"><h5 class=\"mb-0\">" + album.getTitle()  
@@ -85,14 +90,39 @@ public class ArtistInfo extends AbstractInfo {
       out.println("</body></html>");
     }
   }
-  
+  /**
+   * Handles the HTTP <code>GET</code> method.
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
+  @Override
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    processRequest(request, response);
+  }
+  /**
+   * Handles the HTTP <code>POST</code> method.
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    processRequest(request, response);
+  }
+  /**
+   * Returns a short description of the servlet.
+   * @return a String containing servlet description
+   */
   @Override
   public String getServletInfo() {
     return "Provides information for artist groups.";
   }
   /**
-   * Gives values to instance variables.
-   * @param id the artist id
+   * Gives values to instance variables using an artist query.
+   * @param id the id of the artist
    */
   private void populate(String id) {
     ArtistQuery query = new ArtistQuery(id, true);

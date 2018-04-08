@@ -33,9 +33,7 @@ public class QueryBean implements Serializable {
   private String context;
   private transient AbstractQuery delegation;
   private final PropertyChangeSupport propertySupport;
-  /**
-   * Default constructor called when instantiated in a JSP.
-   */
+  
   public QueryBean() {
     propertySupport = new PropertyChangeSupport(this);
     query = "";
@@ -43,6 +41,14 @@ public class QueryBean implements Serializable {
     type = "movie";
     context = MovieQuery.CONTEXT;
     delegation = new MovieQuery();
+  }
+  
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
+    propertySupport.addPropertyChangeListener(listener);
+  }
+
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    propertySupport.removePropertyChangeListener(listener);
   }
   /**
    * @return the query
@@ -62,7 +68,8 @@ public class QueryBean implements Serializable {
    * @return the type
    */
   public String getType() {
-    return capitalize(type); //format as title case so it displays nicely
+    //format as title case so it displays nicely
+    return capitalize(type);
   }
   /**
    * @param type the type to set
@@ -100,18 +107,9 @@ public class QueryBean implements Serializable {
     this.delegation = delegation;
     propertySupport.firePropertyChange(PROP_DELEGATION, oldDelegation, delegation);
   }
-
-  public void addPropertyChangeListener(PropertyChangeListener listener) {
-    propertySupport.addPropertyChangeListener(listener);
-  }
-
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
-    propertySupport.removePropertyChangeListener(listener);
-  }
   /**
    * Creates a MovieQuery that can be referenced from a JSP.
-   * @deprecated
-   * Use delegateQuery() instead
+   * @deprecated Use delegateQuery() instead
    * @return a new MovieQuery with the instance query
    */
   @Deprecated
@@ -120,8 +118,7 @@ public class QueryBean implements Serializable {
   }
   /**
    * Creates an ArtistQuery that can be referenced from a JSP.
-   * @deprecated
-   * Use delegateQuery() instead
+   * @deprecated Use delegateQuery() instead
    * @return a new AlbumQuery with the instance query
    */
   @Deprecated
@@ -130,8 +127,7 @@ public class QueryBean implements Serializable {
   }
   /**
    * Creates an AlbumQuery that can be referenced from a JSP.
-   * @deprecated
-   * Use delegateQuery() instead
+   * @deprecated Use delegateQuery() instead
    * @return a new AlbumQuery with the instance query
    */
   @Deprecated
@@ -139,7 +135,7 @@ public class QueryBean implements Serializable {
     return new AlbumQuery(query);
   }
   /**
-   * Creates the proper query based on <code>type</code>.
+   * Creates an instance the proper query based on the <code>type</code>.
    * Can be used to reference queries from a JSP.
    * @return a new child instance of an AbstractQuery with the instance query
    */
