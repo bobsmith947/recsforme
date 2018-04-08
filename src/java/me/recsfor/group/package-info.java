@@ -15,10 +15,11 @@
  */
 
 /**
- * This package provides functionality to dynamically generate group pages using <code>HTTP GET</code> and <code>POST</code> requests.
- * The servlets are registered in the <code>web.xml</code> file, and do no have any initialization parameters.
- * Query strings are to be formatted with an <code>id</code> parameter set to the group ID.
- * This process can be initiated from the frontend by selecting a result on the <code>search.jsp</code> page.
+ * This package provides functionality to dynamically generate group pages using servlets.
+ * Servlets are registered in <code>web.xml</code>, and do not have any initialization parameters.
+ * Both <code>GET</code> and <code>POST</code> requests work, but the former is recommended.
+ * Requests are formatted with an <code>id</code> parameter set to the group ID.
+ * This process can be initiated from the frontend by selecting a result on <code>search.jsp</code>.
  */
 
 package me.recsfor.group;

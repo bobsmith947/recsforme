@@ -15,8 +15,11 @@
  */
 
 /**
- * This package provides functionality for generating recommendations based on <code>POST</code> requests made to servlets in the <code>group</code> package.
- * Recommendations are primarily based on similarities between users' sets of likes and dislikes.
+ * This package provides functionality for generating recommendations.
+ * <code>POST</code> requests made to servlets will trigger recommendation generation.
+ * Recommendations are primarily based on similarities between sets of user likes and dislikes.
+ * Similarity coefficients are calculated, and the most similar sets for each user are intersected.
+ * Recommendations can be generated once per day on-demand.
  */
 
 package me.recsfor.engine.recommend;

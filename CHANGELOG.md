@@ -1,5 +1,16 @@
 # recsforme changelog
 
+## April 8, 2018 - Beta Release
+
+It's been almost a month since the last release. This is the first beta, although the "recs" part of recsforme has been cut from the original roadmap in the interest of time. Pretty much everything else has been improved upon though. Here are some highlights:
+
+* Bootstrap styling so that you don't have to deal with my terrible CSS
+* Added some icons because why not
+* Bundled everything except jQuery. There will be a warning if the jQuery script cannot be loaded
+* Removed polyfills to save on space in the bundle. These may come back though
+* Added lots of new pages to allow for users to register and whatnot
+* Added the `app` package to deal with stuff like password encryption and user accounts
+
 ## March 9, 2018 - Alpha Release
 
 **Fixed:**

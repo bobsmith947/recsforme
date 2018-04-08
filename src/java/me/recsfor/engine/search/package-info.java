@@ -15,8 +15,10 @@
  */
 
 /**
- * This package provides functionality to retrieve data using the appropriate API (OMDb or MusicBrainz) for generating search results and group pages.
- * Classes can be interacted with from the frontend in <code>search.jsp</code> where a <code>QueryBean</code> is instantiated.
+ * This package provides functionality to process query data.
+ * The appropriate API (OMDb or MusicBrainz) is used for generating search results and group pages.
+ * Once a <code>GET</code> request has been sent to <code>search.jsp</code>, a <code>QueryBean</code> is instantiated.
+ * Search results will automatically link to their appropriate servlet.
  */
 
 package me.recsfor.engine.search;
