@@ -77,37 +77,35 @@ $(() => {
       ko.applyBindings(logInModel);
     }
     if (location.pathname.includes("Info")) {
-      const group = $("#name").text();
+      const name = $("#name").text();
       const type = $("#type").text();
       const id = location.search.substring(4);
+      const json = generateItem(name, id, type);
+      const vote = localStorage.getItem(json);
       let voteModel = {
         selected: ko.observable(false),
-        voted: ko.observable(checkGroup(group)),
+        voted: ko.observable(vote !== null),
+        status: ko.observable(vote),
         sendVote: function(form) {
           const voteData = new FormData(form);
-          voteData.append("name", group);
+          voteData.append("name", name);
           voteData.append("type", type);
           voteData.append("id", id);
           this.voted(true);
+          this.status(voteData.get("status"));
           $.post("group.jsp", 
                 encodeFormData(voteData));
-          localStorage.setItem(group, this.status());
+          localStorage.setItem(json, this.status());
         },
         undoVote: function() {
-          try {
-            localStorage.removeItem(group);
-          } catch (ex) {
-            console.log(ex);
-            console.log("Group not found.");
-          } finally {
-            $.get("group.jsp", 
-              {
-                action: "remove",
-                name: group
-              });
-          }
-          this.voted(false);
-          this.selected(false);
+          localStorage.removeItem(json);
+          $.get("group.jsp", 
+            {
+              action: "remove",
+              name: name
+            });
+        this.voted(false);
+        this.selected(false);
         }
       };
       ko.applyBindings(voteModel);
@@ -118,46 +116,11 @@ $(() => {
   }
 });
 
-/*function isLike(str) {
-  switch (str) {
-    case "true":
-      return "like";
-      break;
-    case "false":
-      return "dislike";
-      break;
-    default:
-      return "either like or dislike";
-      break;
-  }
-}*/
-
-function checkGroup(group) {
-  if (localStorage.getItem(group) !== null)
-    return true;
-  else {
-    let res;
-    $.get("group.jsp",
-          {
-            action: "check",
-            name: group
-          },
-          response => res = $(response).text());
-    switch (res) {
-      case "exists":
-        return true;
-        break;
-      case "does not exist":
-        return false;
-        break;
-      default:
-        console.log("Something went wrong.");
-        return false;
-        break;
-    }
-  }
+function generateItem(name, id, type) {
+  name = name.replace("'", "''");
+  return `{"name":"${name}","id":"${id}","type":"${type}"}`;
 }
-
+  
 //https://stackoverflow.com/questions/7542586/new-formdata-application-x-www-form-urlencoded
 function encodeFormData(fd) {
   let params = new URLSearchParams();

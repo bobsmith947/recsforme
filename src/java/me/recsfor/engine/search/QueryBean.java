@@ -109,8 +109,7 @@ public class QueryBean implements Serializable {
   }
   /**
    * Creates a MovieQuery that can be referenced from a JSP.
-   * @deprecated
-   * Use delegateQuery() instead
+   * @deprecated Use delegateQuery() instead
    * @return a new MovieQuery with the instance query
    */
   @Deprecated
@@ -119,8 +118,7 @@ public class QueryBean implements Serializable {
   }
   /**
    * Creates an ArtistQuery that can be referenced from a JSP.
-   * @deprecated
-   * Use delegateQuery() instead
+   * @deprecated Use delegateQuery() instead
    * @return a new AlbumQuery with the instance query
    */
   @Deprecated
@@ -129,8 +127,7 @@ public class QueryBean implements Serializable {
   }
   /**
    * Creates an AlbumQuery that can be referenced from a JSP.
-   * @deprecated
-   * Use delegateQuery() instead
+   * @deprecated Use delegateQuery() instead
    * @return a new AlbumQuery with the instance query
    */
   @Deprecated

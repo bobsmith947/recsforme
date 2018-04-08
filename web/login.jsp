@@ -44,21 +44,12 @@
             <small class="form-text text-muted">
               Enter the email address that you signed up for the account named <strong data-bind="text:name()"></strong> with.
             </small>
-            <small class="form-text text-muted">If you did not sign up with an email, you'll be unable to reset your password.</small>
+            <small class="form-text text-muted">If you did not sign up with an email, you cannot reset your password.</small>
           </div>
           <div data-bind="visible:email()!==''" class="form-group">
             <label for="npw">New Password</label>
             <input data-bind="textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" maxlength="36" required>
-            <small class="form-text text-muted">Don't use the same password you use elsewhere!</small>
-            <div class="text-info">
-              <span>Your password must:</span>
-              <ul>
-                <li>Be between 8 and 36 characters</li>
-                <li>Contain at least one uppercase, one lowercase, one numeric, and one special character</li>
-                <li>Not contain your username</li>
-                <li>Not contain your date of birth</li>
-              </ul>
-            </div>
+            <small class="form-text text-muted">Enter a secure password you don't use elsewhere.</small>
             <label for="cpw">Confirm Password</label>
             <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
           </div>

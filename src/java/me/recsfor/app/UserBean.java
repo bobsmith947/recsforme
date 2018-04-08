@@ -18,38 +18,29 @@ package me.recsfor.app;
 import java.beans.*;
 import java.io.Serializable;
 /**
- * JavaBeans component to store data of logged in users.
+ * JavaBeans component to store user data.
  * @author lkitaev
  */
 public class UserBean implements Serializable {
   private static final long serialVersionUID = 2857157327400526226L;
   public static final String PROP_NAME = "name";
-  public static final String PROP_PASS = "pass";
   public static final String PROP_ID = "id";
   public static final String PROP_LOGGEDIN = "loggedIn";
   public static final String PROP_MESSAGE = "message";
   public static final String PROP_TRIES = "tries";
-  public static final String PROP_LIKEDATA = "likeData";
-  public static final String PROP_DISLIKEDATA = "dislikeData";
   private String name;
-  private String pass;
   private int id;
   private boolean loggedIn;
   private short tries;
   private String message;
-  private ListData likeData;
-  private ListData dislikeData;
   private final PropertyChangeSupport propertySupport;
   
   public UserBean() {
     name = "";
-    pass = "";
     id = -1;
     loggedIn = false;
     message = null;
     tries = 0;
-    likeData = null;
-    dislikeData = null;
     propertySupport = new PropertyChangeSupport(this);
   }
   
@@ -73,20 +64,6 @@ public class UserBean implements Serializable {
     String oldName = this.name;
     this.name = name;
     propertySupport.firePropertyChange(PROP_NAME, oldName, name);
-  }
-  /**
-   * @return the pass
-   */
-  public String getPass() {
-    return pass;
-  }
-  /**
-   * @param pass the pass to set
-   */
-  public void setPass(String pass) {
-    String oldPass = this.pass;
-    this.pass = pass;
-    propertySupport.firePropertyChange(PROP_PASS, oldPass, pass);
   }
   /**
    * @return the id
@@ -143,49 +120,5 @@ public class UserBean implements Serializable {
     short oldTries = this.tries;
     this.tries = tries;
     propertySupport.firePropertyChange(PROP_TRIES, oldTries, tries);
-  }
-  /**
-   * @return the likeData
-   */
-  public ListData getLikeData() {
-    return likeData;
-  }
-  /**
-   * @param likeData the likeData to set
-   */
-  public void setLikeData(ListData likeData) {
-    ListData oldLikeData = this.likeData;
-    this.likeData = likeData;
-    propertySupport.firePropertyChange(PROP_LIKEDATA, oldLikeData, likeData);
-  }
-  /**
-   * @return the dislikeData
-   */
-  public ListData getDislikeData() {
-    return dislikeData;
-  }
-  /**
-   * @param dislikeData the dislikeData to set
-   */
-  public void setDislikeData(ListData dislikeData) {
-    ListData oldDislikeData = this.dislikeData;
-    this.dislikeData = dislikeData;
-    propertySupport.firePropertyChange(PROP_DISLIKEDATA, oldDislikeData, dislikeData);
-  }
-  
-  public String checkList(String name) {
-    ListModel[] likes = new ListModel[0];
-    ListModel[] dislikes = new ListModel[0];
-    likes = likeData.getList().toArray(likes);
-    dislikes = dislikeData.getList().toArray(dislikes);
-    for (ListModel item : likes) {
-      if (item.getName().equals(name))
-        return "exists";
-    }
-    for (ListModel item : dislikes) {
-      if (item.getName().equals(name))
-        return "exists";
-    }
-    return "does not exist";
   }
 }

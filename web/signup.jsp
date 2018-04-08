@@ -17,15 +17,6 @@
           <label for="pw">Password</label>
           <input data-bind="textInput:pw" type="password" class="form-control" id="pw" name="pw" placeholder="Enter a secure password" minlength="8" required>
           <small class="form-text text-muted">Don't use the same password you use elsewhere!</small>
-          <div class="text-info">
-            <span>Your password must:</span>
-            <ul>
-              <li>Be at least 8 characters</li>
-              <li>Contain at least one uppercase, one lowercase, one numeric, and one special character</li>
-              <li>Not contain your username</li>
-              <li>Not contain your date of birth</li>
-            </ul>
-          </div>
           <input data-bind="enable:pw().length>=8,textInput:pwc" type="password" class="form-control" placeholder="Confirm your password" required>
         </div>
         <h5>Optional Fields</h5>

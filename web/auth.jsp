@@ -8,7 +8,6 @@
     <c:if test='${pageContext.request.getParameter("action") == null}'>
       <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
       <jsp:setProperty name="u" property="name" value='<%= request.getParameter("uname") %>' />
-      <jsp:setProperty name="u" property="pass" value='<%= request.getParameter("pw") %>' />
       <em>Authenticating your user...</em>
       <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
         SELECT id, pw, salt FROM users
@@ -16,11 +15,30 @@
       </sql:query>
       <c:choose>
         <c:when test="${matches.getRowCount() == 1}">
-          <c:if test="${CredentialEncryption.validatePassword(u.pass, matches.getRowsByIndex()[0][1], matches.getRowsByIndex()[0][2])}" var="correct">
+          <c:if test='${CredentialEncryption.validatePassword(pageContext.request.getParameter("pw"),matches.getRowsByIndex()[0][1],matches.getRowsByIndex()[0][2])}' var="correct">
             <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
             <jsp:setProperty name="u" property="loggedIn" value="true" />
             <jsp:setProperty name="u" property="message" value="Successfully logged in." />
-            <c:redirect url="user.jsp" />
+            <sql:query var="likesList" dataSource="jdbc/MediaRecom">
+              SELECT items FROM user_likes
+              WHERE uid = ${u.id}
+            </sql:query>
+            <sql:query var="dislikesList" dataSource="jdbc/MediaRecom">
+              SELECT items FROM user_dislikes
+              WHERE uid = ${u.id}
+            </sql:query>
+            <script type="text/javascript">
+              var i;
+              var likes = JSON.parse('${likesList.getRowsByIndex()[0][0].replace("'", "\\'")}').list;
+              var dislikes = JSON.parse('${dislikesList.getRowsByIndex()[0][0].replace("'", "\\'")}').list;
+              for (i = 0; i < likes.length; i++)
+                localStorage.setItem(JSON.stringify(likes[i]), "like");
+              for (i = 0; i < dislikes.length; i++)
+                localStorage.setItem(JSON.stringify(dislikes[i]), "dislike");
+              console.log("localStorage populated.");
+              window.open("user.jsp", "_self");
+            </script>
+            <%--<c:redirect url="user.jsp" />--%>
           </c:if>
           <c:if test="${!correct}">
             <jsp:setProperty name="u" property="message" value="The password you entered is incorrect." />
@@ -46,8 +64,8 @@
         UPDATE users
         SET pw = '<%= cred.getHash() %>', 
           salt = '<%= cred.getSalt() %>'
-        WHERE uname = '<c:out value='${pageContext.request.getParameter("name")}' />'
-        AND email = '<c:out value='${pageContext.request.getParameter("email")}' />'
+        WHERE uname = '<%= request.getParameter("name") %>'
+        AND email = '<%= request.getParameter("email") %>'
       </sql:update>
       <c:choose>
         <c:when test="${updated == 1}">

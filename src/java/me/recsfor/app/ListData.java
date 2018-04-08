@@ -19,12 +19,11 @@ import java.io.Serializable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
-//import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.recsfor.engine.search.*;
-
 /**
  * Converts user like and dislike data from JavaScript Object Notation (JSON) to a Java object.
  * @author lkitaev
@@ -36,10 +35,26 @@ public class ListData implements Serializable {
   public ListData() {
     list = null;
   }
+  
+  public ListData(LinkedList<ListModel> list) {
+    this.list = list;
+  }
   /**
-   * Maps parsed JSON data to an instance of a <code>ListData</code> object.
+   * @return the list
+   */
+  public LinkedList<ListModel> getList() {
+    return list;
+  }
+  /**
+   * @param list the list to set
+   */
+  public void setList(LinkedList<ListModel> list) {
+    this.list = list;
+  }
+  /**
+   * Maps JSON data to an instance of a <code>ListData</code> object.
    * @param json the data to parse
-   * @return a Java representation of the data
+   * @return the data as a Java object
    * @throws IOException if a problem occurs when reading the input
    */  
   public static ListData mapData(String json) throws IOException {
@@ -47,7 +62,6 @@ public class ListData implements Serializable {
     ListData data;
     try {
       data = mapper.readValue(json, ListData.class);
-      System.out.println(data.toString());
     } catch (JsonMappingException | JsonParseException e) {
       data = new ListData();
       System.err.println(Arrays.toString(e.getStackTrace()));
@@ -111,28 +125,23 @@ public class ListData implements Serializable {
     }
   }
   /**
-   * @return the list
+   * Creates a JSON string representing a group.
+   * @param name the group name
+   * @param id the group id
+   * @param type the group type
+   * @return the item
    */
-  public LinkedList<ListModel> getList() {
-    return list;
-  }
-  /**
-   * @param list the list to set
-   */
-  public void setList(LinkedList<ListModel> list) {
-    this.list = list;
-  }
-  
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    list.stream().forEach(item -> {
-      sb.append("name: ")
-              .append(item.getName())
-              .append("\t id: ")
-              .append(item.getId())
-              .append("\n");
-    });
-    return sb.toString();
+  public static String generateItem(String name, String id, String type) {
+    name = name.replace("'", "''");
+    ListModel item = new ListModel(name, id, type);
+    String ret;
+    ObjectMapper mapper = new ObjectMapper();
+    try {
+      ret = mapper.writeValueAsString(item);
+    } catch (JsonProcessingException e) {
+      ret = e.getMessage();
+      System.err.println(Arrays.toString(e.getStackTrace()));
+    }
+    return ret;
   }
 }

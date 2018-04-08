@@ -45,13 +45,15 @@ $(() => {
   if (location.pathname.includes("user.jsp")) {
     //add groups
     for (var i = 0; i < localStorage.length; i++) {
-      const group = localStorage.key(i);
-      switch (localStorage.getItem(group)) {
+      const item = localStorage.key(i);
+      const group = JSON.parse(item);
+      const context = generateContext(group.type);
+      switch (localStorage.getItem(item)) {
         case "like":
-          $("#likes").append(`<a href="#" class="list-group-item list-group-item-action">${group}</a>`);
+          $("#likes").append(`<a href="${context}${group.id}" class="list-group-item list-group-item-action">${group.name}</a>`);
           break;
         case "dislike":
-          $("#dislikes").append(`<a href="#" class="list-group-item list-group-item-action">${group}</a>`);
+          $("#dislikes").append(`<a href="${context}${group.id}" class="list-group-item list-group-item-action">${group.name}</a>`);
           break;
         default:
           console.log("Group not found.");
@@ -89,8 +91,8 @@ $(() => {
     });
   }
 });
-/*
-function expandImg(ev) {
+
+/*function expandImg(ev) {
   const elem = ev.target;
   const w = elem.naturalWidth;
   switch (elem.style.width) {
@@ -106,5 +108,78 @@ function expandImg(ev) {
       elem.title = "Click to expand.";
       break;
   }
+}*/
+
+function generateContext(type) {
+  const movie = "MovieInfo?id=";
+  const artist = "ArtistInfo?id=";
+  const album = "AlbumInfo?id=";
+  switch (type.toLowerCase()) {
+    case "movie":
+      return movie;
+      break;
+    case "series":
+      return movie;
+      break;
+    case "game":
+      return movie;
+      break;
+    case "person":
+      return artist;
+      break;
+    case "group":
+      return artist;
+      break;
+    case "orchestra":
+      return artist;
+      break;
+    case "choir":
+      return artist;
+      break;
+    case "character":
+      return artist;
+      break;
+    case "album":
+      return album;
+      break;
+    case "single":
+      return album;
+      break;
+    case "ep":
+      return album;
+      break;
+    case "broadcast":
+      return album;
+      break;
+    case "compilation":
+      return album;
+      break;
+    case "soundtrack":
+      return album;
+      break;
+    case "spokenword":
+      return album;
+      break;
+    case "interview":
+      return album;
+      break;
+    case "audiobook":
+      return album;
+      break;
+    case "live":
+      return album;
+      break;
+    case "remix":
+      return album;
+      break;
+    case "dj-mix":
+      return album;
+      break;
+    case "mixtape/street":
+      return album;
+      break;
+    default:
+      return "search.jsp?query=";
+      break;
+  }
 }
-*/

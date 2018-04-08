@@ -27,12 +27,12 @@
         <% CredentialEncryption cred = new CredentialEncryption(request.getParameter("pw")); %>
         <sql:update dataSource="jdbc/MediaRecom">
           INSERT INTO users (uname, pw, joined, sex, dob, email, salt)
-          VALUES ('<c:out value='${pageContext.request.getParameter("uname")}' />', 
+          VALUES ('<%= request.getParameter("uname") %>', 
                   '<%= cred.getHash() %>', 
-                  '<c:out value='${LocalDate.now()}' />', 
-                  '<c:out value='${pageContext.request.getParameter("sex")}' />', 
-                  '<c:out value='${pageContext.request.getParameter("dob")}' />', 
-                  '<c:out value='${pageContext.request.getParameter("email")}' />',
+                  '<%= LocalDate.now() %>', 
+                  '<%= request.getParameter("sex") %>', 
+                  '<%= request.getParameter("dob") %>', 
+                  '<%= request.getParameter("email") %>',
                   '<%= cred.getSalt() %>')
         </sql:update>
         <sql:query var="newUser" dataSource="jdbc/MediaRecom">

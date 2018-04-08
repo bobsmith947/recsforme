@@ -63,6 +63,30 @@ public class CredentialEncryption {
     hash = generateHash();
   }
   /**
+   * @return the salt
+   */
+  public String getSalt() {
+    return salt;
+  }
+  /**
+   * @return the hash
+   */
+  public String getHash() {
+    return hash;
+  }
+  /**
+   * @return the iterations
+   */
+  public static int getIterations() {
+    return iterations;
+  }
+  /**
+   * @param num the number of iterations to set
+   */
+  public static void setIterations(int num) {
+    iterations = num;
+  }
+  /**
    * Creates a random 128-bit (32 character) salt to use for hashing.
    * @return the new salt
    * @throws NoSuchAlgorithmException if there is no suitable random number generator
@@ -88,7 +112,7 @@ public class CredentialEncryption {
     return Hex.encodeHexString(enc);
   }
   /**
-   * Determines whether a password matches its stored hash, using the generated salt for the user.
+   * Static method to determine whether a password matches its stored hash, using the generated salt for the user.
    * @param testPass the password to check
    * @param storedHash the known correct password hash
    * @param storedSalt the user's salt
@@ -97,39 +121,31 @@ public class CredentialEncryption {
    * @throws InvalidKeySpecException if the key specification is wrong
    * @throws DecoderException if the hashes can not be converted
    */
-  public static boolean validatePassword(String testPass, String storedHash, String storedSalt) 
-          throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
+  public static boolean validatePassword(String testPass, String storedHash, String storedSalt) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
     CredentialEncryption testCred = new CredentialEncryption(testPass, storedSalt);
-    byte[] testHash = Hex.decodeHex(testCred.generateHash().toCharArray());
-    byte[] hash = Hex.decodeHex(storedHash.toCharArray());
-    int diff = hash.length ^ testHash.length;
-    for (int i = 0; i < hash.length && i < testHash.length; i++) {
-      diff |= hash[i] ^ testHash[i];
+    byte[] testHash = Hex.decodeHex(testCred.getHash().toCharArray());
+    byte[] knownHash = Hex.decodeHex(storedHash.toCharArray());
+    int diff = knownHash.length ^ testHash.length;
+    for (int i = 0; i < knownHash.length && i < testHash.length; i++) {
+      diff |= knownHash[i] ^ testHash[i];
     }
     return diff == 0;
   }
   /**
-   * @return the pass
+   * Instance method to determine whether a password matches its stored hash, using the generated salt for the user.
+   * @param storedHash the known correct password hash
+   * @return whether or not the password is correct
+   * @throws NoSuchAlgorithmException if the test password can not be encrypted
+   * @throws InvalidKeySpecException if the key specification is wrong
+   * @throws DecoderException if the hashes can not be converted
    */
-  protected String getPass() {
-    return pass;
-  }
-  /**
-   * @return the salt
-   */
-  public String getSalt() {
-    return salt;
-  }
-  /**
-   * @return the hash
-   */
-  public String getHash() {
-    return hash;
-  }
-  /**
-   * @return the iterations
-   */
-  public static int getIterations() {
-    return iterations;
+  public boolean validatePassword(String storedHash) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
+    byte[] testHash = Hex.decodeHex(hash.toCharArray());
+    byte[] knownHash = Hex.decodeHex(storedHash.toCharArray());
+    int diff = knownHash.length ^ testHash.length;
+    for (int i = 0; i < knownHash.length && i < testHash.length; i++) {
+      diff |= knownHash[i] ^ testHash[i];
+    }
+    return diff == 0;
   }
 }

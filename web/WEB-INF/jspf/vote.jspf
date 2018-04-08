@@ -4,11 +4,11 @@
     <div id="vote-radio">
       <div class="form-check form-check-inline mx-3">
         <label class="form-check-label" for="yes">Yes</label>
-        <input class="form-check-input m-0" id="yes" type="radio" value="true" name="like" data-bind="checked:selected" required>
+        <input class="form-check-input m-0" id="yes" type="radio" value="like" name="status" data-bind="checked:selected" required>
       </div>
       <div class="form-check form-check-inline mx-3">
         <label class="form-check-label" for="no">No</label>
-        <input class="form-check-input m-0" id="no" type="radio" value="false" name="like" data-bind="checked:selected" required>
+        <input class="form-check-input m-0" id="no" type="radio" value="dislike" name="status" data-bind="checked:selected" required>
       </div>
     </div>
     <button class="btn btn-success btn-block my-3" type="submit" data-bind="enable:selected" disabled>Submit</button>
@@ -16,5 +16,6 @@
 </div>
 <div id="vote-div" style="display:none" data-bind="visible:voted">
   <h2 class="text-success">Added to <a href="user.jsp">your list</a>.</h2>
+  <h4 class="text-info">You <u data-bind="text:status"></u> this.</h4>
   <button class="btn btn-warning btn-block my-3" type="reset" data-bind="click:undoVote">Reset</button>
 </div>

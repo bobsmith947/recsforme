@@ -30,6 +30,13 @@ public class ListModel implements Serializable {
   public ListModel() {
     name = "";
     id = "";
+    type = "";
+  }
+  
+  public ListModel(String name, String id, String type) {
+    this.name = name;
+    this.id = id;
+    this.type = type;
   }
   /**
    * @return the name
