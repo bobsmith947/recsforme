@@ -83,6 +83,8 @@ public class ArtistQuery extends AbstractQuery {
     this.artist = artist;
   }
 
+  //TODO get sort names too
+  
   @Override
   public String[] listNames() {
     String[] res = new String[0];
