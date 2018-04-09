@@ -1,6 +1,6 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption, me.recsfor.app.ListData"%>
 <!DOCTYPE html>
 <html>
   <title>Logging in...</title>
@@ -60,9 +60,13 @@
               SELECT items FROM user_dislikes
               WHERE uid = ${u.id}
             </sql:query>
+            <c:set var="likes" value="${likesList.getRowsByIndex()[0][0]}" />
+            <c:set var="dislikes" value="${dislikesList.getRowsByIndex()[0][0]}" />
+            <jsp:setProperty name="u" property="likeData" value="${ListData.mapData(likes)}" />
+            <jsp:setProperty name="u" property="dislikeData" value="${ListData.mapData(dislikes)}" />
             <script type="text/javascript">
-              var likes = JSON.parse('${likesList.getRowsByIndex()[0][0].replace("'", "\\'")}').list;
-              var dislikes = JSON.parse('${dislikesList.getRowsByIndex()[0][0].replace("'", "\\'")}').list;
+              var likes = JSON.parse('${likes.replace("'", "\\'")}').list;
+              var dislikes = JSON.parse('${dislikes.replace("'", "\\'")}').list;
               for (i = 0; i < likes.length; i++)
                 localStorage.setItem(JSON.stringify(likes[i]), "like");
               for (i = 0; i < dislikes.length; i++)

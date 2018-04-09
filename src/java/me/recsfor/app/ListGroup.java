@@ -16,24 +16,25 @@
 package me.recsfor.app;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Defines the content of user like and dislike lists.
  * @author lkitaev
  */
-public class ListModel implements Serializable {
+public class ListGroup implements Serializable {
   private static final long serialVersionUID = -3414177256146753331L;
   private String name;
   private String id;
   private String type;
   
-  public ListModel() {
+  public ListGroup() {
     name = "";
     id = "";
     type = "";
   }
   
-  public ListModel(String name, String id, String type) {
+  public ListGroup(String name, String id, String type) {
     this.name = name;
     this.id = id;
     this.type = type;
@@ -73,5 +74,24 @@ public class ListModel implements Serializable {
    */
   public void setType(String type) {
     this.type = type;
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if (obj.getClass().getName()
+            .equals(this.getClass().getName())) {
+      return false;
+    } else {
+      return obj.hashCode() == this.hashCode();
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 97 * hash + Objects.hashCode(this.name);
+    hash = 97 * hash + Objects.hashCode(this.id);
+    hash = 97 * hash + Objects.hashCode(this.type);
+    return hash;
   }
 }

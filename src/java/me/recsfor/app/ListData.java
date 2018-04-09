@@ -30,25 +30,25 @@ import me.recsfor.engine.search.*;
  */
 public class ListData implements Serializable {
   private static final long serialVersionUID = 177281769747262676L;
-  private LinkedList<ListModel> list;
+  private LinkedList<ListGroup> list;
   
   public ListData() {
     list = null;
   }
   
-  public ListData(LinkedList<ListModel> list) {
+  public ListData(LinkedList<ListGroup> list) {
     this.list = list;
   }
   /**
    * @return the list
    */
-  public LinkedList<ListModel> getList() {
+  public LinkedList<ListGroup> getList() {
     return list;
   }
   /**
    * @param list the list to set
    */
-  public void setList(LinkedList<ListModel> list) {
+  public void setList(LinkedList<ListGroup> list) {
     this.list = list;
   }
   /**
@@ -69,7 +69,23 @@ public class ListData implements Serializable {
     return data;
   }
   /**
-   * Creates a string representing the context path of a group, based on its type.
+   * Converts an instance of a <code>ListData</code> object to JSON.
+   * @param data the data to process
+   * @return the data as a JSON string
+   */
+  public static String stringifyData(ListData data) {
+    ObjectMapper mapper = new ObjectMapper();
+    String ret;
+    try {
+      ret = mapper.writeValueAsString(data);
+    } catch (JsonProcessingException e) {
+      ret = e.getMessage();
+      System.err.println(Arrays.toString(e.getStackTrace()));
+    }
+    return ret;
+  }
+  /**
+   * Creates a string representing the servlet context path of a group, based on its type.
    * @param groupType the type of the group
    * @return the context
    */
@@ -125,15 +141,15 @@ public class ListData implements Serializable {
     }
   }
   /**
-   * Creates a JSON string representing a group.
+   * Creates a JSON string representing an entry in a list with the specified group properties.
    * @param name the group name
    * @param id the group id
    * @param type the group type
-   * @return the item
+   * @return the group expressed in JSON
    */
   public static String generateItem(String name, String id, String type) {
     name = name.replace("'", "''");
-    ListModel item = new ListModel(name, id, type);
+    ListGroup item = new ListGroup(name, id, type);
     String ret;
     ObjectMapper mapper = new ObjectMapper();
     try {
@@ -143,5 +159,15 @@ public class ListData implements Serializable {
       System.err.println(Arrays.toString(e.getStackTrace()));
     }
     return ret;
+  }
+  /**
+   * Removes an item matching the specified group properties from the list.
+   * @param name the group name
+   * @param id the group id
+   * @param type the group type
+   */
+  public void removeItem(String name, String id, String type) {
+    ListGroup item = new ListGroup(name, id, type);
+    list.remove(item);
   }
 }

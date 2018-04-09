@@ -42,8 +42,16 @@
         <h3>Your dislikes:</h3>
         <div class="list-group text-center my-2" id="dislikes"></div>
       </div>
-      <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear your lists, you can use the below button to do so.</h6>
-      <button class="btn btn-danger btn-block my-3" type="reset" id="listreset">Reset your lists</button>
+      <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear your lists, you can use the below buttons to do so.</h6>
+      <button class="btn btn-danger btn-block my-3" type="reset" class="listreset" data-list="both">
+        Clear both of your lists
+      </button>
+      <button class="btn btn-danger btn-block my-3" type="reset" class="listreset" data-list="likes">
+        Clear your <strong>likes</strong> list
+      </button>
+      <button class="btn btn-danger btn-block my-3" type="reset" class="listreset" data-list="dislikes">
+        Clear your <strong>dislikes</strong> list
+      </button>
     </main>
   </body>
 </html>

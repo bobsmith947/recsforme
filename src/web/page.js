@@ -69,28 +69,33 @@ $(() => {
     const nolikes = $("#likes").children().length === 0;
     const nodislikes = $("#dislikes").children().length === 0;
     if (nolikes && nodislikes) {
-      $("#listreset").prop("disabled", true);
+      $(".listreset").prop("disabled", true);
       $("#list").empty();
-      $("#list").append("<h6>Your list is empty!</h6>");
+      $("#list").append("<h6>Your lists are empty!</h6>");
       $("#list").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
       $("#resetprompt").addClass("text-muted");
     } else if (nolikes) {
+      $(".listreset[data-list=likes]").prop("disabled", true);
       $("#likes").append("<h6>You haven't added any likes!</h6>");
       $("#likes").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
     } else if (nodislikes) {
+      $(".listreset[data-list=dislikes]").prop("disabled", true);
       $("#dislikes").append("<h6>You haven't added any dislikes!</h6>");
       $("#dislikes").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
     }
     //clear the list
-    $("#listreset").click(ev => {
-      if (confirm("Are you sure you want to clear your list?")) {
+    $(".listreset").click(ev => {
+      if (confirm("Are you sure you want to clear your list(s)?")) {
         localStorage.clear();
         $.get("group.jsp", 
-              {action: "reset"});
-        alert("List cleared.");
+              {
+                action: "reset",
+                list: $(ev).attr("data-list")
+              });
+        alert("List(s) cleared.");
         location.reload();
       } else {
-        alert("List not cleared.");
+        alert("List(s) not cleared.");
         ev.target.blur();
       }
     });
