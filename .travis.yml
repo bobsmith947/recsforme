@@ -5,7 +5,7 @@ cache:
 before_install:
   - wget http://mirrors.ibiblio.org/apache//ant/ivy/2.4.0/apache-ivy-2.4.0-bin.zip
   - unzip apache-ivy-2.4.0-bin.zip
-  - wget http://mirrors.ibiblio.org/apache/tomcat/tomcat-8/v8.5.29/bin/apache-tomcat-8.5.29.zip
+  - wget http://mirrors.ibiblio.org/apache/tomcat/tomcat-8/v8.5.30/bin/apache-tomcat-8.5.30.zip
   - unzip apache-tomcat-8.5.29.zip
 install:
   - mv ./apache-tomcat-8.5.29 ./tomcat

@@ -31,27 +31,27 @@ try {
       age: function() {
         const date = moment(this.dob());
         if (date.isValid())
-          return date.fromNow();
+          return date.fromNow(true);
         else return "unknown";
       },
       completed: function() {
         return (this.accepted() && this.notRobot()) 
-                && (this.uname() !== "") 
-                && (this.pw().length >= 8 && this.pw() === this.pwc());
+          && (this.uname() !== "") 
+          && (this.pw().length >= 8 && this.pw() === this.pwc());
       },
       sendInfo: function() {
         $("#subres").empty();
         $.post("register.jsp", 
-              $("#info-form").serialize(), 
-              response => $("#subres").append(response));
+          $("#info-form").serialize(), 
+          response => $("#subres").append(response));
         $("button[form=info-form]").prop("disabled", true);
       },
       nameCheck: function() {
         $("#checkres").empty();
         if (this.uname() !== "") {
           $.get("register.jsp",
-               {name: this.uname()},
-               response => $("#checkres").append(response));
+           {name: this.uname()},
+           response => $("#checkres").append(response));
         } else $("#checkres").append("You have not entered a username to check.");
       }
     };
@@ -66,13 +66,16 @@ try {
       passCheck: ko.observable(""),
       requestReset: function(form) {
         $("#subres").empty();
-        const requestData = new FormData(form);
-        requestData.append("action", "reset");
-        requestData.append("name", this.name());
+        const reset = $(form).serializeArray();
         this.resetForm(false);
         $.post("auth.jsp",
-              encodeFormData(requestData),
-              response => $("#subres").append(response));
+          {
+            email: reset[0].value,
+            pass: reset[1].value,
+            name: this.name(),
+            action: "reset"
+          },
+          response => $("#subres").append(response));
       }
     };
     ko.applyBindings(logInModel);
@@ -88,15 +91,17 @@ try {
       voted: ko.observable(vote !== null),
       status: ko.observable(vote),
       sendVote: function(form) {
-        const voteData = new FormData(form);
-        voteData.append("name", name);
-        voteData.append("id", id);
-        voteData.append("type", type);
-        voteData.append("action", "add")
+        const vote = $(form).serializeArray();
         this.voted(true);
-        this.status(voteData.get("status"));
+        this.status(vote[0].value);
         $.post("group.jsp", 
-              encodeFormData(voteData));
+          {
+            status: vote[0].value,
+            name: name,
+            id: id,
+            type: type,
+            action: "add"
+          });
         localStorage.setItem(json, this.status());
       },
       undoVote: function() {
@@ -127,12 +132,4 @@ function generateItem(name, id, type) {
     id: id,
     type: type
   });
-}
-  
-//https://stackoverflow.com/questions/7542586/new-formdata-application-x-www-form-urlencoded
-function encodeFormData(fd) {
-  let params = new URLSearchParams();
-  for (let pair of fd.entries())
-    params.append(pair[0], pair[1]);
-  return params.toString();
 }

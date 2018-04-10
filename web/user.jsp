@@ -16,7 +16,7 @@
     </c:if>
     <main>
       <c:if test="${!u.loggedIn}">
-        <ul class="nav justify-content-center mb-4 nav-fill">
+        <ul class="nav justify-content-lg-start justify-content-center mb-4">
           <li class="nav-item">
             <a class="btn btn-secondary btn-sm nav-link mr-1" href="login.jsp">Log in</a>
           </li>
@@ -28,7 +28,7 @@
         <p>This page is unique to your browser. If you sign up with an account, your lists will be saved in the cloud, able to be accessed anytime, anywhere. Recommendation generation is not yet available. Keep checking back for development updates.<p>
       </c:if>
       <c:if test="${u.loggedIn}">
-        <ul class="nav justify-content-center mb-4 nav-fill">
+        <ul class="nav justify-content-lg-start justify-content-center mb-4">
           <li class="nav-item">
             <a class="btn btn-secondary btn-sm nav-link" href="logout.jsp">Log out</a>
           </li>

@@ -98,10 +98,10 @@ $(() => {
           }
         }
         $.get("group.jsp", 
-              {
-                action: "reset",
-                list: $(ev).attr("data-list")
-              });
+          {
+            action: "reset",
+            list: $(ev).attr("data-list")
+          });
         alert("List(s) cleared.");
         location.reload();
       } else {
@@ -202,4 +202,16 @@ function generateContext(type) {
       return "search.jsp?query=";
       break;
   }
+}
+
+//polyfill just in case
+if (!String.prototype.includes) {
+  String.prototype.includes = function(search, start) {
+    if (typeof start !== 'number')
+      start = 0;
+    if (start + search.length > this.length)
+      return false;
+    else
+      return this.indexOf(search, start) !== -1;
+  };
 }
