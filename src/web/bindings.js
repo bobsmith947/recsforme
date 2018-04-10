@@ -65,13 +65,14 @@ try {
       pass: ko.observable(""),
       passCheck: ko.observable(""),
       requestReset: function(form) {
+        $("#subres").empty();
         const requestData = new FormData(form);
         requestData.append("action", "reset");
         requestData.append("name", this.name());
         this.resetForm(false);
         $.post("auth.jsp",
               encodeFormData(requestData),
-              response => $("main").append(response));
+              response => $("#subres").append(response));
       }
     };
     ko.applyBindings(logInModel);
@@ -91,6 +92,7 @@ try {
         voteData.append("name", name);
         voteData.append("id", id);
         voteData.append("type", type);
+        voteData.append("action", "add")
         this.voted(true);
         this.status(voteData.get("status"));
         $.post("group.jsp", 
@@ -99,7 +101,7 @@ try {
       },
       undoVote: function() {
         localStorage.removeItem(json);
-        $.get("group.jsp", 
+        $.post("group.jsp", 
           {
             action: "remove",
             name: name,

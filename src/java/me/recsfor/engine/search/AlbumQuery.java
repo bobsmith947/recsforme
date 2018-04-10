@@ -54,9 +54,10 @@ public class AlbumQuery extends AbstractQuery {
     super(query);
     group = new ReleaseGroupWs2();
     String replace = query.replace("[/\\?&=:]", " ");
-    new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r ->
-            results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - "
-                        + r.getReleaseGroup().getArtistCreditString()));
+    new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r -> {
+      results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - "
+              + r.getReleaseGroup().getArtistCreditString());
+    });
     len = results.size();
     isNotGroup = false;
     groupInc = null;

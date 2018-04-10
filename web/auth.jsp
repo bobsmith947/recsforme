@@ -25,25 +25,32 @@
               for (i = 0; i < localStorage.length; i++) {
                 var item = localStorage.key(i);
                 var group = JSON.parse(item);
+                Object.defineProperty(group, "action",
+                {
+                  configurable: false,
+                  enumerable: true,
+                  value: "add",
+                  writable: false
+                });
                 switch (localStorage.getItem(item)) {
                   case "like":
                     Object.defineProperty(group, "status", 
-                                          {
-                                            configurable: false,
-                                            enumerable: true,
-                                            value: "like",
-                                            writable: false
-                                          });
+                    {
+                      configurable: false,
+                      enumerable: true,
+                      value: "like",
+                      writable: false
+                    });
                     $.post("group.jsp", group);
                     break;
                   case "dislike":
                     Object.defineProperty(group, "status", 
-                                          {
-                                            configurable: false,
-                                            enumerable: true,
-                                            value: "dislike",
-                                            writable: false
-                                          });
+                    {
+                      configurable: false,
+                      enumerable: true,
+                      value: "dislike",
+                      writable: false
+                    });
                     $.post("group.jsp", group);
                     break;
                   default:

@@ -49,7 +49,7 @@ $(() => {
   });
   if (location.pathname.includes("user.jsp")) {
     //add groups
-    for (var i = 0; i < localStorage.length; i++) {
+    for (let i = 0; i < localStorage.length; i++) {
       const item = localStorage.key(i);
       const group = JSON.parse(item);
       const context = generateContext(group.type);
@@ -86,7 +86,17 @@ $(() => {
     //clear the list
     $(".listreset").click(ev => {
       if (confirm("Are you sure you want to clear your list(s)?")) {
-        localStorage.clear();
+        const action = $(ev).attr("data-list");
+        if (action === "both") {
+          localStorage.clear();
+          console.log("localStorage cleared.");
+        } else {
+          for (let i = 0; i < localStorage.length; i++) {
+            const item = localStorage.key(i);
+            if (localStorage.getItem(item) === action)
+              localStorage.removeItem(item);
+          }
+        }
         $.get("group.jsp", 
               {
                 action: "reset",

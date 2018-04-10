@@ -78,10 +78,17 @@ public class ListGroup implements Serializable {
   
   @Override
   public boolean equals(Object obj) {
-    if (obj.getClass().getName()
-            .equals(this.getClass().getName())) {
+    if (obj == null) {
+      //ensure it's not null
+      return false;
+    } else if (obj == this) {
+      //check if reference is the same
+      return true;
+    } else if (obj.getClass() != this.getClass()) {
+      //compare classes rather than instanceof in case this class is extended
       return false;
     } else {
+      //check if fields share the same values
       return obj.hashCode() == this.hashCode();
     }
   }
@@ -93,5 +100,18 @@ public class ListGroup implements Serializable {
     hash = 97 * hash + Objects.hashCode(this.id);
     hash = 97 * hash + Objects.hashCode(this.type);
     return hash;
+  }
+  
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("name: ")
+            .append(name)
+            .append("\n id: ")
+            .append(id)
+            .append("\n type: ")
+            .append(type)
+            .append("\n");
+    return sb.toString();
   }
 }

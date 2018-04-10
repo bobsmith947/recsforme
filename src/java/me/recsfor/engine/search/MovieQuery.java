@@ -48,9 +48,10 @@ public class MovieQuery extends AbstractQuery {
     info = null;
     params = null;
     try {
-      CLIENT.search(query).getResults().forEach(res ->
-              results.put(res.getImdbID(), res.getTitle() + " ("
-                          + res.getYear() + ")"));
+      CLIENT.search(query).getResults().forEach(res -> {
+        results.put(res.getImdbID(), res.getTitle() + " ("
+                + res.getYear() + ")");
+      });
       len = results.size();
     } catch (OMDBException | NullPointerException e) {
       this.query = e.getMessage();

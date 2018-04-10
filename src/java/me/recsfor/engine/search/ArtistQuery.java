@@ -47,8 +47,9 @@ public class ArtistQuery extends AbstractQuery {
     artist = new ArtistWs2();
     inc = null;
     String replace = query.replace("[/\\?&=:]", " ");
-    new ArtistSearchbyName(replace).getFirstPage().forEach(r ->
-            results.put(r.getArtist().getId(), r.getArtist().getUniqueName()));
+    new ArtistSearchbyName(replace).getFirstPage().forEach(r -> {
+      results.put(r.getArtist().getId(), r.getArtist().getUniqueName());
+    });
     len = results.size();
   }
   /**

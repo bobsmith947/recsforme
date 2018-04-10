@@ -33,7 +33,9 @@ public class ListData implements Serializable {
   private LinkedList<ListGroup> list;
   
   public ListData() {
-    list = null;
+    ListGroup dummyGroup = new ListGroup("[unknown]", "", null);
+    list = new LinkedList<>();
+    list.add(dummyGroup);
   }
   
   public ListData(LinkedList<ListGroup> list) {
@@ -53,8 +55,8 @@ public class ListData implements Serializable {
   }
   /**
    * Maps JSON data to an instance of a <code>ListData</code> object.
-   * @param json the data to parse
-   * @return the data as a Java object
+   * @param json the data
+   * @return the mapped data
    * @throws IOException if a problem occurs when reading the input
    */  
   public static ListData mapData(String json) throws IOException {
@@ -70,7 +72,7 @@ public class ListData implements Serializable {
   }
   /**
    * Converts an instance of a <code>ListData</code> object to JSON.
-   * @param data the data to process
+   * @param data the data
    * @return the data as a JSON string
    */
   public static String stringifyData(ListData data) {
@@ -87,7 +89,7 @@ public class ListData implements Serializable {
   /**
    * Creates a string representing the servlet context path of a group, based on its type.
    * @param groupType the type of the group
-   * @return the context
+   * @return the group context
    */
   public static String generateContext(String groupType) {
     String movie = MovieQuery.CONTEXT;
@@ -141,7 +143,7 @@ public class ListData implements Serializable {
     }
   }
   /**
-   * Creates a JSON string representing an entry in a list with the specified group properties.
+   * Creates a JSON string representing an item with the specified group properties.
    * @param name the group name
    * @param id the group id
    * @param type the group type
@@ -169,5 +171,49 @@ public class ListData implements Serializable {
   public void removeItem(String name, String id, String type) {
     ListGroup item = new ListGroup(name, id, type);
     list.remove(item);
+  }
+  /**
+   * Removes an item matching the specified JSON data from the list.
+   * @param json the data
+   * @throws IOException if a problem occurs when reading the input
+   */
+  public void removeItem(String json) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    ListGroup group;
+    try {
+      group = mapper.readValue(json, ListGroup.class);
+    } catch (JsonMappingException | JsonParseException e) {
+      group = new ListGroup();
+      System.err.println(Arrays.toString(e.getStackTrace()));
+    }
+    list.remove(group);
+  }
+  /**
+   * Checks if the list contains an item matching the specified group properties.
+   * @param name the group name
+   * @param id the group id
+   * @param type the group type
+   * @return whether the group exists or not
+   */
+  public boolean containsItem(String name, String id, String type) {
+    ListGroup item = new ListGroup(name, id, type);
+    return list.contains(item);
+  }
+  /**
+   * Checks if the list contains an item matching the specified JSON.
+   * @param json the data
+   * @throws IOException if a problem occurs when reading the input
+   * @return whether the group exists or not
+   */
+  public boolean containsItem(String json) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    ListGroup group;
+    try {
+      group = mapper.readValue(json, ListGroup.class);
+    } catch (JsonMappingException | JsonParseException e) {
+      group = new ListGroup();
+      System.err.println(Arrays.toString(e.getStackTrace()));
+    }
+    return list.contains(group);
   }
 }

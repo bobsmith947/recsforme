@@ -72,8 +72,10 @@ public class AlbumInfo extends HttpServlet {
       try {
         List<TrackWs2> tracks = info.getCompleteTrackList();
         out.println("<ol class=\"list-group-ordered\">");
-        tracks.forEach(track -> out.println("<li>" + track.getRecording().getTitle()
-                + " - " + track.getDuration() + "</li>"));
+        tracks.forEach(track -> {
+          out.println("<li>" + track.getRecording().getTitle()
+                  + " - " + track.getDuration() + "</li>");
+        });
         out.println("</ol>");
       } catch (NullPointerException e) {
         this.log(e.getMessage(), e);

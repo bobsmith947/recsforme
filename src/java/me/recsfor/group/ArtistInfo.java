@@ -74,13 +74,17 @@ public class ArtistInfo extends HttpServlet {
       //TODO order release groups by date
       //TODO print out more entries
       out.println("<h3>Discography:</h3><div class=\"list-group text-right my-2\">");
-      albums.forEach(album -> out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
-              + album.getId() + "\"><h5 class=\"mb-0\">" + album.getTitle()  
-              + "</h5><small class=\"date\">" + album.getFirstReleaseDateStr() + "</small></a>"));
+      albums.forEach(album -> {
+        out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
+                + album.getId() + "\"><h5 class=\"mb-0\">" + album.getTitle()
+                + "</h5><small class=\"date\">" + album.getFirstReleaseDateStr() + "</small></a>");
+      });
       out.println("</div><h4>Contributions:</h4><div class=\"list-group text-right my-2\">");
-      contrib.forEach(cont -> out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
-              + cont.getId() + "\"><h5 class=\"mb-0\">" + cont.getTitle() 
-              + "</h5><small class=\"date\">" + cont.getDateStr() + "</small></a>"));
+      contrib.forEach(cont -> {
+        out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
+                + cont.getId() + "\"><h5 class=\"mb-0\">" + cont.getTitle()
+                + "</h5><small class=\"date\">" + cont.getDateStr() + "</small></a>");
+      });
       out.println("</ul></div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
       out.println("<h6><a href=\"https://musicbrainz.org/artist/"
               + id + "\">View on MusicBrainz</a></h6>");

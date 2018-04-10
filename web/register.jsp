@@ -12,13 +12,13 @@
       </sql:query>
       <c:choose>
         <c:when test="${matches.getRowCount() == 1}">
-          <div class="text-warning">The username you entered is already taken.</div>
+          <h6 class="text-warning">The username you entered is already taken.</h6>
         </c:when>
         <c:when test="${matches.getRowCount() == 0}">
-          <div class="text-success">The username you entered is available.</div>
+          <h6 class="text-success">The username you entered is available.</h6>
         </c:when>
         <c:otherwise>
-          <div class="text-danger">Something went wrong. If the issue persists, please contact the administrator.</div>
+          <h6 class="text-danger">Something went wrong. If the issue persists, please contact the administrator.</h6>
         </c:otherwise>
       </c:choose>
     </c:if>

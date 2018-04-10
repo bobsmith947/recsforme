@@ -55,6 +55,7 @@
           </div>
           <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block">Reset Password</button>
         </form>
+        <div id="subres"></div>
       </c:if>
       <c:if test="${!notLocked}">
         <div class="alert alert-danger">
