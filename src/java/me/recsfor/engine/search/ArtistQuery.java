@@ -46,8 +46,7 @@ public class ArtistQuery extends AbstractQuery {
     super(query);
     artist = new ArtistWs2();
     inc = null;
-    String replace = query.replace("[/\\?&=:]", " ");
-    new ArtistSearchbyName(replace).getFirstPage().forEach(r -> {
+    new ArtistSearchbyName(this.query).getFirstPage().forEach(r -> {
       results.put(r.getArtist().getId(), r.getArtist().getUniqueName());
     });
     len = results.size();
@@ -68,6 +67,7 @@ public class ArtistQuery extends AbstractQuery {
       query = artist.getUniqueName();
     } catch (MBWS2Exception e) {
       query = e.getMessage();
+      System.err.println(Arrays.toString(e.getStackTrace()));
       artist = null;
     }
   }
@@ -109,7 +109,7 @@ public class ArtistQuery extends AbstractQuery {
       type = artist.getType();
       type = type.substring(type.indexOf("#")+1);
     } catch (NullPointerException e) {
-      System.err.print(Arrays.toString(e.getStackTrace()));
+      System.err.println(Arrays.toString(e.getStackTrace()));
       type = "Unknown type";
     }
     return type;
@@ -124,11 +124,13 @@ public class ArtistQuery extends AbstractQuery {
       years[0] = artist.getLifeSpan().getBegin();
     } catch (NullPointerException e) {
       years[0] = e.getMessage();
+      System.err.println(Arrays.toString(e.getStackTrace()));
     } finally {
       try {
         years[1] = artist.getLifeSpan().getEnd();
       } catch (NullPointerException e) {
         years[1] = e.getMessage();
+        System.err.println(Arrays.toString(e.getStackTrace()));
       }
     }
     return years;

@@ -18,6 +18,7 @@ package me.recsfor.app;
 import java.security.SecureRandom;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import org.apache.commons.codec.DecoderException;
@@ -88,7 +89,7 @@ public class CredentialEncryption {
   }
   /**
    * Creates a random 128-bit (32 character) salt to use for hashing.
-   * @return the new salt
+   * @return the salt
    * @throws NoSuchAlgorithmException if there is no suitable random number generator
    */
   private String generateSalt() throws NoSuchAlgorithmException {
@@ -96,6 +97,22 @@ public class CredentialEncryption {
     byte[] randSalt = new byte[16];
     rand.nextBytes(randSalt);
     return Hex.encodeHexString(randSalt);
+  }
+  /**
+   * Creates a random 128-bit salt.
+   * @return the salt
+   */
+  public static byte[] newSalt() {
+    byte[] randSalt;
+    try {
+      randSalt = new byte[16];
+      SecureRandom rand = SecureRandom.getInstance(SALT_ALGO);
+      rand.nextBytes(randSalt);
+    } catch (NoSuchAlgorithmException e) {
+      randSalt = e.getMessage().getBytes();
+      System.err.println(Arrays.toString(e.getStackTrace()));
+    }
+    return randSalt;
   }
   /**
    * Creates a 256-bit (64 character) hash using password-based encryption.
@@ -112,24 +129,45 @@ public class CredentialEncryption {
     return Hex.encodeHexString(enc);
   }
   /**
+   * Creates a 256-bit hash.
+   * @return the hash
+   * @param pw the password to hash
+   * @param slt the salt to use
+   */
+  public static byte[] newHash(String pw, byte[] slt) {
+    char[] charPass = pw.toCharArray();
+    byte[] enc;
+    try {
+      PBEKeySpec spec = new PBEKeySpec(charPass, slt, iterations, 256);
+      SecretKeyFactory key = SecretKeyFactory.getInstance(HASH_ALGO);
+      enc = key.generateSecret(spec).getEncoded();
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      enc = e.getMessage().getBytes();
+      System.err.println(Arrays.toString(e.getStackTrace()));
+    }
+    return enc;
+  }
+  /**
    * Static method to determine whether a password matches its stored hash, using the generated salt for the user.
    * @param testPass the password to check
    * @param storedHash the known correct password hash
    * @param storedSalt the user's salt
    * @return whether or not the password is correct
-   * @throws NoSuchAlgorithmException if the test password can not be encrypted
-   * @throws InvalidKeySpecException if the key specification is wrong
-   * @throws DecoderException if the hashes can not be converted
    */
-  public static boolean validatePassword(String testPass, String storedHash, String storedSalt) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
-    CredentialEncryption testCred = new CredentialEncryption(testPass, storedSalt);
-    byte[] testHash = Hex.decodeHex(testCred.getHash().toCharArray());
-    byte[] knownHash = Hex.decodeHex(storedHash.toCharArray());
-    int diff = knownHash.length ^ testHash.length;
-    for (int i = 0; i < knownHash.length && i < testHash.length; i++) {
-      diff |= knownHash[i] ^ testHash[i];
+  public static boolean validatePassword(String testPass, String storedHash, String storedSalt) {
+    try {
+      CredentialEncryption testCred = new CredentialEncryption(testPass, storedSalt);
+      byte[] testHash = Hex.decodeHex(testCred.getHash().toCharArray());
+      byte[] knownHash = Hex.decodeHex(storedHash.toCharArray());
+      int diff = knownHash.length ^ testHash.length;
+      for (int i = 0; i < knownHash.length && i < testHash.length; i++) {
+        diff |= knownHash[i] ^ testHash[i];
+      }
+      return diff == 0;
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException | DecoderException e) {
+      System.err.println(Arrays.toString(e.getStackTrace()));
     }
-    return diff == 0;
+    return false;
   }
   /**
    * Instance method to determine whether a password matches its stored hash, using the generated salt for the user.

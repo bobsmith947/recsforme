@@ -22,12 +22,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-
+import org.apache.commons.codec.binary.Hex;
 /**
- *
- * @author Lucas Kitaev
+ * Provides tests for the <code>CredentialEncryption</code> class.
+ * Ensures that salts <em>aren't</em> the same.
+ * Also ensures that hashes for the same password <em>are</em> the same.
+ * @author lkitaev
  */
 public class CredentialEncryptionTest {
+  private final String PASS = "Th1sIs@T3stPassw0rd!";
+  private final byte[] testSalt = CredentialEncryption.newSalt();
+  private final byte[] testHash = CredentialEncryption.newHash(PASS, testSalt);
   
   public CredentialEncryptionTest() {
   }
@@ -48,88 +53,52 @@ public class CredentialEncryptionTest {
   public void tearDown() {
   }
 
-  /**
-   * Test of getSalt method, of class CredentialEncryption.
-   */
   @Test
-  public void testGetSalt() {
-    System.out.println("getSalt");
+  public void testSalt() throws Exception {
+    System.out.println("Testing salt generation.");
     CredentialEncryption instance = new CredentialEncryption();
-    String expResult = "";
     String result = instance.getSalt();
-    assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
+    assertNull(result);
+    instance = new CredentialEncryption(PASS);
+    result = instance.getSalt();
+    assertNotNull(result);
+    instance = new CredentialEncryption(PASS);
+    String otherResult = instance.getSalt();
+    assertNotEquals(result, otherResult);
   }
 
-  /**
-   * Test of getHash method, of class CredentialEncryption.
-   */
   @Test
-  public void testGetHash() {
-    System.out.println("getHash");
+  public void testHash() throws Exception {
+    System.out.println("Testing hash generation.");
     CredentialEncryption instance = new CredentialEncryption();
-    String expResult = "";
     String result = instance.getHash();
-    assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
+    assertNull(result);
+    instance = new CredentialEncryption(PASS);
+    result = instance.getHash();
+    assertNotNull(result);
+    instance = new CredentialEncryption(PASS);
+    String otherResult = instance.getHash();
+    assertEquals(result, otherResult);
   }
 
-  /**
-   * Test of getIterations method, of class CredentialEncryption.
-   */
   @Test
-  public void testGetIterations() {
-    System.out.println("getIterations");
-    int expResult = 0;
-    int result = CredentialEncryption.getIterations();
-    assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
-  }
-
-  /**
-   * Test of setIterations method, of class CredentialEncryption.
-   */
-  @Test
-  public void testSetIterations() {
-    System.out.println("setIterations");
-    int num = 0;
-    CredentialEncryption.setIterations(num);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
-  }
-
-  /**
-   * Test of validatePassword method, of class CredentialEncryption.
-   */
-  @Test
-  public void testValidatePassword_3args() throws Exception {
+  public void testValidatePassword_3args() {
     System.out.println("validatePassword");
-    String testPass = "";
-    String storedHash = "";
-    String storedSalt = "";
-    boolean expResult = false;
-    boolean result = CredentialEncryption.validatePassword(testPass, storedHash, storedSalt);
-    assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
+    boolean result = CredentialEncryption.validatePassword(PASS, Hex.encodeHexString(testHash), Hex.encodeHexString(testSalt));
+    assertTrue(result);
+    result = CredentialEncryption.validatePassword("anothertestpassword", Hex.encodeHexString(testHash), Hex.encodeHexString(testSalt));
+    assertFalse(result);
   }
 
-  /**
-   * Test of validatePassword method, of class CredentialEncryption.
-   */
   @Test
   public void testValidatePassword_String() throws Exception {
     System.out.println("validatePassword");
-    String storedHash = "";
-    CredentialEncryption instance = new CredentialEncryption();
-    boolean expResult = false;
-    boolean result = instance.validatePassword(storedHash);
-    assertEquals(expResult, result);
-    // TODO review the generated test code and remove the default call to fail.
-    fail("The test case is a prototype.");
+    CredentialEncryption instance = new CredentialEncryption(PASS, Hex.encodeHexString(testSalt));
+    boolean result = instance.validatePassword(Hex.encodeHexString(testHash));
+    assertTrue(result);
+    instance = new CredentialEncryption(PASS);
+    result = instance.validatePassword(Hex.encodeHexString(testHash));
+    assertFalse(result);
   }
   
 }

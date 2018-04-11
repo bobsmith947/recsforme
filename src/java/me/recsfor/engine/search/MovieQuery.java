@@ -48,13 +48,14 @@ public class MovieQuery extends AbstractQuery {
     info = null;
     params = null;
     try {
-      CLIENT.search(query).getResults().forEach(res -> {
+      CLIENT.search(this.query).getResults().forEach(res -> {
         results.put(res.getImdbID(), res.getTitle() + " ("
                 + res.getYear() + ")");
       });
       len = results.size();
     } catch (OMDBException | NullPointerException e) {
       this.query = e.getMessage();
+      System.err.println(Arrays.toString(e.getStackTrace()));
       len = 0;
     }
   }
@@ -78,6 +79,7 @@ public class MovieQuery extends AbstractQuery {
         query = this.info.getTitle();
       } catch (OMDBException | NullPointerException e) {
         query = e.getMessage();
+        System.err.println(Arrays.toString(e.getStackTrace()));
         this.info = null;
       }
     }

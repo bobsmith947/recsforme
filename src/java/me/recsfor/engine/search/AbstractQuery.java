@@ -33,7 +33,10 @@ public abstract class AbstractQuery {
   }
 
   protected AbstractQuery(String query) {
-    this.query = query;
+    String replace = query.replaceAll("[;/?:@=&]", " ");
+    System.out.println(query);
+    this.query = replace;
+    System.out.println(replace);
     results = new LinkedHashMap<>();
   }
   /**
@@ -46,7 +49,8 @@ public abstract class AbstractQuery {
    * @param query the query to set
    */
   public void setQuery(String query) {
-    this.query = query;
+    String replace = query.replaceAll("[;/?:@=&]", " ");
+    this.query = replace;
   }
   /**
    * @return the results

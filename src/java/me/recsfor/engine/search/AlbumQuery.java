@@ -53,8 +53,7 @@ public class AlbumQuery extends AbstractQuery {
   public AlbumQuery(String query) {
     super(query);
     group = new ReleaseGroupWs2();
-    String replace = query.replace("[/\\?&=:]", " ");
-    new ReleaseGroupSearchbyTitle(replace).getFirstPage().forEach(r -> {
+    new ReleaseGroupSearchbyTitle(this.query).getFirstPage().forEach(r -> {
       results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - "
               + r.getReleaseGroup().getArtistCreditString());
     });
@@ -89,6 +88,8 @@ public class AlbumQuery extends AbstractQuery {
         isNotGroup = true;
       } catch (MBWS2Exception ex) {
         query = e.getMessage().concat(ex.getMessage());
+        System.err.println(Arrays.toString(e.getStackTrace()));
+        System.err.println(Arrays.toString(ex.getStackTrace()));
         group = null;
         this.info = null;
         isNotGroup = false;
@@ -155,7 +156,7 @@ public class AlbumQuery extends AbstractQuery {
     try {
       type = group.getTypeString();
     } catch (NullPointerException e) {
-      System.err.print(Arrays.toString(e.getStackTrace()));
+      System.err.println(Arrays.toString(e.getStackTrace()));
       type = "Unknown type";
     }
     //check if it's null again just in case
@@ -172,7 +173,7 @@ public class AlbumQuery extends AbstractQuery {
       artist[0] = group.getArtistCreditString();
       artist[1] = group.getArtistCredit().getNameCredits().get(0).getArtist().getId();
     } catch (NullPointerException e) {
-      System.err.print(Arrays.toString(e.getStackTrace()));
+      System.err.println(Arrays.toString(e.getStackTrace()));
       //otherwise return [unknown]
       artist[0] = "[unknown]";
       //or return Various Artists
@@ -194,6 +195,7 @@ public class AlbumQuery extends AbstractQuery {
       date = group.getFirstReleaseDateStr();
     } catch (NullPointerException e) {
       date = e.getMessage();
+      System.err.println(Arrays.toString(e.getStackTrace()));
     }
     return date;
   }
