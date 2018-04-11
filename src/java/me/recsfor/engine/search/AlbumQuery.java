@@ -75,7 +75,6 @@ public class AlbumQuery extends AbstractQuery {
     createIncludes(info);
     try {
       group = new LookUpWs2().getReleaseGroupById(id, groupInc);
-      query = group.getTitle();
       this.info = new LookUpWs2().getReleaseById(group.getReleases().get(0).getId(), releaseInc).getMediumList();
       isNotGroup = false;
     } catch (MBWS2Exception | IndexOutOfBoundsException e) {
@@ -83,11 +82,9 @@ public class AlbumQuery extends AbstractQuery {
         //resort to regular release lookup
         ReleaseWs2 rel = new LookUpWs2().getReleaseById(id, releaseInc);
         group = rel.getReleaseGroup();
-        query = rel.getTitle();
         this.info = rel.getMediumList();
         isNotGroup = true;
       } catch (MBWS2Exception ex) {
-        query = e.getMessage().concat(ex.getMessage());
         System.err.println(Arrays.toString(e.getStackTrace()));
         System.err.println(Arrays.toString(ex.getStackTrace()));
         group = null;

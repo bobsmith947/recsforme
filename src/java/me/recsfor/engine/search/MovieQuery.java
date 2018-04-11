@@ -54,7 +54,6 @@ public class MovieQuery extends AbstractQuery {
       });
       len = results.size();
     } catch (OMDBException | NullPointerException e) {
-      this.query = e.getMessage();
       System.err.println(Arrays.toString(e.getStackTrace()));
       len = 0;
     }
@@ -76,9 +75,7 @@ public class MovieQuery extends AbstractQuery {
       params.add(Param.PLOT, parsePlot(plot));
       try {
         this.info = CLIENT.getInfo(params);
-        query = this.info.getTitle();
       } catch (OMDBException | NullPointerException e) {
-        query = e.getMessage();
         System.err.println(Arrays.toString(e.getStackTrace()));
         this.info = null;
       }

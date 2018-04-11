@@ -64,9 +64,7 @@ public class ArtistQuery extends AbstractQuery {
     inc.setVariousArtists(info);
     try {
       artist = new LookUpWs2().getArtistById(id, inc);
-      query = artist.getUniqueName();
     } catch (MBWS2Exception e) {
-      query = e.getMessage();
       System.err.println(Arrays.toString(e.getStackTrace()));
       artist = null;
     }

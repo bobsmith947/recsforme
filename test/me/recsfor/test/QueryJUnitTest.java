@@ -34,42 +34,27 @@ public class QueryJUnitTest {
   private static AlbumQuery album;
   
   public QueryJUnitTest() {
-    System.out.println("Query test created.");
   }
   
   @BeforeClass
   public static void setUpClass() {
-    System.out.println("Query test started.");
-    movie = new MovieQuery();
-    artist = new ArtistQuery();
-    album = new AlbumQuery();
   }
   
   @AfterClass
   public static void tearDownClass() {
-    System.out.println("Query test ended.");
-    movie = null;
-    artist = null;
-    album = null;
   }
   
   @Before
   public void setUp() {
-    movie.setQuery("");
-    artist.setQuery("");
-    album.setQuery("");
   }
   
   @After
   public void tearDown() {
-    movie.setQuery("");
-    artist.setQuery("");
-    album.setQuery("");
   }
   
   @Test
   public void checkMovieResLength() {
-    movie.setQuery("blade runner");
+    movie = new MovieQuery("blade runner");
     Integer lenOne = movie.listNames().length;
     Integer lenTwo = movie.listIds().length;
     assertEquals(lenOne, lenTwo);
@@ -77,7 +62,7 @@ public class QueryJUnitTest {
   
   @Test
   public void checkArtistResLength() {
-    artist.setQuery("daft punk");
+    artist = new ArtistQuery("daft punk");
     Integer lenOne = artist.listNames().length;
     Integer lenTwo = artist.listIds().length;
     assertEquals(lenOne, lenTwo);
@@ -85,7 +70,7 @@ public class QueryJUnitTest {
   
   @Test
   public void checkAlbumResLength() {
-    album.setQuery("homework");
+    album = new AlbumQuery("homework");
     Integer lenOne = album.listNames().length;
     Integer lenTwo = album.listIds().length;
     assertEquals(lenOne, lenTwo);
@@ -95,25 +80,25 @@ public class QueryJUnitTest {
   public void checkReplace() {
     String query = "idolm@ster";
     String rep = "idolm ster";
-    movie.setQuery(query);
+    movie = new MovieQuery(query);
     assertNotEquals(query, movie.getQuery());
     assertEquals(rep, movie.getQuery());
     Object[] resOne = movie.getResults().values().toArray();
-    movie.setQuery(rep);
+    movie = new MovieQuery(rep);
     Object[] resTwo = movie.getResults().values().toArray();
     assertArrayEquals(resOne, resTwo);
-    artist.setQuery(query);
+    artist = new ArtistQuery(query);
     assertNotEquals(query, artist.getQuery());
     assertEquals(rep, artist.getQuery());
     resOne = artist.getResults().values().toArray();
-    artist.setQuery(rep);
+    artist = new ArtistQuery(rep);
     resTwo = artist.getResults().values().toArray();
     assertArrayEquals(resOne, resTwo);
-    album.setQuery(query);
+    album = new AlbumQuery(query);
     assertNotEquals(query, album.getQuery());
     assertEquals(rep, album.getQuery());
     resOne = album.getResults().values().toArray();
-    album.setQuery(rep);
+    album = new AlbumQuery(rep);
     resTwo = album.getResults().values().toArray();
     assertArrayEquals(resOne, resTwo);
   }

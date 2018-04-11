@@ -22,7 +22,7 @@ import java.util.LinkedHashMap;
  * @author lkitaev
  */
 public abstract class AbstractQuery {
-  protected String query;
+  protected final String query;
   protected LinkedHashMap<String, String> results;
   protected int len;
 
@@ -34,9 +34,7 @@ public abstract class AbstractQuery {
 
   protected AbstractQuery(String query) {
     String replace = query.replaceAll("[;/?:@=&]", " ");
-    System.out.println(query);
     this.query = replace;
-    System.out.println(replace);
     results = new LinkedHashMap<>();
   }
   /**
@@ -44,13 +42,6 @@ public abstract class AbstractQuery {
    */
   public String getQuery() {
     return query;
-  }
-  /**
-   * @param query the query to set
-   */
-  public void setQuery(String query) {
-    String replace = query.replaceAll("[;/?:@=&]", " ");
-    this.query = replace;
   }
   /**
    * @return the results

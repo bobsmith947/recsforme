@@ -75,8 +75,9 @@ public class CredentialEncryptionTest {
     assertNull(result);
     instance = new CredentialEncryption(PASS);
     result = instance.getHash();
+    String salt = instance.getSalt();
     assertNotNull(result);
-    instance = new CredentialEncryption(PASS);
+    instance = new CredentialEncryption(PASS, salt);
     String otherResult = instance.getHash();
     assertEquals(result, otherResult);
   }
