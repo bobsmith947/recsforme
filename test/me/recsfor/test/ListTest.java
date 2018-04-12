@@ -60,7 +60,7 @@ public class ListTest {
     ListData expResult = new ListData();
     ListGroup group = new ListGroup("The Idolm@ster (2011–)", "tt2649756", "Series");
     expResult.getList().add(group);
-    group.setAllProps("ClariS (j-pop)", "f3688ad9-cd14-4cee-8fa0-0f4434e762bb", "Group");
+    group = new ListGroup("ClariS (j-pop)", "f3688ad9-cd14-4cee-8fa0-0f4434e762bb", "Group");
     expResult.getList().add(group);
     ListData result = ListData.mapData(DATA);
     assertEquals(expResult, result);
@@ -74,7 +74,7 @@ public class ListTest {
     ListData data = new ListData();
     ListGroup group = new ListGroup("The Idolm@ster (2011–)", "tt2649756", "Series");
     data.getList().add(group);
-    group.setAllProps("ClariS (j-pop)", "f3688ad9-cd14-4cee-8fa0-0f4434e762bb", "Group");
+    group = new ListGroup("ClariS (j-pop)", "f3688ad9-cd14-4cee-8fa0-0f4434e762bb", "Group");
     data.getList().add(group);
     String expResult = DATA;
     String result = ListData.stringifyData(data);
@@ -91,7 +91,7 @@ public class ListTest {
     String result = ListData.generateContext(group.getType());
     assertEquals(expResult, result);
     expResult = "ArtistInfo?id=";
-    group.setAllProps("ClariS (j-pop)", "f3688ad9-cd14-4cee-8fa0-0f4434e762bb", "Group");
+    group = new ListGroup("ClariS (j-pop)", "f3688ad9-cd14-4cee-8fa0-0f4434e762bb", "Group");
     result = ListData.generateContext(group.getType());
     assertEquals(expResult, result);
   }
@@ -147,7 +147,6 @@ public class ListTest {
     ListData instance = new ListData();
     ListGroup group = new ListGroup("The Idolm@ster (2011–)", "tt2649756", "Series");
     instance.getList().add(group);
-    instance.removeItem(json);
     assertThat(instance.getList().size(), is(1));
     instance.removeItem(json);
     assertThat(instance.getList().size(), is(0));

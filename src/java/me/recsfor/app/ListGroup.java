@@ -75,27 +75,6 @@ public class ListGroup implements Serializable {
   public void setType(String type) {
     this.type = type;
   }
-  /**
-   * @return all properties of a group
-   */
-  public String[] getAllProps() {
-    String[] ret = new String[3];
-    ret[0] = this.name;
-    ret[1] = this.id;
-    ret[2] = this.type;
-    return ret;
-  }
-  /**
-   * Sets all properties of a group.
-   * @param name the name
-   * @param id the id
-   * @param type the type
-   */
-  public void setAllProps(String name, String id, String type) {
-    this.name = name;
-    this.id = id;
-    this.type = type;
-  }
   
   @Override
   public boolean equals(Object obj) {
