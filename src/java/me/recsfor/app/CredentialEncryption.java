@@ -117,22 +117,6 @@ public class CredentialEncryption {
     return Hex.encodeHexString(randSalt);
   }
   /**
-   * Creates a random 128-bit salt.
-   * @return the salt
-   */
-  public static byte[] newSalt() {
-    byte[] randSalt;
-    try {
-      randSalt = new byte[16];
-      SecureRandom rand = SecureRandom.getInstance(SALT_ALGO);
-      rand.nextBytes(randSalt);
-    } catch (NoSuchAlgorithmException e) {
-      randSalt = e.getMessage().getBytes();
-      System.err.println(Arrays.toString(e.getStackTrace()));
-    }
-    return randSalt;
-  }
-  /**
    * Creates a 256-bit (64 character) hash using password-based encryption.
    * @return the hashed password
    * @throws NoSuchAlgorithmException if there is no suitable hashing method
@@ -147,25 +131,6 @@ public class CredentialEncryption {
     return Hex.encodeHexString(enc);
   }
   /**
-   * Creates a 256-bit hash.
-   * @return the hash
-   * @param pw the password to hash
-   * @param slt the salt to use
-   */
-  public static byte[] newHash(String pw, byte[] slt) {
-    char[] charPass = pw.toCharArray();
-    byte[] enc;
-    try {
-      PBEKeySpec spec = new PBEKeySpec(charPass, slt, iterations, 256);
-      SecretKeyFactory key = SecretKeyFactory.getInstance(HASH_ALGO);
-      enc = key.generateSecret(spec).getEncoded();
-    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-      enc = e.getMessage().getBytes();
-      System.err.println(Arrays.toString(e.getStackTrace()));
-    }
-    return enc;
-  }
-  /**
    * Static method to determine whether a password matches its stored hash, using the generated salt for the user.
    * @param testPass the password to check
    * @param storedHash the known correct password hash
@@ -177,8 +142,12 @@ public class CredentialEncryption {
       CredentialEncryption testCred = new CredentialEncryption(testPass, storedSalt);
       byte[] testHash = Hex.decodeHex(testCred.getHash().toCharArray());
       byte[] knownHash = Hex.decodeHex(storedHash.toCharArray());
+      //difference between the two hashes
+      //compare the key length of each
       int diff = knownHash.length ^ testHash.length;
       for (int i = 0; i < knownHash.length && i < testHash.length; i++) {
+        //check the current difference against the differing bits in each byte
+        //the new difference will be 0 if these values are the same
         diff |= knownHash[i] ^ testHash[i];
       }
       return diff == 0;
@@ -196,8 +165,12 @@ public class CredentialEncryption {
   public boolean validatePassword(String storedHash) throws DecoderException {
     byte[] testHash = Hex.decodeHex(hash.toCharArray());
     byte[] knownHash = Hex.decodeHex(storedHash.toCharArray());
+    //difference between the two hashes
+    //compare the key length of each
     int diff = knownHash.length ^ testHash.length;
     for (int i = 0; i < knownHash.length && i < testHash.length; i++) {
+      //check the current difference against the differing bits in each byte
+      //the new difference will be 0 if these values are the same
       diff |= knownHash[i] ^ testHash[i];
     }
     return diff == 0;

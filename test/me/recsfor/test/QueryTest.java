@@ -26,12 +26,12 @@ import static org.junit.Assert.*;
  * Provides tests for query classes.
  * @author lkitaev
  */
-public class QueryJUnitTest {
+public class QueryTest {
   private MovieQuery movie;
   private ArtistQuery artist;
   private AlbumQuery album;
   
-  public QueryJUnitTest() {
+  public QueryTest() {
   }
   
   @BeforeClass
@@ -83,15 +83,14 @@ public class QueryJUnitTest {
     assertEquals(lenOne, lenTwo);
   }
   /**
-   * Tests that reserved URL characters are removed properly.
+   * Tests that reserved URL characters are removed properly in movie queries.
    * Should not affect search results.
    */
   @Test
-  public void checkReplace() {
+  public void checkMovieReplace() {
     System.out.println("Testing URL replacement.");
     String query = "idolm@ster";
     String rep = "idolm ster";
-    //movie/tv
     movie = new MovieQuery(query);
     assertNotEquals(query, movie.getQuery());
     assertEquals(rep, movie.getQuery());
@@ -99,21 +98,39 @@ public class QueryJUnitTest {
     movie = new MovieQuery(rep);
     Object[] resTwo = movie.getResults().values().toArray();
     assertArrayEquals(resOne, resTwo);
-    //groups
+  }
+  /**
+   * Tests that reserved URL characters are removed properly in artist queries.
+   * Should not affect search results.
+   */
+  @Test
+  public void checkArtistReplace() {
+    System.out.println("Testing URL replacement.");
+    String query = "idolm@ster";
+    String rep = "idolm ster";
     artist = new ArtistQuery(query);
     assertNotEquals(query, artist.getQuery());
     assertEquals(rep, artist.getQuery());
-    resOne = artist.getResults().values().toArray();
+    Object[] resOne = artist.getResults().values().toArray();
     artist = new ArtistQuery(rep);
-    resTwo = artist.getResults().values().toArray();
+    Object[] resTwo = artist.getResults().values().toArray();
     assertArrayEquals(resOne, resTwo);
-    //releases
+  }
+  /**
+   * Tests that reserved URL characters are removed properly in album queries.
+   * Should not affect search results.
+   */
+  @Test
+  public void checkAlbumReplace() {
+    System.out.println("Testing URL replacement.");
+    String query = "idolm@ster";
+    String rep = "idolm ster";
     album = new AlbumQuery(query);
     assertNotEquals(query, album.getQuery());
     assertEquals(rep, album.getQuery());
-    resOne = album.getResults().values().toArray();
+    Object[] resOne = album.getResults().values().toArray();
     album = new AlbumQuery(rep);
-    resTwo = album.getResults().values().toArray();
+    Object[] resTwo = album.getResults().values().toArray();
     assertArrayEquals(resOne, resTwo);
   }
 }

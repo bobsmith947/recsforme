@@ -8,20 +8,25 @@
     </description>
   </info>
   <dependencies>
+    <!-- regular dependencies -->
     <dependency org="javax" name="javaee-endorsed-api" rev="7.0"/>
     <dependency org="org.apache.taglibs" name="taglibs-standard-impl" rev="1.2.5" />
     <dependency org="org.apache.taglibs" name="taglibs-standard-spec" rev="1.2.5" />
+    <dependency org="org.apache.httpcomponents" name="httpclient" rev="4.5.3"/>
+    <dependency org="org.apache.httpcomponents" name="httpcore" rev="4.4.9" />
+    <dependency org="org.apache.commons" name="commons-lang3" rev="3.4"/>
+    <dependency org="commons-codec" name="commons-codec" rev="1.10"/>
+    <dependency org="commons-logging" name="commons-logging" rev="1.2" />
     <dependency org="com.omertron" name="API-OMDB" rev="1.5"/>
     <dependency org="jdom" name="jdom" rev="1.0"/>
-    <dependency org="commons-codec" name="commons-codec" rev="1.4"/>
-    <dependency org="org.apache.commons" name="commons-lang3" rev="3.4"/>
     <dependency org="org.yamj" name="api-common" rev="2.1"/>
-    <dependency org="org.apache.httpcomponents" name="httpclient" rev="4.5.3"/>
-    <dependency org="junit" name="junit" rev="4.12"/>
     <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.8.7"/>
     <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.8.7"/>
     <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.8.7"/>
     <dependency org="org.slf4j" name="slf4j-api" rev="1.7.24"/>
     <dependency org="org.slf4j" name="slf4j-jdk14" rev="1.7.24"/>
+    <!-- test dependencies -->
+    <dependency org="junit" name="junit" rev="4.12"/>
+    <dependency org="org.hamcrest" name="hamcrest-core" rev="1.3" />
   </dependencies>
 </ivy-module>

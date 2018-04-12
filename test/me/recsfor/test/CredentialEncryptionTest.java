@@ -29,13 +29,10 @@ import org.apache.commons.codec.binary.Hex;
  */
 public class CredentialEncryptionTest {
   private static final String PASS = "Th1sIs@T3stPassw0rd!";
-  private final byte[] testSalt;
-  private final byte[] testHash;
+  private static final byte[] SALT = {-11, 66, -125, 125, 83, -72, -10, 36, -72, -52, 98, 110, 26, -9, 7, -27};
+  private static final byte[] HASH = {13, 61, 92, 119, -95, 85, 68, 109, 12, 0, 32, -24, -32, 52, -56, 72, -19, 49, -120, 17, 22, 27, -76, 121, 79, -107, 3, -21, -109, 70, 90, 97};
   
-  //TODO use hardcoded salt/hash
   public CredentialEncryptionTest() {
-    this.testSalt = CredentialEncryption.newSalt();
-    this.testHash = CredentialEncryption.newHash(PASS, testSalt);
   }
   
   @BeforeClass
@@ -85,7 +82,7 @@ public class CredentialEncryptionTest {
     instance = new CredentialEncryption(PASS, salt);
     String otherResult = instance.getHash();
     assertEquals(result, otherResult);
-    instance = new CredentialEncryption(PASS, Hex.encodeHexString(testSalt));
+    instance = new CredentialEncryption(PASS, Hex.encodeHexString(SALT));
     otherResult = instance.getHash();
     assertNotEquals(result, otherResult);
     instance = new CredentialEncryption("alsoatestpassword");
@@ -98,9 +95,9 @@ public class CredentialEncryptionTest {
   @Test
   public void testValidatePassword_3args() {
     System.out.println("validatePassword");
-    boolean result = CredentialEncryption.validatePassword(PASS, Hex.encodeHexString(testHash), Hex.encodeHexString(testSalt));
+    boolean result = CredentialEncryption.validatePassword(PASS, Hex.encodeHexString(HASH), Hex.encodeHexString(SALT));
     assertTrue(result);
-    result = CredentialEncryption.validatePassword("anothertestpassword", Hex.encodeHexString(testHash), Hex.encodeHexString(testSalt));
+    result = CredentialEncryption.validatePassword("anothertestpassword", Hex.encodeHexString(HASH), Hex.encodeHexString(SALT));
     assertFalse(result);
   }
   /**
@@ -110,11 +107,11 @@ public class CredentialEncryptionTest {
   @Test
   public void testValidatePassword_String() throws Exception {
     System.out.println("validatePassword");
-    CredentialEncryption instance = new CredentialEncryption(PASS, Hex.encodeHexString(testSalt));
-    boolean result = instance.validatePassword(Hex.encodeHexString(testHash));
+    CredentialEncryption instance = new CredentialEncryption(PASS, Hex.encodeHexString(SALT));
+    boolean result = instance.validatePassword(Hex.encodeHexString(HASH));
     assertTrue(result);
     instance = new CredentialEncryption(PASS);
-    result = instance.validatePassword(Hex.encodeHexString(testHash));
+    result = instance.validatePassword(Hex.encodeHexString(HASH));
     assertFalse(result);
   }
 }

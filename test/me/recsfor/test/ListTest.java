@@ -49,7 +49,6 @@ public class ListTest {
   @After
   public void tearDown() {
   }
-
   /**
    * Tests that JSON data can be mapped to an instance.
    * @throws Exception if something goes wrong
