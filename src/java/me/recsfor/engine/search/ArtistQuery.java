@@ -29,8 +29,17 @@ import java.util.List;
  * @author lkitaev
  */
 public class ArtistQuery extends AbstractQuery {
+  /**
+   * Contains result info.
+   */
   private ArtistWs2 artist;
+  /**
+   * Query parameters.
+   */
   private final ArtistIncludesWs2 inc;
+  /**
+   * The servlet context which this class generates info for.
+   */
   public static final String CONTEXT = "ArtistInfo?id=";
 
   public ArtistQuery() {

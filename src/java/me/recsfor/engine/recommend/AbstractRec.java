@@ -22,8 +22,17 @@ import java.util.LinkedHashMap;
  * @author lkitaev
  */
 public abstract class AbstractRec {
+  /**
+   * The username and user ID.
+   */
   protected String name, id;
+  /**
+   * True if the recommendations are for likes, false if they're for dislikes.
+   */
   protected boolean status;
+  /**
+   * The generated recommendations.
+   */
   protected LinkedHashMap<String, String> recs;
   
   public AbstractRec() {
@@ -68,6 +77,12 @@ public abstract class AbstractRec {
    */
   public boolean getStatus() {
     return status;
+  }
+  /**
+   * @param status the status to set
+   */
+  public void setStatus(boolean status) {
+    this.status = status;
   }
   /**
    * @return the recs

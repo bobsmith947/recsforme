@@ -18,10 +18,10 @@
     <dependency org="org.yamj" name="api-common" rev="2.1"/>
     <dependency org="org.apache.httpcomponents" name="httpclient" rev="4.5.3"/>
     <dependency org="junit" name="junit" rev="4.12"/>
-    <!--<dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.8.7"/>-->
-    <!--<dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.8.7"/>-->
-    <!--<dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.8.7"/>-->
-    <!--<dependency org="org.slf4j" name="slf4j-api" rev="1.7.24"/>-->
-    <!--<dependency org="org.slf4j" name="slf4j-jdk14" rev="1.7.24"/>-->
+    <dependency org="com.fasterxml.jackson.core" name="jackson-core" rev="2.8.7"/>
+    <dependency org="com.fasterxml.jackson.core" name="jackson-annotations" rev="2.8.7"/>
+    <dependency org="com.fasterxml.jackson.core" name="jackson-databind" rev="2.8.7"/>
+    <dependency org="org.slf4j" name="slf4j-api" rev="1.7.24"/>
+    <dependency org="org.slf4j" name="slf4j-jdk14" rev="1.7.24"/>
   </dependencies>
 </ivy-module>

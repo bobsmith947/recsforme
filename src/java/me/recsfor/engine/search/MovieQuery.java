@@ -30,8 +30,17 @@ import static org.apache.commons.lang3.text.WordUtils.capitalize;
  */
 public class MovieQuery extends AbstractQuery {
   private OmdbVideoFull info;
+  /**
+   * Only need to use parameters for the plot type.
+   */
   private final OmdbParameters params;
+  /**
+   * Key can be generated on the OMDb site.
+   */
   private static final OmdbApi CLIENT = new OmdbApi(System.getenv("OMDB_KEY"));
+  /**
+   * The servlet context which this class generates info for.
+   */
   public static final String CONTEXT = "MovieInfo?id=";
 
   public MovieQuery() {

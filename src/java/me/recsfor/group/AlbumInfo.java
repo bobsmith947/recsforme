@@ -42,6 +42,9 @@ public class AlbumInfo extends HttpServlet {
   private static final long serialVersionUID = 3558291301985484615L;
   private String title, type, date;
   private String[] artist;
+  /**
+   * Used for getting track listings.
+   */
   private MediumListWs2 info;
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.

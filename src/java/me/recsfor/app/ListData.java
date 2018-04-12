@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Objects;
 import me.recsfor.engine.search.*;
 /**
  * Converts user like and dislike data from JavaScript Object Notation (JSON) to a Java object.
@@ -30,12 +31,13 @@ import me.recsfor.engine.search.*;
  */
 public class ListData implements Serializable {
   private static final long serialVersionUID = 177281769747262676L;
+  /**
+   * Represents the JSON array of objects held under the "list" name.
+   */
   private LinkedList<ListGroup> list;
   
   public ListData() {
-    ListGroup dummyGroup = new ListGroup("[unknown]", "", null);
     list = new LinkedList<>();
-    list.add(dummyGroup);
   }
   
   public ListData(LinkedList<ListGroup> list) {
@@ -163,6 +165,23 @@ public class ListData implements Serializable {
     return ret;
   }
   /**
+   * Creates a <code>ListGroup</code> object representing an item with the specified JSON data.
+   * @param json the data
+   * @return the generated data
+   * @throws IOException if a problem occurs when reading the input
+   */
+  public static ListGroup generateItem(String json) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    ListGroup group;
+    try {
+      group = mapper.readValue(json, ListGroup.class);
+    } catch (JsonMappingException | JsonParseException e) {
+      group = new ListGroup();
+      System.err.println(Arrays.toString(e.getStackTrace()));
+    }
+    return group;
+  }
+  /**
    * Removes an item matching the specified group properties from the list.
    * @param name the group name
    * @param id the group id
@@ -215,5 +234,30 @@ public class ListData implements Serializable {
       System.err.println(Arrays.toString(e.getStackTrace()));
     }
     return list.contains(group);
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null) {
+      //ensure it's not null
+      return false;
+    } else if (obj == this) {
+      //check if reference is the same
+      return true;
+    } else if (obj.getClass() != this.getClass()) {
+      //compare classes rather than instanceof
+      //if this class is extended, children would be equal
+      return false;
+    } else {
+      //check if lists are the same
+      return obj.hashCode() == this.hashCode();
+    }
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 29 * hash + Objects.hashCode(this.list);
+    return hash;
   }
 }

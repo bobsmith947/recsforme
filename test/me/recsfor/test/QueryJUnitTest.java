@@ -24,14 +24,12 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 /**
  * Provides tests for query classes.
- * Checks that name and id arrays are the same length.
- * Also makes sure that reserved URL characters are replaced properly.
  * @author lkitaev
  */
 public class QueryJUnitTest {
-  private static MovieQuery movie;
-  private static ArtistQuery artist;
-  private static AlbumQuery album;
+  private MovieQuery movie;
+  private ArtistQuery artist;
+  private AlbumQuery album;
   
   public QueryJUnitTest() {
   }
@@ -51,35 +49,49 @@ public class QueryJUnitTest {
   @After
   public void tearDown() {
   }
-  
+  /**
+   * Tests that movie query result arrays are the same length.
+   */
   @Test
   public void checkMovieResLength() {
+    System.out.println("Testing movie result length.");
     movie = new MovieQuery("blade runner");
     Integer lenOne = movie.listNames().length;
     Integer lenTwo = movie.listIds().length;
     assertEquals(lenOne, lenTwo);
   }
-  
+  /**
+   * Tests that artist query result arrays are the same length.
+   */
   @Test
   public void checkArtistResLength() {
+    System.out.println("Testing artist result length.");
     artist = new ArtistQuery("daft punk");
     Integer lenOne = artist.listNames().length;
     Integer lenTwo = artist.listIds().length;
     assertEquals(lenOne, lenTwo);
   }
-  
+  /**
+   * Tests that album query result arrays are the same length.
+   */
   @Test
   public void checkAlbumResLength() {
+    System.out.println("Testing album result length.");
     album = new AlbumQuery("homework");
     Integer lenOne = album.listNames().length;
     Integer lenTwo = album.listIds().length;
     assertEquals(lenOne, lenTwo);
   }
-  
+  /**
+   * Tests that reserved URL characters are removed properly.
+   * Should not affect search results.
+   */
   @Test
   public void checkReplace() {
+    System.out.println("Testing URL replacement.");
     String query = "idolm@ster";
     String rep = "idolm ster";
+    //movie/tv
     movie = new MovieQuery(query);
     assertNotEquals(query, movie.getQuery());
     assertEquals(rep, movie.getQuery());
@@ -87,6 +99,7 @@ public class QueryJUnitTest {
     movie = new MovieQuery(rep);
     Object[] resTwo = movie.getResults().values().toArray();
     assertArrayEquals(resOne, resTwo);
+    //groups
     artist = new ArtistQuery(query);
     assertNotEquals(query, artist.getQuery());
     assertEquals(rep, artist.getQuery());
@@ -94,6 +107,7 @@ public class QueryJUnitTest {
     artist = new ArtistQuery(rep);
     resTwo = artist.getResults().values().toArray();
     assertArrayEquals(resOne, resTwo);
+    //releases
     album = new AlbumQuery(query);
     assertNotEquals(query, album.getQuery());
     assertEquals(rep, album.getQuery());

@@ -28,7 +28,8 @@ import org.apache.commons.codec.binary.Hex;
  * @author lkitaev
  */
 public class CredentialEncryption {
-  private final String pass, salt, hash;
+  private final String pass;
+  private String salt, hash;
   private static final String HASH_ALGO = "PBKDF2WithHmacSHA1";
   private static final String SALT_ALGO = "SHA1PRNG";
   private static int iterations = 100000;
@@ -41,27 +42,32 @@ public class CredentialEncryption {
   /**
    * Constructor to create a hash for the provided password using a newly generated salt.
    * @param pass the password to hash
-   * @throws NoSuchAlgorithmException if the encryption can not be applied
-   * @throws InvalidKeySpecException if the key specification is wrong
-   * @throws DecoderException if a hex string can not be converted
    */
-  public CredentialEncryption(String pass) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
+  public CredentialEncryption(String pass) {
     this.pass = pass;
-    salt = generateSalt();
-    hash = generateHash();
+    try {
+      salt = generateSalt();
+      hash = generateHash();
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException | DecoderException e) {
+      System.err.println(Arrays.toString(e.getStackTrace()));
+      salt = null;
+      hash = null;
+    }
   }
   /**
    * Constructor to create a hash for the provided password using a previously generated salt.
    * @param pass the password to hash
    * @param salt the salt to use
-   * @throws NoSuchAlgorithmException if the encryption can not be applied
-   * @throws InvalidKeySpecException if the key specification is wrong
-   * @throws DecoderException if the salt can not be converted
    */
-  public CredentialEncryption(String pass, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
+  public CredentialEncryption(String pass, String salt) {
     this.pass = pass;
     this.salt = salt;
-    hash = generateHash();
+    try {
+      hash = generateHash();
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException | DecoderException e) {
+      System.err.println(Arrays.toString(e.getStackTrace()));
+      hash = null;
+    }
   }
   /**
    * @return the salt
@@ -70,10 +76,22 @@ public class CredentialEncryption {
     return salt;
   }
   /**
+   * @param salt the salt to set
+   */
+  public void setSalt(String salt) {
+    this.salt = salt;
+  }
+  /**
    * @return the hash
    */
   public String getHash() {
     return hash;
+  }
+  /**
+   * @param hash the hash to set
+   */
+  public void setHash(String hash) {
+    this.hash = hash;
   }
   /**
    * @return the iterations
@@ -164,7 +182,7 @@ public class CredentialEncryption {
         diff |= knownHash[i] ^ testHash[i];
       }
       return diff == 0;
-    } catch (NoSuchAlgorithmException | InvalidKeySpecException | DecoderException e) {
+    } catch (DecoderException e) {
       System.err.println(Arrays.toString(e.getStackTrace()));
     }
     return false;
@@ -173,11 +191,9 @@ public class CredentialEncryption {
    * Instance method to determine whether a password matches its stored hash, using the generated salt for the user.
    * @param storedHash the known correct password hash
    * @return whether or not the password is correct
-   * @throws NoSuchAlgorithmException if the test password can not be encrypted
-   * @throws InvalidKeySpecException if the key specification is wrong
-   * @throws DecoderException if the hashes can not be converted
+   * @throws DecoderException if the a hash can not be converted from hexadecimal
    */
-  public boolean validatePassword(String storedHash) throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
+  public boolean validatePassword(String storedHash) throws DecoderException {
     byte[] testHash = Hex.decodeHex(hash.toCharArray());
     byte[] knownHash = Hex.decodeHex(storedHash.toCharArray());
     int diff = knownHash.length ^ testHash.length;

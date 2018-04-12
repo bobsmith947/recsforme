@@ -24,6 +24,9 @@ import java.util.LinkedHashMap;
 public abstract class AbstractQuery {
   protected final String query;
   protected LinkedHashMap<String, String> results;
+  /**
+   * Number of results for the query.
+   */
   protected int len;
 
   protected AbstractQuery() {
