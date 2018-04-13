@@ -21,7 +21,7 @@
         <form data-bind="visible:!resetForm()" action="auth.jsp" method="POST">
           <div class="form-group">
             <label for="uname">Username</label>
-            <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" autofocus required>
+            <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" maxlength="18" pattern="\w+" autofocus required>
           </div>
           <div class="form-group">
             <label for="pw">Password</label>
@@ -40,7 +40,7 @@
         <form data-bind="visible:resetForm(),submit:requestReset" id="reset-form" method="POST">
           <div class="form-group">
             <label for="email">Email Address</label>
-            <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" required>
+            <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" maxlength="254" pattern="[@.]\w+" required>
             <small class="form-text text-muted">
               Enter the email address that you signed up for the account named <strong data-bind="text:name()"></strong> with.
             </small>
@@ -48,12 +48,14 @@
           </div>
           <div data-bind="visible:email()!==''" class="form-group">
             <label for="npw">New Password</label>
-            <input data-bind="textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" maxlength="36" required>
+            <input data-bind="textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" required>
             <small class="form-text text-muted">Enter a secure password you don't use elsewhere.</small>
             <label for="cpw">Confirm Password</label>
             <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
           </div>
-          <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block">Reset Password</button>
+          <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block">
+            Reset Password
+          </button>
         </form>
         <div id="subres"></div>
       </c:if>

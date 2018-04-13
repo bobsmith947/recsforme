@@ -6,10 +6,13 @@
     <%-- TODO add validation --%>
     <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <main>
+      <div class="alert alert-info">
+        Already have an account? <a class="alert-link" href="login.jsp">Log in here.</a>
+      </div>
       <form id="info-form">
         <div class="form-group">
           <label for="uname">Username</label>
-          <input data-bind="textInput:uname,event:{blur:nameCheck}" type="text" class="form-control" id="uname" name="uname" placeholder="Enter your desired username" maxlength="18" autofocus required>
+          <input data-bind="textInput:uname,event:{blur:nameCheck}" type="text" class="form-control" id="uname" name="uname" placeholder="Enter your desired username" maxlength="18" pattern="\w+" autofocus required>
           <small class="form-text text-muted">Only alphanumeric characters are allowed.</small>
           <div id="checkres"></div>
         </div>
@@ -17,14 +20,14 @@
           <label for="pw">Password</label>
           <input data-bind="textInput:pw" type="password" class="form-control" id="pw" name="pw" placeholder="Enter a secure password" minlength="8" required>
           <small class="form-text text-muted">Don't use the same password you use elsewhere!</small>
-          <input data-bind="enable:pw().length>=8,textInput:pwc" type="password" class="form-control" placeholder="Confirm your password" required>
+          <input data-bind="enable:pw().length>=8,textInput:pwc" type="password" class="form-control mt-2" placeholder="Confirm your password" required>
         </div>
         <h5>Optional Fields</h5>
         <div class="form-group">
           <label for="email">Email address</label>
-          <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" placeholder="Enter your email address">
+          <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" maxlength="254" pattern="[@.]\w+">
           <small class="form-text text-muted">Your email is used to reset your password in case you forget it. We will never email you.</small>
-          <small class="form-text text-muted">The email address you use should not be similar to your username for this site.</small>
+          <small class="form-text text-muted">The email address you use should not be the same as your username for this site.</small>
         </div>
         <div class="form-group">
           <label for="dob">Date of birth</label>
