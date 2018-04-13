@@ -29,7 +29,9 @@ import static org.hamcrest.core.Is.is;
  * @author lkitaev
  */
 public class ListTest {
-  private static final String DATA = "{\"list\":[{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"},{\"name\":\"ClariS (j-pop)\",\"id\":\"f3688ad9-cd14-4cee-8fa0-0f4434e762bb\",\"type\":\"Group\"}]}";
+  private String json;
+  private ListData data;
+  private ListGroup group;
   
   public ListTest() {
   }
@@ -44,11 +46,20 @@ public class ListTest {
   
   @Before
   public void setUp() {
+    json = "{\"list\":[{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"},{\"name\":\"ClariS (j-pop)\",\"id\":\"f3688ad9-cd14-4cee-8fa0-0f4434e762bb\",\"type\":\"Group\"},{\"name\":\"Samurai Champloo Music Record: Playlist - Tsutchie\",\"id\":\"655400ef-8e44-3604-8fe5-86c9565b5aa5\",\"type\":\"Soundtrack\"}]}";
+    data = new ListData();
+    group = new ListGroup("The Idolm@ster (2011–)",
+            "tt2649756",
+            "Series");
   }
   
   @After
   public void tearDown() {
+    json = null;
+    data = null;
+    group = null;
   }
+  
   /**
    * Tests that JSON data can be mapped to an instance.
    * @throws Exception if something goes wrong
@@ -57,11 +68,16 @@ public class ListTest {
   public void testMapData() throws Exception {
     System.out.println("mapData");
     ListData expResult = new ListData();
-    ListGroup group = new ListGroup("The Idolm@ster (2011–)", "tt2649756", "Series");
     expResult.getList().add(group);
-    group = new ListGroup("ClariS (j-pop)", "f3688ad9-cd14-4cee-8fa0-0f4434e762bb", "Group");
+    group = new ListGroup("ClariS (j-pop)",
+            "f3688ad9-cd14-4cee-8fa0-0f4434e762bb",
+            "Group");
     expResult.getList().add(group);
-    ListData result = ListData.mapData(DATA);
+    group = new ListGroup("Samurai Champloo Music Record: Playlist - Tsutchie",
+            "655400ef-8e44-3604-8fe5-86c9565b5aa5",
+            "Soundtrack");
+    expResult.getList().add(group);
+    ListData result = ListData.mapData(json);
     assertEquals(expResult, result);
   }
   /**
@@ -70,28 +86,53 @@ public class ListTest {
   @Test
   public void testStringifyData() {
     System.out.println("stringifyData");
-    ListData data = new ListData();
-    ListGroup group = new ListGroup("The Idolm@ster (2011–)", "tt2649756", "Series");
     data.getList().add(group);
-    group = new ListGroup("ClariS (j-pop)", "f3688ad9-cd14-4cee-8fa0-0f4434e762bb", "Group");
+    group = new ListGroup("ClariS (j-pop)",
+            "f3688ad9-cd14-4cee-8fa0-0f4434e762bb",
+            "Group");
     data.getList().add(group);
-    String expResult = DATA;
+    group = new ListGroup("Samurai Champloo Music Record: Playlist - Tsutchie",
+            "655400ef-8e44-3604-8fe5-86c9565b5aa5",
+            "Soundtrack");
+    data.getList().add(group);
+    String expResult = json;
     String result = ListData.stringifyData(data);
     assertEquals(expResult, result);
   }
   /**
-   * Tests that the correct servlet context for groups can be generated.
+   * Tests that the correct servlet context for movies can be generated.
    */
   @Test
-  public void testGenerateContext() {
+  public void testGenerateContextMovie() {
     System.out.println("generateContext");
-    ListGroup group = new ListGroup("The Idolm@ster (2011–)", "tt2649756", "Series");
     String expResult = "MovieInfo?id=";
     String result = ListData.generateContext(group.getType());
     assertEquals(expResult, result);
-    expResult = "ArtistInfo?id=";
-    group = new ListGroup("ClariS (j-pop)", "f3688ad9-cd14-4cee-8fa0-0f4434e762bb", "Group");
-    result = ListData.generateContext(group.getType());
+  }
+  /**
+   * Tests that the correct servlet context for artists can be generated.
+   */
+  @Test
+  public void testGenerateContextArtist() {
+    System.out.println("generateContext");
+    String expResult = "ArtistInfo?id=";
+    group = new ListGroup("ClariS (j-pop)",
+            "f3688ad9-cd14-4cee-8fa0-0f4434e762bb",
+            "Group");
+    String result = ListData.generateContext(group.getType());
+    assertEquals(expResult, result);
+  }
+  /**
+   * Tests that the correct servlet context for albums can be generated.
+   */
+  @Test
+  public void testGenerateContextAlbum() {
+    System.out.println("generateContext");
+    String expResult = "AlbumInfo?id=";
+    group = new ListGroup("Samurai Champloo Music Record: Playlist - Tsutchie",
+            "655400ef-8e44-3604-8fe5-86c9565b5aa5",
+            "Soundtrack");
+    String result = ListData.generateContext(group.getType());
     assertEquals(expResult, result);
   }
   /**
@@ -100,10 +141,10 @@ public class ListTest {
   @Test
   public void testGenerateItem_3args() {
     System.out.println("generateItem");
-    String name = "The Idolm@ster (2011–)";
-    String id = "tt2649756";
-    String type = "Series";
-    String expResult = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
+    String name = "ClariS (j-pop)";
+    String id = "f3688ad9-cd14-4cee-8fa0-0f4434e762bb";
+    String type = "Group";
+    String expResult = "{\"name\":\"ClariS (j-pop)\",\"id\":\"f3688ad9-cd14-4cee-8fa0-0f4434e762bb\",\"type\":\"Group\"}";
     String result = ListData.generateItem(name, id, type);
     assertEquals(expResult, result);
   }
@@ -113,8 +154,8 @@ public class ListTest {
    */
   public void testGenerateItem_String() throws Exception {
     System.out.println("generateItem");
-    String json = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
-    ListGroup expResult = new ListGroup("The Idolm@ster (2011–)", "tt2649756", "Series");
+    json = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
+    ListGroup expResult = group;
     ListGroup result = ListData.generateItem(json);
     assertEquals(expResult, result);
   }
@@ -124,16 +165,14 @@ public class ListTest {
   @Test
   public void testRemoveItem_3args() {
     System.out.println("removeItem");
-    String name = "The Idolm@ster (2011–)";
-    String id = "tt2649756";
-    String type = "Series";
-    ListData instance = new ListData();
-    ListGroup group = new ListGroup(name, id, type);
-    instance.getList().add(group);
-    assertThat(instance.getList().size(), is(1));
-    instance.removeItem(name, id, type);
-    assertThat(instance.getList().size(), is(0));
-    
+    String name = "ClariS (j-pop)";
+    String id = "f3688ad9-cd14-4cee-8fa0-0f4434e762bb";
+    String type = "Group";
+    group = new ListGroup(name, id, type);
+    data.getList().add(group);
+    assertThat(data.getList().size(), is(1));
+    data.removeItem(name, id, type);
+    assertThat(data.getList().size(), is(0));
   }
   /**
    * Tests that an item can be removed from a list if given JSON data.
@@ -142,13 +181,11 @@ public class ListTest {
   @Test
   public void testRemoveItem_String() throws Exception {
     System.out.println("removeItem");
-    String json = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
-    ListData instance = new ListData();
-    ListGroup group = new ListGroup("The Idolm@ster (2011–)", "tt2649756", "Series");
-    instance.getList().add(group);
-    assertThat(instance.getList().size(), is(1));
-    instance.removeItem(json);
-    assertThat(instance.getList().size(), is(0));
+    json = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
+    data.getList().add(group);
+    assertThat(data.getList().size(), is(1));
+    data.removeItem(json);
+    assertThat(data.getList().size(), is(0));
   }
   /**
    * Tests that a list can be checked if it contains an item based on group data.
@@ -156,14 +193,15 @@ public class ListTest {
   @Test
   public void testContainsItem_3args() {
     System.out.println("containsItem");
-    String name = "The Idolm@ster (2011–)";
-    String id = "tt2649756";
-    String type = "Series";
-    ListData instance = new ListData();
-    ListGroup group = new ListGroup(name, id, type);
-    instance.getList().add(group);
-    assertTrue(instance.containsItem(name, id, type));
-    assertFalse(instance.containsItem("The Idolmaster Movie: Beyond the Brilliant Future!", "tt3306854", "Movie"));
+    String name = "ClariS (j-pop)";
+    String id = "f3688ad9-cd14-4cee-8fa0-0f4434e762bb";
+    String type = "Group";
+    group = new ListGroup(name, id, type);
+    data.getList().add(group);
+    assertTrue(data.containsItem(name, id, type));
+    assertFalse(data.containsItem("Samurai Champloo Music Record: Playlist - Tsutchie",
+            "655400ef-8e44-3604-8fe5-86c9565b5aa5",
+            "Soundtrack"));
   }
   /**
    * Tests that a list can be checked if it contains an item based on JSON data.
@@ -172,11 +210,11 @@ public class ListTest {
   @Test
   public void testContainsItem_String() throws Exception {
     System.out.println("containsItem");
-    String json = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
-    ListData instance = new ListData();
-    ListGroup group = new ListGroup("The Idolm@ster (2011–)", "tt2649756", "Series");
-    instance.getList().add(group);
-    assertTrue(instance.containsItem(json));
-    assertFalse(instance.containsItem("The Idolmaster Movie: Beyond the Brilliant Future!", "tt3306854", "Movie"));
+    json = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
+    data.getList().add(group);
+    assertTrue(data.containsItem(json));
+    assertFalse(data.containsItem("Samurai Champloo Music Record: Playlist - Tsutchie",
+            "655400ef-8e44-3604-8fe5-86c9565b5aa5",
+            "Soundtrack"));
   }
 }

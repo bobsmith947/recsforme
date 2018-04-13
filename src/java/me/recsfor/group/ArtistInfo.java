@@ -40,6 +40,7 @@ public class ArtistInfo extends HttpServlet {
   private String[] years;
   private List<ReleaseGroupWs2> albums;
   private List<ReleaseWs2> contrib;
+  
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    * @param request servlet request
@@ -124,16 +125,17 @@ public class ArtistInfo extends HttpServlet {
   public String getServletInfo() {
     return "Provides information for artist groups.";
   }
+  
   /**
    * Gives values to instance variables using an artist query.
    * @param id the id of the artist
    */
   private void populate(String id) {
-    ArtistQuery query = new ArtistQuery(id, true);
-    name = query.getQuery();
-    type = query.listType();
-    years = query.listYears();
-    albums = query.listAlbums();
-    contrib = query.listContrib();
+    ArtistQuery artist = new ArtistQuery(id, true);
+    name = artist.listTitles()[0];
+    type = artist.listType();
+    years = artist.listYears();
+    albums = artist.listAlbums();
+    contrib = artist.listContrib();
   }
 }

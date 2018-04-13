@@ -28,7 +28,7 @@ import static org.apache.commons.lang3.text.WordUtils.capitalize;
  * Uses the OMDb API (https://omdbapi.com) to gather <code>movie</code>, <code>series</code>, and <code>game</code> data for search results and group pages.
  * @author lkitaev
  */
-public class MovieQuery extends AbstractQuery {
+public class MovieQuery extends BasicQuery {
   private OmdbVideoFull info;
   /**
    * Only need to use parameters for the plot type.
@@ -90,6 +90,7 @@ public class MovieQuery extends AbstractQuery {
       }
     }
   }
+  
   /**
    * @return the info
    */
@@ -108,33 +109,27 @@ public class MovieQuery extends AbstractQuery {
   public final OmdbParameters getParams() {
     return params;
   }
-
-  @Override
-  public String[] listNames() {
-    String[] res = new String[0];
-    res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
-    return res;
-  }
-
-  @Override
-  public String[] listIds() {
-    String[] ids = new String[0];
-    ids = len >= 1 ? Arrays.copyOf(results.keySet().toArray(ids), len) : null;
-    return ids;
+  
+  /**
+   * Gets the title of the movie.
+   * @return the title
+   */
+  public String listTitle() {
+    return info.getTitle();
   }
   /**
    * Gets the year of the movie.
    * @return the year
    */
   public String listYear() {
-    return getInfo().getYear();
+    return info.getYear();
   }
   /**
    * Gets the type (movie, series, or game) of the movie.
    * @return the type
    */
   public String listType() {
-    String type = getInfo().getType();
+    String type = info.getType();
     type = capitalize(type); //give it title case because it gets returned lower case
     return type;
   }
@@ -143,14 +138,15 @@ public class MovieQuery extends AbstractQuery {
    * @return the plot
    */
   public String listPlot() {
-    return getInfo().getPlot();
+    return info.getPlot();
   }
+  
   /**
    * Retrieves the value of the desired plot type.
    * @param type the plot type
    * @return the corresponding enum values of the plot type
    */
-  private PlotType parsePlot(String type) {
+  private static PlotType parsePlot(String type) {
     switch (type.toLowerCase()) {
       case "full":
         return PlotType.FULL;

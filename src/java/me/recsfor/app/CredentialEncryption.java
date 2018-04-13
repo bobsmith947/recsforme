@@ -69,6 +69,7 @@ public class CredentialEncryption {
       hash = null;
     }
   }
+  
   /**
    * @return the salt
    */
@@ -105,6 +106,7 @@ public class CredentialEncryption {
   public static void setIterations(int num) {
     iterations = num;
   }
+  
   /**
    * Creates a random 128-bit (32 character) salt to use for hashing.
    * @return the salt
@@ -130,6 +132,7 @@ public class CredentialEncryption {
     byte[] enc = key.generateSecret(spec).getEncoded();
     return Hex.encodeHexString(enc);
   }
+  
   /**
    * Static method to determine whether a password matches its stored hash, using the generated salt for the user.
    * @param testPass the password to check

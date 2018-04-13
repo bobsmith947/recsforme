@@ -30,7 +30,7 @@ import org.musicbrainz.modelWs2.MediumListWs2;
  * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather <code>release</code> and <code>release group</code> data for search results and group pages.
  * @author lkitaev
  */
-public class AlbumQuery extends AbstractQuery {
+public class AlbumQuery extends BasicQuery {
   /**
    * Contains result info.
    */
@@ -111,6 +111,7 @@ public class AlbumQuery extends AbstractQuery {
       }
     }
   }
+  
   /**
    * @return the group
    */
@@ -141,26 +142,19 @@ public class AlbumQuery extends AbstractQuery {
   public boolean isIsNotGroup() {
     return isNotGroup;
   }
-
   /**
    * @param isNotGroup the isNotGroup to set
    */
   public void setIsNotGroup(boolean isNotGroup) {
     this.isNotGroup = isNotGroup;
   }
-
-  @Override
-  public String[] listNames() {
-    String[] res = new String[0];
-    res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
-    return res;
-  }
-
-  @Override
-  public String[] listIds() {
-    String[] res = new String[0];
-    res = len >= 1 ? Arrays.copyOf(getResults().keySet().toArray(res), getResults().size()) : null;
-    return res;
+  
+  /**
+   * Gets the title of the album.
+   * @return the title
+   */
+  public String listTitle() {
+    return group.getTitle();
   }
   /**
    * Gets the type (Album, EP, Single, Compilation, Soundtrack, or others) of the album.
@@ -182,6 +176,7 @@ public class AlbumQuery extends AbstractQuery {
    * @return a length 2 array containing the name and id
    */
   public String[] listArtist() {
+    //TODO add support for multiple artists
     String[] artist = new String[2];
     try {
       //get the first credit if possible
@@ -214,6 +209,7 @@ public class AlbumQuery extends AbstractQuery {
     }
     return date;
   }
+  
   /**
    * Sets the relevant <code>include</code> parameters for <code>release group</code> and <code>release</code> lookup.
    * @param inc whether the includes are to be set or not

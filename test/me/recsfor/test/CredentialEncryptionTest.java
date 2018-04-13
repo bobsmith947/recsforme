@@ -22,15 +22,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.apache.commons.codec.binary.Hex;
 /**
  * Provides tests for the <code>CredentialEncryption</code> class.
  * @author lkitaev
  */
 public class CredentialEncryptionTest {
   private static final String PASS = "Th1sIs@T3stPassw0rd!";
-  private static final byte[] SALT = {-11, 66, -125, 125, 83, -72, -10, 36, -72, -52, 98, 110, 26, -9, 7, -27};
-  private static final byte[] HASH = {13, 61, 92, 119, -95, 85, 68, 109, 12, 0, 32, -24, -32, 52, -56, 72, -19, 49, -120, 17, 22, 27, -76, 121, 79, -107, 3, -21, -109, 70, 90, 97};
+  private static final String SALT = "f542837d53b8f624b8cc626e1af707e5";
+  private static final String HASH = "0d3d5c77a155446d0c0020e8e034c848ed318811161bb4794f9503eb93465a61";
   
   public CredentialEncryptionTest() {
   }
@@ -50,6 +49,7 @@ public class CredentialEncryptionTest {
   @After
   public void tearDown() {
   }
+  
   /**
    * Tests to ensure that salts aren't the same.
    */
@@ -67,26 +67,67 @@ public class CredentialEncryptionTest {
     assertNotEquals(result, otherResult);
   }
   /**
-   * Tests that hashes for the same password/salt are the same.
+   * Tests that hashes for the same password using the same salt are the same.
    */
   @Test
-  public void testHash() {
+  public void testHashSame() {
+    System.out.println("Testing hash generation.");
+    CredentialEncryption instance = new CredentialEncryption();
+    String result = instance.getHash();
+    assertNull(result);
+    instance = new CredentialEncryption(PASS, SALT);
+    result = instance.getHash();
+    assertNotNull(result);
+    instance = new CredentialEncryption(PASS, SALT);
+    String otherResult = instance.getHash();
+    assertEquals(result, otherResult);
+  }
+  /**
+   * Tests that hashes for the same password using different salts aren't the same.
+   */
+  @Test
+  public void testHashNotSameSalt() {
     System.out.println("Testing hash generation.");
     CredentialEncryption instance = new CredentialEncryption();
     String result = instance.getHash();
     assertNull(result);
     instance = new CredentialEncryption(PASS);
     result = instance.getHash();
-    String salt = instance.getSalt();
     assertNotNull(result);
-    instance = new CredentialEncryption(PASS, salt);
+    instance = new CredentialEncryption(PASS, SALT);
     String otherResult = instance.getHash();
-    assertEquals(result, otherResult);
-    instance = new CredentialEncryption(PASS, Hex.encodeHexString(SALT));
-    otherResult = instance.getHash();
     assertNotEquals(result, otherResult);
-    instance = new CredentialEncryption("alsoatestpassword");
-    otherResult = instance.getHash();
+  }
+  /**
+   * Tests that hashes for different passwords using the same salt aren't the same.
+   */
+  @Test
+  public void testHashNotSamePass() {
+    System.out.println("Testing hash generation.");
+    CredentialEncryption instance = new CredentialEncryption();
+    String result = instance.getHash();
+    assertNull(result);
+    instance = new CredentialEncryption(PASS, SALT);
+    result = instance.getHash();
+    assertNotNull(result);
+    instance = new CredentialEncryption("alsoatestpassword", SALT);
+    String otherResult = instance.getHash();
+    assertNotEquals(result, otherResult);
+  }
+  /**
+   * Tests that hashes for different passwords using different salts aren't the same.
+   */
+  @Test
+  public void testHashNotSame() {
+    System.out.println("Testing hash generation.");
+    CredentialEncryption instance = new CredentialEncryption();
+    String result = instance.getHash();
+    assertNull(result);
+    instance = new CredentialEncryption(PASS);
+    result = instance.getHash();
+    assertNotNull(result);
+    instance = new CredentialEncryption("alsoatestpassword", SALT);
+    String otherResult = instance.getHash();
     assertNotEquals(result, otherResult);
   }
   /**
@@ -95,9 +136,9 @@ public class CredentialEncryptionTest {
   @Test
   public void testValidatePassword_3args() {
     System.out.println("validatePassword");
-    boolean result = CredentialEncryption.validatePassword(PASS, Hex.encodeHexString(HASH), Hex.encodeHexString(SALT));
+    boolean result = CredentialEncryption.validatePassword(PASS, HASH, SALT);
     assertTrue(result);
-    result = CredentialEncryption.validatePassword("anothertestpassword", Hex.encodeHexString(HASH), Hex.encodeHexString(SALT));
+    result = CredentialEncryption.validatePassword("anothertestpassword", HASH, SALT);
     assertFalse(result);
   }
   /**
@@ -107,11 +148,11 @@ public class CredentialEncryptionTest {
   @Test
   public void testValidatePassword_String() throws Exception {
     System.out.println("validatePassword");
-    CredentialEncryption instance = new CredentialEncryption(PASS, Hex.encodeHexString(SALT));
-    boolean result = instance.validatePassword(Hex.encodeHexString(HASH));
+    CredentialEncryption instance = new CredentialEncryption(PASS, SALT);
+    boolean result = instance.validatePassword(HASH);
     assertTrue(result);
     instance = new CredentialEncryption(PASS);
-    result = instance.validatePassword(Hex.encodeHexString(HASH));
+    result = instance.validatePassword(HASH);
     assertFalse(result);
   }
 }

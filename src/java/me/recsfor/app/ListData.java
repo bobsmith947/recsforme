@@ -43,6 +43,7 @@ public class ListData implements Serializable {
   public ListData(LinkedList<ListGroup> list) {
     this.list = list;
   }
+  
   /**
    * @return the list
    */
@@ -55,6 +56,7 @@ public class ListData implements Serializable {
   public void setList(LinkedList<ListGroup> list) {
     this.list = list;
   }
+  
   /**
    * Maps JSON data to an instance of a <code>ListData</code> object.
    * @param json the data
@@ -88,6 +90,7 @@ public class ListData implements Serializable {
     }
     return ret;
   }
+  
   /**
    * Creates a string representing the servlet context path of a group, based on its type.
    * @param groupType the type of the group
@@ -181,6 +184,7 @@ public class ListData implements Serializable {
     }
     return group;
   }
+  
   /**
    * Removes an item matching the specified group properties from the list.
    * @param name the group name

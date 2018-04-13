@@ -22,7 +22,7 @@
         </li>
       </ul>
       <form class="form-inline m-lg-3" id="nav-search" action="search.jsp">
-        <input class="form-control mb-2 mb-lg-0 mr-lg-2" type="search" name="query" maxlength="100" autocomplete="off" placeholder="Search" required>
+        <input class="form-control mb-2 mb-lg-0 mr-lg-2" type="search" name="query" maxlength="100" autocomplete="off" placeholder="Search">
         <div class="input-group mb-2 mb-lg-0">
           <div class="input-group-prepend">
             <span class="input-group-text">Type</span>

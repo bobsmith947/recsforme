@@ -48,6 +48,7 @@ public abstract class AbstractRec {
     status = like;
     recs = new LinkedHashMap<>();
   }
+  
   /**
    * @return the name
    */

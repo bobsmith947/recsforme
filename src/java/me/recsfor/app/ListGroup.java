@@ -39,6 +39,7 @@ public class ListGroup implements Serializable {
     this.id = id;
     this.type = type;
   }
+  
   /**
    * @return the name
    */

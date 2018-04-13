@@ -34,6 +34,7 @@ import me.recsfor.engine.search.MovieQuery;
 public class MovieInfo extends HttpServlet {
   private static final long serialVersionUID = -4184169288250689262L;
   private String title, year, type, plot;
+  
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    * @param request servlet request
@@ -89,15 +90,16 @@ public class MovieInfo extends HttpServlet {
   public String getServletInfo() {
     return "Provides information for movie/TV show groups.";
   }
+  
   /**
    * Gives values to instance variables using a movie query.
    * @param id the id of the movie
    */
   private void populate(String id) {
-    MovieQuery query = new MovieQuery(id, true, "full");
-    title = query.getQuery();
-    year = query.listYear();
-    type = query.listType();
-    plot = query.listPlot();
+    MovieQuery movie = new MovieQuery(id, true, "full");
+    title = movie.listTitle();
+    year = movie.listYear();
+    type = movie.listType();
+    plot = movie.listPlot();
   }
 }

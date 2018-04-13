@@ -46,6 +46,7 @@ public class AlbumInfo extends HttpServlet {
    * Used for getting track listings.
    */
   private MediumListWs2 info;
+  
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
    * @param request servlet request
@@ -123,17 +124,18 @@ public class AlbumInfo extends HttpServlet {
   public String getServletInfo() {
     return "Provides information for album groups.";
   }
+  
   /**
    * Gives values to instance variables using an album query.
    * @param id the id of the release group
    */
   private void populate(String id) {
-    AlbumQuery query = new AlbumQuery(id, true);
-    title = query.getQuery();
-    type = query.listType();
-    artist = query.listArtist();
-    date = query.listDate();
-    info = query.getInfo();
+    AlbumQuery album = new AlbumQuery(id, true);
+    title = album.listTitle();
+    type = album.listType();
+    artist = album.listArtist();
+    date = album.listDate();
+    info = album.getInfo();
   }
   /**
    * Check if the ID needs to be switched.

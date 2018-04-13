@@ -55,6 +55,7 @@ public class UserBean implements Serializable {
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     propertySupport.removePropertyChangeListener(listener);
   }
+  
   /**
    * @return the name
    */

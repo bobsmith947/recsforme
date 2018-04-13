@@ -28,7 +28,7 @@ import java.util.List;
  * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather <code>artist</code> data for search results and group pages.
  * @author lkitaev
  */
-public class ArtistQuery extends AbstractQuery {
+public class ArtistQuery extends BasicQuery {
   /**
    * Contains result info.
    */
@@ -78,6 +78,7 @@ public class ArtistQuery extends AbstractQuery {
       artist = null;
     }
   }
+  
   /**
    * @return the artist
    */
@@ -91,20 +92,16 @@ public class ArtistQuery extends AbstractQuery {
     this.artist = artist;
   }
 
-  //TODO get sort names too
-  
-  @Override
-  public String[] listNames() {
-    String[] res = new String[0];
-    res = len >= 1 ? Arrays.copyOf(results.values().toArray(res), len) : null;
-    return res;
-  }
-
-  @Override
-  public String[] listIds() {
-    String[] ids = new String[0];
-    ids = len >= 1 ? Arrays.copyOf(results.keySet().toArray(ids), len) : null;
-    return ids;
+  /**
+   * Gets the unique and sort names of the artist.
+   * First index is the unique name, second index is the sort name.
+   * @return the titles
+   */
+  public String[] listTitles() {
+    String[] titles = new String[2];
+    titles[0] = artist.getUniqueName();
+    titles[1] = artist.getSortName();
+    return titles;
   }
   /**
    * Gets the type (person or group) of the artist (if available).
@@ -123,7 +120,8 @@ public class ArtistQuery extends AbstractQuery {
   }
   /**
    * Gets the active years of the artist (if available).
-   * @return a length 2 array containing the start and end years
+   * First index is the start year, second index is the end year.
+   * @return the years
    */
   public String[] listYears() {
     String[] years = new String[2];

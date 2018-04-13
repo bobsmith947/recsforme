@@ -31,7 +31,7 @@ public class QueryBean implements Serializable {
   private String query;
   private String type;
   private String context;
-  private transient AbstractQuery delegation;
+  private transient BasicQuery delegation;
   private final PropertyChangeSupport propertySupport;
   
   public QueryBean() {
@@ -50,6 +50,7 @@ public class QueryBean implements Serializable {
   public void removePropertyChangeListener(PropertyChangeListener listener) {
     propertySupport.removePropertyChangeListener(listener);
   }
+  
   /**
    * @return the query
    */
@@ -96,17 +97,18 @@ public class QueryBean implements Serializable {
   /**
    * @return the delegation
    */
-  public AbstractQuery getDelegation() {
+  public BasicQuery getDelegation() {
     return delegation;
   }
   /**
    * @param delegation the delegation to set
    */
-  public void setDelegation(AbstractQuery delegation) {
-    AbstractQuery oldDelegation = this.delegation;
+  public void setDelegation(BasicQuery delegation) {
+    BasicQuery oldDelegation = this.delegation;
     this.delegation = delegation;
     propertySupport.firePropertyChange(PROP_DELEGATION, oldDelegation, delegation);
   }
+  
   /**
    * Creates a MovieQuery that can be referenced from a JSP.
    * @deprecated Use delegateQuery() instead
@@ -137,9 +139,9 @@ public class QueryBean implements Serializable {
   /**
    * Creates an instance the proper query based on the <code>type</code>.
    * Can be used to reference queries from a JSP.
-   * @return a new child instance of an AbstractQuery with the instance query
+   * @return a new child instance of an BasicQuery with the instance query
    */
-  public AbstractQuery delegateQuery() {
+  public BasicQuery delegateQuery() {
     switch (type) {
       case "movie":
         context = MovieQuery.CONTEXT;
@@ -154,6 +156,7 @@ public class QueryBean implements Serializable {
         return null;
     }
   }
+  
   /**
    * Checks if one query string is different from another.
    * @param oldQuery the old query
