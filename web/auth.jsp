@@ -11,11 +11,14 @@
       <em>Authenticating your user...</em>
       <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
         SELECT id, pw, salt FROM users
-        WHERE uname='<jsp:getProperty name="u" property="name" />'
+        WHERE uname = ?
+        <sql:param value="${u.name}" />
       </sql:query>
       <c:choose>
         <c:when test="${matches.getRowCount() == 1}">
-          <c:if test='${CredentialEncryption.validatePassword(pageContext.request.getParameter("pw"),matches.getRowsByIndex()[0][1],matches.getRowsByIndex()[0][2])}' var="correct">
+          <c:if test='${CredentialEncryption.validatePassword(pageContext.request.getParameter("pw"), 
+                        matches.getRowsByIndex()[0][1], 
+                        matches.getRowsByIndex()[0][2])}' var="correct">
             <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
             <jsp:setProperty name="u" property="loggedIn" value="true" />
             <jsp:setProperty name="u" property="message" value="Successfully logged in." />
@@ -107,8 +110,10 @@
         UPDATE users
         SET pw = '<%= cred.getHash() %>', 
           salt = '<%= cred.getSalt() %>'
-        WHERE uname = '<%= request.getParameter("name") %>'
-        AND email = '<%= request.getParameter("email") %>'
+        WHERE uname = ?
+        AND email = ?
+        <sql:param value='${pageContext.request.getParameter("name")}' />
+        <sql:param value='${pageContext.request.getParameter("email")}' />
       </sql:update>
       <c:choose>
         <c:when test="${updated == 1}">

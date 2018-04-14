@@ -3,7 +3,6 @@
 <html>
   <title>recsforme :: Sign Up</title>
   <body>
-    <%-- TODO add validation --%>
     <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <main>
       <div class="alert alert-info">
@@ -25,7 +24,7 @@
         <h5>Optional Fields</h5>
         <div class="form-group">
           <label for="email">Email address</label>
-          <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" maxlength="254" pattern="[@.]\w+">
+          <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" placeholder="Enter your email address">
           <small class="form-text text-muted">Your email is used to reset your password in case you forget it. We will never email you.</small>
           <small class="form-text text-muted">The email address you use should not be the same as your username for this site.</small>
         </div>
@@ -34,7 +33,6 @@
           <input data-bind="value:dob" type="date" class="form-control" id="dob" name="dob" max="<%= java.time.LocalDate.now() %>">
           <small class="form-text text-muted">Your date of birth can be used to tailor recommendations to match your age group.</small>
         </div>
-        <%-- use sex and gender interchangeably to piss certain people off --%>
         <div class="mb-2">Gender</div>
         <div class="form-check">
           <input data-bind="checked:sex" type="radio" class="form-check-input" id="m" name="sex" value="male">
@@ -253,6 +251,9 @@
    See the License for the specific language governing permissions and
    limitations under the License.
         </pre>
+      </div>
+      <div data-bind="visible:!completed()" class="mt-2">
+        <h5 class="text-warning">Please ensure all fields are valid before accepting.</h5>
       </div>
       <div class="form-check">
         <input data-bind="checked:accepted" type="checkbox" class="form-check-input" id="acc">

@@ -32,19 +32,26 @@ try {
         const date = moment(this.dob());
         if (date.isValid())
           return date.fromNow(true);
-        else return "unknown";
+        else 
+          return "unknown";
       },
       completed: function() {
-        return (this.accepted() && this.notRobot()) 
-          && (this.uname() !== "") 
-          && (this.pw().length >= 8 && this.pw() === this.pwc());
+        return this.accepted() && 
+                this.notRobot() && 
+                this.pw() === this.pwc() && 
+                $("#valid-name").length !== 0;
       },
-      sendInfo: function() {
-        $("#subres").empty();
-        $.post("register.jsp", 
-          $("#info-form").serialize(), 
-          response => $("#subres").append(response));
-        $("button[form=info-form]").prop("disabled", true);
+      sendInfo: function(data, event) {
+        if (!$("#info-form")[0].checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        } else if ($("#info-form")[0].checkValidity()) {
+          $("#subres").empty();
+          $.post("register.jsp", 
+            $("#info-form").serialize(), 
+            response => $("#subres").append(response));
+          $("button[form=info-form]").prop("disabled", true);
+        }
       },
       nameCheck: function() {
         $("#checkres").empty();
@@ -52,7 +59,7 @@ try {
           $.get("register.jsp",
            {name: this.uname()},
            response => $("#checkres").append(response));
-        } else $("#checkres").append("You have not entered a username to check.");
+        }
       }
     };
     ko.applyBindings(signUpModel);

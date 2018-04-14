@@ -46,10 +46,10 @@
       <div class="mb-2" id="results">
         <c:if test="${len > 0}" var="hasResults" scope="request">
           <c:if test="${q.changed(old, q.query)}">
-            <c:set var="name" value='${pageContext.request.getParameter("query").replace("\'", "\'\'")}' />
             <sql:update dataSource="jdbc/MediaRecom">
               INSERT INTO query_log (query, qtype)
-              VALUES ('${name}', '<jsp:getProperty name="q" property="type" />')
+              VALUES (?, '${q.type}')
+              <sql:param value='${pageContext.request.getParameter("query")}' />
             </sql:update>
           </c:if>
           <div class="list-group text-center">

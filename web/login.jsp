@@ -40,7 +40,7 @@
         <form data-bind="visible:resetForm(),submit:requestReset" id="reset-form" method="POST">
           <div class="form-group">
             <label for="email">Email Address</label>
-            <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" maxlength="254" pattern="[@.]\w+" required>
+            <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" required>
             <small class="form-text text-muted">
               Enter the email address that you signed up for the account named <strong data-bind="text:name()"></strong> with.
             </small>

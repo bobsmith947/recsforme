@@ -8,14 +8,15 @@
     <c:if test='${pageContext.request.getMethod() == "GET"}'>
       <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
         SELECT * FROM users
-        WHERE uname='<%= request.getParameter("name") %>'
+        WHERE uname = ?
+        <sql:param value='${pageContext.request.getParameter("name")}' />
       </sql:query>
       <c:choose>
         <c:when test="${matches.getRowCount() == 1}">
           <h6 class="text-warning">The username you entered is already taken.</h6>
         </c:when>
         <c:when test="${matches.getRowCount() == 0}">
-          <h6 class="text-success">The username you entered is available.</h6>
+          <h6 class="text-success" id="valid-name">The username you entered is available.</h6>
         </c:when>
         <c:otherwise>
           <h6 class="text-danger">Something went wrong. If the issue persists, please contact the administrator.</h6>
@@ -27,17 +28,16 @@
         <% CredentialEncryption cred = new CredentialEncryption(request.getParameter("pw")); %>
         <sql:update dataSource="jdbc/MediaRecom">
           INSERT INTO users (uname, pw, joined, sex, dob, email, salt)
-          VALUES ('<%= request.getParameter("uname") %>', 
-                  '<%= cred.getHash() %>', 
-                  '<%= LocalDate.now() %>', 
-                  '<%= request.getParameter("sex") %>', 
-                  '<%= request.getParameter("dob") %>', 
-                  '<%= request.getParameter("email") %>',
-                  '<%= cred.getSalt() %>')
+          VALUES (?, '<%= cred.getHash() %>', '<%= LocalDate.now() %>', ?, ?, ?, '<%= cred.getSalt() %>')
+        <sql:param value='${pageContext.request.getParameter("uname")}' />
+        <sql:param value='${pageContext.request.getParameter("sex")}' />
+        <sql:param value='${pageContext.request.getParameter("dob")}' />
+        <sql:param value='${pageContext.request.getParameter("email")}' />
         </sql:update>
         <sql:query var="newUser" dataSource="jdbc/MediaRecom">
           SELECT id FROM users
-          WHERE uname = '<%= request.getParameter("uname") %>'
+          WHERE uname = ?
+          <sql:param value='${pageContext.request.getParameter("uname")}' />
         </sql:query>
         <sql:update dataSource="jdbc/MediaRecom">
           INSERT INTO user_likes (uid)
@@ -53,6 +53,7 @@
         <h6 class="text-success">You can now <a href="login.jsp">log in</a>.</h6>
       </c:if>
       <c:if test="${ex != null}">
+        <%-- TODO log exception message --%>
         <% this.log("An error occurred."); %>
         <h5 class="text-warning">Unable to register. Please ensure all form fields are valid.</h5>
       </c:if>
