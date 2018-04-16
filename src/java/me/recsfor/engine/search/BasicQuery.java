@@ -18,17 +18,21 @@ package me.recsfor.engine.search;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 /**
- * Contains basic functionality for how a query should be modeled.
- * Extending classes must implement methods to list the names and ID's of query results.
+ * Contains basic functionality for query classes.
  * @author lkitaev
  */
 public class BasicQuery {
   protected final String query;
+  /**
+   * The results for the query.
+   * Keys contain the group ID's.
+   * Values contain the group names.
+   */
   protected LinkedHashMap<String, String> results;
   /**
    * Number of results for the query.
    */
-  public int len;
+  protected int len;
 
   protected BasicQuery() {
     query = "";

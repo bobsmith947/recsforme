@@ -1,5 +1,27 @@
 # recsforme changelog
 
+## April 16, 2018 - Beta Release
+
+This is the last planned release. Development may or may not continue in June and July of 2018.
+
+**Fixed:**
+
+* User ages are now formatted with `moment#fromNow(true)` rather than `moment#fromNow()` so that it just has the time since and not the "ago" part because that made it kinda weird
+* Email reset messages now won't append on top of each other
+
+**Added:**
+
+* Groups can now be removed from the database list
+* Lists will be checked for duplicates even though it should technically be impossible to add duplicates
+* HTML5 form validation for usernames so that they can actually only be alphanumeric characters
+* SQL parameters are now used for user-submitted info
+* Put back in a polyfill for `String.prototype.includes()` since that's pretty much the only thing that needed a polyfill
+* Made a bunch of unit tests so hopefully the core Java code is more reliable now
+
+**Removed:**
+
+* `FormData` is no longer used for some AJAX data. Edge doesn't support it and it isn't any easier to use than making an object. jQuery serialization is still used for some cases where extra data doesn't need to be added in
+
 ## April 8, 2018 - Beta Release
 
 It's been almost a month since the last release. This is the first beta, although the "recs" part of recsforme has been cut from the original roadmap in the interest of time. Pretty much everything else has been improved upon though. Here are some highlights:
@@ -31,7 +53,7 @@ It's been almost a month since the last release. This is the first beta, althoug
 
 **Missing:**
 
-* Recommendation engine. I added a package and an interface, but that's about it. No real functionality
+* Recommendation engine
 
 ## February 28, 2018 - Alpha Release
 
@@ -86,7 +108,7 @@ It's been almost a month since the last release. This is the first beta, althoug
 
 ## February 13, 2018 - Alpha Release
 
-The first release of recsforme! This release is not meant for production. Notable features missing include:
+The first release of recsforme. Notable features missing include:
 
 * JSP header/footer
 * Functionality for music servlets

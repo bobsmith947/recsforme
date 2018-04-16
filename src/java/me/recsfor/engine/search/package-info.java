@@ -15,9 +15,9 @@
  */
 
 /**
- * This package provides functionality to process query data.
+ * This package provides functionality to process media queries.
  * The appropriate API (OMDb or MusicBrainz) is used for generating search results and group pages.
- * Once a <code>GET</code> request has been sent to <code>search.jsp</code>, a <code>QueryBean</code> is instantiated.
+ * When a request is been sent to <code>search.jsp</code>, a <code>QueryBean</code> is instantiated.
  * Search results will automatically link to their appropriate servlet.
  */
 
