@@ -164,9 +164,12 @@ public class QueryBean implements Serializable {
    * @return true if the two are different, false otherwise
    */
   public static boolean changed(String oldQuery, String newQuery) {
+    //matches punctuation and articles
     String rep = "(([:\\-.,/])|(\\bthe\\b)|(\\ba\\b|\\ban\\b))+";
+    //replaces each match in each query with nothing
     oldQuery = oldQuery.toLowerCase().replaceAll(rep, "").trim();
     newQuery = newQuery.toLowerCase().replaceAll(rep, "").trim();
+    //check if the modified queries are still the same
     return !oldQuery.equals(newQuery);
   }
 }
