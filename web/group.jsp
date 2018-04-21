@@ -4,7 +4,7 @@
 <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
 <!DOCTYPE html>
 <html>
-  <title>recsforme :: Group</title>
+  <title>Group Page</title>
   <body>
     <c:set var="status" value='${pageContext.request.getParameter("status")}' />
     <c:set var="action" value='${pageContext.request.getParameter("action")}' />
@@ -79,16 +79,18 @@
         ${u.likeData.removeItem(json)}
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_likes
-          SET items = '${ListData.stringifyData(u.likeData)}'
+          SET items = ?
           WHERE uid = ${u.id}
+          <sql:param value="${ListData.stringifyData(u.likeData)}" />
         </sql:update>
       </c:if>
       <c:if test='${status == "dislike"}'>
         ${u.dislikeData.removeItem(json)}
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_dislikes
-          SET items = '${ListData.stringifyData(u.dislikeData)}'
+          SET items = ?
           WHERE uid = ${u.id}
+          <sql:param value="${ListData.stringifyData(u.dislikeData)}" />
         </sql:update>
       </c:if>
     </c:if>
