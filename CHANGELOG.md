@@ -1,5 +1,13 @@
 # recsforme changelog
 
+## April 21, 2018 - Beta Release
+
+Some quick bug fixes:
+
+* Fixed being unable to remove groups
+* Fixed bean lists not being updated (caused incorrect data to be synced)
+* Fixed SQL parameterization
+
 ## April 16, 2018 - Beta Release
 
 This is the last planned release. Development may or may not continue in June and July of 2018.
