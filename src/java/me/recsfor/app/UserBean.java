@@ -45,6 +45,8 @@ public class UserBean implements Serializable {
     loggedIn = false;
     message = null;
     tries = 0;
+    likeData = null;
+    dislikeData = null;
     propertySupport = new PropertyChangeSupport(this);
   }
   

@@ -85,22 +85,26 @@ $(() => {
     }
     //clear the list
     $(".listreset").click(ev => {
+      const action = $(ev.target).attr("data-list");
       if (confirm("Are you sure you want to clear your list(s)?")) {
-        const action = $(ev).attr("data-list");
         if (action === "both") {
           localStorage.clear();
           console.log("localStorage cleared.");
         } else {
           for (let i = 0; i < localStorage.length; i++) {
             const item = localStorage.key(i);
-            if (localStorage.getItem(item) === action)
+            console.log(item);
+            if (localStorage.getItem(item) === action) {
               localStorage.removeItem(item);
+              console.log("removed");
+              i--;
+            }
           }
         }
         $.get("group.jsp", 
           {
             action: "reset",
-            list: $(ev).attr("data-list")
+            list: action
           });
         alert("List(s) cleared.");
         location.reload();

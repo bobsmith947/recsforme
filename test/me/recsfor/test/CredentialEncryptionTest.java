@@ -131,22 +131,11 @@ public class CredentialEncryptionTest {
     assertNotEquals(result, otherResult);
   }
   /**
-   * Tests that a password can be validated by providing a known salt and hash.
-   */
-  @Test
-  public void testValidatePassword_3args() {
-    System.out.println("validatePassword");
-    boolean result = CredentialEncryption.validatePassword(PASS, HASH, SALT);
-    assertTrue(result);
-    result = CredentialEncryption.validatePassword("anothertestpassword", HASH, SALT);
-    assertFalse(result);
-  }
-  /**
    * Tests that a password can be validated against an instance.
    * @throws Exception if something goes wrong
    */
   @Test
-  public void testValidatePassword_String() throws Exception {
+  public void testValidatePassword() throws Exception {
     System.out.println("validatePassword");
     CredentialEncryption instance = new CredentialEncryption(PASS, SALT);
     boolean result = instance.validatePassword(HASH);

@@ -24,7 +24,7 @@ import javax.crypto.spec.PBEKeySpec;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 /**
- * This class is used to encrypt user credentials (their password), so they can be securely stored in a database.
+ * This class is used to encrypt a user's credentials (their password), so it can be securely stored in a database.
  * @author lkitaev
  */
 public class CredentialEncryption {
@@ -32,7 +32,7 @@ public class CredentialEncryption {
   private String salt, hash;
   private static final String HASH_ALGO = "PBKDF2WithHmacSHA1";
   private static final String SALT_ALGO = "SHA1PRNG";
-  private static int iterations = 100000;
+  private static int ITERATIONS = 100000;
   
   public CredentialEncryption() {
     pass = "";
@@ -94,18 +94,6 @@ public class CredentialEncryption {
   public void setHash(String hash) {
     this.hash = hash;
   }
-  /**
-   * @return the iterations
-   */
-  public static int getIterations() {
-    return iterations;
-  }
-  /**
-   * @param num the number of iterations to set
-   */
-  public static void setIterations(int num) {
-    iterations = num;
-  }
   
   /**
    * Creates a random 128-bit (32 character) salt to use for hashing.
@@ -127,37 +115,10 @@ public class CredentialEncryption {
    */
   private String generateHash() throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
     char[] charPass = pass.toCharArray();
-    PBEKeySpec spec = new PBEKeySpec(charPass, Hex.decodeHex(salt.toCharArray()), iterations, 256);
+    PBEKeySpec spec = new PBEKeySpec(charPass, Hex.decodeHex(salt.toCharArray()), ITERATIONS, 256);
     SecretKeyFactory key = SecretKeyFactory.getInstance(HASH_ALGO);
     byte[] enc = key.generateSecret(spec).getEncoded();
     return Hex.encodeHexString(enc);
-  }
-  
-  /**
-   * Static method to determine whether a password matches its stored hash, using the generated salt for the user.
-   * @param testPass the password to check
-   * @param storedHash the known correct password hash
-   * @param storedSalt the user's salt
-   * @return whether or not the password is correct
-   */
-  public static boolean validatePassword(String testPass, String storedHash, String storedSalt) {
-    try {
-      CredentialEncryption testCred = new CredentialEncryption(testPass, storedSalt);
-      byte[] testHash = Hex.decodeHex(testCred.getHash().toCharArray());
-      byte[] knownHash = Hex.decodeHex(storedHash.toCharArray());
-      //difference between the two hashes
-      //compare the key length of each
-      int diff = knownHash.length ^ testHash.length;
-      for (int i = 0; i < knownHash.length && i < testHash.length; i++) {
-        //check the current difference against the differing bits in each byte
-        //the new difference will be 0 if these values are the same
-        diff |= knownHash[i] ^ testHash[i];
-      }
-      return diff == 0;
-    } catch (DecoderException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
-    }
-    return false;
   }
   /**
    * Instance method to determine whether a password matches its stored hash, using the generated salt for the user.

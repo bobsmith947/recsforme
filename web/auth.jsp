@@ -16,49 +16,28 @@
       </sql:query>
       <c:choose>
         <c:when test="${matches.getRowCount() == 1}">
-          <c:if test='${CredentialEncryption.validatePassword(pageContext.request.getParameter("pw"), 
-                        matches.getRowsByIndex()[0][1], 
-                        matches.getRowsByIndex()[0][2])}' var="correct">
+          <c:if test='${CredentialEncryption(pageContext.request.getParameter("pw"), matches.getRowsByIndex()[0][2])
+                        .validatePassword(matches.getRowsByIndex()[0][1])}' var="correct">
             <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
             <jsp:setProperty name="u" property="loggedIn" value="true" />
             <jsp:setProperty name="u" property="message" value="Successfully logged in." />
             <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
             <script type="text/javascript">
-              var i;
-              for (i = 0; i < localStorage.length; i++) {
-                var item = localStorage.key(i);
-                var group = JSON.parse(item);
-                Object.defineProperty(group, "action",
-                {
-                  configurable: false,
-                  enumerable: true,
-                  value: "add",
-                  writable: false
-                });
-                switch (localStorage.getItem(item)) {
-                  case "like":
-                    Object.defineProperty(group, "status", 
-                    {
-                      configurable: false,
-                      enumerable: true,
-                      value: "like",
-                      writable: false
-                    });
-                    $.post("group.jsp", group);
-                    break;
-                  case "dislike":
-                    Object.defineProperty(group, "status", 
-                    {
-                      configurable: false,
-                      enumerable: true,
-                      value: "dislike",
-                      writable: false
-                    });
-                    $.post("group.jsp", group);
-                    break;
-                  default:
-                    console.log("Group not found.");
-                    break;
+              if (localStorage.length > 0 && confirm("Sync local items to the cloud?")) {
+                for (var i = 0; i < localStorage.length; i++) {
+                  var item = localStorage.key(i);
+                  var group = JSON.parse(item);
+                  Object.defineProperty(group, "action",
+                  {
+                    enumerable: true,
+                    value: "add"
+                  });
+                  Object.defineProperty(group, "status", 
+                  {
+                    enumerable: true,
+                    value: localStorage.getItem(item)
+                  });
+                  $.post("group.jsp", group);
                 }
               }
             </script>

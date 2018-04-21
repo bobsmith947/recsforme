@@ -48,13 +48,13 @@
         <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear your lists, you can use the below buttons to do so.</h6>
         <div class="row">
           <button class="btn btn-danger col-md my-3 mr-md-2 listreset" type="reset" data-list="like">
-            Clear your <strong>likes</strong> list
+            Clear your likes list
           </button>
           <button class="btn btn-danger col-md my-3 listreset" type="reset" data-list="both">
-            Clear <strong>both</strong> of your lists
+            Clear both of your lists
           </button>
           <button class="btn btn-danger col-md my-3 ml-md-2 listreset" type="reset" data-list="dislike">
-            Clear your <strong>dislikes</strong> list
+            Clear your dislikes list
           </button>
         </div>
       </div>

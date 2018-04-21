@@ -41,10 +41,10 @@ try {
                 this.pw() === this.pwc() && 
                 $("#valid-name").length !== 0;
       },
-      sendInfo: function(data, event) {
+      sendInfo: function(data, ev) {
         if (!$("#info-form")[0].checkValidity()) {
-          event.preventDefault();
-          event.stopPropagation();
+          ev.preventDefault();
+          ev.stopPropagation();
         } else if ($("#info-form")[0].checkValidity()) {
           $("#subres").empty();
           $.post("register.jsp", 
@@ -133,7 +133,6 @@ try {
 }
 
 function generateItem(name, id, type) {
-  name = name.replace("'", "''");
   return JSON.stringify({
     name: name,
     id: id,

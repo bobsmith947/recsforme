@@ -13,40 +13,44 @@
                                  pageContext.request.getParameter("type"))}' />
     <c:if test='${action == "add"}'>
       <c:if test='${status == "like" && !u.likeData.containsItem(json)}'>
+        ${u.likeData.list.add(ListData.generateGroup(json))}
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_likes
-          SET items = LEFT(items, LEN(items)-2) 
-            + ',${json}]}'
+          SET items = LEFT(items, LEN(items)-2) + ',' + ? + ']}'
           WHERE uid = ${u.id} AND LEN(items) > 11;
+          <sql:param value="${json}" />
           -- for first entry
           UPDATE user_likes
-          SET items = LEFT(items, LEN(items)-2) 
-            + '${json}]}'
+          SET items = LEFT(items, LEN(items)-2) + ? + ']}'
           WHERE uid = ${u.id} AND LEN(items) <= 11;
+          <sql:param value="${json}" />
         </sql:update>
       </c:if>
       <c:if test='${status == "dislike" && !u.dislikeData.containsItem(json)}'>
+        ${u.dislikeData.list.add(ListData.generateGroup(json))}
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_dislikes
-          SET items = LEFT(items, LEN(items)-2) 
-            + ',${json}]}'
+          SET items = LEFT(items, LEN(items)-2) + ',' + ? + ']}'
           WHERE uid = ${u.id} AND LEN(items) > 11
+          <sql:param value="${json}" />
           -- for first entry
           UPDATE user_dislikes
-          SET items = LEFT(items, LEN(items)-2) +
-            + '${json}]}'
+          SET items = LEFT(items, LEN(items)-2) + ? + ']}'
           WHERE uid = ${u.id} AND LEN(items) <= 11;
+          <sql:param value="${json}" />
         </sql:update>
       </c:if>
     </c:if>
     <c:if test='${action == "reset" && u.loggedIn}'>
       <c:set var="list" value='${pageContext.request.getParameter("list")}' />
       <c:if test='${list == "both"}'>
+        <jsp:setProperty name="u" property="likeData" value="${null}" />
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_likes
           SET items = DEFAULT
           WHERE uid = ${u.id}
         </sql:update>
+        <jsp:setProperty name="u" property="dislikeData" value="${null}" />
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_dislikes
           SET items = DEFAULT
@@ -54,6 +58,7 @@
         </sql:update>
       </c:if>
       <c:if test='${list == "like"}'>
+        <jsp:setProperty name="u" property="likeData" value="${null}" />
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_likes
           SET items = DEFAULT
@@ -61,6 +66,7 @@
         </sql:update>
       </c:if>
       <c:if test='${list == "dislike"}'>
+        <jsp:setProperty name="u" property="dislikeData" value="${null}" />
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_dislikes
           SET items = DEFAULT
@@ -70,22 +76,18 @@
     </c:if>
     <c:if test='${action == "remove" && u.loggedIn}'>
       <c:if test='${status == "like"}'>
-        <% u.getLikeData().removeItem(request.getParameter("name"), 
-                request.getParameter("id"), 
-                request.getParameter("type")); %>
+        ${u.likeData.removeItem(json)}
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_likes
-          SET items = '${ListData.stringifyData(u.getLikeData())}'
+          SET items = '${ListData.stringifyData(u.likeData)}'
           WHERE uid = ${u.id}
         </sql:update>
       </c:if>
       <c:if test='${status == "dislike"}'>
-        <% u.getDislikeData().removeItem(request.getParameter("name"), 
-                request.getParameter("id"), 
-                request.getParameter("type")); %>
+        ${u.dislikeData.removeItem(json)}
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_dislikes
-          SET items = '${ListData.stringifyData(u.getDislikeData())}'
+          SET items = '${ListData.stringifyData(u.dislikeData)}'
           WHERE uid = ${u.id}
         </sql:update>
       </c:if>

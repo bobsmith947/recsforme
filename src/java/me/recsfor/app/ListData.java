@@ -80,6 +80,8 @@ public class ListData implements Serializable {
    * @return the data as a JSON string
    */
   public static String stringifyData(ListData data) {
+    if (data == null || data.list.isEmpty() || data.list == null)
+      return "{\"list\":[]}";
     ObjectMapper mapper = new ObjectMapper();
     String ret;
     try {
@@ -155,7 +157,6 @@ public class ListData implements Serializable {
    * @return the group expressed in JSON
    */
   public static String generateItem(String name, String id, String type) {
-    name = name.replace("'", "''");
     ListGroup item = new ListGroup(name, id, type);
     String ret;
     ObjectMapper mapper = new ObjectMapper();
@@ -173,7 +174,7 @@ public class ListData implements Serializable {
    * @return the generated data
    * @throws IOException if a problem occurs when reading the input
    */
-  public static ListGroup generateItem(String json) throws IOException {
+  public static ListGroup generateGroup(String json) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     ListGroup group;
     try {

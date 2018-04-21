@@ -139,7 +139,7 @@ public class ListTest {
    * Tests that a Java object can be turned into a JSON object.
    */
   @Test
-  public void testGenerateItem_3args() {
+  public void testGenerateItem() {
     System.out.println("generateItem");
     String name = "ClariS (j-pop)";
     String id = "f3688ad9-cd14-4cee-8fa0-0f4434e762bb";
@@ -152,11 +152,11 @@ public class ListTest {
    * Tests that a JSON object can be turned into a Java object.
    * @throws Exception if something goes wrong
    */
-  public void testGenerateItem_String() throws Exception {
+  public void testGenerateGroup() throws Exception {
     System.out.println("generateItem");
     json = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
     ListGroup expResult = group;
-    ListGroup result = ListData.generateItem(json);
+    ListGroup result = ListData.generateGroup(json);
     assertEquals(expResult, result);
   }
   /**
