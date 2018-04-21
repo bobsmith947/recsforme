@@ -58,19 +58,7 @@ public class ArtistInfo extends HttpServlet {
       out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
       out.println("<h2 id=\"name\">" + name + "</h2>");
       out.println("<h3 id=\"type\">" + type + "</h3>");
-      String term;
-      switch (type) {
-        case "Person":
-          term = "Alive";
-          break;
-        case "Group":
-          term = "Active";
-          break;
-        default:
-          term = "Alive/Active";
-          break;
-      }
-      out.println("<h3>" + term + ": <span class=\"date\">" + years[0] 
+      out.println("<h3>" + yearsType() + ": <span class=\"date\">" + years[0] 
               + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       //TODO order release groups by date
@@ -137,5 +125,19 @@ public class ArtistInfo extends HttpServlet {
     years = artist.listYears();
     albums = artist.listAlbums();
     contrib = artist.listContrib();
+  }
+  /**
+   * Determines how the years of an artist should be referred to as based on its type.
+   * @return the proper to term to use
+   */
+  private String yearsType() {
+    switch (type) {
+      case "Person":
+        return "Alive";
+      case "Group":
+        return "Active";
+      default:
+        return "Alive/Active";
+    }
   }
 }

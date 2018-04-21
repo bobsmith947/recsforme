@@ -85,7 +85,7 @@ public class AlbumInfo extends HttpServlet {
         this.log(e.getMessage(), e);
         out.println("<h4>No tracks found!</h4>");
       }
-      out.println("<h5>Total length: " + info.getDuration() + "</h5>");
+      //out.println("<h5>Total length: " + info.getDuration() + "</h5>");
       out.println("<h6><a href=\"https://musicbrainz.org/release-group/"
               + id + "\">View on MusicBrainz</a></h6>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
