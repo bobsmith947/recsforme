@@ -184,14 +184,9 @@ public class AlbumQuery extends BasicQuery {
       artist[1] = group.getArtistCredit().getNameCredits().get(0).getArtist().getId();
     } catch (NullPointerException e) {
       System.err.println(Arrays.toString(e.getStackTrace()));
-      //otherwise return [unknown]
+      //get the reserved artist for unknown releases
       artist[0] = "[unknown]";
-      //or return Various Artists
-      //artist = "Various Artists";
-      //otherwise return ID for [unknown] artist
       artist[1] = "125ec42a-7229-4250-afc5-e057484327fe";
-      //or return ID for Various Artists
-      //return "89ad4ac3-39f7-470e-963a-56509c546377";
     }
     return artist;
   }
