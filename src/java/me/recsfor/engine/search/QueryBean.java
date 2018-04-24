@@ -62,7 +62,7 @@ public class QueryBean implements Serializable {
    */
   public void setQuery(String query) {
     String oldQuery = this.query;
-    this.query = query;
+    this.query = query.trim();
     propertySupport.firePropertyChange(PROP_QUERY, oldQuery, query);
   }
   /**

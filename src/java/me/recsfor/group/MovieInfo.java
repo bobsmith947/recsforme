@@ -50,9 +50,10 @@ public class MovieInfo extends HttpServlet {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
-      out.println("<h2 id=\"name\">" + title + " (" + year + ")</h2>");
-      out.println("<h3 id=\"type\">" + type + "<a class=\"ml-2\" href=\"https://imdb.com/title/"
-              + id + "\"><span class=\"fab fa-imdb\"></span></a></h3>");
+      out.println("<h2 id=\"name\">" + title + " (" + year 
+              + ")<a class=\"ml-2\" href=\"https://imdb.com/title/"
+              + id + "\"><span class=\"fab fa-imdb\"></span></a></h2>");
+      out.println("<h3 id=\"type\">" + type + "</h3>");
       out.println("<p>" + plot + "</p>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       out.println("</main>");

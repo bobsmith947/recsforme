@@ -70,18 +70,19 @@ $(() => {
     const nodislikes = $("#dislikes").children().length === 0;
     if (nolikes && nodislikes) {
       $(".listreset").prop("disabled", true);
-      $("#list").empty();
-      $("#list").append("<h6>Your lists are empty!</h6>");
-      $("#list").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
+      $("#list").append("<h6 id='warn'>Your lists are empty!</h6>");
       $("#resetprompt").addClass("text-muted");
     } else if (nolikes) {
-      $(".listreset[data-list=likes]").prop("disabled", true);
-      $("#likes").append("<h6>You haven't added any likes!</h6>");
-      $("#likes").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
+      $(".listreset[data-list=like]").prop("disabled", true);
+      $("#likes").append("<h6 id='warn'>You haven't added any likes!</h6>");
     } else if (nodislikes) {
-      $(".listreset[data-list=dislikes]").prop("disabled", true);
-      $("#dislikes").append("<h6>You haven't added any dislikes!</h6>");
-      $("#dislikes").append("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
+      $(".listreset[data-list=dislike]").prop("disabled", true);
+      $("#dislikes").append("<h6 id='warn'>You haven't added any dislikes!</h6>");
+    }
+    $("#warn").addClass("text-warning");
+    if (nolikes || nodislikes) {
+      $(".listreset[data-list=both]").prop("disabled", true);
+      $("#warn").after("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
     }
     //clear the list
     $(".listreset").click(ev => {

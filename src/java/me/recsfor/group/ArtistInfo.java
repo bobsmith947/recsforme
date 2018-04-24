@@ -72,6 +72,7 @@ public class ArtistInfo extends HttpServlet {
       }
       out.println("<h3>" + term + ": <span class=\"date\">" + years[0] 
               + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");
+      request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       //TODO order release groups by date
       //TODO print out more entries
       out.println("<h3>Discography:</h3><div class=\"list-group text-right my-2\">");
@@ -89,7 +90,6 @@ public class ArtistInfo extends HttpServlet {
       out.println("</ul></div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
       out.println("<h6><a href=\"https://musicbrainz.org/artist/"
               + id + "\">View on MusicBrainz</a></h6>");
-      request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       out.println("</main>");
       request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
       out.println("</body></html>");
