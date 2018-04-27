@@ -17,7 +17,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text">Searching for</span>
           </div>
-          <input class="form-control form-control-lg" type="search" name="query" maxlength="100" autocomplete="off" value="<jsp:getProperty name="q" property="query" />" required>
+          <input class="form-control form-control-lg" type="search" name="query" maxlength="100" autocomplete="off" value="<c:out value='${q.query}' />" required>
         </div>
         <div class="input-group">
           <div class="input-group-prepend">

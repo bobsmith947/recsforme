@@ -83,43 +83,7 @@
         <libraries xmlns="http://www.netbeans.org/ns/ant-project-libraries/1">
             <definitions>.\lib\nblibraries.properties</definitions>
         </libraries>
-        <libraries xmlns="http://www.netbeans.org/ns/cdnjs-libraries/1">
-            <library name="jquery" version="3.3.1">
-                <file localPath="lib/js/jquery/core.js" path="core.js"/>
-                <file localPath="lib/js/jquery/jquery.js" path="jquery.js"/>
-                <file localPath="lib/js/jquery/jquery.min.js" path="jquery.min.js"/>
-                <file localPath="lib/js/jquery/jquery.min.map" path="jquery.min.map"/>
-                <file localPath="lib/js/jquery/jquery.slim.js" path="jquery.slim.js"/>
-                <file localPath="lib/js/jquery/jquery.slim.min.js" path="jquery.slim.min.js"/>
-                <file localPath="lib/js/jquery/jquery.slim.min.map" path="jquery.slim.min.map"/>
-            </library>
-            <library name="popper.js" version="1.14.1">
-                <file localPath="lib/js/popper.js/esm/popper-utils.js" path="esm/popper-utils.js"/>
-                <file localPath="lib/js/popper.js/esm/popper-utils.js.map" path="esm/popper-utils.js.map"/>
-                <file localPath="lib/js/popper.js/esm/popper-utils.min.js" path="esm/popper-utils.min.js"/>
-                <file localPath="lib/js/popper.js/esm/popper-utils.min.js.map" path="esm/popper-utils.min.js.map"/>
-                <file localPath="lib/js/popper.js/esm/popper.js" path="esm/popper.js"/>
-                <file localPath="lib/js/popper.js/esm/popper.js.map" path="esm/popper.js.map"/>
-                <file localPath="lib/js/popper.js/esm/popper.min.js" path="esm/popper.min.js"/>
-                <file localPath="lib/js/popper.js/esm/popper.min.js.map" path="esm/popper.min.js.map"/>
-                <file localPath="lib/js/popper.js/popper-utils.js" path="popper-utils.js"/>
-                <file localPath="lib/js/popper.js/popper-utils.js.map" path="popper-utils.js.map"/>
-                <file localPath="lib/js/popper.js/popper-utils.min.js" path="popper-utils.min.js"/>
-                <file localPath="lib/js/popper.js/popper-utils.min.js.map" path="popper-utils.min.js.map"/>
-                <file localPath="lib/js/popper.js/popper.js" path="popper.js"/>
-                <file localPath="lib/js/popper.js/popper.js.map" path="popper.js.map"/>
-                <file localPath="lib/js/popper.js/popper.min.js" path="popper.min.js"/>
-                <file localPath="lib/js/popper.js/popper.min.js.map" path="popper.min.js.map"/>
-                <file localPath="lib/js/popper.js/umd/popper-utils.js" path="umd/popper-utils.js"/>
-                <file localPath="lib/js/popper.js/umd/popper-utils.js.map" path="umd/popper-utils.js.map"/>
-                <file localPath="lib/js/popper.js/umd/popper-utils.min.js" path="umd/popper-utils.min.js"/>
-                <file localPath="lib/js/popper.js/umd/popper-utils.min.js.map" path="umd/popper-utils.min.js.map"/>
-                <file localPath="lib/js/popper.js/umd/popper.js" path="umd/popper.js"/>
-                <file localPath="lib/js/popper.js/umd/popper.js.map" path="umd/popper.js.map"/>
-                <file localPath="lib/js/popper.js/umd/popper.min.js" path="umd/popper.min.js"/>
-                <file localPath="lib/js/popper.js/umd/popper.min.js.map" path="umd/popper.min.js.map"/>
-            </library>
-        </libraries>
+        <libraries xmlns="http://www.netbeans.org/ns/cdnjs-libraries/1"/>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
             <word>enum</word>
             <word>frontend</word>
