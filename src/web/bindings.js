@@ -88,11 +88,11 @@ try {
     ko.applyBindings(logInModel);
   }
   if (location.pathname.includes("Info")) {
-    const name = $("#name").text();
-    const type = $("#type").text();
-    const id = location.search.substring(4);
-    const json = generateItem(name, id, type);
-    const vote = localStorage.getItem(json);
+    let name = $("#name").text();
+    let type = $("#type").text();
+    let id = location.search.substring(4);
+    let json = generateItem(name, id, type);
+    let vote = localStorage.getItem(json);
     let voteModel = {
       selected: ko.observable(false),
       voted: ko.observable(vote !== null),

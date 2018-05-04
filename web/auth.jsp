@@ -8,7 +8,7 @@
     <c:if test='${pageContext.request.getParameter("action") == null}'>
       <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
       <jsp:setProperty name="u" property="name" value='<%= request.getParameter("uname") %>' />
-      <em>Authenticating your user...</em>
+      <em>Authenticating the login credentials.</em>
       <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
         SELECT id, pw, salt FROM users
         WHERE uname = ?

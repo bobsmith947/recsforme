@@ -37,15 +37,15 @@ $(() => {
     });
   }*/
   //format dates
-  $(".date").each((ind, cur) => {
-    const str = $(cur).text();
+  $(".date").each(function() {
+    const str = $(this).text();
     const date = moment(str, "YYYY-MM-DD", true);
     if (date.isValid())
-      $(cur).text(date.format("LL"));
+      $(this).text(date.format("LL"));
     else if (str === "null")
-      $(cur).text("Unknown date");
+      $(this).text("Unknown date");
     else
-      $(cur).text(str);
+      $(this).text(str);
   });
   if (location.pathname.includes("user.jsp")) {
     //add groups

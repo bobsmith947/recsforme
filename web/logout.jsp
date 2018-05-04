@@ -3,7 +3,7 @@
 <html>
   <title>Logging out...</title>
   <body>
-    <em>Setting user session bean to null...</em>
+    <em>Setting session attributes to null.</em>
     <% session.invalidate(); %>
     <script type="text/javascript">
       localStorage.clear();
