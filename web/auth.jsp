@@ -7,7 +7,7 @@
   <body>
     <c:if test='${pageContext.request.getParameter("action") == null}'>
       <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
-      <jsp:setProperty name="u" property="name" value='<%= request.getParameter("uname") %>' />
+      <jsp:setProperty name="u" property="name" value="uname" />
       <em>Authenticating the login credentials.</em>
       <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
         SELECT id, pw, salt FROM users
@@ -16,31 +16,12 @@
       </sql:query>
       <c:choose>
         <c:when test="${matches.getRowCount() == 1}">
-          <c:if test='${CredentialEncryption(pageContext.request.getParameter("pw"), matches.getRowsByIndex()[0][2])
+          <c:if test='${CredentialEncryption(pageContext.request.getParameter("pw"), 
+                                              matches.getRowsByIndex()[0][2])
                         .validatePassword(matches.getRowsByIndex()[0][1])}' var="correct">
             <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
             <jsp:setProperty name="u" property="loggedIn" value="true" />
             <jsp:setProperty name="u" property="message" value="Successfully logged in." />
-            <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-            <script type="text/javascript">
-              if (localStorage.length > 0 && confirm("Sync local items to the cloud?")) {
-                for (var i = 0; i < localStorage.length; i++) {
-                  var item = localStorage.key(i);
-                  var group = JSON.parse(item);
-                  Object.defineProperty(group, "action",
-                  {
-                    enumerable: true,
-                    value: "add"
-                  });
-                  Object.defineProperty(group, "status", 
-                  {
-                    enumerable: true,
-                    value: localStorage.getItem(item)
-                  });
-                  $.post("group.jsp", group);
-                }
-              }
-            </script>
             <sql:query var="likesList" dataSource="jdbc/MediaRecom">
               SELECT items FROM user_likes
               WHERE uid = ${u.id}
@@ -49,21 +30,11 @@
               SELECT items FROM user_dislikes
               WHERE uid = ${u.id}
             </sql:query>
-            <c:set var="likes" value="${likesList.getRowsByIndex()[0][0]}" />
-            <c:set var="dislikes" value="${dislikesList.getRowsByIndex()[0][0]}" />
-            <jsp:setProperty name="u" property="likeData" value="${ListData.mapData(likes)}" />
-            <jsp:setProperty name="u" property="dislikeData" value="${ListData.mapData(dislikes)}" />
-            <script type="text/javascript">
-              var likes = JSON.parse('${likes.replace("'", "\\'")}').list;
-              var dislikes = JSON.parse('${dislikes.replace("'", "\\'")}').list;
-              for (i = 0; i < likes.length; i++)
-                localStorage.setItem(JSON.stringify(likes[i]), "like");
-              for (i = 0; i < dislikes.length; i++)
-                localStorage.setItem(JSON.stringify(dislikes[i]), "dislike");
-              console.log("localStorage populated.");
-              window.open("user.jsp", "_self");
-            </script>
-            <%--<c:redirect url="user.jsp" />--%>
+            <jsp:setProperty name="u" property="likeData" value="${ListData.mapData(likesList
+                                                                 .getRowsByIndex()[0][0])}" />
+            <jsp:setProperty name="u" property="dislikeData" value="${ListData.mapData(dislikesList
+                                                                    .getRowsByIndex()[0][0])}" />
+            <c:redirect url="user.jsp" />
           </c:if>
           <c:if test="${!correct}">
             <jsp:setProperty name="u" property="message" value="The password you entered is incorrect." />
