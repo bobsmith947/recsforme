@@ -66,6 +66,28 @@ try {
   }
   if (location.pathname.includes("login.jsp")) {
     let logInModel = {
+      beforeSendLogin: function() {
+        if (localStorage.length > 0 && confirm("Sync local items to the cloud?")) {
+          let item, group;
+          for (let i = 0; i < localStorage.length; i++) {
+            item = localStorage.key(i);
+            group = JSON.parse(item);
+            Object.defineProperty(group, "action",
+              {
+                enumerable: true,
+                value: "add"
+              });
+            Object.defineProperty(group, "status", 
+              {
+                enumerable: true,
+                value: localStorage.getItem(item)
+              });
+            $.post("group.jsp", group);
+          }
+          localStorage.clear();
+        }
+        return true;
+      },
       name: ko.observable(""),
       resetForm: ko.observable(false),
       email: ko.observable(""),
