@@ -16,6 +16,5 @@
 </div>
 <div id="vote-div" style="display:none" data-bind="visible:voted">
   <h2 class="text-success">Added to <a href="user.jsp">your list</a>.</h2>
-  <h4 class="text-info">You <u data-bind="text:status"></u> this.</h4>
   <button class="btn btn-warning btn-block my-3" type="reset" data-bind="click:undoVote">Reset</button>
 </div>

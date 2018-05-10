@@ -18,7 +18,7 @@
         Don't have an account? <a class="alert-link" href="signup.jsp">Sign up here.</a>
       </div>
       <c:if test="${u.tries < 6}" scope="session" var="notLocked">
-        <form data-bind="visible:!resetForm(),submit:beforeSendLogin" action="auth.jsp" method="POST">
+        <form data-bind="visible:!resetForm(),submit:beforeLogin" action="auth.jsp" method="POST">
           <div class="form-group">
             <label for="uname">Username</label>
             <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" maxlength="18" pattern="\w+" autofocus required>

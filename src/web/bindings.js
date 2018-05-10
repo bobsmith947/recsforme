@@ -41,11 +41,8 @@ try {
                 this.pw() === this.pwc() && 
                 $("#valid-name").length !== 0;
       },
-      sendInfo: function(data, ev) {
-        if (!$("#info-form")[0].checkValidity()) {
-          ev.preventDefault();
-          ev.stopPropagation();
-        } else if ($("#info-form")[0].checkValidity()) {
+      sendInfo: function() {
+        if ($("#info-form")[0].checkValidity()) {
           $("#subres").empty();
           $.post("register.jsp", 
             $("#info-form").serialize(), 
@@ -66,7 +63,8 @@ try {
   }
   if (location.pathname.includes("login.jsp")) {
     let logInModel = {
-      beforeSendLogin: function() {
+      //TODO move this to a different function
+      beforeLogin: function() {
         if (localStorage.length > 0 && confirm("Sync local items to the cloud?")) {
           let item, group;
           for (let i = 0; i < localStorage.length; i++) {
@@ -77,6 +75,7 @@ try {
                 enumerable: true,
                 value: "add"
               });
+            //add as either like or dislike
             Object.defineProperty(group, "status", 
               {
                 enumerable: true,
@@ -84,8 +83,8 @@ try {
               });
             $.post("group.jsp", group);
           }
-          localStorage.clear();
         }
+        //continue with form submission
         return true;
       },
       name: ko.observable(""),
@@ -114,16 +113,13 @@ try {
     let type = $("#type").text();
     let id = location.search.substring(4);
     let json = generateItem(name, id, type);
-    let vote = localStorage.getItem(json);
     let voteModel = {
       selected: ko.observable(false),
-      voted: ko.observable(vote !== null),
-      status: ko.observable(vote),
+      voted: ko.observable(checkVote(json)),
       sendVote: function(form) {
         const vote = $(form).serializeArray();
         this.voted(true);
-        this.status(vote[0].value);
-        $.post("group.jsp", 
+        let xhr = $.post("group.jsp", 
           {
             status: vote[0].value,
             name: name,
@@ -131,17 +127,18 @@ try {
             type: type,
             action: "add"
           });
-        localStorage.setItem(json, this.status());
+        xhr.fail(() => {
+          localStorage.setItem(json, vote[0].value);
+        });
       },
       undoVote: function() {
         localStorage.removeItem(json);
         $.post("group.jsp", 
           {
-            action: "remove",
             name: name,
             id: id,
             type: type,
-            status: this.status()
+            action: "remove"
           });
       this.voted(false);
       this.selected(false);
@@ -160,4 +157,23 @@ function generateItem(name, id, type) {
     id: id,
     type: type
   });
+}
+
+function checkVote(json) {
+  let group = JSON.parse(json);
+  //TODO synchronous request is deprecated!
+  let xhr = $.ajax({
+          async: false,
+          url: "group.jsp",
+          data: {
+            name: group.name,
+            id: group.id,
+            type: group.type,
+            action: "check"
+          }
+        });
+  if (xhr.getResponseHeader("contained") === "true")
+    return true;
+  else
+    return localStorage.getItem(json) !== null;
 }
