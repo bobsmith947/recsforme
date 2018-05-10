@@ -12,7 +12,7 @@
                                  pageContext.request.getParameter("id"),
                                  pageContext.request.getParameter("type"))}' />
     <c:if test='${action == "add"}'>
-      <c:if test="${u.loggedIn && !u.likeData.containsItem(json)}">
+      <c:if test="${u.loggedIn && !u.likeData.containsItem(json) && !u.dislikeData.containsItem(json)}">
         ${u.likeData.list.add(ListData.generateGroup(json))}
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_${status}s
@@ -20,7 +20,7 @@
           WHERE uid = ${u.id} AND LEN(items) > 11;
           <sql:param value="${json}" />
           -- for first entry
-          UPDATE user_likes
+          UPDATE user_${status}s
           SET items = LEFT(items, LEN(items)-2) + ? + ']}'
           WHERE uid = ${u.id} AND LEN(items) <= 11;
           <sql:param value="${json}" />
@@ -45,10 +45,18 @@
           WHERE uid = ${u.id}
         </sql:update>
       </c:if>
-      <c:if test='${list != "both"}'>
-        <jsp:setProperty name="u" property="${list}Data" value="${null}" />
+      <c:if test='${list == "like"}'>
+        <jsp:setProperty name="u" property="likeData" value="${null}" />
         <sql:update dataSource="jdbc/MediaRecom">
-          UPDATE user_${list}s
+          UPDATE user_likes
+          SET items = DEFAULT
+          WHERE uid = ${u.id}
+        </sql:update>
+      </c:if>
+      <c:if test='${list == "dislike"}'>
+        <jsp:setProperty name="u" property="dislikeData" value="${null}" />
+        <sql:update dataSource="jdbc/MediaRecom">
+          UPDATE user_dislikes
           SET items = DEFAULT
           WHERE uid = ${u.id}
         </sql:update>
