@@ -48,24 +48,7 @@ $(() => {
       $(this).text(str);
   });
   if (location.pathname.includes("user.jsp")) {
-    //add groups
-    for (let i = 0; i < localStorage.length; i++) {
-      const item = localStorage.key(i);
-      const group = JSON.parse(item);
-      const context = generateContext(group.type);
-      switch (localStorage.getItem(item)) {
-        case "like":
-          $("#likes").append(`<a href="${context}${group.id}" class="list-group-item list-group-item-action">${group.name}</a>`);
-          break;
-        case "dislike":
-          $("#dislikes").append(`<a href="${context}${group.id}" class="list-group-item list-group-item-action">${group.name}</a>`);
-          break;
-        default:
-          console.log("Group not found.");
-          break;
-      }
-    }
-    //notify if nothing could be added
+    //notify if list(s) are empty
     const nolikes = $("#likes").children().length === 0;
     const nodislikes = $("#dislikes").children().length === 0;
     if (nolikes && nodislikes) {
@@ -88,20 +71,6 @@ $(() => {
     $(".listreset").click(ev => {
       const action = $(ev.target).attr("data-list");
       if (confirm("Are you sure you want to clear your list(s)?")) {
-        if (action === "both") {
-          localStorage.clear();
-          console.log("localStorage cleared.");
-        } else {
-          for (let i = 0; i < localStorage.length; i++) {
-            const item = localStorage.key(i);
-            console.log(item);
-            if (localStorage.getItem(item) === action) {
-              localStorage.removeItem(item);
-              console.log("removed");
-              i--;
-            }
-          }
-        }
         $.get("group.jsp", 
           {
             action: "reset",

@@ -5,10 +5,6 @@
   <body>
     <em>Setting session attributes to null.</em>
     <% session.invalidate(); %>
-    <script type="text/javascript">
-      localStorage.clear();
-      console.log("localStorage cleared.");
-      window.open("index.jsp", "_self");
-    </script>
+    <% response.sendRedirect("index.jsp"); %>
   </body>
 </html>

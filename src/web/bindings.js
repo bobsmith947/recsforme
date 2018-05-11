@@ -63,30 +63,6 @@ try {
   }
   if (location.pathname.includes("login.jsp")) {
     let logInModel = {
-      //TODO move this to a different function
-      beforeLogin: function() {
-        if (localStorage.length > 0 && confirm("Sync local items to the cloud?")) {
-          let item, group;
-          for (let i = 0; i < localStorage.length; i++) {
-            item = localStorage.key(i);
-            group = JSON.parse(item);
-            Object.defineProperty(group, "action",
-              {
-                enumerable: true,
-                value: "add"
-              });
-            //add as either like or dislike
-            Object.defineProperty(group, "status", 
-              {
-                enumerable: true,
-                value: localStorage.getItem(item)
-              });
-            $.post("group.jsp", group);
-          }
-        }
-        //continue with form submission
-        return true;
-      },
       name: ko.observable(""),
       resetForm: ko.observable(false),
       email: ko.observable(""),
@@ -113,28 +89,28 @@ try {
     let type = $("#type").text();
     let id = location.search.substring(4);
     let json = generateItem(name, id, type);
+    let vote = checkVote(json);
     let voteModel = {
+      status: ko.observable(vote),
       selected: ko.observable(false),
-      voted: ko.observable(checkVote(json)),
+      voted: ko.observable(vote !== null),
       sendVote: function(form) {
-        const vote = $(form).serializeArray();
+        vote = $(form).serializeArray()[0].value;
         this.voted(true);
-        let xhr = $.post("group.jsp", 
+        this.status(vote);
+        $.post("group.jsp", 
           {
-            status: vote[0].value,
+            status: this.status(),
             name: name,
             id: id,
             type: type,
             action: "add"
           });
-        xhr.fail(() => {
-          localStorage.setItem(json, vote[0].value);
-        });
       },
       undoVote: function() {
-        localStorage.removeItem(json);
         $.post("group.jsp", 
           {
+            status: this.status(),
             name: name,
             id: id,
             type: type,
@@ -161,7 +137,8 @@ function generateItem(name, id, type) {
 
 function checkVote(json) {
   let group = JSON.parse(json);
-  //TODO synchronous request is deprecated!
+  //TODO maybe find another solution
+  //synchronous request is deprecated
   let xhr = $.ajax({
           async: false,
           url: "group.jsp",
@@ -172,8 +149,5 @@ function checkVote(json) {
             action: "check"
           }
         });
-  if (xhr.getResponseHeader("contained") === "true")
-    return true;
-  else
-    return localStorage.getItem(json) !== null;
+  return xhr.getResponseHeader("Item-Contained");
 }
