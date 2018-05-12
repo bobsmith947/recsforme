@@ -5,6 +5,7 @@
 <c:set var="old" value="${q.query}" />
 <jsp:setProperty name="q" property="type" />
 <jsp:setProperty name="q" property="query" />
+<% if (q.getQuery().equals("make me coffee")) response.sendError(418); %>
 <c:set var="d" target="q" property="delegation" value="${q.delegateQuery()}" scope="request" />
 <!DOCTYPE html>
 <html>

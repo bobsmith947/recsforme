@@ -39,6 +39,10 @@
         <error-code>500</error-code>
         <location>/WEB-INF/500.jsp</location>
     </error-page>
+    <error-page>
+        <error-code>418</error-code>
+        <location>/WEB-INF/418.jsp</location>
+    </error-page>
     <jsp-config>
         <jsp-property-group>
             <url-pattern>/search.jsp</url-pattern>
@@ -51,6 +55,7 @@
             <include-coda>/WEB-INF/jspf/footer.jspf</include-coda>
         </jsp-property-group>
         <jsp-property-group>
+            <url-pattern>/WEB-INF/418.jsp</url-pattern>
             <url-pattern>/WEB-INF/500.jsp</url-pattern>
             <url-pattern>/WEB-INF/404.jsp</url-pattern>
             <el-ignored>true</el-ignored>
