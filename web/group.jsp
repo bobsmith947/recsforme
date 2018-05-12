@@ -11,14 +11,15 @@
     <c:set var="json" value='${ListData.generateItem(pageContext.request.getParameter("name"),
                                  pageContext.request.getParameter("id"),
                                  pageContext.request.getParameter("type"))}' />
-    <c:if test='${action == "add" && !u.likeData.containsItem(json) && !u.dislikeData.containsItem(json)}'>
+    <c:if test='${action == "add"}'>
+      <%-- TODO check if the item exists in the other list --%>
       <c:if test='${status == "like"}'>
-        ${u.likeData.list.add(ListData.generateGroup(json))}
+        <c:set var="added" value="${u.likeData.list.add(ListData.generateGroup(json))}" />
       </c:if>
       <c:if test='${status == "dislike"}'>
-        ${u.dislikeData.list.add(ListData.generateGroup(json))}
+        <c:set var="added" value="${u.dislikeData.list.add(ListData.generateGroup(json))}" />
       </c:if>
-      <c:if test="${u.loggedIn}">
+      <c:if test="${u.loggedIn && added}">
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_${status}s
           SET items = LEFT(items, LEN(items)-2) + ',' + ? + ']}'
@@ -72,7 +73,7 @@
     </c:if>
     <c:if test='${action == "remove"}'>
       <c:if test='${status == "like"}'>
-        ${u.likeData.removeItem(json)}
+        ${u.likeData.list.remove(ListData.generateGroup(json))}
         <c:if test="${u.loggedIn}">
           <sql:update dataSource="jdbc/MediaRecom">
             UPDATE user_likes
@@ -83,7 +84,7 @@
         </c:if>
       </c:if>
       <c:if test='${status == "dislike"}'>
-        ${u.dislikeData.removeItem(json)}
+        ${u.dislikeData.list.remove(ListData.generateGroup(json))}
         <c:if test="${u.loggedIn}">
           <sql:update dataSource="jdbc/MediaRecom">
             UPDATE user_dislikes
@@ -95,10 +96,10 @@
       </c:if>
     </c:if>
     <c:if test='${action == "check"}'>
-      <c:if test="${u.likeData.containsItem(json)}">
+      <c:if test="${u.likeData.list.contains(ListData.generateGroup(json))}">
         <% response.addHeader("Item-Contained", "like"); %>
       </c:if>
-      <c:if test="${u.dislikeData.containsItem(json)}">
+      <c:if test="${u.dislikeData.list.contains(ListData.generateGroup(json))}">
         <% response.addHeader("Item-Contained", "dislike"); %>
       </c:if>
     </c:if>
