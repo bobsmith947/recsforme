@@ -12,12 +12,28 @@
                                  pageContext.request.getParameter("id"),
                                  pageContext.request.getParameter("type"))}' />
     <c:if test='${action == "add"}'>
-      <%-- TODO check if the item exists in the other list --%>
+      <c:set var="item" value="${ListData.generateGroup(json)}" />
       <c:if test='${status == "like"}'>
-        <c:set var="added" value="${u.likeData.list.add(ListData.generateGroup(json))}" />
+        <c:choose>
+          <c:when test="${u.dislikeData.list.contains(item)}">
+            <h5 class="text-danger">This group already exists on your dislikes list.</h5>
+            <% response.sendError(400); %>
+          </c:when>
+          <c:otherwise>
+            <c:set var="added" value="${u.likeData.list.add(item)}" />
+          </c:otherwise>
+        </c:choose>
       </c:if>
       <c:if test='${status == "dislike"}'>
-        <c:set var="added" value="${u.dislikeData.list.add(ListData.generateGroup(json))}" />
+        <c:choose>
+          <c:when test="${u.likeData.list.contains(item)}">
+            <h5 class="text-danger">This group already exists on your likes list.</h5>
+            <% response.sendError(400); %>
+          </c:when>
+          <c:otherwise>
+            <c:set var="added" value="${u.dislikeData.list.add(item)}" />
+          </c:otherwise>
+        </c:choose>
       </c:if>
       <c:if test="${u.loggedIn && added}">
         <sql:update dataSource="jdbc/MediaRecom">

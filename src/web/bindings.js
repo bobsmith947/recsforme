@@ -96,16 +96,30 @@ try {
       voted: ko.observable(vote !== null),
       sendVote: function(form) {
         vote = $(form).serializeArray()[0].value;
-        this.voted(true);
-        this.status(vote);
-        $.post("group.jsp", 
+        let xhr = $.post("group.jsp", 
           {
-            status: this.status(),
+            status: vote,
             name: name,
             id: id,
             type: type,
             action: "add"
           });
+        xhr.fail(() => {
+          switch (vote) {
+            case "like":
+              $("#vote-form").append(`<h5 class="text-danger">This group already exists on your dislikes list.</h5>`);
+              break;
+            case "dislike":
+              $("#vote-form").append(`<h5 class="text-danger">This group already exists on your likes list.</h5>`);
+              break;
+          }
+          console.log("This item has already been added.");
+          this.selected(false);
+        });
+        xhr.done(() => {
+          this.status(vote);
+          this.voted(true);
+        });
       },
       undoVote: function() {
         $.post("group.jsp", 
