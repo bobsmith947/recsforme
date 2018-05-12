@@ -72,7 +72,7 @@ try {
         $("#subres").empty();
         const reset = $(form).serializeArray();
         this.resetForm(false);
-        $.post("auth.jsp",
+        $.post("register.jsp",
           {
             email: reset[0].value,
             pass: reset[1].value,

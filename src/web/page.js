@@ -28,14 +28,6 @@ import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 $(() => {
   $("#warning").css("display", "none");
   $("body").addClass("bg-dark text-light");
-  //add listener to expand images on click
-  /*if (screen.width > 1024) {
-    $(".exp").each((ind, cur) => {
-      $(cur).click(expandImg);
-      $(cur).attr("title", "Click to expand.");
-      $(cur).css("width", "15%");
-    });
-  }*/
   //format dates
   $(".date").each(function() {
     const str = $(this).text();
@@ -85,24 +77,6 @@ $(() => {
     });
   }
 });
-
-/*function expandImg(ev) {
-  const elem = ev.target;
-  const w = elem.naturalWidth;
-  switch (elem.style.width) {
-    case "15%":
-      if (w > 0.9 * screen.width)
-        elem.style.width = "90%";
-      else
-        elem.style.width = `${w}px`;
-      elem.title = "Click to shrink."
-      break;
-    default:
-      elem.style.width = "15%";
-      elem.title = "Click to expand.";
-      break;
-  }
-}*/
 
 //polyfill just in case
 if (!String.prototype.includes) {
