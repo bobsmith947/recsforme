@@ -33,7 +33,7 @@
           </li>
         </ul>
         <h2>Welcome to your page, <jsp:getProperty name="u" property="name" />.</h2>
-        <p>This page contains your cloud lists. Recommendation generation is not yet available. Keep checking back for development updates.</p>
+        <p>This page contains your cloud lists. Lists are only synced upon logout, so don't forget to do so when you're done. Recommendation generation is not yet available. Keep checking back for development updates.</p>
       </c:if>
       <div class="text-center" id="list">
         <h3>Your likes:</h3>
