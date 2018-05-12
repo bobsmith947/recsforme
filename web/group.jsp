@@ -8,90 +8,89 @@
   <body>
     <c:set var="status" value='${pageContext.request.getParameter("status")}' />
     <c:set var="action" value='${pageContext.request.getParameter("action")}' />
-    <c:set var="json" value='${ListData.generateItem(pageContext.request.getParameter("name"),
+    <c:set var="item" value='${ListData.generateItem(pageContext.request.getParameter("name"),
                                  pageContext.request.getParameter("id"),
                                  pageContext.request.getParameter("type"))}' />
+    <c:set var="group" value="${ListData.generateGroup(item)}" />
     <c:if test='${action == "add"}'>
-      <c:if test='${status == "like" && !u.likeData.containsItem(json)}'>
-        ${u.likeData.list.add(ListData.generateGroup(json))}
-        <sql:update dataSource="jdbc/MediaRecom">
-          UPDATE user_likes
-          SET items = LEFT(items, LEN(items)-2) + ',' + ? + ']}'
-          WHERE uid = ${u.id} AND LEN(items) > 11;
-          <sql:param value="${json}" />
-          -- for first entry
-          UPDATE user_likes
-          SET items = LEFT(items, LEN(items)-2) + ? + ']}'
-          WHERE uid = ${u.id} AND LEN(items) <= 11;
-          <sql:param value="${json}" />
-        </sql:update>
-      </c:if>
-      <c:if test='${status == "dislike" && !u.dislikeData.containsItem(json)}'>
-        ${u.dislikeData.list.add(ListData.generateGroup(json))}
-        <sql:update dataSource="jdbc/MediaRecom">
-          UPDATE user_dislikes
-          SET items = LEFT(items, LEN(items)-2) + ',' + ? + ']}'
-          WHERE uid = ${u.id} AND LEN(items) > 11
-          <sql:param value="${json}" />
-          -- for first entry
-          UPDATE user_dislikes
-          SET items = LEFT(items, LEN(items)-2) + ? + ']}'
-          WHERE uid = ${u.id} AND LEN(items) <= 11;
-          <sql:param value="${json}" />
-        </sql:update>
-      </c:if>
-    </c:if>
-    <c:if test='${action == "reset" && u.loggedIn}'>
-      <c:set var="list" value='${pageContext.request.getParameter("list")}' />
-      <c:if test='${list == "both"}'>
-        <jsp:setProperty name="u" property="likeData" value="${null}" />
-        <sql:update dataSource="jdbc/MediaRecom">
-          UPDATE user_likes
-          SET items = DEFAULT
-          WHERE uid = ${u.id}
-        </sql:update>
-        <jsp:setProperty name="u" property="dislikeData" value="${null}" />
-        <sql:update dataSource="jdbc/MediaRecom">
-          UPDATE user_dislikes
-          SET items = DEFAULT
-          WHERE uid = ${u.id}
-        </sql:update>
-      </c:if>
-      <c:if test='${list == "like"}'>
-        <jsp:setProperty name="u" property="likeData" value="${null}" />
-        <sql:update dataSource="jdbc/MediaRecom">
-          UPDATE user_likes
-          SET items = DEFAULT
-          WHERE uid = ${u.id}
-        </sql:update>
-      </c:if>
-      <c:if test='${list == "dislike"}'>
-        <jsp:setProperty name="u" property="dislikeData" value="${null}" />
-        <sql:update dataSource="jdbc/MediaRecom">
-          UPDATE user_dislikes
-          SET items = DEFAULT
-          WHERE uid = ${u.id}
-        </sql:update>
-      </c:if>
-    </c:if>
-    <c:if test='${action == "remove" && u.loggedIn}'>
       <c:if test='${status == "like"}'>
-        ${u.likeData.removeItem(json)}
-        <sql:update dataSource="jdbc/MediaRecom">
-          UPDATE user_likes
-          SET items = ?
-          WHERE uid = ${u.id}
-          <sql:param value="${ListData.stringifyData(u.likeData)}" />
-        </sql:update>
+        <c:choose>
+          <c:when test="${u.dislikeData.list.contains(group)}">
+            <h5 class="text-danger">This group already exists on your dislikes list.</h5>
+            <% response.sendError(400); %>
+          </c:when>
+          <c:otherwise>
+            <c:set var="added" value="${u.likeData.list.add(group)}" />
+          </c:otherwise>
+        </c:choose>
       </c:if>
       <c:if test='${status == "dislike"}'>
-        ${u.dislikeData.removeItem(json)}
-        <sql:update dataSource="jdbc/MediaRecom">
-          UPDATE user_dislikes
-          SET items = ?
-          WHERE uid = ${u.id}
-          <sql:param value="${ListData.stringifyData(u.dislikeData)}" />
-        </sql:update>
+        <c:choose>
+          <c:when test="${u.likeData.list.contains(group)}">
+            <h5 class="text-danger">This group already exists on your likes list.</h5>
+            <% response.sendError(400); %>
+          </c:when>
+          <c:otherwise>
+            <c:set var="added" value="${u.dislikeData.list.add(group)}" />
+          </c:otherwise>
+        </c:choose>
+      </c:if>
+      <c:if test="${added}">
+        <h5 class="text-success">This group has been added.</h5>
+      </c:if>
+    </c:if>
+    <c:if test='${action == "reset"}'>
+      <c:set var="list" value='${pageContext.request.getParameter("list")}' />
+      <c:if test='${list == "both"}'>
+        <% u.getLikeData().getList().clear(); %>
+        <% u.getDislikeData().getList().clear(); %>
+        <c:if test="${u.loggedIn}">
+          <sql:update dataSource="jdbc/MediaRecom">
+            UPDATE user_likes
+            SET items = DEFAULT
+            WHERE uid = ${u.id}
+
+            UPDATE user_dislikes
+            SET items = DEFAULT
+            WHERE uid = ${u.id}
+          </sql:update>
+        </c:if>
+      </c:if>
+      <c:if test='${list == "like"}'>
+        <% u.getLikeData().getList().clear(); %>
+        <c:if test="${u.loggedIn}">
+          <sql:update dataSource="jdbc/MediaRecom">
+            UPDATE user_likes
+            SET items = DEFAULT
+            WHERE uid = ${u.id}
+          </sql:update>
+        </c:if>
+      </c:if>
+      <c:if test='${list == "dislike"}'>
+        <% u.getDislikeData().getList().clear(); %>
+        <c:if test="${u.loggedIn}">
+          <sql:update dataSource="jdbc/MediaRecom">
+            UPDATE user_dislikes
+            SET items = DEFAULT
+            WHERE uid = ${u.id}
+          </sql:update>
+        </c:if>
+      </c:if>
+    </c:if>
+    <c:if test='${action == "remove"}'>
+      <c:if test='${status == "like" && u.likeData.list.remove(group)}'>
+        <h5 class="text-success">Group removed from likes.</h5>
+      </c:if>
+      <c:if test='${status == "dislike" && u.dislikeData.list.remove(group)}'>
+        <h5 class="text-success">Group removed from dislikes.</h5>
+      </c:if>
+    </c:if>
+    <c:if test='${action == "check"}'>
+      <c:if test="${u.likeData.list.contains(group)}">
+        <% response.addHeader("Item-Contained", "like"); %>
+      </c:if>
+      <c:if test="${u.dislikeData.list.contains(group)}">
+        <% response.addHeader("Item-Contained", "dislike"); %>
       </c:if>
     </c:if>
   </body>

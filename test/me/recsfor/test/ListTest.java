@@ -23,7 +23,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.hamcrest.core.Is.is;
 /**
  * Provides tests for the <code>ListData</code> and <code>ListGroup</code> classes.
  * @author lkitaev
@@ -158,63 +157,5 @@ public class ListTest {
     ListGroup expResult = group;
     ListGroup result = ListData.generateGroup(json);
     assertEquals(expResult, result);
-  }
-  /**
-   * Tests that an item can be removed from a list if given group data.
-   */
-  @Test
-  public void testRemoveItem_3args() {
-    System.out.println("removeItem");
-    String name = "ClariS (j-pop)";
-    String id = "f3688ad9-cd14-4cee-8fa0-0f4434e762bb";
-    String type = "Group";
-    group = new ListGroup(name, id, type);
-    data.getList().add(group);
-    assertThat(data.getList().size(), is(1));
-    data.removeItem(name, id, type);
-    assertThat(data.getList().size(), is(0));
-  }
-  /**
-   * Tests that an item can be removed from a list if given JSON data.
-   * @throws Exception if something goes wrong
-   */
-  @Test
-  public void testRemoveItem_String() throws Exception {
-    System.out.println("removeItem");
-    json = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
-    data.getList().add(group);
-    assertThat(data.getList().size(), is(1));
-    data.removeItem(json);
-    assertThat(data.getList().size(), is(0));
-  }
-  /**
-   * Tests that a list can be checked if it contains an item based on group data.
-   */
-  @Test
-  public void testContainsItem_3args() {
-    System.out.println("containsItem");
-    String name = "ClariS (j-pop)";
-    String id = "f3688ad9-cd14-4cee-8fa0-0f4434e762bb";
-    String type = "Group";
-    group = new ListGroup(name, id, type);
-    data.getList().add(group);
-    assertTrue(data.containsItem(name, id, type));
-    assertFalse(data.containsItem("Samurai Champloo Music Record: Playlist - Tsutchie",
-            "655400ef-8e44-3604-8fe5-86c9565b5aa5",
-            "Soundtrack"));
-  }
-  /**
-   * Tests that a list can be checked if it contains an item based on JSON data.
-   * @throws Exception if something goes wrong
-   */
-  @Test
-  public void testContainsItem_String() throws Exception {
-    System.out.println("containsItem");
-    json = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
-    data.getList().add(group);
-    assertTrue(data.containsItem(json));
-    assertFalse(data.containsItem("Samurai Champloo Music Record: Playlist - Tsutchie",
-            "655400ef-8e44-3604-8fe5-86c9565b5aa5",
-            "Soundtrack"));
   }
 }

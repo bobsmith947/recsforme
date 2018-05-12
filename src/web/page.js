@@ -28,14 +28,6 @@ import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 $(() => {
   $("#warning").css("display", "none");
   $("body").addClass("bg-dark text-light");
-  //add listener to expand images on click
-  /*if (screen.width > 1024) {
-    $(".exp").each((ind, cur) => {
-      $(cur).click(expandImg);
-      $(cur).attr("title", "Click to expand.");
-      $(cur).css("width", "15%");
-    });
-  }*/
   //format dates
   $(".date").each(function() {
     const str = $(this).text();
@@ -48,24 +40,7 @@ $(() => {
       $(this).text(str);
   });
   if (location.pathname.includes("user.jsp")) {
-    //add groups
-    for (let i = 0; i < localStorage.length; i++) {
-      const item = localStorage.key(i);
-      const group = JSON.parse(item);
-      const context = generateContext(group.type);
-      switch (localStorage.getItem(item)) {
-        case "like":
-          $("#likes").append(`<a href="${context}${group.id}" class="list-group-item list-group-item-action">${group.name}</a>`);
-          break;
-        case "dislike":
-          $("#dislikes").append(`<a href="${context}${group.id}" class="list-group-item list-group-item-action">${group.name}</a>`);
-          break;
-        default:
-          console.log("Group not found.");
-          break;
-      }
-    }
-    //notify if nothing could be added
+    //notify if list(s) are empty
     const nolikes = $("#likes").children().length === 0;
     const nodislikes = $("#dislikes").children().length === 0;
     if (nolikes && nodislikes) {
@@ -88,20 +63,6 @@ $(() => {
     $(".listreset").click(ev => {
       const action = $(ev.target).attr("data-list");
       if (confirm("Are you sure you want to clear your list(s)?")) {
-        if (action === "both") {
-          localStorage.clear();
-          console.log("localStorage cleared.");
-        } else {
-          for (let i = 0; i < localStorage.length; i++) {
-            const item = localStorage.key(i);
-            console.log(item);
-            if (localStorage.getItem(item) === action) {
-              localStorage.removeItem(item);
-              console.log("removed");
-              i--;
-            }
-          }
-        }
         $.get("group.jsp", 
           {
             action: "reset",
@@ -116,98 +77,6 @@ $(() => {
     });
   }
 });
-
-/*function expandImg(ev) {
-  const elem = ev.target;
-  const w = elem.naturalWidth;
-  switch (elem.style.width) {
-    case "15%":
-      if (w > 0.9 * screen.width)
-        elem.style.width = "90%";
-      else
-        elem.style.width = `${w}px`;
-      elem.title = "Click to shrink."
-      break;
-    default:
-      elem.style.width = "15%";
-      elem.title = "Click to expand.";
-      break;
-  }
-}*/
-
-function generateContext(type) {
-  const movie = "MovieInfo?id=";
-  const artist = "ArtistInfo?id=";
-  const album = "AlbumInfo?id=";
-  switch (type.toLowerCase()) {
-    case "movie":
-      return movie;
-      break;
-    case "series":
-      return movie;
-      break;
-    case "game":
-      return movie;
-      break;
-    case "person":
-      return artist;
-      break;
-    case "group":
-      return artist;
-      break;
-    case "orchestra":
-      return artist;
-      break;
-    case "choir":
-      return artist;
-      break;
-    case "character":
-      return artist;
-      break;
-    case "album":
-      return album;
-      break;
-    case "single":
-      return album;
-      break;
-    case "ep":
-      return album;
-      break;
-    case "broadcast":
-      return album;
-      break;
-    case "compilation":
-      return album;
-      break;
-    case "soundtrack":
-      return album;
-      break;
-    case "spokenword":
-      return album;
-      break;
-    case "interview":
-      return album;
-      break;
-    case "audiobook":
-      return album;
-      break;
-    case "live":
-      return album;
-      break;
-    case "remix":
-      return album;
-      break;
-    case "dj-mix":
-      return album;
-      break;
-    case "mixtape/street":
-      return album;
-      break;
-    default:
-      return "search.jsp?query=";
-      break;
-  }
-}
 
 //polyfill just in case
 if (!String.prototype.includes) {

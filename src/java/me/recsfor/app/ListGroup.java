@@ -109,11 +109,10 @@ public class ListGroup implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("name: ")
             .append(name)
-            .append("\n id: ")
+            .append("\t id: ")
             .append(id)
-            .append("\n type: ")
-            .append(type)
-            .append("\n");
+            .append("\t type: ")
+            .append(type);
     return sb.toString();
   }
 }

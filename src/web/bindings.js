@@ -41,11 +41,8 @@ try {
                 this.pw() === this.pwc() && 
                 $("#valid-name").length !== 0;
       },
-      sendInfo: function(data, ev) {
-        if (!$("#info-form")[0].checkValidity()) {
-          ev.preventDefault();
-          ev.stopPropagation();
-        } else if ($("#info-form")[0].checkValidity()) {
+      sendInfo: function() {
+        if ($("#info-form")[0].checkValidity()) {
           $("#subres").empty();
           $.post("register.jsp", 
             $("#info-form").serialize(), 
@@ -75,7 +72,7 @@ try {
         $("#subres").empty();
         const reset = $(form).serializeArray();
         this.resetForm(false);
-        $.post("auth.jsp",
+        $.post("register.jsp",
           {
             email: reset[0].value,
             pass: reset[1].value,
@@ -92,34 +89,46 @@ try {
     let type = $("#type").text();
     let id = location.search.substring(4);
     let json = generateItem(name, id, type);
-    let vote = localStorage.getItem(json);
+    let vote = checkVote(json);
     let voteModel = {
+      status: ko.observable(vote),
       selected: ko.observable(false),
       voted: ko.observable(vote !== null),
-      status: ko.observable(vote),
       sendVote: function(form) {
-        const vote = $(form).serializeArray();
-        this.voted(true);
-        this.status(vote[0].value);
-        $.post("group.jsp", 
+        vote = $(form).serializeArray()[0].value;
+        let xhr = $.post("group.jsp", 
           {
-            status: vote[0].value,
+            status: vote,
             name: name,
             id: id,
             type: type,
             action: "add"
           });
-        localStorage.setItem(json, this.status());
+        xhr.fail(() => {
+          switch (vote) {
+            case "like":
+              $("#vote-form").append(`<h5 class="text-danger">This group already exists on your dislikes list.</h5>`);
+              break;
+            case "dislike":
+              $("#vote-form").append(`<h5 class="text-danger">This group already exists on your likes list.</h5>`);
+              break;
+          }
+          console.log("This item has already been added.");
+          this.selected(false);
+        });
+        xhr.done(() => {
+          this.status(vote);
+          this.voted(true);
+        });
       },
       undoVote: function() {
-        localStorage.removeItem(json);
         $.post("group.jsp", 
           {
-            action: "remove",
+            status: this.status(),
             name: name,
             id: id,
             type: type,
-            status: this.status()
+            action: "remove"
           });
       this.voted(false);
       this.selected(false);
@@ -138,4 +147,21 @@ function generateItem(name, id, type) {
     id: id,
     type: type
   });
+}
+
+function checkVote(json) {
+  let group = JSON.parse(json);
+  //TODO maybe find another solution
+  //synchronous request is deprecated
+  let xhr = $.ajax({
+          async: false,
+          url: "group.jsp",
+          data: {
+            name: group.name,
+            id: group.id,
+            type: group.type,
+            action: "check"
+          }
+        });
+  return xhr.getResponseHeader("Item-Contained");
 }
