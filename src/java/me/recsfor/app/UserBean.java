@@ -26,14 +26,12 @@ public class UserBean implements Serializable {
   public static final String PROP_NAME = "name";
   public static final String PROP_ID = "id";
   public static final String PROP_LOGGEDIN = "loggedIn";
-  public static final String PROP_MESSAGE = "message";
   public static final String PROP_TRIES = "tries";
   public static final String PROP_LIKEDATA = "likeData";
   public static final String PROP_DISLIKEDATA = "dislikeData";
   private String name;
   private int id;
   private boolean loggedIn;
-  private String message;
   private short tries;
   private ListData likeData;
   private ListData dislikeData;
@@ -43,7 +41,6 @@ public class UserBean implements Serializable {
     name = "";
     id = -1;
     loggedIn = false;
-    message = null;
     tries = 0;
     likeData = new ListData();
     dislikeData = new ListData();
@@ -99,20 +96,6 @@ public class UserBean implements Serializable {
     boolean oldLoggedIn = this.loggedIn;
     this.loggedIn = loggedIn;
     propertySupport.firePropertyChange(PROP_LOGGEDIN, oldLoggedIn, loggedIn);
-  }
-  /**
-   * @return the message
-   */
-  public String getMessage() {
-    return message;
-  }
-  /**
-   * @param message the message to set
-   */
-  public void setMessage(String message) {
-    String oldMessage = this.message;
-    this.message = message;
-    propertySupport.firePropertyChange(PROP_MESSAGE, oldMessage, message);
   }
   /**
    * @return the tries

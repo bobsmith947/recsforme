@@ -5,9 +5,7 @@
   <body>
     <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <main>
-      <div class="alert alert-info">
-        Already have an account? <a class="alert-link" href="login.jsp">Log in here.</a>
-      </div>
+      <h2>Account Registration</h2>
       <form id="info-form">
         <div class="form-group">
           <label for="uname">Username</label>

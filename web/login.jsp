@@ -1,79 +1,57 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption, me.recsfor.app.ListData"%>
 <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
+<jsp:setProperty name="u" property="name" value='${pageContext.request.getParameter("uname")}' />
 <!DOCTYPE html>
 <html>
-  <title>recsforme :: Log In</title>
+  <title>Logging in...</title>
   <body>
-    <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
-    <c:if test="${u.message != null && !u.message.isEmpty()}">
-      <div class="alert alert-warning alert-dismissable fade show text-center">
-        <jsp:getProperty name="u" property="message" />
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-      </div>
-      <jsp:setProperty name="u" property="message" value="" />
-    </c:if>
-    <main>
-      <div class="alert alert-info">
-        Don't have an account? <a class="alert-link" href="signup.jsp">Sign up here.</a>
-      </div>
-      <c:if test="${u.tries < 6}" scope="session" var="notLocked">
-        <div>
-          <form data-bind="visible:!resetForm()" action="auth.jsp" method="POST">
-            <div class="form-group">
-              <label for="uname">Username</label>
-              <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" maxlength="18" pattern="\w+" autofocus required>
-            </div>
-            <div class="form-group">
-              <label for="pw">Password</label>
-              <input type="password" class="form-control" id="pw" name="pw" required>
-              <small class="form-text text-muted">
-                Forgot your password?
-                <span data-bind="visible:name()===''">First, enter your username to be able request a password reset.</span>
-                <a data-bind="visible:name()!=='',click:resetForm" href="#">Reset it.</a>
-              </small>
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Log In</button>
-          </form>
-          <c:if test="${u.likeData.list.size() > 0 || u.dislikeData.list.size() > 0}">
-            <div class="alert alert-danger">Local lists will be cleared upon logging in.</div>
-          </c:if>
-          <div class="alert alert-warning">
-            You have <strong><c:out value="${6-u.tries}" /> tries</strong> left before you will be locked out.
-          </div>
-        </div>
-        <div>
-          <form data-bind="visible:resetForm(),submit:requestReset" id="reset-form" method="POST">
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" required>
-              <small class="form-text text-muted">
-                Enter the email address that you signed up for the account named <strong data-bind="text:name()"></strong> with.
-              </small>
-              <small class="form-text text-muted">If you did not sign up with an email, you cannot reset your password.</small>
-            </div>
-            <div data-bind="visible:email()!==''" class="form-group">
-              <label for="npw">New Password</label>
-              <input data-bind="textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" required>
-              <small class="form-text text-muted">Enter a secure password you don't use elsewhere.</small>
-              <label for="cpw">Confirm Password</label>
-              <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
-            </div>
-            <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block">
-              Reset Password
-            </button>
-          </form>
-          <div id="subres"></div>
-        </div>
-      </c:if>
-      <c:if test="${!notLocked}">
-        <div class="alert alert-danger">
-          You have been locked out from being able to log in for this session. Please wait a minimum of <strong>30 minutes</strong> before trying again.
-        </div>
-        <div class="alert alert-info">
-          If you think this has been an error, consider <a class="alert-link" href="https://github.com/bobsmith947/recsforme/issues"> opening an issue on GitHub</a>.
-        </div>
-      </c:if>
-    </main>
+    <em>Authenticating the login credentials.</em>
+    <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
+      SELECT id, pw, salt FROM users
+      WHERE uname = ?
+      <sql:param value="${u.name}" />
+    </sql:query>
+    <c:choose>
+      <c:when test="${matches.getRowCount() == 1}">
+        <c:if test='${CredentialEncryption(pageContext.request.getParameter("pw"), 
+                                            matches.getRowsByIndex()[0][2])
+                      .validatePassword(matches.getRowsByIndex()[0][1])}' var="correct">
+          <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
+          <jsp:setProperty name="u" property="loggedIn" value="true" />
+          <sql:query var="likesList" dataSource="jdbc/MediaRecom">
+            SELECT items FROM user_likes
+            WHERE uid = ${u.id}
+          </sql:query>
+          <sql:query var="dislikesList" dataSource="jdbc/MediaRecom">
+            SELECT items FROM user_dislikes
+            WHERE uid = ${u.id}
+          </sql:query>
+          <jsp:setProperty name="u" property="likeData" value="${ListData.mapData(likesList
+                                                               .getRowsByIndex()[0][0])}" />
+          <jsp:setProperty name="u" property="dislikeData" value="${ListData.mapData(dislikesList
+                                                                  .getRowsByIndex()[0][0])}" />
+          <c:set scope="session" var="message" value="Successfully logged in." />
+          <c:set scope="session" var="status" value="success" />
+        </c:if>
+        <c:if test="${!correct}">
+          <c:set scope="session" var="message" value="The password you entered is incorrect." />
+          <c:set scope="session" var="status" value="warning" />
+          <jsp:setProperty name="u" property="tries" value="${u.tries + 1}" />
+        </c:if>
+      </c:when>
+      <c:when test="${matches.getRowCount() == 0}">
+        <c:set scope="session" var="message" value="Unable to find a matching username." />
+        <c:set scope="session" var="status" value="warning" />
+        <jsp:setProperty name="u" property="tries" value="${u.tries + 1}" />
+      </c:when>
+      <c:otherwise>
+        <c:set scope="session" var="message" value="Something has gone wrong. If the issue persists, please contact the administrator." />
+        <c:set scope="session" var="status" value="danger" />
+        <jsp:setProperty name="u" property="tries" value="${u.tries + 1}" />
+      </c:otherwise>
+    </c:choose>
+    <c:redirect url="user.jsp" />
   </body>
 </html>

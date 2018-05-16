@@ -61,9 +61,10 @@ try {
     };
     ko.applyBindings(signUpModel);
   }
-  if (location.pathname.includes("login.jsp")) {
+  if (location.pathname.includes("user.jsp")) {
     let logInModel = {
       name: ko.observable(""),
+      loginForm: ko.observable(false),
       resetForm: ko.observable(false),
       email: ko.observable(""),
       pass: ko.observable(""),
