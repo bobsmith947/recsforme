@@ -41,8 +41,9 @@ public class BasicQuery {
   }
 
   protected BasicQuery(String query) {
-    String replace = query.replaceAll("[;/?:@=&]", " ");
-    this.query = replace;
+    //String replace = query.replaceAll("[;/?:@=&]", " ");
+    //this.query = replace;
+    this.query = query;
     results = new LinkedHashMap<>();
   }
   
