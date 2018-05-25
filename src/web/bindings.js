@@ -28,41 +28,41 @@ try {
       accepted: ko.observable(false),
       notRobot: ko.observable(false),
       dob: ko.observable(""),
-      age: function() {
+      age: function () {
         const date = moment(this.dob());
         if (date.isValid())
-          return date.fromNow(true);
+          return date.fromNow(true); //without the "ago" part
         else 
           return "unknown";
       },
-      completed: function() {
+      completed: function () {
         return this.accepted() && 
-                this.notRobot() && 
-                $("#info-form")[0].checkValidity();
+               this.notRobot() && 
+               $("#info-form")[0].checkValidity();
       },
-      sendInfo: function(data, ev) {
+      sendInfo: function () {
         $("#subres").empty();
         $.post("register.jsp", 
           $("#info-form").serialize(), 
           response => $("#subres").append(response));
         $("button[form=info-form]").prop("disabled", true);
       },
-      nameCheck: function() {
+      nameCheck: function () {
         $("#nameres").empty();
-        if (this.uname() !== "" && $("#uname")[0].checkValidity()) {
+        if ($("#uname")[0].checkValidity()) {
           $.get("register.jsp",
-           {name: this.uname()},
-           (response, status, xhr) => {
-                     $("#nameres").append(response);
-                     console.log(status);
-                     xhr.then(() =>
-                              $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") : 
-                                $("#uname")[0].setCustomValidity("Username is already taken.")
-                             );
+            {name: this.uname()},
+            (response, status, xhr) => {
+              $("#nameres").append(response);
+              console.log(status);
+              xhr.then(() =>
+                $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") : 
+                  $("#uname")[0].setCustomValidity("Username is already taken.")
+              );
            });
         }
       },
-      emailCheck: function() {
+      emailCheck: function () {
         $("#emailres").empty();
         if (this.uname() === this.email().substring(0, this.email().indexOf("@"))) {
           $("#emailres").text("The email you use cannot be the same as your username.");
@@ -70,7 +70,7 @@ try {
         } else
           $("#email")[0].setCustomValidity("");
       },
-      passCheck: function() {
+      passCheck: function () {
         $("#passres").empty();
         if (this.pw() !== this.pwc()) {
           $("#passres").text("The passwords you entered do not match.");
@@ -93,12 +93,11 @@ try {
       email: ko.observable(""),
       pass: ko.observable(""),
       passCheck: ko.observable(""),
-      requestReset: function(form) {
+      requestReset: function (form) {
         $("#subres").empty();
         const reset = $(form).serializeArray();
         this.resetForm(false);
-        $.post("register.jsp",
-          {
+        $.post("register.jsp", {
             email: reset[0].value,
             pass: reset[1].value,
             name: this.name(),
@@ -119,10 +118,9 @@ try {
       status: ko.observable(vote),
       selected: ko.observable(false),
       voted: ko.observable(vote !== null),
-      sendVote: function(form) {
+      sendVote: function (form) {
         vote = $(form).serializeArray()[0].value;
-        let xhr = $.post("group.jsp", 
-          {
+        let xhr = $.post("group.jsp", {
             status: vote,
             name: name,
             id: id,
@@ -146,9 +144,8 @@ try {
           this.voted(true);
         });
       },
-      undoVote: function() {
-        $.post("group.jsp", 
-          {
+      undoVote: function () {
+        $.post("group.jsp", {
             status: this.status(),
             name: name,
             id: id,
@@ -179,14 +176,14 @@ function checkVote(json) {
   //TODO maybe find another solution
   //synchronous request is deprecated
   let xhr = $.ajax({
-          async: false,
-          url: "group.jsp",
-          data: {
-            name: group.name,
-            id: group.id,
-            type: group.type,
-            action: "check"
-          }
-        });
+    async: false,
+    url: "group.jsp",
+    data: {
+      name: group.name,
+      id: group.id,
+      type: group.type,
+      action: "check"
+    }
+  });
   return xhr.getResponseHeader("Item-Contained");
 }

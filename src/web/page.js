@@ -22,14 +22,15 @@ import "bootstrap/js/dist/alert";
 import "bootstrap/js/dist/button";
 import "bootstrap/js/dist/collapse";
 import "@fortawesome/fontawesome-free-webfonts/css/fontawesome.css";
-import "@fortawesome/fontawesome-free-webfonts/css/fa-solid.css"
+import "@fortawesome/fontawesome-free-webfonts/css/fa-solid.css";
 import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 
 $(() => {
   $("#warning").css("display", "none");
   $("body").addClass("bg-dark text-light");
   //format dates
-  $(".date").each(function() {
+  $(".date").each(function () {
+    //keep this as the element
     const str = $(this).text();
     const date = moment(str, "YYYY-MM-DD", true);
     if (date.isValid())
@@ -63,8 +64,7 @@ $(() => {
     $(".listreset").click(ev => {
       const action = $(ev.target).attr("data-list");
       if (confirm("Are you sure you want to clear your list(s)?")) {
-        $.get("group.jsp", 
-          {
+        $.get("group.jsp", {
             action: "reset",
             list: action
           });
@@ -80,7 +80,7 @@ $(() => {
 
 //polyfill just in case
 if (!String.prototype.includes) {
-  String.prototype.includes = function(search, start) {
+  String.prototype.includes = function (search, start) {
     if (typeof start !== 'number')
       start = 0;
     if (start + search.length > this.length)
