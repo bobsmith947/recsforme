@@ -11,20 +11,20 @@
           <label for="uname">Username</label>
           <input data-bind="textInput:uname,event:{blur:nameCheck}" type="text" class="form-control" id="uname" name="uname" placeholder="Enter your desired username" maxlength="18" pattern="\w+" autofocus required>
           <small class="form-text text-muted">Only alphanumeric characters are allowed.</small>
-          <div id="checkres"></div>
+          <div id="nameres"></div>
         </div>
         <div class="form-group">
           <label for="pw">Password</label>
           <input data-bind="textInput:pw" type="password" class="form-control" id="pw" name="pw" placeholder="Enter a secure password" minlength="8" required>
-          <small class="form-text text-muted">Don't use the same password you use elsewhere!</small>
+          <small class="form-text text-muted">Your password must be at least 8 characters.</small>
           <input data-bind="enable:pw().length>=8,textInput:pwc" type="password" class="form-control mt-2" placeholder="Confirm your password" required>
         </div>
         <h5>Optional Fields</h5>
         <div class="form-group">
           <label for="email">Email address</label>
-          <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" placeholder="Enter your email address">
-          <small class="form-text text-muted">Your email is used to reset your password in case you forget it. We will never email you.</small>
-          <small class="form-text text-muted">The email address you use should not be the same as your username for this site.</small>
+          <input data-bind="textInput:email,event:{blur:emailCheck}" type="email" class="form-control" id="email" name="email" placeholder="Enter your email address">
+          <small class="form-text text-muted">Your email is used to reset your password in case you forget it.</small>
+          <div id="emailres" class="text-warning"></div>
         </div>
         <div class="form-group">
           <label for="dob">Date of birth</label>
@@ -52,8 +52,6 @@
           <li>The service will not share your information with any other group or person.</li>
           <li>You are to be held liable for your usage of the service.</li>
           <li>You will not take legal action against the owner of the service under any circumstance.</li>
-          <li>Information stored by the service is not guaranteed to be completely safe, although necessary steps are taken to minimize the risk of data loss.</li>
-          <li>In the unlikely event of data loss, the service will not assume responsibility for the information you have submitted.</li>
           <li>Only passwords are stored in an encrypted format. Any other information submitted should not be sensitive.</li>
           <li>Sensitive information includes your full name, home/work address, or other details you would not want given out to strangers.</li>
           <li>The owner of the service reserves all rights in accordance with the Apache License 2.0 (below).</li>
@@ -250,9 +248,6 @@
    limitations under the License.
         </pre>
       </div>
-      <div data-bind="visible:!completed()" class="mt-2">
-        <h5 class="text-warning">Please ensure all fields are valid before accepting.</h5>
-      </div>
       <div class="form-check">
         <input data-bind="checked:accepted" type="checkbox" class="form-check-input" id="acc">
         <label class="form-check-label" for="acc">
@@ -281,6 +276,7 @@
         </span>
         <div id="subres"></div>
       </div>
+      <h5 data-bind="visible:!completed()&&accepted()&&notRobot()" class="text-warning mt-2">Your info is not valid.</h5>
       <button data-bind="enable:completed(),click:sendInfo" type="submit" class="btn btn-primary btn-lg btn-block mt-3" disabled form="info-form" formmethod="POST">
         Sign Up
       </button>

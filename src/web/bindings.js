@@ -38,8 +38,7 @@ try {
       completed: function() {
         return this.accepted() && 
                 this.notRobot() && 
-                this.pw() === this.pwc() && 
-                $("#valid-name").length !== 0;
+                $("#info-form")[0].checkValidity();
       },
       sendInfo: function() {
         if ($("#info-form")[0].checkValidity()) {
@@ -51,13 +50,28 @@ try {
         }
       },
       nameCheck: function() {
-        $("#checkres").empty();
-        if (this.uname() !== "") {
+        $("#nameres").empty();
+        if (this.uname() !== "" && $("#uname")[0].checkValidity()) {
           $.get("register.jsp",
            {name: this.uname()},
-           response => $("#checkres").append(response));
+           (response, status, xhr) =>
+                   {
+                     $("#nameres").append(response);
+                     xhr.then(() =>
+                             $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") : $("#uname")[0].setCustomValidity("Username is already taken.")
+                             );
+           });
         }
-      }
+      },
+      emailCheck: function() {
+        $("#emailres").empty();
+        if (this.uname() === this.email().substring(0, this.email().indexOf("@"))) {
+          $("#emailres").text("The email you use cannot be the same as your username.");
+          $("#email")[0].setCustomValidity("Email cannot match username.");
+        } else
+          $("#email")[0].setCustomValidity("");
+      },
+      passCheck: null //TODO implement this
     };
     ko.applyBindings(signUpModel);
   }
