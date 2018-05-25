@@ -40,25 +40,24 @@ try {
                 this.notRobot() && 
                 $("#info-form")[0].checkValidity();
       },
-      sendInfo: function() {
-        if ($("#info-form")[0].checkValidity()) {
-          $("#subres").empty();
-          $.post("register.jsp", 
-            $("#info-form").serialize(), 
-            response => $("#subres").append(response));
-          $("button[form=info-form]").prop("disabled", true);
-        }
+      sendInfo: function(data, ev) {
+        $("#subres").empty();
+        $.post("register.jsp", 
+          $("#info-form").serialize(), 
+          response => $("#subres").append(response));
+        $("button[form=info-form]").prop("disabled", true);
       },
       nameCheck: function() {
         $("#nameres").empty();
         if (this.uname() !== "" && $("#uname")[0].checkValidity()) {
           $.get("register.jsp",
            {name: this.uname()},
-           (response, status, xhr) =>
-                   {
+           (response, status, xhr) => {
                      $("#nameres").append(response);
+                     console.log(status);
                      xhr.then(() =>
-                             $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") : $("#uname")[0].setCustomValidity("Username is already taken.")
+                              $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") : 
+                                $("#uname")[0].setCustomValidity("Username is already taken.")
                              );
            });
         }
@@ -71,9 +70,20 @@ try {
         } else
           $("#email")[0].setCustomValidity("");
       },
-      passCheck: null //TODO implement this
+      passCheck: function() {
+        $("#passres").empty();
+        if (this.pw() !== this.pwc()) {
+          $("#passres").text("The passwords you entered do not match.");
+          $("#pw")[0].setCustomValidity("Passwords aren't the same.");
+        } else
+          $("#pw")[0].setCustomValidity("");
+      }
     };
     ko.applyBindings(signUpModel);
+    $("#info-form").find("input").change(() => {
+      signUpModel.accepted(false);
+      signUpModel.notRobot(false);
+    });
   }
   if (location.pathname.includes("user.jsp")) {
     let logInModel = {

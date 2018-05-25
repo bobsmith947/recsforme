@@ -17,7 +17,8 @@
           <label for="pw">Password</label>
           <input data-bind="textInput:pw" type="password" class="form-control" id="pw" name="pw" placeholder="Enter a secure password" minlength="8" required>
           <small class="form-text text-muted">Your password must be at least 8 characters.</small>
-          <input data-bind="enable:pw().length>=8,textInput:pwc" type="password" class="form-control mt-2" placeholder="Confirm your password" required>
+          <input data-bind="enable:pw().length>=8,textInput:pwc,event:{blur:passCheck}" type="password" class="form-control mt-2" placeholder="Confirm your password" required>
+          <div id="passres" class="text-warning mt-2"></div>
         </div>
         <h5>Optional Fields</h5>
         <div class="form-group">
