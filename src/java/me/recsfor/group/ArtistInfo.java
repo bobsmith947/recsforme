@@ -48,7 +48,8 @@ public class ArtistInfo extends HttpServlet {
    * @throws ServletException if a servlet-specific error occurs
    * @throws IOException if an I/O error occurs
    */
-  protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  protected void processRequest(HttpServletRequest request, HttpServletResponse response) 
+          throws ServletException, IOException {
     String id = request.getParameter("id");
     populate(id);
     response.setContentType("text/html;charset=UTF-8");
@@ -91,7 +92,8 @@ public class ArtistInfo extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+          throws ServletException, IOException {
     processRequest(request, response);
   }
   /**
@@ -102,7 +104,8 @@ public class ArtistInfo extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+          throws ServletException, IOException {
     processRequest(request, response);
   }
   /**

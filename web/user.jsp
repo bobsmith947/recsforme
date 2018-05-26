@@ -84,7 +84,7 @@
           </div>
         </c:if>
         <h2>Welcome to your temporary page.</h2>
-        <p>This page is unique to your browsing session, and will be cleared if it expires (after 30 minutes of inactivity), or if you close your browser. If you sign up with an account, your lists will be saved in the cloud, able to be accessed anytime, anywhere. Recommendation generation is not yet available. Keep checking back for development updates.<p>
+        <p>This page is unique to your browser, and will be cleared if it expires (after 30 minutes of inactivity), or if you close your browser. If you sign up with an account, your lists will be saved in the cloud, able to be accessed anytime, anywhere. Recommendation generation is not yet available. Keep checking back for development updates.</p>
       </c:if>
       <c:if test="${u.loggedIn}">
         <ul class="nav justify-content-lg-start justify-content-center mb-4">
