@@ -77,7 +77,6 @@
       </c:if>
     </c:if>
     <c:if test='${action == "check"}'>
-      <c:set var="changed" value="${false}" />
       <c:choose>
         <c:when test="${u.likeData.list.contains(group)}">
           <h5 class="text-success">This group exists on your likes list.</h5>
@@ -88,8 +87,7 @@
           <% response.addHeader("Item-Contained", "dislike"); %>
         </c:when>
         <c:otherwise>
-          <h5 class="text-warning">This group does not exist on either of your lists.</h5>
-          <% response.addHeader("Item-Contained", "false"); %>
+          <h5 class="text-success">This group does not exist on either of your lists.</h5>
         </c:otherwise>
       </c:choose>
     </c:if>
