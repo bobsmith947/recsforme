@@ -6,7 +6,7 @@
 <jsp:setProperty name="q" property="type" />
 <jsp:setProperty name="q" property="query" />
 <% if (q.getQuery().equals("make me coffee")) response.sendError(418); %>
-<c:set var="d" target="q" property="delegation" value="${q.delegateQuery()}" scope="request" />
+<c:set var="d" target="q" property="delegation" value="${q.delegateQuery()}" />
 <!DOCTYPE html>
 <html>
   <title>recsforme :: <jsp:getProperty name="q" property="type" /> Search - <jsp:getProperty name="q" property="query" /></title>
@@ -45,7 +45,7 @@
       <c:set var="con" value="${q.context}" />
       <c:set var="len" value="${d.len}" />
       <div class="mb-2" id="results">
-        <c:if test="${len > 0}" var="hasResults" scope="request">
+        <c:if test="${len > 0}" var="hasResults">
           <c:if test="${q.changed(old, q.query)}">
             <sql:update dataSource="jdbc/MediaRecom">
               INSERT INTO query_log (query, qtype)
@@ -57,7 +57,9 @@
             <c:forEach var="i" begin="0" end="${len-1}" step="1">
               <c:set var="id" value="${d.listIds()[i]}" />
               <c:set var="name" value="${d.listNames()[i]}" />
-              <a class="list-group-item list-group-item-action" href="<c:out value="${con.concat(id)}" />"><c:out value="${name}" /></a>
+              <a class="list-group-item list-group-item-action" href="${con.concat(id)}">
+                <c:out value="${name}" />
+              </a>
             </c:forEach>
           </div>
         </c:if>

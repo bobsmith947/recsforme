@@ -6,7 +6,7 @@
   <title>Registration Page</title>
   <body>
     <c:if test='${pageContext.request.getMethod() == "GET"}'>
-      <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
+      <sql:query var="matches" dataSource="jdbc/MediaRecom">
         SELECT * FROM users
         WHERE uname = ?
         <sql:param value='${pageContext.request.getParameter("name")}' />

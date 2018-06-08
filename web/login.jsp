@@ -8,7 +8,7 @@
   <title>Logging in...</title>
   <body>
     <em>Authenticating the login credentials.</em>
-    <sql:query var="matches" scope="request" dataSource="jdbc/MediaRecom">
+    <sql:query var="matches" dataSource="jdbc/MediaRecom">
       SELECT id, pw, salt FROM users
       WHERE uname = ?
       <sql:param value="${u.name}" />

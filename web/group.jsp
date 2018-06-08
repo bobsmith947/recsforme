@@ -12,6 +12,7 @@
                                  pageContext.request.getParameter("id"),
                                  pageContext.request.getParameter("type"))}' />
     <c:set var="group" value="${ListData.generateGroup(item)}" />
+    <c:set var="changed" />
     <c:if test='${action == "add"}'>
       <c:if test='${status == "like"}'>
         <c:choose>
@@ -36,62 +37,75 @@
         </c:choose>
       </c:if>
       <c:if test="${added}">
+        <c:set var="changed" value="${true}" />
         <h5 class="text-success">This group has been added.</h5>
+      </c:if>
+      <c:if test="${!added}">
+        <h5 class="text-warning">This group could not be added.</h5>
       </c:if>
     </c:if>
     <c:if test='${action == "reset"}'>
+      <c:set var="changed" value="${true}" />
       <c:set var="list" value='${pageContext.request.getParameter("list")}' />
       <c:if test='${list == "both"}'>
         <% u.getLikeData().getList().clear(); %>
         <% u.getDislikeData().getList().clear(); %>
-        <c:if test="${u.loggedIn}">
-          <sql:update dataSource="jdbc/MediaRecom">
-            UPDATE user_likes
-            SET items = DEFAULT
-            WHERE uid = ${u.id}
-
-            UPDATE user_dislikes
-            SET items = DEFAULT
-            WHERE uid = ${u.id}
-          </sql:update>
-        </c:if>
+        <h5 class="text-success">Both of your lists have been reset.</h5>
       </c:if>
       <c:if test='${list == "like"}'>
         <% u.getLikeData().getList().clear(); %>
-        <c:if test="${u.loggedIn}">
-          <sql:update dataSource="jdbc/MediaRecom">
-            UPDATE user_likes
-            SET items = DEFAULT
-            WHERE uid = ${u.id}
-          </sql:update>
-        </c:if>
+        <h5 class="text-success">Your likes list has been reset.</h5>
       </c:if>
       <c:if test='${list == "dislike"}'>
         <% u.getDislikeData().getList().clear(); %>
-        <c:if test="${u.loggedIn}">
-          <sql:update dataSource="jdbc/MediaRecom">
-            UPDATE user_dislikes
-            SET items = DEFAULT
-            WHERE uid = ${u.id}
-          </sql:update>
-        </c:if>
+        <h5 class="text-success">Your dislikes list has been reset.</h5>
       </c:if>
     </c:if>
     <c:if test='${action == "remove"}'>
-      <c:if test='${status == "like" && u.likeData.list.remove(group)}'>
-        <h5 class="text-success">Group removed from likes.</h5>
+      <c:if test='${status == "like"}'>
+        <c:set var="removed" value="${u.likeData.list.remove(group)}" />
       </c:if>
-      <c:if test='${status == "dislike" && u.dislikeData.list.remove(group)}'>
-        <h5 class="text-success">Group removed from dislikes.</h5>
+      <c:if test='${status == "dislike"}'>
+        <c:set var="removed" value="${u.dislikeData.list.remove(group)}" />
+      </c:if>
+      <c:if test="${removed}">
+        <c:set var="changed" value="${true}" />
+        <h5 class="text-success">This group has been removed.</h5>
+      </c:if>
+      <c:if test="${!removed}">
+        <h5 class="text-warning">This group could not be removed.</h5>
       </c:if>
     </c:if>
     <c:if test='${action == "check"}'>
-      <c:if test="${u.likeData.list.contains(group)}">
-        <% response.addHeader("Item-Contained", "like"); %>
-      </c:if>
-      <c:if test="${u.dislikeData.list.contains(group)}">
-        <% response.addHeader("Item-Contained", "dislike"); %>
-      </c:if>
+      <c:set var="changed" value="${false}" />
+      <c:choose>
+        <c:when test="${u.likeData.list.contains(group)}">
+          <h5 class="text-success">This group exists on your likes list.</h5>
+          <% response.addHeader("Item-Contained", "like"); %>
+        </c:when>
+        <c:when test="${u.dislikeData.list.contains(group)}">
+          <h5 class="text-success">This group exists on your dislikes list.</h5>
+          <% response.addHeader("Item-Contained", "dislike"); %>
+        </c:when>
+        <c:otherwise>
+          <h5 class="text-warning">This group does not exist on either of your lists.</h5>
+          <% response.addHeader("Item-Contained", "false"); %>
+        </c:otherwise>
+      </c:choose>
+    </c:if>
+    <c:if test="${u.loggedIn && changed}">
+      <sql:update dataSource="jdbc/MediaRecom">
+        UPDATE user_likes
+        SET items = ?
+        WHERE uid = ${u.id}
+        <sql:param value="${ListData.stringifyData(u.likeData)}" />
+
+        UPDATE user_dislikes
+        SET items = ?
+        WHERE uid = ${u.id}
+        <sql:param value="${ListData.stringifyData(u.dislikeData)}" />
+      </sql:update>
+      <h5 class="text-success">The database has been updated.</h5>
     </c:if>
   </body>
 </html>
