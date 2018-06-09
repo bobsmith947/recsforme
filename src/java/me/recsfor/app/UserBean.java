@@ -38,7 +38,7 @@ public class UserBean implements Serializable {
   private final PropertyChangeSupport propertySupport;
   
   public UserBean() {
-    name = "";
+    name = "temp";
     id = -1;
     loggedIn = false;
     tries = 0;

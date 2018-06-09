@@ -12,7 +12,6 @@
                                  pageContext.request.getParameter("id"),
                                  pageContext.request.getParameter("type"))}' />
     <c:set var="group" value="${ListData.generateGroup(item)}" />
-    <c:set var="changed" />
     <c:if test='${action == "add"}'>
       <c:if test='${status == "like"}'>
         <c:choose>

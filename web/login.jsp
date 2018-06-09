@@ -2,7 +2,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption, me.recsfor.app.ListData"%>
 <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
-<jsp:setProperty name="u" property="name" value='${pageContext.request.getParameter("uname")}' />
+<jsp:setProperty name="u" property="name" param="uname" />
 <!DOCTYPE html>
 <html>
   <title>Logging in...</title>
