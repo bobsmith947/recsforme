@@ -19,7 +19,8 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Defines the content of user like and dislike lists.
+ * Represents a group in a list.
+ * Each group has a name, ID (from either IMDb or MusicBrainz), and type.
  * @author lkitaev
  */
 public class ListGroup implements Serializable {

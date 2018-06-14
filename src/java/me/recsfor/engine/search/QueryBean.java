@@ -19,7 +19,8 @@ import java.beans.*;
 import java.io.Serializable;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 /**
- * JavaBeans component to delegate queries to the proper class.
+ * JavaBeans component to store query data.
+ * Can be used to delegate queries to the proper class.
  * @author lkitaev
  */
 public class QueryBean implements Serializable {

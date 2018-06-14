@@ -26,7 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Objects;
 import me.recsfor.engine.search.*;
 /**
- * Converts user like and dislike data from JavaScript Object Notation (JSON) to a Java object.
+ * Represents a list of groups.
+ * Can convert data to and from JSON.
  * @author lkitaev
  */
 public class ListData implements Serializable {
