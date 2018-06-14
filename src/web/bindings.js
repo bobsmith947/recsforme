@@ -88,7 +88,6 @@ try {
   if (location.pathname.includes("user.jsp")) {
     let logInModel = {
       name: ko.observable(""),
-      loginForm: ko.observable(false),
       resetForm: ko.observable(false),
       email: ko.observable(""),
       pass: ko.observable(""),
@@ -104,6 +103,9 @@ try {
             action: "reset"
           },
           response => $("#subres").append(response));
+      },
+      cancelReset: function () {
+        this.resetForm(false);
       }
     };
     ko.applyBindings(logInModel);

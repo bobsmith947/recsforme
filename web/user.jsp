@@ -19,59 +19,70 @@
         <c:if test="${u.tries < 6}" scope="session" var="notLocked">
           <ul class="nav justify-content-lg-start justify-content-center mb-4">
             <li class="nav-item">
-              <a class="btn btn-secondary btn-sm nav-link mr-1" href="#" data-bind="click:loginForm">Log in</a>
+              <a class="btn btn-secondary btn-sm nav-link mr-1" href="#" data-toggle="modal" data-target="#login">Log in</a>
             </li>
             <li class="nav-item">
               <a class="btn btn-secondary btn-sm nav-link ml-1" href="signup.jsp">Sign up</a>
             </li>
           </ul>
-          <div id="login" data-bind="visible:loginForm">
-            <div>
-              <form data-bind="visible:!resetForm()" action="login.jsp" method="POST">
-                <div class="form-group">
-                  <label for="uname">Username</label>
-                  <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" maxlength="18" pattern="\w+" autofocus required>
+          <div id="login" class="modal fade text-dark" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" data-bind="if:!resetForm()">Log in to your account</h5>
+                  <h5 class="modal-title" data-bind="if:resetForm">Reset your password</h5>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <div class="form-group">
-                  <label for="pw">Password</label>
-                  <input type="password" class="form-control" id="pw" name="pw" required>
-                  <small class="form-text text-muted">
-                    Forgot your password?
-                    <span data-bind="visible:name()===''">First, enter your username to be able request a password reset.</span>
-                    <a data-bind="visible:name()!=='',click:resetForm" href="#">Reset it.</a>
-                  </small>
+                <div class="modal-body">
+                  <form data-bind="visible:!resetForm()" action="login.jsp" method="POST">
+                    <div class="form-group">
+                      <label for="uname">Username</label>
+                      <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" maxlength="18" pattern="\w+" autofocus required>
+                    </div>
+                    <div class="form-group">
+                      <label for="pw">Password</label>
+                      <input type="password" class="form-control" id="pw" name="pw" required>
+                      <small class="form-text text-muted">
+                        Forgot your password?
+                        <span data-bind="visible:name()===''">First, enter your username to be able request a password reset.</span>
+                        <a data-bind="visible:name()!=='',click:resetForm" href="#">Reset it.</a>
+                      </small>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block mb-3">Log In</button>
+                    <c:if test="${u.likeData.list.size() > 0 || u.dislikeData.list.size() > 0}">
+                      <div class="alert alert-danger">Local lists will be cleared upon logging in.</div>
+                    </c:if>
+                    <div class="alert alert-warning">
+                      You have <strong>${6-u.tries} tries</strong> left before you will be locked out.
+                    </div>
+                  </form>
+                  <form data-bind="visible:resetForm,submit:requestReset" id="reset-form" method="POST">
+                    <small class="form-text text-muted">
+                      Don't want to reset your password or entered the wrong username?
+                      <a data-bind="click:cancelReset" href="#">Go back.</a>
+                    </small>
+                    <div class="form-group">
+                      <label for="email">Email Address</label>
+                      <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" required>
+                      <small class="form-text text-muted">
+                        Enter the email address that you signed up for the account named <strong data-bind="text:name()"></strong> with.
+                      </small>
+                      <small class="form-text text-muted">If you did not sign up with an email, you cannot reset your password.</small>
+                    </div>
+                    <div data-bind="visible:email()!==''" class="form-group">
+                      <label for="npw">New Password</label>
+                      <input data-bind="textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" required>
+                      <small class="form-text text-muted">Enter a secure password you don't use elsewhere.</small>
+                      <label for="cpw">Confirm Password</label>
+                      <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
+                    </div>
+                    <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block">
+                      Reset Password
+                    </button>
+                    <div id="subres"></div>
+                  </form>
                 </div>
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Log In</button>
-              </form>
-              <c:if test="${u.likeData.list.size() > 0 || u.dislikeData.list.size() > 0}">
-                <div class="alert alert-danger">Local lists will be cleared upon logging in.</div>
-              </c:if>
-              <div class="alert alert-warning">
-                You have <strong><c:out value="${6-u.tries}" /> tries</strong> left before you will be locked out.
               </div>
-            </div>
-            <div>
-              <form data-bind="visible:resetForm,submit:requestReset" id="reset-form" method="POST">
-                <div class="form-group">
-                  <label for="email">Email Address</label>
-                  <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" required>
-                  <small class="form-text text-muted">
-                    Enter the email address that you signed up for the account named <strong data-bind="text:name()"></strong> with.
-                  </small>
-                  <small class="form-text text-muted">If you did not sign up with an email, you cannot reset your password.</small>
-                </div>
-                <div data-bind="visible:email()!==''" class="form-group">
-                  <label for="npw">New Password</label>
-                  <input data-bind="textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" required>
-                  <small class="form-text text-muted">Enter a secure password you don't use elsewhere.</small>
-                  <label for="cpw">Confirm Password</label>
-                  <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
-                </div>
-                <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block">
-                  Reset Password
-                </button>
-              </form>
-              <div id="subres"></div>
             </div>
           </div>
         </c:if>

@@ -76,7 +76,7 @@
           </c:catch>
           <c:if test="${ex == null}">
             <h5 class="text-success">Data successfully registered in the database!</h5>
-            <h6 class="text-success">You can now <a href="login.jsp">log in</a>.</h6>
+            <h6 class="text-success">You can now log in on the <a href="user.jsp">user page</a>.</h6>
           </c:if>
           <c:if test="${ex != null}">
             ${pageContext.exception.printStackTrace()}
