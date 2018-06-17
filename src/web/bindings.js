@@ -49,18 +49,15 @@ try {
       },
       nameCheck: function () {
         $("#nameres").empty();
-        if ($("#uname")[0].checkValidity()) {
-          $.get("register.jsp",
-            {name: this.uname()},
-            (response, status, xhr) => {
-              $("#nameres").append(response);
-              console.log(status);
-              xhr.then(() =>
-                $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") : 
-                  $("#uname")[0].setCustomValidity("Username is already taken.")
-              );
-           });
-        }
+        $.get(
+                "register.jsp",
+                {name: this.uname()}
+        )
+                .done((response) => {
+                  $("#nameres").append(response);
+                  $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") :
+                          $("#uname")[0].setCustomValidity("Username is already taken.");
+                });
       },
       emailCheck: function () {
         $("#emailres").empty();
@@ -95,17 +92,31 @@ try {
       requestReset: function (form) {
         $("#subres").empty();
         const reset = $(form).serializeArray();
-        this.resetForm(false);
         $.post("register.jsp", {
             email: reset[0].value,
             pass: reset[1].value,
             name: this.name(),
             action: "reset"
-          },
-          response => $("#subres").append(response));
+          })
+                .done((response) => {
+                  $("#pw").val("");
+                  this.resetForm(false);
+                  $("#subres").append(response);
+                })
+                .fail(() => {
+                  $("#subres").append("Your email and/or username are not correct.");
+                  $("#subres").addClass("text-danger");
+                  $("#email").focus();
+                });
       },
       cancelReset: function () {
+        this.name("");
+        $("#pw").val("");
         this.resetForm(false);
+      },
+      beginReset: function () {
+        if (this.email())
+          return $("#email")[0].checkValidity();
       }
     };
     ko.applyBindings(logInModel);

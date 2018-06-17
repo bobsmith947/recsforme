@@ -34,6 +34,7 @@
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
+                  <div id="subres"></div>
                   <form data-bind="visible:!resetForm()" action="login.jsp" method="POST">
                     <div class="form-group">
                       <label for="uname">Username</label>
@@ -44,7 +45,7 @@
                       <input type="password" class="form-control" id="pw" name="pw" required>
                       <small class="form-text text-muted">
                         Forgot your password?
-                        <span data-bind="visible:name()===''">First, enter your username to be able request a password reset.</span>
+                        <span data-bind="visible:name()===''">First, enter your username to be able to request a password reset for that account.</span>
                         <a data-bind="visible:name()!=='',click:resetForm" href="#">Reset it.</a>
                       </small>
                     </div>
@@ -53,33 +54,36 @@
                       <div class="alert alert-danger">Local lists will be cleared upon logging in.</div>
                     </c:if>
                     <div class="alert alert-warning">
-                      You have <strong>${6-u.tries} tries</strong> left before you will be locked out.
+                      You have 
+                      <strong>${6-u.tries} tries</strong>
+                      left before you will be locked out.
                     </div>
                   </form>
                   <form data-bind="visible:resetForm,submit:requestReset" id="reset-form" method="POST">
                     <small class="form-text text-muted">
-                      Don't want to reset your password or entered the wrong username?
+                      Entered the wrong username?
                       <a data-bind="click:cancelReset" href="#">Go back.</a>
                     </small>
                     <div class="form-group">
                       <label for="email">Email Address</label>
                       <input data-bind="textInput:email" type="email" class="form-control" id="email" name="email" required>
                       <small class="form-text text-muted">
-                        Enter the email address that you signed up for the account named <strong data-bind="text:name()"></strong> with.
+                        Enter the email address that you signed up for the account named 
+                        <strong data-bind="text:name()"></strong>
+                        with.
                       </small>
-                      <small class="form-text text-muted">If you did not sign up with an email, you cannot reset your password.</small>
+                      <small class="form-text text-muted">If you do not have an email associated with your account, you cannot reset your password.</small>
+                      <small class="form-text text-muted">You can add an email to your account by contacting the administrator, using the icons at the top of the page.</small>
                     </div>
-                    <div data-bind="visible:email()!==''" class="form-group">
-                      <label for="npw">New Password</label>
-                      <input data-bind="textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" required>
-                      <small class="form-text text-muted">Enter a secure password you don't use elsewhere.</small>
-                      <label for="cpw">Confirm Password</label>
-                      <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
-                    </div>
-                    <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block">
+                    <label for="npw">New Password</label>
+                    <input data-bind="enable:beginReset(),textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" required>
+                    <small class="form-text text-muted">Enter a password you don't use elsewhere.</small>
+                    <small class="form-text text-muted">Your password must be at least 8 characters.</small>
+                    <label for="cpw">Confirm Password</label>
+                    <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
+                    <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block mt-3">
                       Reset Password
                     </button>
-                    <div id="subres"></div>
                   </form>
                 </div>
               </div>

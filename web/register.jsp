@@ -42,10 +42,12 @@
               <h6 class="text-success">Your password has successfully been reset. You can now log in with the new password.</h6>
             </c:when>
             <c:when test="${updated == 0}">
-              <h6 class="text-warning">Unable to reset your password. Please try again.</h6>
+              <h6 class="text-danger">Your email and/or username are not correct.</h6>
+              <% response.sendError(400); %>
             </c:when>
             <c:otherwise>
               <h6 class="text-danger">Something went wrong. If the issue persists, please contact the administrator.</h6>
+              <% response.sendError(500); %>
             </c:otherwise>
           </c:choose>
         </c:when>
