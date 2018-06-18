@@ -19,6 +19,7 @@ import moment from "moment/min/moment.min.js";
 
 try {
   if (location.pathname.includes("signup.jsp")) {
+    let changed = false;
     let signUpModel = {
       uname: ko.observable(""),
       pw: ko.observable(""),
@@ -26,7 +27,6 @@ try {
       email: ko.observable(""),
       sex: ko.observable(""),
       accepted: ko.observable(false),
-      notRobot: ko.observable(false),
       dob: ko.observable(""),
       age: function () {
         const date = moment(this.dob());
@@ -34,11 +34,6 @@ try {
           return date.fromNow(true); //without the "ago" part
         else 
           return "unknown";
-      },
-      completed: function () {
-        return this.accepted() && 
-               this.notRobot() && 
-               $("#info-form")[0].checkValidity();
       },
       sendInfo: function () {
         $("#subres").empty();
@@ -48,16 +43,16 @@ try {
         $("button[form=info-form]").prop("disabled", true);
       },
       nameCheck: function () {
-        $("#nameres").empty();
-        $.get(
-                "register.jsp",
-                {name: this.uname()}
-        )
-                .done((response) => {
-                  $("#nameres").append(response);
-                  $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") :
-                          $("#uname")[0].setCustomValidity("Username is already taken.");
-                });
+        if ($("#uname")[0].checkValidity() && changed) {
+          $("#nameres").empty();
+          changed = false;
+          $.get("register.jsp", {name: this.uname()})
+                  .done((response) => {
+                    $("#nameres").append(response);
+                    $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") :
+                            $("#uname")[0].setCustomValidity("Username is already taken.");
+                  });
+        }
       },
       emailCheck: function () {
         $("#emailres").empty();
@@ -74,13 +69,18 @@ try {
           $("#pw")[0].setCustomValidity("Passwords aren't the same.");
         } else
           $("#pw")[0].setCustomValidity("");
+      },
+      valid: function () {
+        if (this.accepted())
+          return $("#info-form")[0].checkValidity();
       }
     };
     ko.applyBindings(signUpModel);
-    $("#info-form").find("input").change(() => {
-      signUpModel.accepted(false);
-      signUpModel.notRobot(false);
+    $("#uname").change(() => {
+      $("#uname")[0].setCustomValidity("");
+      changed = true;
     });
+    $("#info-form").find("input").change(() => signUpModel.accepted(false));
   }
   if (location.pathname.includes("user.jsp")) {
     let logInModel = {
@@ -133,29 +133,31 @@ try {
       voted: ko.observable(vote !== null),
       sendVote: function (form) {
         vote = $(form).serializeArray()[0].value;
-        let xhr = $.post("group.jsp", {
-            status: vote,
-            name: name,
-            id: id,
-            type: type,
-            action: "add"
-          });
-        xhr.fail(() => {
-          switch (vote) {
-            case "like":
-              $("#vote-form").append(`<h5 class="text-danger">This group already exists on your dislikes list.</h5>`);
-              break;
-            case "dislike":
-              $("#vote-form").append(`<h5 class="text-danger">This group already exists on your likes list.</h5>`);
-              break;
-          }
-          console.log("This item has already been added.");
-          this.selected(false);
-        });
-        xhr.done(() => {
-          this.status(vote);
-          this.voted(true);
-        });
+        $.post("group.jsp", {
+          status: vote,
+          name: name,
+          id: id,
+          type: type,
+          action: "add"
+        })
+                .done(() => {
+                  this.status(vote);
+                  this.voted(true);
+                })
+                .fail(() => {
+                  switch (vote) {
+                    case "like":
+                      $("#vote-form").append(`<h5 class="text-danger">This group already exists on your dislikes list.</h5>`);
+                      break;
+                    case "dislike":
+                      $("#vote-form").append(`<h5 class="text-danger">This group already exists on your likes list.</h5>`);
+                      break;
+                    default:
+                      break;
+                  }
+                  console.log("This item has already been added.");
+                  this.selected(false);
+                });
       },
       undoVote: function () {
         $.post("group.jsp", {

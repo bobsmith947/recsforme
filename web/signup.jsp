@@ -255,32 +255,13 @@
           I accept the privacy policy and terms in their entirety.
         </label>
       </div>
-      <div class="form-check">
-        <input data-bind="checked:notRobot" type="checkbox" class="form-check-input" id="rob">
-        <label class="form-check-label" for="rob">
-          I am not a robot, and do not plan on becoming one.
-        </label>
-      </div>
-      <div data-bind="visible:completed()" id="info-div" class="mt-3 text-info" style="display:none">
-        <h6>Username: <span data-bind="text:uname"></span></h6>
-        <span data-bind="visible:email()!==''">
-          <h6>Email: <span data-bind="text:email"></span></h6>
-        </span>
-        <span data-bind="visible:email()===''">
-          <h6 class="text-danger">You will be unable to reset your password if you do not supply an email address.</h6>
-        </span>
-        <span data-bind="visible:dob()!==''">
-          <h6>Age: <span data-bind="text:age()"></span></h6>
-        </span>
-        <span data-bind="visible:sex()">
-          <h6>Sex: <span data-bind="text:sex"></span></h6>
-        </span>
-        <div id="subres"></div>
-      </div>
-      <h5 data-bind="visible:!completed()&&accepted()&&notRobot()" class="text-warning mt-2">Your info is not valid.</h5>
-      <button data-bind="enable:completed(),click:sendInfo" type="submit" class="btn btn-primary btn-lg btn-block mt-3" disabled form="info-form" formmethod="POST">
+      <span data-bind="visible:email()===''">
+        <h6 class="text-danger mt-3">You will be unable to reset your password if you do not supply an email address.</h6>
+      </span>
+      <button data-bind="enable:valid(),click:sendInfo" type="submit" class="btn btn-primary btn-lg btn-block mt-3" disabled form="info-form" formmethod="POST">
         Sign Up
       </button>
+      <div id="subres"></div>
     </main>
   </body>
 </html>
