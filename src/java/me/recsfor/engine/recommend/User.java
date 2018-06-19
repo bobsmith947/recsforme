@@ -42,11 +42,9 @@ public class User {
   
   public User(String uname, String sex, LocalDate dob, String likeList, String dislikeList) {
     name = uname;
-    this.sex = sex != null && !sex.isEmpty() ? Sex.valueOf(sex) : Sex.UNKNOWN;
-    if (dob.isEqual(LocalDate.of(1900, 1, 1))) //the default date
-      age = -1;
-    else
-      age = (short) dob.until(LocalDate.now()).getYears();
+    this.sex = sex != null && !sex.isEmpty() ? Sex.valueOf(sex.toUpperCase()) : Sex.UNKNOWN;
+    age = (dob.isEqual(LocalDate.of(1900, 1, 1))) ? -1 : 
+            (short) dob.until(LocalDate.now()).getYears(); //the default date
     try {
       likes = ListData.mapData(likeList);
       dislikes = ListData.mapData(dislikeList);

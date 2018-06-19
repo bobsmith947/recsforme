@@ -18,13 +18,19 @@ package me.recsfor.engine.recommend;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import javax.sql.DataSource;
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.LinkedList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
+import me.recsfor.app.ListData;
 
 /**
  * Servlet that initializes recommendation generation and displays the results.
@@ -37,6 +43,8 @@ public class RecGen extends HttpServlet {
    */
   @Resource(name = "jdbc/MediaRecom")
   private DataSource ds;
+  private LinkedList<User> users;
+  private ListData recs;
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -51,21 +59,20 @@ public class RecGen extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter();
             Connection conn = ds.getConnection()) {
+      Statement query = conn.createStatement();
+      ResultSet res = query.executeQuery("SELECT id, uname, sex, dob FROM users");
+      users = findUsers(res);
+      generateRecs();
       /* TODO output your page here. You may use following sample code. */
       out.println("<!DOCTYPE html>");
       out.println("<html>");
-      out.println("<head>");
-      out.println("<title>Servlet MediaRec</title>");      
-      out.println("</head>");
+      out.println("<title>RecGen</title>");      
       out.println("<body>");
-      out.println("<h1>Servlet MediaRec at " + request.getContextPath() + "</h1>");
-      out.println("<h2>Connected to database " + conn.getSchema() + "</h2>");
+      out.println("<h1>Servlet RecGen at " + request.getContextPath() + "</h1>");
       out.println("</body>");
       out.println("</html>");
-      conn.close();
     }
   }
-
   /**
    * Handles the HTTP <code>GET</code> method.
    * @param request servlet request
@@ -82,7 +89,6 @@ public class RecGen extends HttpServlet {
       this.log(e.getMessage(), e);
     }
   }
-
   /**
    * Handles the HTTP <code>POST</code> method.
    * @param request servlet request
@@ -99,7 +105,6 @@ public class RecGen extends HttpServlet {
       this.log(e.getMessage(), e);
     }
   }
-
   /**
    * Returns a short description of the servlet.
    * @return a String containing servlet description
@@ -107,5 +112,43 @@ public class RecGen extends HttpServlet {
   @Override
   public String getServletInfo() {
     return "This servlet is used for generating recommendations.";
+  }
+  
+  /**
+   * Creates a list of similar users based on the database query results.
+   * @param results the possible users
+   * @return the similar users
+   */
+  private LinkedList<User> findUsers(ResultSet results) throws SQLException {
+    LinkedList<User> list = new LinkedList<>();
+    while (results.next()) {
+      String name = results.getString("uname");
+      String sex = results.getString("sex");
+      String dob = results.getDate("dob").toString();
+      LocalDate newDob;
+      try {
+        newDob = LocalDate.parse(dob);
+      } catch (DateTimeParseException e) {
+        newDob = LocalDate.of(1900, 1, 1);
+      }
+      String[] userLists = new String[2];
+      try (Connection conn = ds.getConnection()) {
+        Statement query = conn.createStatement();
+        ResultSet listResults = query.executeQuery("SELECT items FROM user_likes WHERE uid = " + results.getString("id"));
+        listResults.next();
+        userLists[0] = listResults.getString("items");
+        listResults = query.executeQuery("SELECT items FROM user_dislikes WHERE uid = " + results.getString("id"));
+        listResults.next();
+        userLists[1] = listResults.getString("items");
+      }
+      list.add(new User(name, sex, newDob, userLists[0], userLists[1]));
+    }
+    return list;
+  }
+  /**
+   * Generates recommendations using the already found users.
+   */
+  private void generateRecs() {
+    //TODO implement
   }
 }
