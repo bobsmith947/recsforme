@@ -124,9 +124,11 @@
           </c:forEach>
         </div>
       </div>
-      <button class="btn btn-primary btn-block btn-lg my-4" type="button" disabled>
-        Generate my recommendations
-      </button>
+      <c:if test="${u.likeData.list.size() != 0 && u.dislikeData.list.size() != 0}">
+        <a class="btn btn-primary btn-block btn-lg my-4" href="recommend.jsp">
+          Generate my recommendations
+        </a>
+      </c:if>
       <div class="container">
         <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear your lists, you can use the below buttons to do so.</h6>
         <div class="row">

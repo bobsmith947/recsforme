@@ -16,16 +16,17 @@
 package me.recsfor.engine.recommend;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import me.recsfor.app.ListData;
 
 /**
- * Represents any user and his or her likes and dislikes.
- * Can be used to find the similarity with another user, in order to make recommendations.
+ * Represents any user other than the one using the application.
  * @author lkitaev
  */
-public class User {
+public class User implements Serializable {
+  private static final long serialVersionUID = -4997310154302356037L;
   private String name;
   private Sex sex;
   private short age;
@@ -40,11 +41,15 @@ public class User {
     dislikes = null;
   }
   
-  public User(String uname, String sex, LocalDate dob, String likeList, String dislikeList) {
+  public User(String uname, String sex, LocalDate dob) {
     name = uname;
     this.sex = sex != null && !sex.isEmpty() ? Sex.valueOf(sex.toUpperCase()) : Sex.UNKNOWN;
-    age = (dob.isEqual(LocalDate.of(1900, 1, 1))) ? -1 : 
-            (short) dob.until(LocalDate.now()).getYears(); //the default date
+    age = (dob.isEqual(LocalDate.of(1900, 1, 1))) ? -1 : //the default date
+            (short) dob.until(LocalDate.now()).getYears();
+  }
+  
+  public User(String uname, String sex, LocalDate dob, String likeList, String dislikeList) {
+    this(uname, sex, dob);
     try {
       likes = ListData.mapData(likeList);
       dislikes = ListData.mapData(dislikeList);
@@ -54,7 +59,7 @@ public class User {
       dislikes = new ListData();
     }
   }
-
+  
   /**
    * @return the name
    */
@@ -114,10 +119,5 @@ public class User {
    */
   public void setDislikes(ListData dislikes) {
     this.dislikes = dislikes;
-  }
-  
-  public float calculateSimilarity(User otherUser) {
-    //TODO implement this
-    return 0.0f;
   }
 }

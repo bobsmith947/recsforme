@@ -14,10 +14,6 @@
         <servlet-name>AlbumInfo</servlet-name>
         <servlet-class>me.recsfor.group.AlbumInfo</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>RecGen</servlet-name>
-        <servlet-class>me.recsfor.engine.recommend.RecGen</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>MovieInfo</servlet-name>
         <url-pattern>/MovieInfo</url-pattern>
@@ -29,10 +25,6 @@
     <servlet-mapping>
         <servlet-name>AlbumInfo</servlet-name>
         <url-pattern>/AlbumInfo</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>RecGen</servlet-name>
-        <url-pattern>/RecGen</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -55,6 +47,7 @@
         <jsp-property-group>
             <url-pattern>/search.jsp</url-pattern>
             <url-pattern>/login.jsp</url-pattern>
+            <url-pattern>/recommend.jsp</url-pattern>
             <url-pattern>/index.jsp</url-pattern>
             <url-pattern>/signup.jsp</url-pattern>
             <url-pattern>/user.jsp</url-pattern>
