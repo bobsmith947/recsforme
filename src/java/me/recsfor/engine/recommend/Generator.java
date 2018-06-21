@@ -15,26 +15,28 @@
  */
 package me.recsfor.engine.recommend;
 
-import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import javax.servlet.jsp.jstl.sql.Result;
 import me.recsfor.app.ListData;
+import me.recsfor.app.ListGroup;
 
 /**
  * Used for generating recommendations.
  * @author lkitaev
  */
 public class Generator {
-  private LinkedList<User> users;
+  private final LinkedList<User> users;
   
   /**
-   * Creates an instance with an empty list of users for making recommendations.
-   * Not very helpful.
+   * Creates an instance with an empty list of users.
+   * Not very helpful for making recommendations.
    */
   public Generator() {
     users = new LinkedList<>();
@@ -91,41 +93,69 @@ public class Generator {
   public static User addListsToUser(User user, Result likeResult, Result dislikeResult) {
     String likes = (String) likeResult.getRowsByIndex()[0][0];
     String dislikes = (String) dislikeResult.getRowsByIndex()[0][0];
-    try {
-      user.setLikes(ListData.mapData(likes));
-      user.setDislikes(ListData.mapData(dislikes));
-    } catch (IOException | NullPointerException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
-    }
+    user.setLikes(ListData.mapData(likes));
+    user.setDislikes(ListData.mapData(dislikes));
     return user;
   }
   /**
    * Calculates the similarity between two pairs of lists.
-   * Both parameters are expected to be length two arrays; one like list and one dislike list.
-   * Neither list must be at a specific index, but the same indexes must correspond to the same list.
-   * A result of 1.0 means the two contain all the same elements.
-   * A result of 0.0 means the two do not share any elements.
-   * @param one the first group of lists
-   * @param two the second group of lists
-   * @return a value between 0.0 and 1.0, inclusive, indicating the similarity
+   * Both parameters are expected to be length two arrays.
+   * The first index should be the like list and the second index should be the dislike list.
+   * A result of 1.0 means the two pairs of lists are exactly the same.
+   * A result of -1.0 means the two pairs of lists are completely opposite.
+   * @param one the first pair of lists
+   * @param two the second pair of lists
+   * @return a decimal between -1 and 1, inclusive, that indicates the similarity
    */
-  protected static double calculateSimilarity(ListData[] one, ListData[] two) {
-    //TODO implement
-    return 0.0;
+  public static double calculateSimilarity(ListData[] one, ListData[] two) {
+    //intersect the likes
+    HashSet<ListGroup> likeIntersection = new HashSet<>(one[0].getList());
+    likeIntersection.retainAll(two[0].getList());
+    //intersect the dislikes
+    HashSet<ListGroup> dislikeIntersection = new HashSet<>(one[1].getList());
+    dislikeIntersection.retainAll(two[1].getList());
+    //intersect likes in the first with dislikes in the second
+    HashSet<ListGroup> conflictOne = new HashSet<>(one[0].getList());
+    conflictOne.retainAll(two[1].getList());
+    //intersect likes in the second with dislikes in the first
+    HashSet<ListGroup> conflictTwo = new HashSet<>(one[1].getList());
+    conflictTwo.retainAll(two[0].getList());
+    //union the likes and dislikes
+    HashSet<ListGroup> union = new HashSet<>(one[0].getList());
+    union.addAll(one[1].getList());
+    union.addAll(two[0].getList());
+    union.addAll(two[1].getList());
+    //get the sizes of each intersected/unioned set
+    double i1 = (double) likeIntersection.size();
+    double i2 = (double) dislikeIntersection.size();
+    double c1 = (double) conflictOne.size();
+    double c2 = (double) conflictTwo.size();
+    double u = (double) union.size();
+    //Jaccard index formula
+    return (i1 + i2 - c1 - c2) / u;
   }
   /**
    * Ranks the list of users based on their similarity to the supplied likes and dislikes.
+   * The list will be sorted in descending order.
+   * The list will be in ascending order.
    * @param likes the likes of the user who is being ranked against
    * @param dislikes the dislikes of the user who is being ranked against
    */
   private void rankUsers(ListData likes, ListData dislikes) {
-    ListData[] lists = {likes, dislikes};
+    final ListData[] lists = {likes, dislikes};
     users.sort((User userOne, User userTwo) -> {
       ListData[] listsOne = {userOne.getLikes(), userOne.getDislikes()};
       ListData[] listsTwo = {userTwo.getLikes(), userTwo.getDislikes()};
-      double diff = calculateSimilarity(listsOne, lists) - calculateSimilarity(listsTwo, lists);
-      return (int) (diff * 100);
+      double simOne = calculateSimilarity(listsOne, lists);
+      double simTwo = calculateSimilarity(listsTwo, lists);
+      if (simOne > simTwo)
+        return 1;
+      else if (simOne < simTwo)
+        return -1;
+      else
+        return 0;
     });
+    Collections.reverse(users);
   }
 
   /**
@@ -133,12 +163,5 @@ public class Generator {
    */
   public LinkedList<User> getUsers() {
     return users;
-  }
-
-  /**
-   * @param users the users to set
-   */
-  public void setUsers(LinkedList<User> users) {
-    this.users = users;
   }
 }

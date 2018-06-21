@@ -20,12 +20,13 @@
           WHERE uid = ${user}
         </sql:query>
         <sql:query var="dislikes" dataSource="jdbc/MediaRecom">
-          SELECT items FROM user_likes
+          SELECT items FROM user_dislikes
           WHERE uid = ${user}
         </sql:query>
         <c:set var="newUser" value="${Generator.addListsToUser(r.users.get(user), likes, dislikes)}" />
         <c:set var="oldUser" value="${r.users.replace(user, newUser)}" />
       </c:forEach>
+      <c:set var="gen" value="${Generator(r.users)}" />
     </main>
   </body>
 </html>

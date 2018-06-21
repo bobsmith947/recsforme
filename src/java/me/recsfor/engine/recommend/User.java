@@ -50,14 +50,8 @@ public class User implements Serializable {
   
   public User(String uname, String sex, LocalDate dob, String likeList, String dislikeList) {
     this(uname, sex, dob);
-    try {
-      likes = ListData.mapData(likeList);
-      dislikes = ListData.mapData(dislikeList);
-    } catch (IOException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
-      likes = new ListData();
-      dislikes = new ListData();
-    }
+    likes = ListData.mapData(likeList);
+    dislikes = ListData.mapData(dislikeList);
   }
   
   /**

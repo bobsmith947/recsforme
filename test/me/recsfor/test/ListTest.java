@@ -61,10 +61,9 @@ public class ListTest {
   
   /**
    * Tests that JSON data can be mapped to an instance.
-   * @throws Exception if something goes wrong
    */
   @Test
-  public void testMapData() throws Exception {
+  public void testMapData() {
     System.out.println("mapData");
     ListData expResult = new ListData();
     expResult.getList().add(group);
@@ -149,9 +148,8 @@ public class ListTest {
   }
   /**
    * Tests that a JSON object can be turned into a Java object.
-   * @throws Exception if something goes wrong
    */
-  public void testGenerateGroup() throws Exception {
+  public void testGenerateGroup() {
     System.out.println("generateItem");
     json = "{\"name\":\"The Idolm@ster (2011–)\",\"id\":\"tt2649756\",\"type\":\"Series\"}";
     ListGroup expResult = group;

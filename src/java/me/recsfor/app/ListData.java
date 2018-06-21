@@ -18,23 +18,23 @@ package me.recsfor.app;
 import java.io.Serializable;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.LinkedHashSet;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+//import com.fasterxml.jackson.core.JsonParseException;
+//import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Objects;
-import me.recsfor.engine.search.*;
+import me.recsfor.engine.search.AlbumQuery;
+import me.recsfor.engine.search.ArtistQuery;
+import me.recsfor.engine.search.MovieQuery;
+
 /**
  * Represents a list of groups.
  * Can convert data to and from JSON.
  * @author lkitaev
  */
-public class ListData implements Serializable {
+public class ListData implements Serializable, Comparable {
   private static final long serialVersionUID = 177281769747262676L;
-  /**
-   * Represents the JSON array of objects held under the "list" name.
-   */
   private LinkedHashSet<ListGroup> list;
   
   public ListData() {
@@ -62,14 +62,13 @@ public class ListData implements Serializable {
    * Maps JSON data to an instance of a <code>ListData</code> object.
    * @param json the data
    * @return the mapped data
-   * @throws IOException if a problem occurs when reading the input
    */  
-  public static ListData mapData(String json) throws IOException {
+  public static ListData mapData(String json) {
     ObjectMapper mapper = new ObjectMapper();
     ListData data;
     try {
       data = mapper.readValue(json, ListData.class);
-    } catch (JsonMappingException | JsonParseException e) {
+    } catch (IOException e) {
       data = new ListData();
       System.err.println(Arrays.toString(e.getStackTrace()));
     }
@@ -173,14 +172,13 @@ public class ListData implements Serializable {
    * Creates a <code>ListGroup</code> object representing an item with the specified JSON data.
    * @param json the data
    * @return the generated data
-   * @throws IOException if a problem occurs when reading the input
    */
-  public static ListGroup generateGroup(String json) throws IOException {
+  public static ListGroup generateGroup(String json) {
     ObjectMapper mapper = new ObjectMapper();
     ListGroup group;
     try {
       group = mapper.readValue(json, ListGroup.class);
-    } catch (JsonMappingException | JsonParseException e) {
+    } catch (IOException e) {
       group = new ListGroup();
       System.err.println(Arrays.toString(e.getStackTrace()));
     }
@@ -220,9 +218,33 @@ public class ListData implements Serializable {
       sb.append("Item ")
               .append(count)
               .append(": ")
-              .append(g.toString());
+              .append(g.toString())
+              .append("\n");
       count++;
     }
     return sb.toString();
+  }
+
+  @Override
+  public int compareTo(Object t) {
+    if (t == null) {
+      throw new NullPointerException();
+    } else if (!(t instanceof ListData)) {
+      throw new ClassCastException();
+    } else {
+      ListData other = (ListData) t;
+      int diff = 0;
+      ListGroup[] groups = new ListGroup[other.list.size()];
+      for (ListGroup item : other.list.toArray(groups)) {
+        if (!this.list.contains(item))
+          diff--;
+      }
+      groups = new ListGroup[this.list.size()];
+      for (ListGroup item : this.list.toArray(groups)) {
+        if (!other.list.contains(item))
+          diff++;
+      }
+      return diff;
+    }
   }
 }

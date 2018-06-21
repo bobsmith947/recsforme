@@ -124,7 +124,7 @@
           </c:forEach>
         </div>
       </div>
-      <c:if test="${u.likeData.list.size() != 0 && u.dislikeData.list.size() != 0}">
+      <c:if test="${u.likeData.list.size() != 0 || u.dislikeData.list.size() != 0}">
         <a class="btn btn-primary btn-block btn-lg my-4" href="recommend.jsp">
           Generate my recommendations
         </a>
