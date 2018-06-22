@@ -18,6 +18,7 @@ package me.recsfor.engine.recommend;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -33,27 +34,57 @@ import me.recsfor.app.ListGroup;
  */
 public class Generator {
   private final LinkedList<User> users;
+  private ListData knownLikes;
+  private ListData knownDislikes;
   
   /**
-   * Creates an instance with an empty list of users.
+   * Creates an instance with an empty list of users and no known likes or dislikes.
    * Not very helpful for making recommendations.
    */
   public Generator() {
     users = new LinkedList<>();
+    knownLikes = null;
+    knownDislikes = null;
   }
   /**
-   * Creates an instance with a list of users from an already existing list.
+   * Creates an instance with a list of users from an already existing list and no known likes or dislikes.
    * @param users the users
    */
   public Generator(LinkedList<User> users) {
     this.users = users;
+    knownLikes = null;
+    knownDislikes = null;
   }
   /**
-   * Creates an instance with a list of users from a map of users and ID's from the database.
+   * Creates an instance with a list of users from an already existing list and likes and dislikes.
+   * @param users the users
+   * @param likes the known likes
+   * @param dislikes the known dislikes
+   */
+  public Generator(LinkedList<User> users, ListData likes, ListData dislikes) {
+    this(users);
+    knownLikes = likes;
+    knownDislikes = dislikes;
+  }
+  /**
+   * Creates an instance with a list of users from a map of users and ID's from the database and no known likes or dislikes.
    * @param users the users
    */
   public Generator(LinkedHashMap<Integer, User> users) {
     this.users = new LinkedList<>(users.values());
+    knownLikes = null;
+    knownDislikes = null;
+  }
+  /**
+   * Creates an instance with a list of users from a map of users and ID's from the database and already existing likes and dislikes.
+   * @param users the users
+   * @param likes the known likes
+   * @param dislikes the known dislikes
+   */
+  public Generator(LinkedHashMap<Integer, User> users, ListData likes, ListData dislikes) {
+    this(users);
+    knownLikes = likes;
+    knownDislikes = dislikes;
   }
   
   /**
@@ -135,14 +166,11 @@ public class Generator {
     return (i1 + i2 - c1 - c2) / u;
   }
   /**
-   * Ranks the list of users based on their similarity to the supplied likes and dislikes.
+   * Ranks the list of users based on their similarity to the known likes and dislikes.
    * The list will be sorted in descending order.
-   * The list will be in ascending order.
-   * @param likes the likes of the user who is being ranked against
-   * @param dislikes the dislikes of the user who is being ranked against
    */
-  private void rankUsers(ListData likes, ListData dislikes) {
-    final ListData[] lists = {likes, dislikes};
+  private void rankUsers() {
+    final ListData[] lists = {knownLikes, knownDislikes};
     users.sort((User userOne, User userTwo) -> {
       ListData[] listsOne = {userOne.getLikes(), userOne.getDislikes()};
       ListData[] listsTwo = {userTwo.getLikes(), userTwo.getDislikes()};
@@ -157,11 +185,95 @@ public class Generator {
     });
     Collections.reverse(users);
   }
-
+  /**
+   * Generates recommendations using a sorted list of users.
+   * @param limit the number of recommendations to generate (defaults to 10 if this is 0)
+   * @return a list of recommendations
+   */
+  public ListData listRecommendations(int limit) {
+    if (limit == 0)
+      limit = 10;
+    else
+      limit = Math.abs(limit);
+    if (knownLikes == null)
+      knownLikes = new ListData();
+    if (knownDislikes == null)
+      knownDislikes = new ListData();
+    rankUsers();
+    ListData recList = new ListData();
+    User user;
+    while (recList.getList().size() < limit && !users.isEmpty()) {
+      user = users.pop();
+      user.getLikes().getList().forEach(group -> {
+        if (!(knownLikes.getList().contains(group) || knownDislikes.getList().contains(group)))
+          recList.getList().add(group);
+      });
+    }
+    return recList;
+  }
+  /**
+   * Generates a random list of items.
+   * @param limit the number of groups to add (defaults to 5 if this is 0)
+   * @return a random list
+   */
+  public ListData listRandom(int limit) {
+    if (limit == 0)
+      limit = 5;
+    else
+      limit = Math.abs(limit);
+    ListData randList = new ListData();
+    User user;
+    int count = 0;
+    int rand;
+    ListGroup[] tempList = new ListGroup[0];
+    Collections.shuffle(users);
+    while (randList.getList().size() < limit) {
+      if (count >= users.size())
+        count = 0;
+      user = users.get(count);
+      if (count % 2 == 0) {
+        tempList = user.getLikes().getList().toArray(tempList);
+        rand = (int) (Math.random() * tempList.length);
+        randList.getList().add(tempList[rand]);
+      } else {
+        tempList = user.getDislikes().getList().toArray(tempList);
+        rand = (int) (Math.random() * tempList.length);
+        randList.getList().add(tempList[rand]);
+      }
+      count++;
+    }
+    return randList;
+  }
+  
   /**
    * @return the users
    */
   public LinkedList<User> getUsers() {
     return users;
+  }
+  /**
+   * @return the knownLikes
+   */
+  public ListData getKnownLikes() {
+    return knownLikes;
+  }
+  /**
+   * @param knownLikes the knownLikes to set
+   */
+  public void setKnownLikes(ListData knownLikes) {
+    this.knownLikes = knownLikes;
+  }
+
+  /**
+   * @return the knownDislikes
+   */
+  public ListData getKnownDislikes() {
+    return knownDislikes;
+  }
+  /**
+   * @param knownDislikes the knownDislikes to set
+   */
+  public void setKnownDislikes(ListData knownDislikes) {
+    this.knownDislikes = knownDislikes;
   }
 }

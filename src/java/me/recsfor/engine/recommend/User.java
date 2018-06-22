@@ -15,10 +15,8 @@
  */
 package me.recsfor.engine.recommend;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Arrays;
 import me.recsfor.app.ListData;
 
 /**

@@ -18,22 +18,22 @@ package me.recsfor.engine.recommend;
 import java.beans.*;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.LinkedHashSet;
 import me.recsfor.app.ListData;
 
 /**
  * JavaBeans component to store recommendation data.
  * @author lkitaev
  */
-public class RecBean implements Serializable {
+public class RecommendationBean implements Serializable {
   private static final long serialVersionUID = -7420405811924841508L;
   public static final String PROP_USERS = "users";
   public static final String PROP_RECOMMENDATIONS = "recommendations";
   private LinkedHashMap<Integer, User> users;
-  private LinkedList<ListData> recommendations;
+  private LinkedHashSet<ListData> recommendations;
   private final PropertyChangeSupport propertySupport;
   
-  public RecBean() {
+  public RecommendationBean() {
     users = null;
     recommendations = null;
     propertySupport = new PropertyChangeSupport(this);
@@ -66,15 +66,15 @@ public class RecBean implements Serializable {
   /**
    * @return the recommendations
    */
-  public LinkedList<ListData> getRecommendations() {
+  public LinkedHashSet<ListData> getRecommendations() {
     return recommendations;
   }
 
   /**
    * @param recommendations the recommendations to set
    */
-  public void setRecommendations(LinkedList<ListData> recommendations) {
-    LinkedList<ListData> oldRecommendations = this.recommendations;
+  public void setRecommendations(LinkedHashSet<ListData> recommendations) {
+    LinkedHashSet<ListData> oldRecommendations = this.recommendations;
     this.recommendations = recommendations;
     propertySupport.firePropertyChange(PROP_RECOMMENDATIONS, oldRecommendations, recommendations);
   }

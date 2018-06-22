@@ -18,7 +18,6 @@ package me.recsfor.app;
 import java.io.Serializable;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.LinkedHashSet;
 import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.core.JsonParseException;
@@ -206,7 +205,9 @@ public class ListData implements Serializable, Comparable {
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = 29 * hash + Objects.hashCode(this.list);
+    ListGroup[] arr = new ListGroup[0];
+    for (ListGroup g : this.list.toArray(arr))
+      hash = 29 * hash + g.hashCode();
     return hash;
   }
   
@@ -234,12 +235,11 @@ public class ListData implements Serializable, Comparable {
     } else {
       ListData other = (ListData) t;
       int diff = 0;
-      ListGroup[] groups = new ListGroup[other.list.size()];
+      ListGroup[] groups = new ListGroup[0];
       for (ListGroup item : other.list.toArray(groups)) {
         if (!this.list.contains(item))
           diff--;
       }
-      groups = new ListGroup[this.list.size()];
       for (ListGroup item : this.list.toArray(groups)) {
         if (!other.list.contains(item))
           diff++;
