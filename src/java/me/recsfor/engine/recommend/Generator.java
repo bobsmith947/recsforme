@@ -19,11 +19,11 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
+import java.util.HashMap;
 import javax.servlet.jsp.jstl.sql.Result;
 import me.recsfor.app.ListData;
 import me.recsfor.app.ListGroup;
@@ -33,7 +33,7 @@ import me.recsfor.app.ListGroup;
  * @author lkitaev
  */
 public class Generator {
-  private final LinkedList<User> users;
+  private final ArrayList<User> users;
   private ListData knownLikes;
   private ListData knownDislikes;
   
@@ -42,7 +42,7 @@ public class Generator {
    * Not very helpful for making recommendations.
    */
   public Generator() {
-    users = new LinkedList<>();
+    users = new ArrayList<>();
     knownLikes = null;
     knownDislikes = null;
   }
@@ -50,7 +50,7 @@ public class Generator {
    * Creates an instance with a list of users from an already existing list and no known likes or dislikes.
    * @param users the users
    */
-  public Generator(LinkedList<User> users) {
+  public Generator(ArrayList<User> users) {
     this.users = users;
     knownLikes = null;
     knownDislikes = null;
@@ -61,7 +61,7 @@ public class Generator {
    * @param likes the known likes
    * @param dislikes the known dislikes
    */
-  public Generator(LinkedList<User> users, ListData likes, ListData dislikes) {
+  public Generator(ArrayList<User> users, ListData likes, ListData dislikes) {
     this(users);
     knownLikes = likes;
     knownDislikes = dislikes;
@@ -70,8 +70,8 @@ public class Generator {
    * Creates an instance with a list of users from a map of users and ID's from the database and no known likes or dislikes.
    * @param users the users
    */
-  public Generator(LinkedHashMap<Integer, User> users) {
-    this.users = new LinkedList<>(users.values());
+  public Generator(HashMap<Integer, User> users) {
+    this.users = new ArrayList<>(users.values());
     knownLikes = null;
     knownDislikes = null;
   }
@@ -81,7 +81,7 @@ public class Generator {
    * @param likes the known likes
    * @param dislikes the known dislikes
    */
-  public Generator(LinkedHashMap<Integer, User> users, ListData likes, ListData dislikes) {
+  public Generator(HashMap<Integer, User> users, ListData likes, ListData dislikes) {
     this(users);
     knownLikes = likes;
     knownDislikes = dislikes;
@@ -93,14 +93,15 @@ public class Generator {
    * @param results the database query results
    * @return the map of the users
    */
-  public static LinkedHashMap<Integer, User> addUsers(Result results) {
-    LinkedHashMap<Integer, User> users = new LinkedHashMap<>();
+  public static HashMap<Integer, User> addUsers(Result results) {
+    HashMap<Integer, User> users = new HashMap<>();
+    Object[][] resArr;
     Integer id;
     String name;
     String sex;
     LocalDate dob;
     for (int i = 0; i < results.getRowCount(); i++) {
-      Object[][] resArr = results.getRowsByIndex();
+      resArr = results.getRowsByIndex();
       id = (Integer) resArr[i][0];
       name = (String) resArr[i][1];
       sex = (String) resArr[i][2];
@@ -108,6 +109,7 @@ public class Generator {
         dob = LocalDate.parse(((Date) resArr[i][3]).toString());
       } catch (DateTimeParseException e) {
         System.err.println(Arrays.toString(e.getStackTrace()));
+        //use the default date
         dob = LocalDate.of(1900, 1, 1);
       }
       users.put(id, new User(name, sex, dob));
@@ -201,9 +203,10 @@ public class Generator {
       knownDislikes = new ListData();
     rankUsers();
     ListData recList = new ListData();
+    ArrayDeque<User> userList = new ArrayDeque<>(users);
     User user;
-    while (recList.getList().size() < limit && !users.isEmpty()) {
-      user = users.pop();
+    while (recList.getList().size() < limit && !userList.isEmpty()) {
+      user = userList.pop();
       user.getLikes().getList().forEach(group -> {
         if (!(knownLikes.getList().contains(group) || knownDislikes.getList().contains(group)))
           recList.getList().add(group);
@@ -225,20 +228,33 @@ public class Generator {
     User user;
     int count = 0;
     int rand;
-    ListGroup[] tempList = new ListGroup[0];
+    //ListGroup[] tempArr;
+    ArrayList<ListGroup> tempList;
     Collections.shuffle(users);
-    while (randList.getList().size() < limit) {
-      if (count >= users.size())
-        count = 0;
+    while (randList.getList().size() < limit && count < users.size()) {
+      //if (count >= users.size())
+        //count = 0;
       user = users.get(count);
       if (count % 2 == 0) {
-        tempList = user.getLikes().getList().toArray(tempList);
-        rand = (int) (Math.random() * tempList.length);
-        randList.getList().add(tempList[rand]);
+        tempList = new ArrayList<>(user.getLikes().getList());
+        if (tempList.size() > 0) {
+          //tempArr = new ListGroup[tempList.size()];
+          //tempArr = tempList.toArray(tempArr);
+          //rand = (int) (Math.random() * tempArr.length);
+          //randList.getList().add(tempArr[rand]);
+          rand = (int) (Math.random() * tempList.size());
+          randList.getList().add(tempList.remove(rand));
+        }
       } else {
-        tempList = user.getDislikes().getList().toArray(tempList);
-        rand = (int) (Math.random() * tempList.length);
-        randList.getList().add(tempList[rand]);
+        tempList = new ArrayList<>(user.getDislikes().getList());
+        if (tempList.size() > 0) {
+          //tempArr = new ListGroup[tempList.size()];
+          //tempArr = tempList.toArray(tempArr);
+          //rand = (int) (Math.random() * tempArr.length);
+          //randList.getList().add(tempArr[rand]);
+          rand = (int) (Math.random() * tempList.size());
+          randList.getList().add(tempList.remove(rand));
+        }
       }
       count++;
     }
@@ -248,7 +264,7 @@ public class Generator {
   /**
    * @return the users
    */
-  public LinkedList<User> getUsers() {
+  public ArrayList<User> getUsers() {
     return users;
   }
   /**

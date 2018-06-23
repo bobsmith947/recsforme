@@ -17,8 +17,7 @@ package me.recsfor.engine.recommend;
 
 import java.beans.*;
 import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.HashMap;
 import me.recsfor.app.ListData;
 
 /**
@@ -29,12 +28,12 @@ public class RecommendationBean implements Serializable {
   private static final long serialVersionUID = -7420405811924841508L;
   public static final String PROP_USERS = "users";
   public static final String PROP_RECOMMENDATIONS = "recommendations";
-  private LinkedHashMap<Integer, User> users;
-  private LinkedHashSet<ListData> recommendations;
+  private HashMap<Integer, User> users;
+  private ListData recommendations;
   private final PropertyChangeSupport propertySupport;
   
   public RecommendationBean() {
-    users = null;
+    users = new HashMap<>();
     recommendations = null;
     propertySupport = new PropertyChangeSupport(this);
   }
@@ -50,15 +49,15 @@ public class RecommendationBean implements Serializable {
   /**
    * @return the users
    */
-  public LinkedHashMap<Integer, User> getUsers() {
+  public HashMap<Integer, User> getUsers() {
     return users;
   }
 
   /**
    * @param users the users to set
    */
-  public void setUsers(LinkedHashMap<Integer, User> users) {
-    LinkedHashMap<Integer, User> oldUsers = this.users;
+  public void setUsers(HashMap<Integer, User> users) {
+    HashMap<Integer, User> oldUsers = this.users;
     this.users = users;
     propertySupport.firePropertyChange(PROP_USERS, oldUsers, users);
   }
@@ -66,15 +65,15 @@ public class RecommendationBean implements Serializable {
   /**
    * @return the recommendations
    */
-  public LinkedHashSet<ListData> getRecommendations() {
+  public ListData getRecommendations() {
     return recommendations;
   }
 
   /**
    * @param recommendations the recommendations to set
    */
-  public void setRecommendations(LinkedHashSet<ListData> recommendations) {
-    LinkedHashSet<ListData> oldRecommendations = this.recommendations;
+  public void setRecommendations(ListData recommendations) {
+    ListData oldRecommendations = this.recommendations;
     this.recommendations = recommendations;
     propertySupport.firePropertyChange(PROP_RECOMMENDATIONS, oldRecommendations, recommendations);
   }

@@ -19,16 +19,16 @@
       </ol>
       <h4>Random picks:</h4>
       <c:if test="${rand == null}">
-        <sql:query var="users" dataSource="jdbc/MediaRecom">
+        <sql:query var="users" dataSource="jdbc/MediaRecom" scope="session">
           SELECT id, uname, sex, dob FROM users
         </sql:query>
         <jsp:setProperty name="r" property="users" value="${Generator.addUsers(users)}" />
         <c:forEach var="user" items="${r.users.keySet()}">
-          <sql:query var="likes" dataSource="jdbc/MediaRecom">
+          <sql:query var="likes" dataSource="jdbc/MediaRecom" scope="session">
             SELECT items FROM user_likes
             WHERE uid = ${user}
           </sql:query>
-          <sql:query var="dislikes" dataSource="jdbc/MediaRecom">
+          <sql:query var="dislikes" dataSource="jdbc/MediaRecom" scope="session">
             SELECT items FROM user_dislikes
             WHERE uid = ${user}
           </sql:query>

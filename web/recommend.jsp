@@ -9,8 +9,9 @@
   <body>
     <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <main>
+      <h2>Your Recommendations</h2>
       <c:if test="${r.recommendations == null}">
-        <sql:query var="users" dataSource="jdbc/MediaRecom">
+        <%--<sql:query var="users" dataSource="jdbc/MediaRecom">
           SELECT id, uname, sex, dob FROM users
           WHERE id != ${u.id}
         </sql:query>
@@ -26,12 +27,12 @@
           </sql:query>
           <c:set var="newUser" value="${Generator.addListsToUser(r.users.get(user), likes, dislikes)}" />
           <c:set var="oldUser" value="${r.users.replace(user, newUser)}" />
-        </c:forEach>
+        </c:forEach>--%>
         <c:set var="gen" value="${Generator(r.users, u.likeData, u.dislikeData)}" />
-        <jsp:setProperty name="r" property="recommendations" value="${gen.listRecommendations(0).list}" />
+        <jsp:setProperty name="r" property="recommendations" value="${gen.listRecommendations(0)}" />
       </c:if>
       <div class="list-group text-center">
-        <c:forEach var="rec" items="${r.recommendations}">
+        <c:forEach var="rec" items="${r.recommendations.list}">
           <a href="${ListData.generateContext(rec.type)}${rec.id}" class="list-group-item list-group-item-action">${rec.name}</a>
         </c:forEach>
       </div>
