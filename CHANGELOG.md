@@ -1,5 +1,28 @@
 # recsforme changelog
 
+## June 23, 2018 - Release
+
+It's been two months since the last release, and the recommendation engine has finally been implemented. Extensive testing has not been done, but I'm going to count this as a stable release.
+
+**Fixed:**
+
+* Artist vote moved to top of page so there's no need to scroll
+* Whitespace bug in searches (sometimes returned nothing)
+* Use `c:out` when printing the query to the page (in case it had quotes)
+* Form validation on signup
+
+**Added:**
+
+* Recommendation engine
+* Login modal on user page
+* AJAX check for groups
+* `ListData` now implements `Comparable` because why not
+
+**Removed:**
+
+* Removed usage of `localStorage`
+* Unnecessary character replacement
+
 ## April 21, 2018 - Beta Release
 
 Some quick bug fixes:

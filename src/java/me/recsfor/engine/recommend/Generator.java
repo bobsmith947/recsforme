@@ -202,11 +202,11 @@ public class Generator {
     if (knownDislikes == null)
       knownDislikes = new ListData();
     rankUsers();
-    ListData recList = new ListData();
-    ArrayDeque<User> userList = new ArrayDeque<>(users);
+    ArrayDeque<User> userQueue = new ArrayDeque<>(users);
     User user;
-    while (recList.getList().size() < limit && !userList.isEmpty()) {
-      user = userList.pop();
+    ListData recList = new ListData();
+    while (recList.getList().size() < limit && !userQueue.isEmpty()) {
+      user = userQueue.pop();
       user.getLikes().getList().forEach(group -> {
         if (!(knownLikes.getList().contains(group) || knownDislikes.getList().contains(group)))
           recList.getList().add(group);
@@ -224,36 +224,29 @@ public class Generator {
       limit = 5;
     else
       limit = Math.abs(limit);
-    ListData randList = new ListData();
+    Collections.shuffle(users);
+    ArrayDeque<User> userQueue = new ArrayDeque<>(users);
     User user;
+    ListData randList = new ListData();
     int count = 0;
     int rand;
-    //ListGroup[] tempArr;
     ArrayList<ListGroup> tempList;
-    Collections.shuffle(users);
-    while (randList.getList().size() < limit && count < users.size()) {
+    while (randList.getList().size() < limit && !userQueue.isEmpty()) {
       //if (count >= users.size())
         //count = 0;
-      user = users.get(count);
+      //user = users.get(count);
+      user = userQueue.pop();
       if (count % 2 == 0) {
         tempList = new ArrayList<>(user.getLikes().getList());
         if (tempList.size() > 0) {
-          //tempArr = new ListGroup[tempList.size()];
-          //tempArr = tempList.toArray(tempArr);
-          //rand = (int) (Math.random() * tempArr.length);
-          //randList.getList().add(tempArr[rand]);
           rand = (int) (Math.random() * tempList.size());
-          randList.getList().add(tempList.remove(rand));
+          randList.getList().add(tempList.get(rand));
         }
       } else {
         tempList = new ArrayList<>(user.getDislikes().getList());
         if (tempList.size() > 0) {
-          //tempArr = new ListGroup[tempList.size()];
-          //tempArr = tempList.toArray(tempArr);
-          //rand = (int) (Math.random() * tempArr.length);
-          //randList.getList().add(tempArr[rand]);
           rand = (int) (Math.random() * tempList.size());
-          randList.getList().add(tempList.remove(rand));
+          randList.getList().add(tempList.get(rand));
         }
       }
       count++;

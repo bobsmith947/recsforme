@@ -16,10 +16,9 @@
 
 /**
  * This package provides functionality for processing user data.
- * Upon submission of a user form, passwords are encrypted and validated.
+ * Passwords are encrypted on signup, and validated on login.
  * Once a user has been authenticated, their session data will be stored in a <code>UserBean</code>.
  * User like and dislike lists are processed as JSON data.
- * Data is synced with the frontend using <code>localStorage</code>.
  */
 
 package me.recsfor.app;

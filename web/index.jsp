@@ -19,22 +19,24 @@
       </ol>
       <h4>Random picks:</h4>
       <c:if test="${rand == null}">
-        <sql:query var="users" dataSource="jdbc/MediaRecom" scope="session">
-          SELECT id, uname, sex, dob FROM users
-        </sql:query>
-        <jsp:setProperty name="r" property="users" value="${Generator.addUsers(users)}" />
-        <c:forEach var="user" items="${r.users.keySet()}">
-          <sql:query var="likes" dataSource="jdbc/MediaRecom" scope="session">
-            SELECT items FROM user_likes
-            WHERE uid = ${user}
+        <c:if test="${r.users == null}">
+          <sql:query var="users" dataSource="jdbc/MediaRecom">
+            SELECT id, uname, sex, dob FROM users
           </sql:query>
-          <sql:query var="dislikes" dataSource="jdbc/MediaRecom" scope="session">
-            SELECT items FROM user_dislikes
-            WHERE uid = ${user}
-          </sql:query>
-          <c:set var="newUser" value="${Generator.addListsToUser(r.users.get(user), likes, dislikes)}" />
-          <c:set var="oldUser" value="${r.users.replace(user, newUser)}" />
-        </c:forEach>
+          <jsp:setProperty name="r" property="users" value="${Generator.addUsers(users)}" />
+          <c:forEach var="user" items="${r.users.keySet()}">
+            <sql:query var="likes" dataSource="jdbc/MediaRecom">
+              SELECT items FROM user_likes
+              WHERE uid = ${user}
+            </sql:query>
+            <sql:query var="dislikes" dataSource="jdbc/MediaRecom">
+              SELECT items FROM user_dislikes
+              WHERE uid = ${user}
+            </sql:query>
+            <c:set var="newUser" value="${Generator.addListsToUser(r.users.get(user), likes, dislikes)}" />
+            <c:set var="oldUser" value="${r.users.replace(user, newUser)}" />
+          </c:forEach>
+        </c:if>
         <c:set var="gen" value="${Generator(r.users)}" />
         <c:set var="rand" value="${gen.listRandom(0).list}" scope="session" />
       </c:if>

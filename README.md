@@ -4,7 +4,7 @@
 
 A media recommendation web app.
 
-Java/SQL backend + CSS/JS frontend. Focused on as little use of frameworks as possible, so as to provide a better learning experience. Documentation can be viewed [here](http://recsfor.me/javadoc/).
+Java/SQL backend + CSS/JS frontend. Documentation can be viewed [here](http://recsfor.me/javadoc/).
 
 ## Getting Started
 
@@ -12,13 +12,13 @@ Want to get recsforme set up on your local machine for development and testing p
 
 ### Prerequisites
 
-* [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-* [Apache Tomcat 8.5](https://tomcat.apache.org/download-80.cgi)
+* A JDK (at least Java 8)
+* A servlet container like [Tomcat](https://tomcat.apache.org)
 * [Apache Ant 1.7.1+ and Apache Ivy 2.4.0](https://ant.apache.org/)
-* npm (installed with [Node.js](https://nodejs.org/en/download/))
+* npm (comes with [Node.js](https://nodejs.org/en/download/))
 * [oxipng](https://github.com/shssoichiro/oxipng) (optional)
 
-**Some features require access to a SQL database, so you must either comment out any SQL code, or create your own connection pool in `context.xml` with the reference `jdbc/MediaRecom`.**
+**Access to a SQL database is required. You can contact me for the schema.**
 
 **You may also want to get your own API key from https://www.omdbapi.com/.**
 

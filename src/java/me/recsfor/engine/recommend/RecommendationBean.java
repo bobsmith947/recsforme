@@ -33,7 +33,7 @@ public class RecommendationBean implements Serializable {
   private final PropertyChangeSupport propertySupport;
   
   public RecommendationBean() {
-    users = new HashMap<>();
+    users = null;
     recommendations = null;
     propertySupport = new PropertyChangeSupport(this);
   }
