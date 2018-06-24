@@ -16,8 +16,8 @@
 package me.recsfor.engine.recommend;
 
 /**
- * The possible types of a user's sex.
- * Useful for making recommendations.
+ * Defines the possible types of a user's sex.
+ * May later be implemented as a part of making recommendations.
  * @author lkitaev
  */
 public enum Sex {

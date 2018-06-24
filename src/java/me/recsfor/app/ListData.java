@@ -23,9 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.core.JsonParseException;
 //import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.recsfor.engine.search.AlbumQuery;
-import me.recsfor.engine.search.ArtistQuery;
-import me.recsfor.engine.search.MovieQuery;
+import static me.recsfor.engine.search.Context.*;
 
 /**
  * Represents a list of groups.
@@ -98,9 +96,9 @@ public class ListData implements Serializable, Comparable {
    * @return the group context
    */
   public static String generateContext(String groupType) {
-    String movie = MovieQuery.CONTEXT;
-    String artist = ArtistQuery.CONTEXT;
-    String album = AlbumQuery.CONTEXT;
+    String movie = MOVIE.getContext();
+    String artist = ARTIST.getContext();
+    String album = ALBUM.getContext();
     switch (groupType.toLowerCase()) {
       case "movie":
         return movie;
