@@ -31,30 +31,12 @@ import org.musicbrainz.modelWs2.MediumListWs2;
  * @author lkitaev
  */
 public class AlbumQuery extends BasicQuery {
-  /**
-   * Contains result info.
-   */
   private ReleaseGroupWs2 group;
-  /**
-   * Used for getting track listings.
-   */
   private MediumListWs2 info;
-  /**
-   * If the query ID is that of a release and not a release group.
-   */
   private boolean isNotGroup;
-  /**
-   * Query parameters for release groups.
-   */
   private final ReleaseGroupIncludesWs2 groupInc;
-  /**
-   * Query parameters for releases.
-   */
   private final ReleaseIncludesWs2 releaseInc;
-  /**
-   * The servlet context which this class generates info for.
-   */
-  public static final String CONTEXT = "AlbumInfo?id=";
+  static final String CONTEXT = "AlbumInfo?id=";
 
   public AlbumQuery() {
     super();
@@ -75,7 +57,6 @@ public class AlbumQuery extends BasicQuery {
       results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - "
               + r.getReleaseGroup().getArtistCreditString());
     });
-    len = results.size();
     isNotGroup = false;
     groupInc = null;
     releaseInc = null;

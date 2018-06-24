@@ -29,18 +29,9 @@ import java.util.List;
  * @author lkitaev
  */
 public class ArtistQuery extends BasicQuery {
-  /**
-   * Contains result info.
-   */
   private ArtistWs2 artist;
-  /**
-   * Query parameters.
-   */
   private final ArtistIncludesWs2 inc;
-  /**
-   * The servlet context which this class generates info for.
-   */
-  public static final String CONTEXT = "ArtistInfo?id=";
+  static final String CONTEXT = "ArtistInfo?id=";
 
   public ArtistQuery() {
     super();
@@ -58,7 +49,6 @@ public class ArtistQuery extends BasicQuery {
     new ArtistSearchbyName(this.query).getFirstPage().forEach(r -> {
       results.put(r.getArtist().getId(), r.getArtist().getUniqueName());
     });
-    len = results.size();
   }
   /**
    * Constructor for generating group info.

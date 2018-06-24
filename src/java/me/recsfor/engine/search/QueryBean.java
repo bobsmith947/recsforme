@@ -32,7 +32,6 @@ public class QueryBean implements Serializable {
   private String query;
   private String type;
   private String context;
-  private transient BasicQuery delegation;
   private final PropertyChangeSupport propertySupport;
   
   public QueryBean() {
@@ -41,7 +40,6 @@ public class QueryBean implements Serializable {
     //default to a movie type query
     type = "movie";
     context = MovieQuery.CONTEXT;
-    delegation = new MovieQuery();
   }
   
   public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -95,20 +93,6 @@ public class QueryBean implements Serializable {
     this.context = context;
     propertySupport.firePropertyChange(PROP_CONTEXT, oldContext, context);
   }
-  /**
-   * @return the delegation
-   */
-  public BasicQuery getDelegation() {
-    return delegation;
-  }
-  /**
-   * @param delegation the delegation to set
-   */
-  public void setDelegation(BasicQuery delegation) {
-    BasicQuery oldDelegation = this.delegation;
-    this.delegation = delegation;
-    propertySupport.firePropertyChange(PROP_DELEGATION, oldDelegation, delegation);
-  }
   
   /**
    * Creates a MovieQuery that can be referenced from a JSP.
@@ -156,21 +140,5 @@ public class QueryBean implements Serializable {
       default:
         return null;
     }
-  }
-  
-  /**
-   * Checks if one query string is different from another.
-   * @param oldQuery the old query
-   * @param newQuery the new query
-   * @return true if the two are different, false otherwise
-   */
-  public static boolean changed(String oldQuery, String newQuery) {
-    //matches punctuation and articles
-    String rep = "(([:\\-.,/])|(\\bthe\\b)|(\\ba\\b|\\ban\\b))+";
-    //replaces each match in each query with nothing
-    oldQuery = oldQuery.toLowerCase().replaceAll(rep, "").trim();
-    newQuery = newQuery.toLowerCase().replaceAll(rep, "").trim();
-    //check if the modified queries are still the same
-    return !oldQuery.equals(newQuery);
   }
 }

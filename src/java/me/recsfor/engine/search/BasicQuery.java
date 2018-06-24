@@ -15,34 +15,27 @@
  */
 package me.recsfor.engine.search;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.Objects;
 /**
  * Contains basic functionality for query classes.
  * @author lkitaev
  */
-public class BasicQuery {
-  protected final String query;
+public abstract class BasicQuery {
+  final String query;
   /**
    * The results for the query.
    * Keys contain the group ID's.
    * Values contain the group names.
    */
-  protected LinkedHashMap<String, String> results;
-  /**
-   * Number of results for the query.
-   */
-  protected int len;
+  final LinkedHashMap<String, String> results;
 
   protected BasicQuery() {
     query = "";
     results = null;
-    len = 0;
   }
 
   protected BasicQuery(String query) {
-    //String replace = query.replaceAll("[;/?:@=&]", " ");
-    //this.query = replace;
     this.query = query;
     results = new LinkedHashMap<>();
   }
@@ -59,24 +52,6 @@ public class BasicQuery {
   public LinkedHashMap<String, String> getResults() {
     return results;
   }
-  /**
-   * @param results the results to set
-   */
-  public void setResults(LinkedHashMap<String, String> results) {
-    this.results = results;
-  }
-  /**
-   * @return the len
-   */
-  public int getLen() {
-    return len;
-  }
-  /**
-   * @param len the len to set
-   */
-  public void setLen(int len) {
-    this.len = len;
-  }
   
   /**
    * Gets the associated names of search results as a string array.
@@ -84,7 +59,8 @@ public class BasicQuery {
    */
   public String[] listNames() {
     String[] names = new String[0];
-    names = len >= 1 ? Arrays.copyOf(results.values().toArray(names), len) : null;
+    if (!results.isEmpty())
+      return results.values().toArray(names);
     return names;
   }
   /**
@@ -93,7 +69,45 @@ public class BasicQuery {
    */
   public String[] listIds() {
     String[] ids = new String[0];
-    ids = len >= 1 ? Arrays.copyOf(results.keySet().toArray(ids), len) : null;
+    if (!results.isEmpty())
+      return results.keySet().toArray(ids);
     return ids;
+  }
+  /**
+   * Determines if the contents of this query are effectively different from another query.
+   * @param query the query to check against
+   * @return true if the two are different, false otherwise
+   */
+  public final boolean different(String query) {
+    //matches punctuation and articles
+    String rep = "(([:\\-.,/])|(\\bthe\\b)|(\\ba\\b|\\ban\\b))+";
+    //replaces each match in each query with nothing
+    String oldQuery = this.query.toLowerCase().replaceAll(rep, "").trim();
+    String newQuery = query.toLowerCase().replaceAll(rep, "").trim();
+    //check if the modified queries are still the same
+    return !oldQuery.equals(newQuery);
+  }
+  
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == null)
+      return false;
+    else if (obj == this)
+      return true;
+    else if (!(obj instanceof BasicQuery))
+      return false;
+    else
+      if (!this.different(((BasicQuery) (obj)).query))
+        return obj.hashCode() == this.hashCode();
+      else
+        return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 17 * hash + Objects.hashCode(this.query);
+    hash = 17 * hash + Objects.hashCode(this.results);
+    return hash;
   }
 }
