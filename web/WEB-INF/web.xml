@@ -43,6 +43,10 @@
         <error-code>418</error-code>
         <location>/WEB-INF/418.jsp</location>
     </error-page>
+    <error-page>
+        <error-code>400</error-code>
+        <location>/WEB-INF/400.jsp</location>
+    </error-page>
     <jsp-config>
         <jsp-property-group>
             <url-pattern>/search.jsp</url-pattern>
