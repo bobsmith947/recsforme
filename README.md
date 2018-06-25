@@ -4,7 +4,7 @@
 
 A media recommendation web app.
 
-Java/SQL backend + CSS/JS frontend. Documentation can be viewed [here](http://recsfor.me/javadoc/).
+The backend is composed of a number of Java classes, beans, and servlets. The Javadoc for these can be viewed [here](http://recsfor.me/javadoc/). There are also a number of JSP's using JSTL. Bootstrap is used for styling the pages, and Knockout is used for the data model on the frontend.
 
 ## Getting Started
 
@@ -12,15 +12,14 @@ Want to get recsforme set up on your local machine for development and testing p
 
 ### Prerequisites
 
-* A JDK (at least Java 8)
+* A JDK (at least Java 8). If you have a higher version, make sure the project is compiled on version 8.
 * A servlet container like [Tomcat](https://tomcat.apache.org)
 * [Apache Ant 1.7.1+ and Apache Ivy 2.4.0](https://ant.apache.org/)
 * npm (comes with [Node.js](https://nodejs.org/en/download/))
-* [oxipng](https://github.com/shssoichiro/oxipng) (optional)
 
-**Access to a SQL database is required. You can contact me for the schema.**
+**Access to a SQL database under the name *jdbc/MediaRecom* is required. You can contact me for the schema. Once set up, the connection can be added to `context.xml` (for Tomcat).**
 
-**You may also want to get your own API key from https://www.omdbapi.com/.**
+**You can get your own API key from https://www.omdbapi.com/. Set it as an environment variable named *OMDB_KEY*.**
 
 ### Installing
 
@@ -30,11 +29,9 @@ Want to get recsforme set up on your local machine for development and testing p
     npm install
     ant resolve
 
-After everything has been installed, you can open recsforme in NetBeans, or the IDE of your choice, and begin [contributing](#contributing) to this wonderful project.
-
 ### Running
 
-It's possible to run recsforme without an IDE. Make sure you have `CATALINA_HOME` set, and that your user has proper permissions.
+Ant tasks have already been made to do these automatically, but if you want to do it manually, make sure you have `CATALINA_HOME` set (if you're using Tomcat), and that your user has proper permissions.
 
     $CATALINA_HOME/bin/catalina start
     ant run -Dj2ee.server.home=$CATALINA_HOME
@@ -47,11 +44,9 @@ When you're done:
 
     $CATALINA_HOME/bin/catalina stop
 
-Alternatively, you can directly deploy the WAR (can be downloaded from the [releases](https://github.com/bobsmith947/recsforme/releases) section) using the Tomcat Manager (you will need to set up a user with the `manager-gui` permission). Keep in mind, the latest release isn't the latest build, so you'll be missing any hot new features.
-
 ## Contributing
 
-Please read [CONTRIBUTING](./CONTRIBUTING.md) and [CODE OF CONDUCT](./CODE_OF_CONDUCT.md) for details on the community guidelines, and the process for submitting pull requests and issues.
+Please read [CONTRIBUTING](./CONTRIBUTING.md) for details on the community guidelines, and the process for submitting pull requests and issues.
 
 ## Authors
 
@@ -66,6 +61,4 @@ recsforme is open source, licensed under the Apache License 2.0. See [LICENSE](.
 ## Acknowledgments
 
 * Anyone whose code was used
-* Anyone who [contributed](https://github.com/bobsmith947/recsforme/contributors) code
-* Anyone who so graciously [donated](https://bobsmith947.github.io/donate.html)
 * Friends and family
