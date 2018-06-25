@@ -20,7 +20,6 @@ import java.io.Serializable;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 /**
  * JavaBeans component to store query data.
- * Can be used to delegate queries to the proper class.
  * @author lkitaev
  */
 public class QueryBean implements Serializable {
@@ -28,18 +27,22 @@ public class QueryBean implements Serializable {
   public static final String PROP_QUERY = "query";
   public static final String PROP_TYPE = "type";
   public static final String PROP_CONTEXT = "context";
-  public static final String PROP_DELEGATION = "delegation";
+  public static final String PROP_NAMES = "names";
+  public static final String PROP_IDS = "ids";
   private String query;
   private String type;
   private String context;
+  private String[] names;
+  private String[] ids;
   private final PropertyChangeSupport propertySupport;
   
   public QueryBean() {
+    query = null;
+    type = null;
+    context = "search.jsp?query=";
+    names = new String[0];
+    ids = new String[0];
     propertySupport = new PropertyChangeSupport(this);
-    query = "";
-    //default to a movie type query
-    type = "movie";
-    context = MovieQuery.CONTEXT;
   }
   
   public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -93,52 +96,32 @@ public class QueryBean implements Serializable {
     this.context = context;
     propertySupport.firePropertyChange(PROP_CONTEXT, oldContext, context);
   }
-  
   /**
-   * Creates a MovieQuery that can be referenced from a JSP.
-   * @deprecated Use delegateQuery() instead
-   * @return a new MovieQuery with the instance query
+   * @return the names
    */
-  @Deprecated
-  public MovieQuery sendMovieQuery() {
-    return new MovieQuery(query);
+  public String[] getNames() {
+    return names;
   }
   /**
-   * Creates an ArtistQuery that can be referenced from a JSP.
-   * @deprecated Use delegateQuery() instead
-   * @return a new AlbumQuery with the instance query
+   * @param names the names to set
    */
-  @Deprecated
-  public ArtistQuery sendArtistQuery() {
-    return new ArtistQuery(query);
+  public void setNames(String[] names) {
+    String[] oldNames = this.names;
+    this.names = names;
+    propertySupport.firePropertyChange(PROP_NAMES, oldNames, names);
   }
   /**
-   * Creates an AlbumQuery that can be referenced from a JSP.
-   * @deprecated Use delegateQuery() instead
-   * @return a new AlbumQuery with the instance query
+   * @return the ids
    */
-  @Deprecated
-  public AlbumQuery sendAlbumQuery() {
-    return new AlbumQuery(query);
+  public String[] getIds() {
+    return ids;
   }
   /**
-   * Creates an instance the proper query based on the <code>type</code>.
-   * Can be used to reference queries from a JSP.
-   * @return a new child instance of an BasicQuery with the instance query
+   * @param ids the ids to set
    */
-  public BasicQuery delegateQuery() {
-    switch (type) {
-      case "movie":
-        context = MovieQuery.CONTEXT;
-        return new MovieQuery(query);
-      case "artist":
-        context = ArtistQuery.CONTEXT;
-        return new ArtistQuery(query);
-      case "album":
-        context = AlbumQuery.CONTEXT;
-        return new AlbumQuery(query);
-      default:
-        return null;
-    }
+  public void setIds(String[] ids) {
+    String[] oldIds = this.ids;
+    this.ids = ids;
+    propertySupport.firePropertyChange(PROP_IDS, oldIds, ids);
   }
 }

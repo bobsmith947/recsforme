@@ -1,8 +1,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.engine.search.Context" %>
 <jsp:useBean id="q" scope="session" class="me.recsfor.engine.search.QueryBean" />
-<c:set var="old" value="${q.query}" />
+<c:set var="oldType" value="${q.type}" />
+<c:set var="oldQuery" value="${q.query}" />
 <jsp:setProperty name="q" property="type" />
 <jsp:setProperty name="q" property="query" />
 <% if (q.getQuery().toLowerCase().equals("make me coffee")) response.sendError(418); %>
@@ -41,33 +42,35 @@
         </div>
         <button class="btn btn-light btn-lg btn-block mt-2 mb-4" type="submit">Search</button>
       </form>
-      <c:if test="${q.query.length() != 0}">
-        <c:set var="d" value="${q.delegateQuery()}" />
-        <c:set var="con" value="${q.context}" />
-        <div class="mb-2" id="results">
-          <c:if test="${!d.results.isEmpty()}" var="hasResults">
-            <c:if test="${d.changed(old)}">
-              <sql:update dataSource="jdbc/MediaRecom">
-                INSERT INTO query_log (query, qtype)
-                VALUES (?, '${q.type}')
-                <sql:param value='${pageContext.request.getParameter("query")}' />
-              </sql:update>
-            </c:if>
-            <div class="list-group text-center">
-              <c:set var="ids" value="${d.listIds()}" />
-              <c:set var="names" value="${d.listNames()}" />
-              <c:forEach var="i" begin="0" end="${d.results.size()-1}" step="1">
-                <a class="list-group-item list-group-item-action" href="${con.concat(ids[i])}">
-                  <c:out value="${names[i]}" />
-                </a>
-              </c:forEach>
-            </div>
+      <c:if test="${!q.query.equals(oldQuery) || !q.type.equals(oldType)}">
+        <c:set var="con" value="${Context.valueOf(q.type.toUpperCase())}" />
+        <jsp:setProperty name="q" property="context" value="${con.context}" />
+        <c:set var="del" value="${con.createQuery(q.query)}" />
+        <c:set var="len" value="${del.results.size()}" scope="session" />
+        <c:if test="${len != 0}">
+          <c:if test="${del.different(oldQuery)}">
+            <sql:update dataSource="jdbc/MediaRecom">
+              INSERT INTO query_log (query, qtype)
+              VALUES (?, '${q.type}')
+              <sql:param value='${q.query}' />
+            </sql:update>
           </c:if>
-          <c:if test="${!hasResults}">
-            <h3>No results found!</h3>
-          </c:if>
-        </div>
+          <jsp:setProperty name="q" property="names" value="${del.listNames()}" />
+          <jsp:setProperty name="q" property="ids" value="${del.listIds()}" />
+        </c:if>
       </c:if>
+      <div class="list-group text-center mb-2" id="results">
+        <c:if test="${len > 0}">
+          <c:forEach var="i" begin="0" end="${len-1}" step="1">
+            <a class="list-group-item list-group-item-action" href="${q.context.concat(q.ids[i])}">
+              <c:out value="${q.names[i]}" />
+            </a>
+          </c:forEach>
+        </c:if>
+        <c:if test="${q.query.length() != 0 && len == 0}">
+          <h3>No results found!</h3>
+        </c:if>
+      </div>
       <c:choose>
         <c:when test='${q.type == "Movie"}'>
           <h6>Search results provided by <a href="https://www.omdbapi.com/">OMDb</a>.</h6>

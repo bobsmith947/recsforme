@@ -38,7 +38,7 @@ public class AlbumQuery extends BasicQuery {
   private final ReleaseIncludesWs2 releaseInc;
   static final String CONTEXT = "AlbumInfo?id=";
 
-  public AlbumQuery() {
+  protected AlbumQuery() {
     super();
     group = null;
     info = null;
@@ -50,7 +50,7 @@ public class AlbumQuery extends BasicQuery {
    * Constructor for generating search results.
    * @param query the query to search for
    */
-  public AlbumQuery(String query) {
+  protected AlbumQuery(String query) {
     super(query);
     group = new ReleaseGroupWs2();
     new ReleaseGroupSearchbyTitle(this.query).getFirstPage().forEach(r -> {

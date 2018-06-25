@@ -17,18 +17,19 @@ package me.recsfor.engine.search;
 
 import java.util.LinkedHashMap;
 import java.util.Objects;
+import static org.apache.commons.lang3.StringUtils.normalizeSpace;
 /**
  * Contains basic functionality for query classes.
  * @author lkitaev
  */
-public abstract class BasicQuery {
-  final String query;
+public class BasicQuery {
+  protected final String query;
   /**
    * The results for the query.
    * Keys contain the group ID's.
    * Values contain the group names.
    */
-  final LinkedHashMap<String, String> results;
+  protected final LinkedHashMap<String, String> results;
 
   protected BasicQuery() {
     query = "";
@@ -80,10 +81,11 @@ public abstract class BasicQuery {
    */
   public final boolean different(String query) {
     //matches punctuation and articles
-    String rep = "(([:\\-.,/])|(\\bthe\\b)|(\\ba\\b|\\ban\\b))+";
-    //replaces each match in each query with nothing
-    String oldQuery = this.query.toLowerCase().replaceAll(rep, "").trim();
-    String newQuery = query.toLowerCase().replaceAll(rep, "").trim();
+    String regex = "(([:\\-.,/\\\\])|(\\bthe\\b)|(\\ba\\b|\\ban\\b))+";
+    String oldQuery = this.query.toLowerCase().replaceAll(regex, " ");
+    String newQuery = query.toLowerCase().replaceAll(regex, " ");
+    oldQuery = normalizeSpace(oldQuery);
+    newQuery = normalizeSpace(newQuery);
     //check if the modified queries are still the same
     return !oldQuery.equals(newQuery);
   }

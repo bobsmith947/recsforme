@@ -26,15 +26,34 @@ public enum Context {
   /**
    * The query is for movies, TV shows, or games.
    */
-  MOVIE(MovieQuery.class),
+  MOVIE(MovieQuery.class) {
+    @Override
+    public BasicQuery createQuery(String query) {
+      return new MovieQuery(query);
+    }
+  },
   /**
    * The query is for musical artists (groups or people).
    */
-  ARTIST(ArtistQuery.class),
+  ARTIST(ArtistQuery.class) {
+    @Override
+    public BasicQuery createQuery(String query) {
+      return new ArtistQuery(query);
+    }
+  },
   /**
    * The query is for musical works (like albums, singles, EP's).
    */
-  ALBUM(AlbumQuery.class);
+  ALBUM(AlbumQuery.class) {
+    @Override
+    public BasicQuery createQuery(String query) {
+      return new AlbumQuery(query);
+    }
+  },
+  /**
+   * The query is basic and can't have any results.
+   */
+  BASIC(null);
   /**
    * The servlet context which the enum type represents.
    */
@@ -45,11 +64,15 @@ public enum Context {
    */
   Context(Class<? extends BasicQuery> type) {
     String field;
-    try {
-      field = (String) type.getDeclaredField("CONTEXT").get(null);
-    } catch (NoSuchFieldException | IllegalAccessException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
+    if (type == null) {
       field = null;
+    } else {
+      try {
+        field = (String) type.getDeclaredField("CONTEXT").get(null);
+      } catch (NoSuchFieldException | IllegalAccessException e) {
+      System.err.println(Arrays.toString(e.getStackTrace()));
+        field = null;
+      }
     }
     context = field;
   }
@@ -58,5 +81,13 @@ public enum Context {
    */
   public String getContext() {
     return context;
+  }
+  /**
+   * Factory method to instantiate a <code>BasicQuery</code> type.
+   * @param query the query to construct the object with
+   * @return a query object
+   */
+  public BasicQuery createQuery(String query) {
+    return new BasicQuery(query);
   }
 }

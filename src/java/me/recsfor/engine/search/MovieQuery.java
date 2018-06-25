@@ -34,7 +34,7 @@ public class MovieQuery extends BasicQuery {
   private static final OmdbApi CLIENT = new OmdbApi(System.getenv("OMDB_KEY"));
   static final String CONTEXT = "MovieInfo?id=";
 
-  public MovieQuery() {
+  protected MovieQuery() {
     super();
     info = null;
     params = null;
@@ -43,7 +43,7 @@ public class MovieQuery extends BasicQuery {
    * Constructor for generating search results.
    * @param query the query to search for
    */
-  public MovieQuery(String query) {
+  protected MovieQuery(String query) {
     super(query);
     info = null;
     params = null;
@@ -70,7 +70,7 @@ public class MovieQuery extends BasicQuery {
     } else {
       params = new OmdbParameters();
       params.add(Param.IMDB, id);
-      params.add(Param.PLOT, parsePlot(plot));
+      params.add(Param.PLOT, PlotType.valueOf(plot.toUpperCase()));
       try {
         this.info = CLIENT.getInfo(params);
       } catch (OMDBException | NullPointerException e) {
@@ -128,21 +128,5 @@ public class MovieQuery extends BasicQuery {
    */
   public String listPlot() {
     return info.getPlot();
-  }
-  
-  /**
-   * Retrieves the value of the desired plot type.
-   * @param type the plot type
-   * @return the corresponding enum values of the plot type
-   */
-  private static PlotType parsePlot(String type) {
-    switch (type.toLowerCase()) {
-      case "full":
-        return PlotType.FULL;
-      case "short":
-        return PlotType.SHORT;
-      default:
-        return PlotType.FULL;
-    }
   }
 }

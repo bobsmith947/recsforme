@@ -33,7 +33,7 @@ public class ArtistQuery extends BasicQuery {
   private final ArtistIncludesWs2 inc;
   static final String CONTEXT = "ArtistInfo?id=";
 
-  public ArtistQuery() {
+  protected ArtistQuery() {
     super();
     artist = null;
     inc = null;
@@ -42,7 +42,7 @@ public class ArtistQuery extends BasicQuery {
    * Constructor for generating search results.
    * @param query the query to search for
    */
-  public ArtistQuery(String query) {
+  protected ArtistQuery(String query) {
     super(query);
     artist = new ArtistWs2();
     inc = null;
