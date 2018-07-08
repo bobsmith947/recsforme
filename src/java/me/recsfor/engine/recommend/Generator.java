@@ -15,7 +15,6 @@
  */
 package me.recsfor.engine.recommend;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -34,8 +33,7 @@ import me.recsfor.app.ListGroup;
  */
 public class Generator {
   private final ArrayList<User> users;
-  private ListData knownLikes;
-  private ListData knownDislikes;
+  private ListData knownLikes, knownDislikes;
   
   /**
    * Creates an instance with an empty list of users and no known likes or dislikes.
@@ -88,6 +86,25 @@ public class Generator {
   }
   
   /**
+   * @return the users
+   */
+  public ArrayList<User> getUsers() {
+    return users;
+  }
+  /**
+   * @return the knownLikes
+   */
+  public ListData getKnownLikes() {
+    return knownLikes;
+  }
+  /**
+   * @return the knownDislikes
+   */
+  public ListData getKnownDislikes() {
+    return knownDislikes;
+  }
+  
+  /**
    * Adds users and their ID's from the database to a map.
    * This does not include the user lists.
    * @param results the database query results
@@ -106,7 +123,7 @@ public class Generator {
       name = (String) resArr[i][1];
       sex = (String) resArr[i][2];
       try {
-        dob = LocalDate.parse(((Date) resArr[i][3]).toString());
+        dob = LocalDate.parse(resArr[i][3].toString());
       } catch (DateTimeParseException e) {
         System.err.println(Arrays.toString(e.getStackTrace()));
         //use the default date
@@ -159,11 +176,11 @@ public class Generator {
     union.addAll(two[0].getList());
     union.addAll(two[1].getList());
     //get the sizes of each intersected/unioned set
-    double i1 = (double) likeIntersection.size();
-    double i2 = (double) dislikeIntersection.size();
-    double c1 = (double) conflictOne.size();
-    double c2 = (double) conflictTwo.size();
-    double u = (double) union.size();
+    double i1 = likeIntersection.size();
+    double i2 = dislikeIntersection.size();
+    double c1 = conflictOne.size();
+    double c2 = conflictTwo.size();
+    double u = union.size();
     //Jaccard index formula
     return (i1 + i2 - c1 - c2) / u;
   }
@@ -193,10 +210,11 @@ public class Generator {
    * @return a list of recommendations
    */
   public ListData listRecommendations(int limit) {
+    int num;
     if (limit == 0)
-      limit = 10;
+      num = 10;
     else
-      limit = Math.abs(limit);
+      num = Math.abs(limit);
     if (knownLikes == null)
       knownLikes = new ListData();
     if (knownDislikes == null)
@@ -205,7 +223,7 @@ public class Generator {
     ArrayDeque<User> userQueue = new ArrayDeque<>(users);
     User user;
     ListData recList = new ListData();
-    while (recList.getList().size() < limit && !userQueue.isEmpty()) {
+    while (recList.getList().size() < num && !userQueue.isEmpty()) {
       user = userQueue.pop();
       user.getLikes().getList().forEach(group -> {
         if (!(knownLikes.getList().contains(group) || knownDislikes.getList().contains(group)))
@@ -220,10 +238,11 @@ public class Generator {
    * @return a random list
    */
   public ListData listRandom(int limit) {
+    int num;
     if (limit == 0)
-      limit = 5;
+      num = 5;
     else
-      limit = Math.abs(limit);
+      num = Math.abs(limit);
     Collections.shuffle(users);
     ArrayDeque<User> userQueue = new ArrayDeque<>(users);
     User user;
@@ -231,7 +250,7 @@ public class Generator {
     int count = 0;
     int rand;
     ArrayList<ListGroup> tempList;
-    while (randList.getList().size() < limit && !userQueue.isEmpty()) {
+    while (randList.getList().size() < num && !userQueue.isEmpty()) {
       //if (count >= users.size())
         //count = 0;
       //user = users.get(count);
@@ -252,37 +271,5 @@ public class Generator {
       count++;
     }
     return randList;
-  }
-  
-  /**
-   * @return the users
-   */
-  public ArrayList<User> getUsers() {
-    return users;
-  }
-  /**
-   * @return the knownLikes
-   */
-  public ListData getKnownLikes() {
-    return knownLikes;
-  }
-  /**
-   * @param knownLikes the knownLikes to set
-   */
-  public void setKnownLikes(ListData knownLikes) {
-    this.knownLikes = knownLikes;
-  }
-
-  /**
-   * @return the knownDislikes
-   */
-  public ListData getKnownDislikes() {
-    return knownDislikes;
-  }
-  /**
-   * @param knownDislikes the knownDislikes to set
-   */
-  public void setKnownDislikes(ListData knownDislikes) {
-    this.knownDislikes = knownDislikes;
   }
 }

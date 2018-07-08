@@ -7,10 +7,10 @@ cache:
 before_install:
   - wget -O ivy.zip http://mirrors.ibiblio.org/apache//ant/ivy/2.4.0/apache-ivy-2.4.0-bin.zip
   - unzip ivy.zip
-  - wget -O tomcat.zip http://mirrors.ibiblio.org/apache/tomcat/tomcat-8/v8.5.31/bin/apache-tomcat-8.5.31.zip
+  - wget -O tomcat.zip http://mirrors.ibiblio.org/apache/tomcat/tomcat-8/v8.5.32/bin/apache-tomcat-8.5.32.zip
   - unzip tomcat.zip
 install:
-  - mv ./apache-tomcat-8.5.31 ./tomcat
+  - mv ./apache-tomcat-8.5.32 ./tomcat
   - chmod 555 ./tomcat/bin/catalina.sh
   #- npm install
   - ant resolve -lib ./apache-ivy-2.4.0

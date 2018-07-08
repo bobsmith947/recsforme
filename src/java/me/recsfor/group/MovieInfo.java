@@ -100,7 +100,7 @@ public class MovieInfo extends HttpServlet {
    * @param id the id of the movie
    */
   private void populate(String id) {
-    MovieQuery movie = new MovieQuery(id, true, "full");
+    MovieQuery movie = new MovieQuery(id, true);
     title = movie.listTitle();
     year = movie.listYear();
     type = movie.listType();

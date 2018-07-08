@@ -19,9 +19,7 @@ import com.omertron.omdbapi.*;
 import com.omertron.omdbapi.model.*;
 import com.omertron.omdbapi.tools.OmdbParameters;
 import com.omertron.omdbapi.tools.Param;
-//import static com.omertron.omdbapi.emumerations.PlotType.SHORT;
-//import static com.omertron.omdbapi.emumerations.PlotType.FULL;
-import com.omertron.omdbapi.emumerations.PlotType;
+import static com.omertron.omdbapi.emumerations.PlotType.FULL;
 import java.util.Arrays;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 /**
@@ -59,44 +57,24 @@ public class MovieQuery extends BasicQuery {
   /**
    * Constructor for generating group info.
    * @param id the id to generate info for
-   * @param info whether to get full info or not
-   * @param plot the desired plot return type (short or full)
+   * @param full whether to get full info or not
    */
-  public MovieQuery(String id, boolean info, String plot) {
+  public MovieQuery(String id, boolean full) {
     super();
-    if (!info) {
-      this.info = null;
+    if (!full) {
+      info = null;
       params = null;
     } else {
       params = new OmdbParameters();
       params.add(Param.IMDB, id);
-      params.add(Param.PLOT, PlotType.valueOf(plot.toUpperCase()));
+      params.add(Param.PLOT, FULL);
       try {
-        this.info = CLIENT.getInfo(params);
+        info = CLIENT.getInfo(params);
       } catch (OMDBException | NullPointerException e) {
         System.err.println(Arrays.toString(e.getStackTrace()));
-        this.info = null;
+        info = null;
       }
     }
-  }
-  
-  /**
-   * @return the info
-   */
-  public OmdbVideoFull getInfo() {
-    return info;
-  }
-  /**
-   * @param info the info to set
-   */
-  public void setInfo(OmdbVideoFull info) {
-    this.info = info;
-  }
-  /**
-   * @return the params
-   */
-  public final OmdbParameters getParams() {
-    return params;
   }
   
   /**
