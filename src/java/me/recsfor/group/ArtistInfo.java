@@ -17,6 +17,8 @@ package me.recsfor.group;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +37,7 @@ import org.musicbrainz.modelWs2.Entity.ReleaseGroupWs2;
  */
 public class ArtistInfo extends HttpServlet {
   private static final long serialVersionUID = -8210213618927548383L;
-  private String name, type;
+  private String name, sortName, type;
   private String[] years;
   private List<ReleaseGroupWs2> albums;
   
@@ -55,7 +57,7 @@ public class ArtistInfo extends HttpServlet {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + name + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
       out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
-      out.println("<h2 id=\"name\">" + name + "</h2>");
+      out.println("<h2 id=\"name\">" + name + " <small class=\"text-muted\">" + sortName + "</small></h2>");
       out.println("<h3 id=\"type\">" + type + "</h3>");
       out.println("<h3>" + yearsType() + ": <span class=\"date\">" + years[0] 
               + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");
@@ -118,6 +120,7 @@ public class ArtistInfo extends HttpServlet {
   private void populate(String id) {
     ArtistQuery artist = new ArtistQuery(id, true);
     name = artist.listTitles()[0];
+    sortName = artist.listTitles()[1];
     type = artist.listType();
     years = artist.listYears();
     albums = artist.listAlbums();
@@ -136,10 +139,45 @@ public class ArtistInfo extends HttpServlet {
         return "Alive/Active";
     }
   }
+  /**
+   * Sorts the albums from oldest to newest.
+   */
   private void orderAlbums() {
     albums.sort((ReleaseGroupWs2 groupOne, ReleaseGroupWs2 groupTwo) -> {
-      return groupOne.getFirstReleaseDate()
-              .compareTo(groupTwo.getFirstReleaseDate());
+      String dateOne = groupOne.getFirstReleaseDateStr();
+      String dateTwo = groupTwo.getFirstReleaseDateStr();
+      if (dateOne.isEmpty() && !dateTwo.isEmpty())
+        return -1;
+      else if (!dateOne.isEmpty() && dateTwo.isEmpty())
+        return 1;
+      else if (dateOne.isEmpty() && dateTwo.isEmpty())
+        return 0;
+      else {
+        //return parse(dateOne).compareTo(parse(dateTwo));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+        return sdf.parse(padDate(dateOne))
+                .compareTo(sdf.parse(padDate(dateTwo)));
+        } catch (ParseException e) {
+          System.err.println(e);
+          return dateOne.compareTo(dateTwo);
+        }
+      }
     });
+  }
+  /**
+   * Formats a date string to match the correct pattern.
+   * @param date the date
+   * @return the date with padded zeroes if needed
+   */
+  private static String padDate(String date) {
+    int first = date.indexOf('-');
+    int second = date.lastIndexOf('-');
+    if (first == -1)
+      return date + "-00-00";
+    else if (first == second)
+      return date + "-00";
+    else
+      return date;
   }
 }

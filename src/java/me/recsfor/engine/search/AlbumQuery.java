@@ -51,8 +51,9 @@ public class AlbumQuery extends BasicQuery {
     super(query);
     group = new ReleaseGroupWs2();
     new ReleaseGroupSearchbyTitle(this.query).getFirstPage().forEach(r -> {
-      results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - "
-              + r.getReleaseGroup().getArtistCreditString());
+      ReleaseGroupWs2 rg = r.getReleaseGroup();
+      results.put(rg.getId(), rg.getTitle() + " - "
+              + rg.getArtistCreditString());
     });
     groupInc = null;
     releaseInc = null;
