@@ -53,14 +53,12 @@ public class ArtistQuery extends BasicQuery {
   /**
    * Constructor for generating group info.
    * @param id the id to generate info for
-   * @param info whether extra info is to be gathered or not
+   * @param full whether extra info is to be gathered or not
    */
-  public ArtistQuery(String id, boolean info) {
+  public ArtistQuery(String id, boolean full) {
     super();
     inc = new ArtistIncludesWs2();
-    inc.setReleaseGroups(info);
-    inc.setReleases(info);
-    inc.setVariousArtists(info);
+    inc.setReleaseGroups(full);
     try {
       artist = new LookUpWs2().getArtistById(id, inc);
     } catch (MBWS2Exception e) {
@@ -69,19 +67,6 @@ public class ArtistQuery extends BasicQuery {
     }
   }
   
-  /**
-   * @return the artist
-   */
-  public ArtistWs2 getArtist() {
-    return artist;
-  }
-  /**
-   * @param artist the artist to set
-   */
-  public void setArtist(ArtistWs2 artist) {
-    this.artist = artist;
-  }
-
   /**
    * Gets the unique and sort names of the artist.
    * First index is the unique name, second index is the sort name.
@@ -101,7 +86,7 @@ public class ArtistQuery extends BasicQuery {
     String type;
     try {
       type = artist.getType();
-      type = type.substring(type.indexOf("#")+1);
+      type = type.substring(type.indexOf('#')+1);
     } catch (NullPointerException e) {
       System.err.println(Arrays.toString(e.getStackTrace()));
       type = "Unknown type";
@@ -136,12 +121,5 @@ public class ArtistQuery extends BasicQuery {
    */
   public List<ReleaseGroupWs2> listAlbums() {
     return artist.getReleaseGroups();
-  }
-  /**
-   * Gets the available release contributions associated with the artist.
-   * @return the releases
-   */
-  public List<ReleaseWs2> listContrib() {
-    return artist.getReleases();
   }
 }

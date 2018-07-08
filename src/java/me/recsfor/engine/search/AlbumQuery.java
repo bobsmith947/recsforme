@@ -22,8 +22,7 @@ import org.musicbrainz.IncludesWs2.*;
 import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
 import org.musicbrainz.QueryWs2.Search.ReadySearches.*;
-//import java.util.List;
-//import java.util.LinkedList;
+import java.util.LinkedList;
 import java.util.Arrays;
 import org.musicbrainz.modelWs2.MediumListWs2;
 /**
@@ -33,7 +32,6 @@ import org.musicbrainz.modelWs2.MediumListWs2;
 public class AlbumQuery extends BasicQuery {
   private ReleaseGroupWs2 group;
   private MediumListWs2 info;
-  private boolean isNotGroup;
   private final ReleaseGroupIncludesWs2 groupInc;
   private final ReleaseIncludesWs2 releaseInc;
   static final String CONTEXT = "AlbumInfo?id=";
@@ -42,7 +40,6 @@ public class AlbumQuery extends BasicQuery {
     super();
     group = null;
     info = null;
-    isNotGroup = false;
     groupInc = null;
     releaseInc = null;
   }
@@ -57,7 +54,6 @@ public class AlbumQuery extends BasicQuery {
       results.put(r.getReleaseGroup().getId(), r.getReleaseGroup().getTitle() + " - "
               + r.getReleaseGroup().getArtistCreditString());
     });
-    isNotGroup = false;
     groupInc = null;
     releaseInc = null;
     
@@ -65,69 +61,23 @@ public class AlbumQuery extends BasicQuery {
   /**
    * Constructor for generating group info.
    * @param id the id to generate info for
-   * @param info whether extra info is to be gathered or not
+   * @param full whether extra info is to be gathered or not
    */
-  public AlbumQuery(String id, boolean info) {
+  public AlbumQuery(String id, boolean full) {
     super();
     groupInc = new ReleaseGroupIncludesWs2();
     releaseInc = new ReleaseIncludesWs2();
-    createIncludes(info);
+    groupInc.setArtists(full);
+    groupInc.setReleases(full);
+    releaseInc.setRecordings(full);
     try {
       group = new LookUpWs2().getReleaseGroupById(id, groupInc);
-      this.info = new LookUpWs2().getReleaseById(group.getReleases().get(0).getId(), releaseInc).getMediumList();
-      isNotGroup = false;
+      info = new LookUpWs2().getReleaseById(group.getReleases().get(0).getId(), releaseInc).getMediumList();
     } catch (MBWS2Exception | IndexOutOfBoundsException e) {
-      try {
-        //resort to regular release lookup
-        ReleaseWs2 rel = new LookUpWs2().getReleaseById(id, releaseInc);
-        group = rel.getReleaseGroup();
-        this.info = rel.getMediumList();
-        isNotGroup = true;
-      } catch (MBWS2Exception ex) {
-        System.err.println(Arrays.toString(e.getStackTrace()));
-        System.err.println(Arrays.toString(ex.getStackTrace()));
-        group = null;
-        this.info = null;
-        isNotGroup = false;
-      }
+      System.err.println(Arrays.toString(e.getStackTrace()));
+      group = null;
+      info = null;
     }
-  }
-  
-  /**
-   * @return the group
-   */
-  public ReleaseGroupWs2 getGroup() {
-    return group;
-  }
-  /**
-   * @param group the group to set
-   */
-  public void setGroup(ReleaseGroupWs2 group) {
-    this.group = group;
-  }
-  /**
-   * @return the info
-   */
-  public MediumListWs2 getInfo() {
-    return info;
-  }
-  /**
-   * @param info the info to set
-   */
-  public void setInfo(MediumListWs2 info) {
-    this.info = info;
-  }
-  /**
-   * @return the isNotGroup
-   */
-  public boolean isIsNotGroup() {
-    return isNotGroup;
-  }
-  /**
-   * @param isNotGroup the isNotGroup to set
-   */
-  public void setIsNotGroup(boolean isNotGroup) {
-    this.isNotGroup = isNotGroup;
   }
   
   /**
@@ -185,30 +135,14 @@ public class AlbumQuery extends BasicQuery {
     }
     return date;
   }
-  
   /**
-   * Sets the relevant <code>include</code> parameters for <code>release group</code> and <code>release</code> lookup.
-   * @param inc whether the includes are to be set or not
+   * Gets the tracks in the album.
+   * @return the tracks
    */
-  private void createIncludes(boolean inc) {
-    groupInc.setArtists(inc);
-    groupInc.setReleases(inc);
-    releaseInc.setMedia(inc);
-    releaseInc.setRecordings(inc);
-    releaseInc.setReleaseGroups(inc);
-    //R_INC.setLabel(inc);
-    //R_INC.setDiscids(inc);
-  }
-  /**
-   * Switches a <code>release</code> ID to the ID of its <code>release-group</code>.
-   * @param id the id of a release
-   * @return the id of the release-group
-   * @throws MBWS2Exception if the lookup fails
-   * @throws NullPointerException if a matching id can not be found
-   */
-  public static String switchId(String id) throws MBWS2Exception, NullPointerException {
-    ReleaseIncludesWs2 inc = new ReleaseIncludesWs2();
-    inc.setReleaseGroups(true);
-    return new LookUpWs2().getReleaseById(id, inc).getReleaseGroup().getId();
+  public String[] listTracks() {
+    String[] tracks = new String[info.getTracksCount()];
+    LinkedList<String> list = new LinkedList<>();
+    info.getCompleteTrackList().forEach(track -> list.add(track.getRecording().getTitle()));
+    return list.toArray(tracks);
   }
 }

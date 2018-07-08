@@ -24,13 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 //import java.io.UnsupportedEncodingException;
 //import static java.net.URLDecoder.decode;
 //import static java.net.URLEncoder.encode;
-//import java.util.LinkedList;
-import java.util.List;
 import me.recsfor.engine.search.AlbumQuery;
-import org.musicbrainz.MBWS2Exception;
-//import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
-import org.musicbrainz.modelWs2.MediumListWs2;
-import org.musicbrainz.modelWs2.TrackWs2;
 /**
  * A servlet to build group pages for albums, EP's, singles, and other types, including the available track listing.
  * It can process <code>HTTP GET</code> and <code>POST</code> requests by being given a request parameter (named <code>id</code>) containing the MusicBrainz ID of the respective <code>release group</code>.
@@ -41,11 +35,7 @@ import org.musicbrainz.modelWs2.TrackWs2;
 public class AlbumInfo extends HttpServlet {
   private static final long serialVersionUID = 3558291301985484615L;
   private String title, type, date;
-  private String[] artist;
-  /**
-   * Used for getting track listings.
-   */
-  private MediumListWs2 info;
+  private String[] artist, tracks;
   
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -57,13 +47,7 @@ public class AlbumInfo extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response) 
           throws ServletException, IOException {
     String id = request.getParameter("id");
-    try {
-      id = checkId(id) ? AlbumQuery.switchId(id) : id;
-      populate(id);
-    } catch (MBWS2Exception | NullPointerException e) {
-      this.log(e.getMessage(), e);
-      populate(id);
-    }
+    populate(id);
     response.setContentType("text/html;charset=UTF-8");
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + title + "</title><body>");
@@ -72,21 +56,17 @@ public class AlbumInfo extends HttpServlet {
       out.println("<h2 id=\"name\">" + title + " - <a href=\"ArtistInfo?id=" + artist[1] + "\">" + artist[0] + "</a></h2>");
       out.println("<h3 id=\"type\">" + type + "</h3>");
       out.println("<h3>Released on: <span class=\"date\">" + date + "</span></h3>");
-      //TODO fix duration time
-      out.println("<h3>Tracklist:</h2>");
-      try {
-        List<TrackWs2> tracks = info.getCompleteTrackList();
-        out.println("<ol class=\"list-group-ordered\">");
-        tracks.forEach(track -> {
-          out.println("<li>" + track.getRecording().getTitle()
-                  + " - " + track.getDuration() + "</li>");
-        });
-        out.println("</ol>");
-      } catch (NullPointerException e) {
-        this.log(e.getMessage(), e);
-        out.println("<h4>No tracks found!</h4>");
+      out.println("<h4>Tracklist <small class=\"text-muted\">In the original release</small></h4>");
+      out.println("<ol class=\"list-group text-dark mb-3\">");
+      for (int i = 0; i < tracks.length; i++) {
+        out.println("<li class=\"list-group-item d-flex justify-content-between align-items-center\">"
+                + "<span class=\"badge badge-primary\">"
+                + Integer.toString(i+1)
+                + "</span>"
+                + tracks[i] 
+                + "<span></span></li>");
       }
-      //out.println("<h5>Total length: " + info.getDuration() + "</h5>");
+      out.println("</ol>");
       out.println("<h6><a href=\"https://musicbrainz.org/release-group/"
               + id + "\">View on MusicBrainz</a></h6>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
@@ -138,14 +118,6 @@ public class AlbumInfo extends HttpServlet {
     type = album.listType();
     artist = album.listArtist();
     date = album.listDate();
-    info = album.getInfo();
-  }
-  /**
-   * Check if the ID needs to be switched.
-   * True if it does, false otherwise.
-   * @param id the id to check
-   */
-  private static boolean checkId(String id) {
-    return new AlbumQuery(id, false).isIsNotGroup();
+    tracks = album.listTracks();
   }
 }

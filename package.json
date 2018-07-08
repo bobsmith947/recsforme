@@ -22,7 +22,7 @@
     "contributors": [],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "del .\\web\\*.eot & del .\\web\\*.ttf & del .\\web\\*.woff & del .\\web\\*.woff2 && webpack --progress -p",
+        "build": "del .\\web\\*.eot & del .\\web\\*.ttf & del .\\web\\*.woff & del .\\web\\*.woff2 && webpack --progress -p"
     },
     "browserslist": [
         "last 3 versions",

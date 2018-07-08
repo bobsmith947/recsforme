@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import me.recsfor.engine.search.ArtistQuery;
 import org.musicbrainz.modelWs2.Entity.ReleaseGroupWs2;
-import org.musicbrainz.modelWs2.Entity.ReleaseWs2;
 /**
  * A servlet to build group pages for artists.
  * It can process <code>HTTP GET</code> and <code>POST</code> requests by being given a request parameter (named <code>id</code>) containing the MusicBrainz ID of the respective <code>artist</code>.
@@ -39,7 +38,6 @@ public class ArtistInfo extends HttpServlet {
   private String name, type;
   private String[] years;
   private List<ReleaseGroupWs2> albums;
-  private List<ReleaseWs2> contrib;
   
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -62,20 +60,16 @@ public class ArtistInfo extends HttpServlet {
       out.println("<h3>" + yearsType() + ": <span class=\"date\">" + years[0] 
               + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
-      //TODO order release groups by date
-      //TODO print out more entries
-      out.println("<h3>Discography:</h3><div class=\"list-group text-right my-2\">");
+      out.println("<h3>Discography:</h3><div class=\"text-right my-2\">");
+      out.println("<a href=\"#\" id=\"orderer\" data-target=\"#discog\">Toggle order</a>");
+      out.println("<div class=\"list-group\" id=\"discog\">");
+      orderAlbums();
       albums.forEach(album -> {
         out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
                 + album.getId() + "\"><h5 class=\"mb-0\">" + album.getTitle()
                 + "</h5><small class=\"date\">" + album.getFirstReleaseDateStr() + "</small></a>");
       });
-      out.println("</div><h4>Contributions:</h4><div class=\"list-group text-right my-2\">");
-      contrib.forEach(cont -> {
-        out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
-                + cont.getId() + "\"><h5 class=\"mb-0\">" + cont.getTitle()
-                + "</h5><small class=\"date\">" + cont.getDateStr() + "</small></a>");
-      });
+      out.println("</div></div>");
       out.println("</ul></div><h6>May not be exhausitve. Check MusicBrainz if you can't find what you're looking for.</h6>");
       out.println("<h6><a href=\"https://musicbrainz.org/artist/"
               + id + "\">View on MusicBrainz</a></h6>");
@@ -127,7 +121,6 @@ public class ArtistInfo extends HttpServlet {
     type = artist.listType();
     years = artist.listYears();
     albums = artist.listAlbums();
-    contrib = artist.listContrib();
   }
   /**
    * Determines how the years of an artist should be referred to as based on its type.
@@ -142,5 +135,11 @@ public class ArtistInfo extends HttpServlet {
       default:
         return "Alive/Active";
     }
+  }
+  private void orderAlbums() {
+    albums.sort((ReleaseGroupWs2 groupOne, ReleaseGroupWs2 groupTwo) -> {
+      return groupOne.getFirstReleaseDate()
+              .compareTo(groupTwo.getFirstReleaseDate());
+    });
   }
 }

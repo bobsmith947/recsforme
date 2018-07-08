@@ -41,6 +41,13 @@ $(() => {
     else
       $(this).text(str);
   });
+  $("#orderer").click(ev => {
+    ev.preventDefault();
+    const list = $($(ev.target).attr("data-target"));
+    const items = list.children();
+    list.empty();
+    list.append(items.toArray().reverse());
+  });
   if (location.pathname.includes("user.jsp")) {
     //notify if list(s) are empty
     const nolikes = $("#likes").children().length === 0;
