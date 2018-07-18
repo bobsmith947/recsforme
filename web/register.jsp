@@ -5,11 +5,12 @@
 <html>
   <title>Registration Page</title>
   <body>
-    <c:if test='${pageContext.request.getMethod() == "GET"}'>
+    <c:set var="method" value="${pageContext.request.method}" />
+    <c:if test="${method == 'GET'}">
       <sql:query var="matches" dataSource="jdbc/MediaRecom">
         SELECT * FROM users
         WHERE uname = ?
-        <sql:param value='${pageContext.request.getParameter("name")}' />
+        <sql:param value="${param.name}" />
       </sql:query>
       <c:choose>
         <c:when test="${matches.getRowCount() == 1}">
@@ -23,19 +24,19 @@
         </c:otherwise>
       </c:choose>
     </c:if>
-    <c:if test='${pageContext.request.getMethod() == "POST"}'>
+    <c:if test="${method == 'POST'}">
       <% CredentialEncryption cred; %>
       <c:choose>
-        <c:when test='${pageContext.request.getParameter("action") == "reset"}'>
+        <c:when test="${param.action == 'reset'}">
           <% cred = new CredentialEncryption(request.getParameter("pass")); %>
           <sql:update var="updated" dataSource="jdbc/MediaRecom">
             UPDATE users
-            SET pw = '<%= cred.getHash() %>', 
-              salt = '<%= cred.getSalt() %>'
+            SET pw = "<%= cred.getHash() %>", 
+              salt = "<%= cred.getSalt() %>"
             WHERE uname = ?
             AND email = ?
-            <sql:param value='${pageContext.request.getParameter("name")}' />
-            <sql:param value='${pageContext.request.getParameter("email")}' />
+            <sql:param value="${param.name}" />
+            <sql:param value="${param.email}" />
           </sql:update>
           <c:choose>
             <c:when test="${updated == 1}">
@@ -56,16 +57,16 @@
             <% cred = new CredentialEncryption(request.getParameter("pw")); %>
             <sql:update dataSource="jdbc/MediaRecom">
               INSERT INTO users (uname, pw, joined, sex, dob, email, salt)
-              VALUES (?, '<%= cred.getHash() %>', '<%= LocalDate.now() %>', ?, ?, ?, '<%= cred.getSalt() %>')
-            <sql:param value='${pageContext.request.getParameter("uname")}' />
-            <sql:param value='${pageContext.request.getParameter("sex")}' />
-            <sql:param value='${pageContext.request.getParameter("dob")}' />
-            <sql:param value='${pageContext.request.getParameter("email")}' />
+              VALUES (?, "<%= cred.getHash() %>", "<%= LocalDate.now() %>", ?, ?, ?, "<%= cred.getSalt() %>")
+            <sql:param value="${param.uname}" />
+            <sql:param value="${param.sex}" />
+            <sql:param value="${param.dob}" />
+            <sql:param value="${param.email}" />
             </sql:update>
             <sql:query var="newUser" dataSource="jdbc/MediaRecom">
               SELECT id FROM users
               WHERE uname = ?
-              <sql:param value='${pageContext.request.getParameter("uname")}' />
+              <sql:param value="${param.uname}" />
             </sql:query>
             <sql:update dataSource="jdbc/MediaRecom">
               INSERT INTO user_likes (uid)

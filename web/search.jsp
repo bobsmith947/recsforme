@@ -9,7 +9,7 @@
 <% if (q.getQuery().toLowerCase().equals("make me coffee")) response.sendError(418); %>
 <!DOCTYPE html>
 <html>
-  <title>recsforme :: <c:out value='${q.type}' /> Search - <c:out value='${q.query}' /></title>
+  <title>recsforme :: <c:out value="${q.type}" /> Search - <c:out value="${q.query}" /></title>
   <body>
     <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <main>
@@ -18,7 +18,7 @@
           <div class="input-group-prepend">
             <span class="input-group-text">Searching for</span>
           </div>
-          <input class="form-control form-control-lg" type="search" name="query" maxlength="100" autocomplete="off" value="<c:out value='${q.query}' />" required>
+          <input class="form-control form-control-lg" type="search" name="query" maxlength="100" autocomplete="off" value="<c:out value="${q.query}" />" required>
         </div>
         <div class="input-group">
           <div class="input-group-prepend">
@@ -52,7 +52,7 @@
             <sql:update dataSource="jdbc/MediaRecom">
               INSERT INTO query_log (query, qtype)
               VALUES (?, '${q.type}')
-              <sql:param value='${q.query}' />
+              <sql:param value="${q.query}" />
             </sql:update>
           </c:if>
           <jsp:setProperty name="q" property="names" value="${del.listNames()}" />
@@ -72,7 +72,7 @@
         </c:if>
       </div>
       <c:choose>
-        <c:when test='${q.type == "Movie"}'>
+        <c:when test="${q.type == 'Movie'}">
           <h6>Search results provided by <a href="https://www.omdbapi.com/">OMDb</a>.</h6>
         </c:when>
         <c:otherwise>

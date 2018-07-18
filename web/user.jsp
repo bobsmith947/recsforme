@@ -107,7 +107,7 @@
             <a class="btn btn-secondary btn-sm nav-link" href="logout.jsp">Log out</a>
           </li>
         </ul>
-        <h2>Welcome to your page, <c:out value='${u.name}' />.</h2>
+        <h2>Welcome to your page, <c:out value="${u.name}" />.</h2>
         <p>This page contains your cloud lists. Lists are only synced upon logout, so don't forget to do so when you're done. Recommendation generation is not yet available. Keep checking back for development updates.</p>
       </c:if>
       <div class="text-center" id="list">

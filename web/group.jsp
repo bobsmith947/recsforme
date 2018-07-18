@@ -6,14 +6,12 @@
 <html>
   <title>Group Page</title>
   <body>
-    <c:set var="status" value='${pageContext.request.getParameter("status")}' />
-    <c:set var="action" value='${pageContext.request.getParameter("action")}' />
-    <c:set var="item" value='${ListData.generateItem(pageContext.request.getParameter("name"),
-                                 pageContext.request.getParameter("id"),
-                                 pageContext.request.getParameter("type"))}' />
+    <c:set var="status" value="${param.status}" />
+    <c:set var="action" value="${param.action}" />
+    <c:set var="item" value="${ListData.generateItem(param.name, param.id, param.type)}" />
     <c:set var="group" value="${ListData.generateGroup(item)}" />
-    <c:if test='${action == "add"}'>
-      <c:if test='${status == "like"}'>
+    <c:if test="${action == 'add'}">
+      <c:if test="${status == 'like'}">
         <c:choose>
           <c:when test="${u.dislikeData.list.contains(group)}">
             <h5 class="text-danger">This group already exists on your dislikes list.</h5>
@@ -24,7 +22,7 @@
           </c:otherwise>
         </c:choose>
       </c:if>
-      <c:if test='${status == "dislike"}'>
+      <c:if test="${status == 'dislike'}">
         <c:choose>
           <c:when test="${u.likeData.list.contains(group)}">
             <h5 class="text-danger">This group already exists on your likes list.</h5>
@@ -43,28 +41,28 @@
         <h5 class="text-warning">This group could not be added.</h5>
       </c:if>
     </c:if>
-    <c:if test='${action == "reset"}'>
+    <c:if test="${action == 'reset'}">
       <c:set var="changed" value="${true}" />
-      <c:set var="list" value='${pageContext.request.getParameter("list")}' />
-      <c:if test='${list == "both"}'>
+      <c:set var="list" value="${param.list}" />
+      <c:if test="${list == 'both'}">
         <% u.getLikeData().getList().clear(); %>
         <% u.getDislikeData().getList().clear(); %>
         <h5 class="text-success">Both of your lists have been reset.</h5>
       </c:if>
-      <c:if test='${list == "like"}'>
+      <c:if test="${list == 'like'}">
         <% u.getLikeData().getList().clear(); %>
         <h5 class="text-success">Your likes list has been reset.</h5>
       </c:if>
-      <c:if test='${list == "dislike"}'>
+      <c:if test="${list == 'dislike'}">
         <% u.getDislikeData().getList().clear(); %>
         <h5 class="text-success">Your dislikes list has been reset.</h5>
       </c:if>
     </c:if>
-    <c:if test='${action == "remove"}'>
-      <c:if test='${status == "like"}'>
+    <c:if test="${action == 'remove'}">
+      <c:if test="${status == 'like'}">
         <c:set var="removed" value="${u.likeData.list.remove(group)}" />
       </c:if>
-      <c:if test='${status == "dislike"}'>
+      <c:if test="${status == 'dislike'}">
         <c:set var="removed" value="${u.dislikeData.list.remove(group)}" />
       </c:if>
       <c:if test="${removed}">
@@ -75,7 +73,7 @@
         <h5 class="text-warning">This group could not be removed.</h5>
       </c:if>
     </c:if>
-    <c:if test='${action == "check"}'>
+    <c:if test="${action == 'check'}">
       <c:choose>
         <c:when test="${u.likeData.list.contains(group)}">
           <h5 class="text-success">This group exists on your likes list.</h5>
@@ -102,7 +100,6 @@
         WHERE uid = ${u.id}
         <sql:param value="${ListData.stringifyData(u.dislikeData)}" />
       </sql:update>
-      <h5 class="text-success">The database has been updated.</h5>
     </c:if>
   </body>
 </html>
