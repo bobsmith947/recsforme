@@ -19,8 +19,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Collections;
+import static java.util.Collections.reverse;
+import static java.util.Collections.shuffle;
 import java.util.HashSet;
 import java.util.HashMap;
 import javax.servlet.jsp.jstl.sql.Result;
@@ -125,7 +125,7 @@ public class Generator {
       try {
         dob = LocalDate.parse(resArr[i][3].toString());
       } catch (DateTimeParseException e) {
-        System.err.println(Arrays.toString(e.getStackTrace()));
+        System.err.println(e);
         //use the default date
         dob = LocalDate.of(1900, 1, 1);
       }
@@ -202,7 +202,7 @@ public class Generator {
       else
         return 0;
     });
-    Collections.reverse(users);
+    reverse(users);
   }
   /**
    * Generates recommendations using a sorted list of users.
@@ -243,7 +243,7 @@ public class Generator {
       num = 5;
     else
       num = Math.abs(limit);
-    Collections.shuffle(users);
+    shuffle(users);
     ArrayDeque<User> userQueue = new ArrayDeque<>(users);
     User user;
     ListData randList = new ListData();

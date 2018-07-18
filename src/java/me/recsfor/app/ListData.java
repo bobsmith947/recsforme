@@ -17,7 +17,6 @@ package me.recsfor.app;
 
 import java.io.Serializable;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.core.JsonParseException;
@@ -67,7 +66,7 @@ public class ListData implements Serializable, Comparable {
       data = mapper.readValue(json, ListData.class);
     } catch (IOException e) {
       data = new ListData();
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
     }
     return data;
   }
@@ -85,7 +84,7 @@ public class ListData implements Serializable, Comparable {
       ret = mapper.writeValueAsString(data);
     } catch (JsonProcessingException e) {
       ret = e.getMessage();
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
     }
     return ret;
   }
@@ -99,6 +98,7 @@ public class ListData implements Serializable, Comparable {
     String movie = MOVIE.getContext();
     String artist = ARTIST.getContext();
     String album = ALBUM.getContext();
+    //<editor-fold defaultstate="collapsed">
     switch (groupType.toLowerCase()) {
       case "movie":
         return movie;
@@ -145,6 +145,7 @@ public class ListData implements Serializable, Comparable {
       default:
         return "search.jsp?query=";
     }
+    //</editor-fold>
   }
   /**
    * Creates a JSON string representing an item with the specified group properties.
@@ -161,7 +162,7 @@ public class ListData implements Serializable, Comparable {
       ret = mapper.writeValueAsString(item);
     } catch (JsonProcessingException e) {
       ret = e.getMessage();
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
     }
     return ret;
   }
@@ -177,7 +178,7 @@ public class ListData implements Serializable, Comparable {
       group = mapper.readValue(json, ListGroup.class);
     } catch (IOException e) {
       group = new ListGroup();
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
     }
     return group;
   }

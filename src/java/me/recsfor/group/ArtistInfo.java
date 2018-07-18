@@ -159,7 +159,7 @@ public class ArtistInfo extends HttpServlet {
         return sdf.parse(padDate(dateOne))
                 .compareTo(sdf.parse(padDate(dateTwo)));
         } catch (ParseException e) {
-          System.err.println(e);
+          this.log(e.getMessage());
           return dateOne.compareTo(dateTwo);
         }
       }

@@ -16,7 +16,7 @@
 package me.recsfor.app;
 
 import java.io.Serializable;
-import java.util.Objects;
+import static java.util.Objects.hash;
 
 /**
  * Represents a group in a list.
@@ -99,9 +99,7 @@ public class ListGroup implements Serializable {
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = 97 * hash + Objects.hashCode(this.name);
-    hash = 97 * hash + Objects.hashCode(this.id);
-    hash = 97 * hash + Objects.hashCode(this.type);
+    hash = 97 * hash + hash(this.name, this.id, this.type);
     return hash;
   }
   

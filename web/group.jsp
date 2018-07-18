@@ -92,12 +92,12 @@
       <sql:update dataSource="jdbc/MediaRecom">
         UPDATE user_likes
         SET items = ?
-        WHERE uid = ${u.id}
+        WHERE uid = ${u.id};
         <sql:param value="${ListData.stringifyData(u.likeData)}" />
 
         UPDATE user_dislikes
         SET items = ?
-        WHERE uid = ${u.id}
+        WHERE uid = ${u.id};
         <sql:param value="${ListData.stringifyData(u.dislikeData)}" />
       </sql:update>
     </c:if>

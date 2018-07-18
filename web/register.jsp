@@ -70,11 +70,10 @@
             </sql:query>
             <sql:update dataSource="jdbc/MediaRecom">
               INSERT INTO user_likes (uid)
-              VALUES (${newUser.getRowsByIndex()[0][0]})
-            </sql:update>
-            <sql:update dataSource="jdbc/MediaRecom">
+              VALUES (${newUser.getRowsByIndex()[0][0]});
+              
               INSERT INTO user_dislikes (uid)
-              VALUES (${newUser.getRowsByIndex()[0][0]})
+              VALUES (${newUser.getRowsByIndex()[0][0]});
             </sql:update>
           </c:catch>
           <c:if test="${ex == null}">
@@ -82,7 +81,7 @@
             <h6 class="text-success">You can now log in on the <a href="user.jsp">user page</a>.</h6>
           </c:if>
           <c:if test="${ex != null}">
-            ${pageContext.exception.printStackTrace()}
+            ${pageContext.servletContext.log(ex.message)}
             <h5 class="text-warning">Unable to register. Please ensure all form fields are valid.</h5>
           </c:if>
         </c:otherwise>

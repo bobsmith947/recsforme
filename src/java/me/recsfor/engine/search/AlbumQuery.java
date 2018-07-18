@@ -23,7 +23,6 @@ import org.musicbrainz.MBWS2Exception;
 import org.musicbrainz.QueryWs2.LookUp.LookUpWs2;
 import org.musicbrainz.QueryWs2.Search.ReadySearches.*;
 import java.util.LinkedList;
-import java.util.Arrays;
 import org.musicbrainz.modelWs2.MediumListWs2;
 /**
  * Uses MusicBrainz (https://musicbrainz.org/ws/2/) to gather <code>release</code> and <code>release group</code> data for search results and group pages.
@@ -75,7 +74,7 @@ public class AlbumQuery extends BasicQuery {
       group = new LookUpWs2().getReleaseGroupById(id, groupInc);
       info = new LookUpWs2().getReleaseById(group.getReleases().get(0).getId(), releaseInc).getMediumList();
     } catch (MBWS2Exception | IndexOutOfBoundsException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
       group = null;
       info = null;
     }
@@ -97,7 +96,7 @@ public class AlbumQuery extends BasicQuery {
     try {
       type = group.getTypeString();
     } catch (NullPointerException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
       type = "Unknown type";
     }
     //check if it's null again just in case
@@ -115,7 +114,7 @@ public class AlbumQuery extends BasicQuery {
       artist[0] = group.getArtistCreditString();
       artist[1] = group.getArtistCredit().getNameCredits().get(0).getArtist().getId();
     } catch (NullPointerException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
       //get the reserved artist for unknown releases
       artist[0] = "[unknown]";
       artist[1] = "125ec42a-7229-4250-afc5-e057484327fe";
@@ -132,7 +131,7 @@ public class AlbumQuery extends BasicQuery {
       date = group.getFirstReleaseDateStr();
     } catch (NullPointerException e) {
       date = e.getMessage();
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
     }
     return date;
   }

@@ -18,11 +18,13 @@ package me.recsfor.app;
 import java.security.SecureRandom;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
+import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
+import static org.apache.commons.codec.binary.Hex.decodeHex;
+import static org.apache.commons.codec.binary.Hex.encodeHexString;
 /**
  * This class is used to encrypt a user's credentials (their password), so it can be securely stored in a database.
  * @author lkitaev
@@ -32,7 +34,7 @@ public class CredentialEncryption {
   private String salt, hash;
   private static final String HASH_ALGO = "PBKDF2WithHmacSHA1";
   private static final String SALT_ALGO = "SHA1PRNG";
-  private static int ITERATIONS = 100000;
+  private static int ITERATIONS = 100_000;
   
   public CredentialEncryption() {
     pass = "";
@@ -45,14 +47,8 @@ public class CredentialEncryption {
    */
   public CredentialEncryption(String pass) {
     this.pass = pass;
-    try {
-      salt = generateSalt();
-      hash = generateHash();
-    } catch (NoSuchAlgorithmException | InvalidKeySpecException | DecoderException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
-      salt = null;
-      hash = null;
-    }
+    salt = generateSalt();
+    hash = generateHash();
   }
   /**
    * Constructor to create a hash for the provided password using a previously generated salt.
@@ -62,12 +58,7 @@ public class CredentialEncryption {
   public CredentialEncryption(String pass, String salt) {
     this.pass = pass;
     this.salt = salt;
-    try {
-      hash = generateHash();
-    } catch (NoSuchAlgorithmException | InvalidKeySpecException | DecoderException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
-      hash = null;
-    }
+    hash = generateHash();
   }
   
   /**
@@ -98,27 +89,41 @@ public class CredentialEncryption {
   /**
    * Creates a random 128-bit (32 character) salt to use for hashing.
    * @return the salt
-   * @throws NoSuchAlgorithmException if there is no suitable random number generator
    */
-  private String generateSalt() throws NoSuchAlgorithmException {
-    SecureRandom rand = SecureRandom.getInstance(SALT_ALGO);
+  private String generateSalt() {
+    SecureRandom rand;
+    try {
+      rand = SecureRandom.getInstance(SALT_ALGO);
+    } catch (NoSuchAlgorithmException e) {
+      System.err.println(e);
+      rand = new SecureRandom();
+    }
     byte[] randSalt = new byte[16];
     rand.nextBytes(randSalt);
-    return Hex.encodeHexString(randSalt);
+    return encodeHexString(randSalt);
   }
   /**
    * Creates a 256-bit (64 character) hash using password-based encryption.
    * @return the hashed password
-   * @throws NoSuchAlgorithmException if there is no suitable hashing method
-   * @throws InvalidKeySpecException if the key specification is wrong
-   * @throws DecoderException if the salt can not be converted
    */
-  private String generateHash() throws NoSuchAlgorithmException, InvalidKeySpecException, DecoderException {
-    char[] charPass = pass.toCharArray();
-    PBEKeySpec spec = new PBEKeySpec(charPass, Hex.decodeHex(salt.toCharArray()), ITERATIONS, 256);
-    SecretKeyFactory key = SecretKeyFactory.getInstance(HASH_ALGO);
-    byte[] enc = key.generateSecret(spec).getEncoded();
-    return Hex.encodeHexString(enc);
+  private String generateHash() {
+    PBEKeySpec spec;
+    try {
+      spec = new PBEKeySpec(pass.toCharArray(), decodeHex(salt.toCharArray()), ITERATIONS, 256);
+    } catch (DecoderException e) {
+      System.err.println(e);
+      spec = new PBEKeySpec(pass.toCharArray(), new byte[1], ITERATIONS, 256);
+    }
+    SecretKey key;
+    try {
+      SecretKeyFactory factory = SecretKeyFactory.getInstance(HASH_ALGO);
+      key = factory.generateSecret(spec);
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      System.err.println(e);
+      key = new SecretKeySpec(new byte[32], HASH_ALGO);
+    }
+    byte[] enc = key.getEncoded();
+    return encodeHexString(enc);
   }
   /**
    * Instance method to determine whether a password matches its stored hash, using the generated salt for the user.
@@ -127,8 +132,8 @@ public class CredentialEncryption {
    * @throws DecoderException if the a hash can not be converted from hexadecimal
    */
   public boolean validatePassword(String storedHash) throws DecoderException {
-    byte[] testHash = Hex.decodeHex(hash.toCharArray());
-    byte[] knownHash = Hex.decodeHex(storedHash.toCharArray());
+    byte[] testHash = decodeHex(hash.toCharArray());
+    byte[] knownHash = decodeHex(storedHash.toCharArray());
     //difference between the two hashes
     //compare the key length of each
     int diff = knownHash.length ^ testHash.length;

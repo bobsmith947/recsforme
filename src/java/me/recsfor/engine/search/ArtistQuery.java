@@ -16,7 +16,6 @@
 package me.recsfor.engine.search;
 
 //import org.musicbrainz.Controller.Artist;
-import java.util.Arrays;
 //import org.musicbrainz.modelWs2.SearchResult.ArtistResultWs2;
 import org.musicbrainz.modelWs2.Entity.*;
 import org.musicbrainz.IncludesWs2.ArtistIncludesWs2;
@@ -64,7 +63,7 @@ public class ArtistQuery extends BasicQuery {
     try {
       artist = new LookUpWs2().getArtistById(id, inc);
     } catch (MBWS2Exception e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
       artist = null;
     }
   }
@@ -90,7 +89,7 @@ public class ArtistQuery extends BasicQuery {
       type = artist.getType();
       type = type.substring(type.indexOf('#')+1);
     } catch (NullPointerException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
       type = "Unknown type";
     }
     return type;
@@ -106,13 +105,13 @@ public class ArtistQuery extends BasicQuery {
       years[0] = artist.getLifeSpan().getBegin();
     } catch (NullPointerException e) {
       years[0] = e.getMessage();
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
     } finally {
       try {
         years[1] = artist.getLifeSpan().getEnd();
       } catch (NullPointerException e) {
         years[1] = e.getMessage();
-        System.err.println(Arrays.toString(e.getStackTrace()));
+        System.err.println(e);
       }
     }
     return years;

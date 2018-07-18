@@ -15,8 +15,6 @@
  */
 package me.recsfor.engine.search;
 
-import java.util.Arrays;
-
 /**
  * Defines the servlet contexts of possible query types.
  * Allows for easier access to the context constants from outside packages.
@@ -70,7 +68,7 @@ public enum Context {
       try {
         field = (String) type.getDeclaredField("CONTEXT").get(null);
       } catch (NoSuchFieldException | IllegalAccessException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
+        System.err.println(e);
         field = null;
       }
     }

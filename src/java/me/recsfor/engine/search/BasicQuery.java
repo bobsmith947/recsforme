@@ -16,7 +16,7 @@
 package me.recsfor.engine.search;
 
 import java.util.LinkedHashMap;
-import java.util.Objects;
+import static java.util.Objects.hash;
 import static org.apache.commons.lang3.StringUtils.normalizeSpace;
 /**
  * Contains basic functionality for query classes.
@@ -108,8 +108,7 @@ public class BasicQuery {
   @Override
   public int hashCode() {
     int hash = 7;
-    hash = 17 * hash + Objects.hashCode(this.query);
-    hash = 17 * hash + Objects.hashCode(this.results);
+    hash = 17 * hash + hash(this.query, this.results);
     return hash;
   }
 }

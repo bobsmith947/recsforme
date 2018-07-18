@@ -15,8 +15,15 @@
     </sql:query>
     <c:choose>
       <c:when test="${matches.getRowCount() == 1}">
-        <c:if test="${CredentialEncryption(param.pw, matches.getRowsByIndex()[0][2])
-                      .validatePassword(matches.getRowsByIndex()[0][1])}" var="correct">
+        <c:catch var="ex">
+          <c:set var="val" value="${CredentialEncryption(param.pw, matches.getRowsByIndex()[0][2])
+                                  .validatePassword(matches.getRowsByIndex()[0][1])}" />
+        </c:catch>
+        <c:if test="${ex != null}">
+          ${pageContext.servletContext.log(ex.message)}
+          <% response.sendError(500); %>
+        </c:if>
+        <c:if test="${val}" var="correct">
           <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
           <jsp:setProperty name="u" property="loggedIn" value="true" />
           <sql:query var="likesList" dataSource="jdbc/MediaRecom">

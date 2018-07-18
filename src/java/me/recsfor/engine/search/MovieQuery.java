@@ -20,7 +20,6 @@ import com.omertron.omdbapi.model.*;
 import com.omertron.omdbapi.tools.OmdbParameters;
 import com.omertron.omdbapi.tools.Param;
 import static com.omertron.omdbapi.emumerations.PlotType.FULL;
-import java.util.Arrays;
 import static org.apache.commons.lang3.text.WordUtils.capitalize;
 /**
  * Uses the OMDb API (https://omdbapi.com) to gather <code>movie</code>, <code>series</code>, and <code>game</code> data for search results and group pages.
@@ -51,7 +50,7 @@ public class MovieQuery extends BasicQuery {
                 + res.getYear() + ")");
       });
     } catch (OMDBException | NullPointerException e) {
-      System.err.println(Arrays.toString(e.getStackTrace()));
+      System.err.println(e);
     }
   }
   /**
@@ -71,7 +70,7 @@ public class MovieQuery extends BasicQuery {
       try {
         info = CLIENT.getInfo(params);
       } catch (OMDBException | NullPointerException e) {
-        System.err.println(Arrays.toString(e.getStackTrace()));
+        System.err.println(e);
         info = null;
       }
     }
