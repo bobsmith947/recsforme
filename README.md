@@ -12,12 +12,11 @@ Want to get recsforme set up on your local machine for development and testing p
 
 ### Prerequisites
 
-* A JDK (at least Java 8). If you have a higher version, make sure the project is compiled on version 8.
-* A servlet container like [Tomcat](https://tomcat.apache.org)
+* A JDK (at least Java 8)
+* A servlet container ([Tomcat](https://tomcat.apache.org) is recommended)
+* A SQL database
 * [Apache Ant 1.7.1+ and Apache Ivy 2.4.0](https://ant.apache.org/)
 * npm (comes with [Node.js](https://nodejs.org/en/download/))
-
-**Access to a SQL database under the name *jdbc/MediaRecom* is required. You can contact me for the schema. Once set up, the connection can be added to `context.xml` (for Tomcat).**
 
 **You can get your own API key from https://www.omdbapi.com/. Set it as an environment variable named *OMDB_KEY*.**
 
@@ -31,7 +30,7 @@ Want to get recsforme set up on your local machine for development and testing p
 
 ### Running
 
-Ant tasks have already been made to do these automatically, but if you want to do it manually, make sure you have `CATALINA_HOME` set (if you're using Tomcat), and that your user has proper permissions.
+You can use these commands to run and test using Tomcat.
 
     $CATALINA_HOME/bin/catalina start
     ant run -Dj2ee.server.home=$CATALINA_HOME
