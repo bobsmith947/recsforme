@@ -16,16 +16,16 @@
     <c:choose>
       <c:when test="${matches.getRowCount() == 1}">
         <c:catch var="ex">
-          <c:set var="val" value="${CredentialEncryption(param.pw, matches.getRowsByIndex()[0][2])
-                                  .validatePassword(matches.getRowsByIndex()[0][1])}" />
+          <c:set var="valid" value="${CredentialEncryption(param.pw, matches.getRowsByIndex()[0][2])
+                                    .validatePassword(matches.getRowsByIndex()[0][1])}" />
         </c:catch>
         <c:if test="${ex != null}">
           ${pageContext.servletContext.log(ex.message)}
           <% response.sendError(500); %>
         </c:if>
-        <c:if test="${val}" var="correct">
+        <c:if test="${valid}" var="correct">
           <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
-          <jsp:setProperty name="u" property="loggedIn" value="true" />
+          <jsp:setProperty name="u" property="loggedIn" value="${true}" />
           <sql:query var="likesList" dataSource="jdbc/MediaRecom">
             SELECT items FROM user_likes
             WHERE uid = ${u.id}
@@ -34,10 +34,31 @@
             SELECT items FROM user_dislikes
             WHERE uid = ${u.id}
           </sql:query>
+          <c:if test="${param.update}">
+            <c:set var="tempLikes" value="${u.likeData}" />
+            <c:set var="tempDislikes" value="${u.dislikeData}" />
+          </c:if>
           <jsp:setProperty name="u" property="likeData" value="${ListData.mapData(likesList
                                                                 .getRowsByIndex()[0][0])}" />
           <jsp:setProperty name="u" property="dislikeData" value="${ListData.mapData(dislikesList
                                                                     .getRowsByIndex()[0][0])}" />
+          <c:if test="${param.update}">
+            <c:set var="merge" value="${ListData.mergeLists(ListData.createArray(tempLikes, tempDislikes),
+                                        ListData.createArray(u.likeData, u.dislikeData))}" />
+            <jsp:setProperty name="u" property="likeData" value="${merge[0]}" />
+            <jsp:setProperty name="u" property="dislikeData" value="${merge[1]}" />
+            <sql:update dataSource="jdbc/MediaRecom">
+              UPDATE user_likes
+              SET items = ?
+              WHERE uid = ${u.id};
+              <sql:param value="${ListData.stringifyData(u.likeData)}" />
+
+              UPDATE user_dislikes
+              SET items = ?
+              WHERE uid = ${u.id};
+              <sql:param value="${ListData.stringifyData(u.dislikeData)}" />
+            </sql:update>
+          </c:if>
           <c:set scope="session" var="message" value="Successfully logged in." />
           <c:set scope="session" var="status" value="success" />
         </c:if>

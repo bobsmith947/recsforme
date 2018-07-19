@@ -47,8 +47,8 @@ public class ArtistQuery extends BasicQuery {
     inc = null;
     new ArtistSearchbyName(this.query).getFirstPage().forEach(r -> {
       ArtistWs2 a = r.getArtist();
-      results.put(a.getId(), a.getUniqueName() + " [" 
-              + a.getSortName() + "]");
+      results.put(a.getId(), a.getUniqueName() + " (" 
+              + a.getSortName() + ")");
     });
   }
   /**

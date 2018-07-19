@@ -18,6 +18,7 @@ package me.recsfor.app;
 import java.io.Serializable;
 import java.io.IOException;
 import java.util.LinkedHashSet;
+import static java.util.Arrays.copyOf;
 import com.fasterxml.jackson.core.JsonProcessingException;
 //import com.fasterxml.jackson.core.JsonParseException;
 //import com.fasterxml.jackson.databind.JsonMappingException;
@@ -26,6 +27,7 @@ import static me.recsfor.engine.search.Context.*;
 
 /**
  * Represents a list of groups.
+ * The list is actually implemented as a set.
  * Can convert data to and from JSON.
  * @author lkitaev
  */
@@ -86,6 +88,28 @@ public class ListData implements Serializable, Comparable {
       ret = e.getMessage();
       System.err.println(e);
     }
+    return ret;
+  }
+  /**
+   * Merges the likes and dislikes from two pairs of lists into a single pair of lists.
+   * Each pair is to be treated with likes first and dislikes second.
+   * Conflicts are removed from the resulting lists.
+   * @param listsOne the first pair
+   * @param listsTwo the second pair
+   * @return the lists merged into a length two array
+   */
+  public static ListData[] mergeLists(ListData[] listsOne, ListData[] listsTwo) {
+    LinkedHashSet<ListGroup> likesList = new LinkedHashSet<>(listsOne[0].list);
+    likesList.addAll(listsTwo[0].list);
+    LinkedHashSet<ListGroup> dislikesList = new LinkedHashSet<>(listsOne[1].list);
+    dislikesList.addAll(listsTwo[1].list);
+    LinkedHashSet<ListGroup> conflicts = new LinkedHashSet<>(likesList);
+    conflicts.retainAll(dislikesList);
+    conflicts.forEach(item -> {
+      likesList.remove(item);
+      dislikesList.remove(item);
+    });
+    ListData[] ret = {new ListData(likesList), new ListData(dislikesList)};
     return ret;
   }
   
@@ -181,6 +205,13 @@ public class ListData implements Serializable, Comparable {
       System.err.println(e);
     }
     return group;
+  }
+  /**
+   * @param lists the lists
+   * @return an array of the lists
+   */
+  public static ListData[] createArray(ListData... lists) {
+    return copyOf(lists, lists.length);
   }
     
   @Override

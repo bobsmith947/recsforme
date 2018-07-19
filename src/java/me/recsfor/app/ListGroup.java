@@ -99,6 +99,7 @@ public class ListGroup implements Serializable {
   @Override
   public int hashCode() {
     int hash = 7;
+    //TODO consider using just the ID
     hash = 97 * hash + hash(this.name, this.id, this.type);
     return hash;
   }

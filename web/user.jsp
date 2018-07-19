@@ -38,7 +38,7 @@
                   <form data-bind="visible:!resetForm()" action="login.jsp" method="POST">
                     <div class="form-group">
                       <label for="uname">Username</label>
-                      <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" maxlength="18" pattern="\w+" autofocus required>
+                      <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" required>
                     </div>
                     <div class="form-group">
                       <label for="pw">Password</label>
@@ -49,16 +49,20 @@
                         <a data-bind="visible:name()!=='',click:resetForm" href="#">Reset it.</a>
                       </small>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg btn-block mb-3">Log In</button>
                     <c:if test="${u.likeData.list.size() > 0 || u.dislikeData.list.size() > 0}">
-                      <div class="alert alert-danger">Local lists will be cleared upon logging in.</div>
+                      <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="update" name="update" value="true" />
+                        <label class="form-check-label" for="update">Update lists to add current items</label>
+                        <small class="form-text text-muted">Conflicting items will be removed.</small>
+                      </div>
                     </c:if>
-                    <div class="alert alert-warning">
-                      You have 
-                      <strong>${6-u.tries} tries</strong>
-                      left before you will be locked out.
-                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block my-3">Log In</button>
                   </form>
+                  <div class="alert alert-warning">
+                    You have 
+                    <strong>${6-u.tries} tries</strong>
+                    left before you will be locked out.
+                  </div>
                   <form data-bind="visible:resetForm,submit:requestReset" id="reset-form" method="POST">
                     <small class="form-text text-muted">
                       Entered the wrong username?
@@ -73,7 +77,6 @@
                         with.
                       </small>
                       <small class="form-text text-muted">If you do not have an email associated with your account, you cannot reset your password.</small>
-                      <small class="form-text text-muted">You can add an email to your account by contacting the administrator, using the icons at the top of the page.</small>
                     </div>
                     <label for="npw">New Password</label>
                     <input data-bind="enable:beginReset(),textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" required>
@@ -99,7 +102,7 @@
           </div>
         </c:if>
         <h2>Welcome to your temporary page.</h2>
-        <p>This page is unique to your browser, and will be cleared if it expires (after 30 minutes of inactivity), or if you close your browser. If you sign up with an account, your lists will be saved in the cloud, able to be accessed anytime, anywhere. Recommendation generation is not yet available. Keep checking back for development updates.</p>
+        <p>This page is unique to your browser, and will be cleared if the browsing session expires after 30 minutes of inactivity, or if you close your browser. If you sign up with an account, your lists will be saved, able to be accessed anytime, anywhere.</p>
       </c:if>
       <c:if test="${u.loggedIn}">
         <ul class="nav justify-content-lg-start justify-content-center mb-4">
@@ -108,7 +111,6 @@
           </li>
         </ul>
         <h2>Welcome to your page, <c:out value="${u.name}" />.</h2>
-        <p>This page contains your cloud lists. Lists are only synced upon logout, so don't forget to do so when you're done. Recommendation generation is not yet available. Keep checking back for development updates.</p>
       </c:if>
       <div class="text-center" id="list">
         <h3>Your likes:</h3>
