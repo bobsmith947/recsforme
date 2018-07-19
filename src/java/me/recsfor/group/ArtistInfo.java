@@ -63,7 +63,7 @@ public class ArtistInfo extends HttpServlet {
               + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");
       request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
       out.println("<h3>Discography:</h3><div class=\"text-right my-2\">");
-      out.println("<a href=\"#\" id=\"orderer\" data-target=\"#discog\">Toggle order</a>");
+      out.println("<a href=\"#\" class=\"orderer\" data-target=\"#discog\">Toggle order</a>");
       out.println("<div class=\"list-group\" id=\"discog\">");
       orderAlbums();
       albums.forEach(album -> {

@@ -6,6 +6,7 @@
 <c:set var="oldQuery" value="${q.query}" />
 <jsp:setProperty name="q" property="type" />
 <jsp:setProperty name="q" property="query" />
+<% if (q.getQuery() == null) q.setQuery(""); %>
 <% if (q.getQuery().toLowerCase().equals("make me coffee")) response.sendError(418); %>
 <!DOCTYPE html>
 <html>

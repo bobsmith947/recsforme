@@ -19,15 +19,16 @@ import moment from "moment/min/moment.min.js";
 import "./style.css";
 window.Util = require("exports-loader?Util!bootstrap/js/dist/util");
 import "bootstrap/js/dist/alert";
-import "bootstrap/js/dist/button";
+//import "bootstrap/js/dist/button";
 import "bootstrap/js/dist/collapse";
+import "bootstrap/js/dist/dropdown";
 import "bootstrap/js/dist/modal";
 import "@fortawesome/fontawesome-free-webfonts/css/fontawesome.css";
 import "@fortawesome/fontawesome-free-webfonts/css/fa-solid.css";
 import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 
 $(() => {
-  $("#warning").css("display", "none");
+  $("#warning").remove();
   $("body").addClass("bg-dark text-light");
   //format dates
   $(".date").each(function () {
@@ -41,7 +42,7 @@ $(() => {
     else
       $(this).text(str);
   });
-  $("#orderer").click(ev => {
+  $(".orderer").click(ev => {
     ev.preventDefault();
     const list = $($(ev.target).attr("data-target"));
     const items = list.children();
@@ -49,6 +50,9 @@ $(() => {
     list.append(items.toArray().reverse());
   });
   if (location.pathname.includes("user.jsp")) {
+    $("a[href='user.jsp'] + span[data-toggle=dropdown]").remove();
+    if (location.href.includes("#login"))
+      $("#login").modal("show");
     //notify if list(s) are empty
     const nolikes = $("#likes").children().length === 0;
     const nodislikes = $("#dislikes").children().length === 0;
@@ -82,6 +86,16 @@ $(() => {
         alert("List(s) not cleared.");
         ev.target.blur();
       }
+    });
+  } else {
+    $.get("user.jsp", "", response => {
+      const links = $(response).find(".profilelink");
+      $(links).each(function () {
+        $(this).removeClass();
+        $(this).addClass("dropdown-item");
+        $(this).removeAttr("data-toggle data-target");
+      });
+      $("#profilelinks").append(links);
     });
   }
 });

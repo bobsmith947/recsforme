@@ -19,10 +19,10 @@
         <c:if test="${u.tries < 6}" scope="session" var="notLocked">
           <ul class="nav justify-content-lg-start justify-content-center mb-4">
             <li class="nav-item">
-              <a class="btn btn-secondary btn-sm nav-link mr-1" href="#" data-toggle="modal" data-target="#login">Log in</a>
+              <a class="btn btn-secondary btn-sm nav-link mr-1 profilelink" href="user.jsp#login" data-toggle="modal" data-target="#login">Log in</a>
             </li>
             <li class="nav-item">
-              <a class="btn btn-secondary btn-sm nav-link ml-1" href="signup.jsp">Sign up</a>
+              <a class="btn btn-secondary btn-sm nav-link ml-1 profilelink" href="signup.jsp">Sign up</a>
             </li>
           </ul>
           <div id="login" class="modal fade text-dark" tabindex="-1">
@@ -104,7 +104,7 @@
       <c:if test="${u.loggedIn}">
         <ul class="nav justify-content-lg-start justify-content-center mb-4">
           <li class="nav-item">
-            <a class="btn btn-secondary btn-sm nav-link" href="logout.jsp">Log out</a>
+            <a class="btn btn-secondary btn-sm nav-link profilelink" href="logout.jsp">Log out</a>
           </li>
         </ul>
         <h2>Welcome to your page, <c:out value="${u.name}" />.</h2>
