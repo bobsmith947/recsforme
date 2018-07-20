@@ -25,8 +25,6 @@ import "@fortawesome/fontawesome-free-webfonts/css/fa-solid.css";
 import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 
 $(() => {
-  $("#warning").remove();
-  $("body").addClass("bg-dark text-light");
   //format dates
   $(".date").each(function () {
     const str = $(this).text();
@@ -88,8 +86,7 @@ $(() => {
     $.get("user.jsp", "", response => {
       const links = $(response).find(".profilelink");
       $(links).each(function () {
-        $(this).removeClass();
-        $(this).addClass("dropdown-item");
+        $(this).attr("class", "dropdown-item");
         $(this).removeAttr("data-toggle data-target");
       });
       $("#profilelinks").append(links);

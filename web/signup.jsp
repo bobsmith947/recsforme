@@ -44,7 +44,7 @@
         <small class="form-text text-muted">Your gender can be used to tailor recommendations to match others of your sex.</small>
       </form>
       <h5 class="mb-4">Privacy Policy and Terms</h5>
-      <div class="border p-2 p-lg-4 mb-4" style="height:50%;overflow-y:scroll">
+      <div class="border p-2 p-lg-4 mb-4">
         <strong class="d-block mb-2">By accepting these terms, you agree to be bound be them.</strong>
         <em class="d-block mb-2">The "service" refers to this application, recsforme.</em>
         <ol class="list-group-ordered mb-2">

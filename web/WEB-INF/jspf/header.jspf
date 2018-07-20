@@ -5,7 +5,10 @@
 <style>
   @import url("https://fonts.googleapis.com/css?family=Roboto:400,400i,700&subset=cyrillic,cyrillic-ext,latin-ext");
   @import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css");
-  body {font-family: 'Roboto', sans-serif !important}
+  body {
+    font-family: Roboto, sans-serif !important;
+    background-color: var(--dark, #000);
+    color: var(--light, #fff)}
   h1, h2, h3, h4, h5, h6 {text-align: center}
   a:hover {text-decoration: none !important}
   p {text-indent: 50px}
@@ -66,4 +69,5 @@
   </div>
 </nav>
 
-<div id="warning" class="alert alert-danger" style="display:block">jQuery is not available. Some features may not work.</div>
+<div id="jqwarning" class="alert alert-danger" style="display:none">jQuery is not available. Please allow jQuery in order to use the site.</div>
+<div id="pwarning" class="alert alert-danger" style="display:none">Popper is not available. Dropdowns and tooltips will not work.</div>
