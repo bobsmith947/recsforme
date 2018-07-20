@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-//import "babel-polyfill";
 import moment from "moment/min/moment.min.js";
-import "./style.css";
 window.Util = require("exports-loader?Util!bootstrap/js/dist/util");
 import "bootstrap/js/dist/alert";
-//import "bootstrap/js/dist/button";
 import "bootstrap/js/dist/collapse";
 import "bootstrap/js/dist/dropdown";
 import "bootstrap/js/dist/modal";
@@ -32,7 +29,6 @@ $(() => {
   $("body").addClass("bg-dark text-light");
   //format dates
   $(".date").each(function () {
-    //keep this as the element
     const str = $(this).text();
     const date = moment(str, "YYYY-MM-DD", true);
     if (date.isValid())
@@ -42,6 +38,7 @@ $(() => {
     else
       $(this).text(str);
   });
+  //reverse the ordering of elements in a list
   $(".orderer").click(ev => {
     ev.preventDefault();
     const list = $($(ev.target).attr("data-target"));

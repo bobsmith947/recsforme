@@ -1,7 +1,7 @@
 <div data-bind="visible:!voted()">
   <h2 class="text-warning">Do you like this?</h2>
   <form id="vote-form" data-bind="submit:sendVote" method="POST">
-    <div id="vote-radio">
+    <div class="m-auto w-25">
       <div class="form-check form-check-inline mx-3">
         <label class="form-check-label" for="yes">Yes</label>
         <input class="form-check-input m-0" id="yes" type="radio" value="like" name="status" data-bind="checked:selected" required>

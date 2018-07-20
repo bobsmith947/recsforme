@@ -2,8 +2,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="keywords" content="recommendation engine, recommender system, open source, java, web app, web application, movies, shows, tv, music, games">
 <meta name="description" content="recsforme (recs for me) is an open source Java web application for media recommendations. It's free to use and contains no advertisements.">
+<style>
+  @import url("https://fonts.googleapis.com/css?family=Roboto:400,400i,700&subset=cyrillic,cyrillic-ext,latin-ext");
+  @import url("https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css");
+  body {font-family: 'Roboto', sans-serif !important}
+  h1, h2, h3, h4, h5, h6 {text-align: center}
+  a:hover {text-decoration: none !important}
+  p {text-indent: 50px}
+  main {margin: 1% 25%}
+  @media (max-width: 1024px) {
+    p {text-indent: 25px}
+    main {margin: 5% 5%}
+  }
+  :disabled {cursor: not-allowed}
+</style>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.1/umd/popper.min.js" async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.1/umd/popper.min.js"></script>
 <script src="bundle.js" async></script>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
