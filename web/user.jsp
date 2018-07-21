@@ -1,6 +1,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.ListData"%>
 <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
+<jsp:useBean id="r" scope="session" class="me.recsfor.engine.recommend.RecommendationBean" />
 <!DOCTYPE html>
 <html>
   <title>recsforme :: User</title>
@@ -126,11 +127,21 @@
           </c:forEach>
         </div>
       </div>
-      <c:if test="${u.likeData.list.size() != 0 || u.dislikeData.list.size() != 0}">
-        <a class="btn btn-primary btn-block btn-lg my-4" href="recommend.jsp">
+      <c:if test="${r.recommendations == null}">
+        <button id="recgen" type="button" class="btn btn-primary btn-block btn-lg my-4">
           Generate my recommendations
-        </a>
+        </button>
       </c:if>
+      <div id="recs">
+        <c:if test="${r.recommendations != null}">
+          <div class="list-group text-center res">
+            <h3>Your recommendations:</h3>
+            <c:forEach var="rec" items="${r.recommendations.list}">
+              <a href="${ListData.generateContext(rec.type)}${rec.id}" class="list-group-item list-group-item-action">${rec.name}</a>
+            </c:forEach>
+          </div>
+        </c:if>
+      </div>
       <div class="container">
         <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear your lists, you can use the below buttons to do so.</h6>
         <div class="row">

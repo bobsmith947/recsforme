@@ -2,6 +2,7 @@
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption, me.recsfor.app.ListData"%>
 <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
+<jsp:useBean id="r" scope="session" class="me.recsfor.engine.recommend.RecommendationBean" />
 <jsp:setProperty name="u" property="name" param="uname" />
 <!DOCTYPE html>
 <html>
@@ -17,14 +18,17 @@
       <c:when test="${matches.getRowCount() == 1}">
         <c:catch var="ex">
           <c:set var="valid" value="${CredentialEncryption(param.pw, matches.getRowsByIndex()[0][2])
-                                    .validatePassword(matches.getRowsByIndex()[0][1])}" />
+                                      .validatePassword(matches.getRowsByIndex()[0][1])}" />
         </c:catch>
         <c:if test="${ex != null}">
           ${pageContext.servletContext.log(ex.message)}
-          <% response.sendError(500); %>
+          <c:set scope="session" var="message" value="Your password could not be validated. Please try again." />
+          <c:set scope="session" var="status" value="danger" />
         </c:if>
         <c:if test="${valid}" var="correct">
           <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
+          <% r.getUsers().remove(Integer.valueOf(u.getId())); %>
+          <jsp:setProperty name="r" property="recommendations" value="${null}" />
           <jsp:setProperty name="u" property="loggedIn" value="${true}" />
           <sql:query var="likesList" dataSource="jdbc/MediaRecom">
             SELECT items FROM user_likes

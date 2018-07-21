@@ -39,7 +39,7 @@ try {
         $("#subres").empty();
         $.post("register.jsp", 
           $("#info-form").serialize(), 
-          response => $("#subres").append(response));
+          response => $("#subres").append($(response).filter(".res")));
         $("button[form=info-form]").prop("disabled", true);
       },
       nameCheck: function () {
@@ -47,8 +47,8 @@ try {
           $("#nameres").empty();
           changed = false;
           $.get("register.jsp", {name: this.uname()})
-                  .done((response) => {
-                    $("#nameres").append(response);
+                  .done(response => {
+                    $("#nameres").append($(response).filter(".res"));
                     $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") :
                             $("#uname")[0].setCustomValidity("Username is already taken.");
                   });
@@ -98,7 +98,7 @@ try {
             name: this.name(),
             action: "reset"
           })
-                .done((response) => {
+                .done(response => {
                   $("#pw").val("");
                   this.resetForm(false);
                   $("#subres").append(response);

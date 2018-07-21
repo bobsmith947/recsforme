@@ -48,6 +48,11 @@ $(() => {
     $("a[href='user.jsp'] + span[data-toggle=dropdown]").remove();
     if (location.href.includes("#login"))
       $("#login").modal("show");
+    $("#recgen").click(() => {
+      $.get("group.jsp", 
+      {action: "recommend"}, 
+      response => $("#recs").append($(response).filter(".res")));
+    });
     //notify if list(s) are empty
     const nolikes = $("#likes").children().length === 0;
     const nodislikes = $("#dislikes").children().length === 0;
