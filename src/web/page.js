@@ -50,6 +50,11 @@ $(() => {
     list.empty();
     list.append(items.toArray().reverse());
   });
+  //error pages
+  $("#escape").click(ev => {
+    ev.preventDefault();
+    history.back();
+  });
   if (location.pathname.includes("user.jsp")) {
     $("a[href='user.jsp'] + span[data-toggle=dropdown]").remove();
     if (location.href.includes("#login"))

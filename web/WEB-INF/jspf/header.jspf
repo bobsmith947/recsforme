@@ -71,3 +71,4 @@
 
 <div id="jqwarning" class="alert alert-danger" style="display:none">jQuery is not available. Please allow jQuery in order to use the site.</div>
 <div id="pwarning" class="alert alert-danger" style="display:none">Popper is not available. Dropdowns and tooltips will not work.</div>
+<noscript class="alert alert-danger d-block">Scripts have been disabled. Please allow JavaScript in order to use the site.</noscript>

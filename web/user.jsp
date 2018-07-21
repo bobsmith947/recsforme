@@ -6,7 +6,6 @@
 <html>
   <title>recsforme :: User</title>
   <body>
-    <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <c:if test="${message != null}">
       <div class="alert alert-${status} alert-dismissable fade show text-center">
         <c:out value="${message}" />

@@ -3,7 +3,6 @@
 <html>
   <title>recsforme :: Sign Up</title>
   <body>
-    <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <main>
       <h2>Account Registration</h2>
       <form id="info-form">

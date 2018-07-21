@@ -56,8 +56,7 @@ public class ArtistInfo extends HttpServlet {
     try (PrintWriter out = response.getWriter()) {
       out.println("<!DOCTYPE html><html><title>recsforme :: " + name + "</title><body>");
       request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
-      out.println("<noscript class=\"alert alert-danger d-block\">Scripts have been disabled. Some features may not work.</noscript><main>");
-      out.println("<h2 id=\"name\">" + name + " <small class=\"text-muted\">(" + sortName + ")</small></h2>");
+      out.println("<main><h2 id=\"name\">" + name + " <small class=\"text-muted\">(" + sortName + ")</small></h2>");
       out.println("<h3 id=\"type\">" + type + "</h3>");
       out.println("<h3>" + yearsType() + ": <span class=\"date\">" + years[0] 
               + "</span> to <span class=\"date\">" + years[1] + "</span></h3>");

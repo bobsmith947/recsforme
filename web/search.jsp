@@ -12,7 +12,6 @@
 <html>
   <title>recsforme :: <c:out value="${q.type}" /> Search - <c:out value="${q.query}" /></title>
   <body>
-    <noscript class="alert alert-danger d-block">Scripts have been disabled. Some features may not work.</noscript>
     <main>
       <form id="adv-search" action="search.jsp">
         <div class="input-group">
