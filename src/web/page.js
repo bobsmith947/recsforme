@@ -25,7 +25,7 @@ import "@fortawesome/fontawesome-free-webfonts/css/fa-solid.css";
 import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 
 $(() => {
-  //format dates
+  //format dates/times
   $(".date").each(function () {
     const str = $(this).text();
     const date = moment(str, "YYYY-MM-DD", true);
@@ -35,6 +35,12 @@ $(() => {
       $(this).text("Unknown date");
     else
       $(this).text(str);
+  });
+  $("#timeout").text((index, text) => {
+    if (index !== 0)
+      return "";
+    else
+      return moment(text, "X").format("m") + " minutes";
   });
   //reverse the ordering of elements in a list
   $(".orderer").click(ev => {
@@ -88,7 +94,7 @@ $(() => {
       }
     });
   } else {
-    $.get("user.jsp", "", response => {
+    $.get("login.jsp", {action: "check"}, response => {
       const links = $(response).find(".profilelink");
       $(links).each(function () {
         $(this).attr("class", "dropdown-item");

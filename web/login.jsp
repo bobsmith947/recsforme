@@ -8,81 +8,101 @@
 <html>
   <title>Logging in...</title>
   <body>
-    <em>Authenticating the login credentials.</em>
-    <sql:query var="matches" dataSource="jdbc/MediaRecom">
-      SELECT id, pw, salt FROM users
-      WHERE uname = ?
-      <sql:param value="${u.name}" />
-    </sql:query>
-    <c:choose>
-      <c:when test="${matches.getRowCount() == 1}">
-        <c:catch var="ex">
-          <c:set var="valid" value="${CredentialEncryption(param.pw, matches.getRowsByIndex()[0][2])
-                                      .validatePassword(matches.getRowsByIndex()[0][1])}" />
-        </c:catch>
-        <c:if test="${ex != null}">
-          ${pageContext.servletContext.log(ex.message)}
-          <c:set scope="session" var="message" value="Your password could not be validated. Please try again." />
-          <c:set scope="session" var="status" value="danger" />
-        </c:if>
-        <c:if test="${valid}" var="correct">
-          <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
-          <% r.getUsers().remove(Integer.valueOf(u.getId())); %>
-          <jsp:setProperty name="r" property="recommendations" value="${null}" />
-          <jsp:setProperty name="u" property="loggedIn" value="${true}" />
-          <sql:query var="likesList" dataSource="jdbc/MediaRecom">
-            SELECT items FROM user_likes
-            WHERE uid = ${u.id}
-          </sql:query>
-          <sql:query var="dislikesList" dataSource="jdbc/MediaRecom">
-            SELECT items FROM user_dislikes
-            WHERE uid = ${u.id}
-          </sql:query>
-          <c:if test="${param.update}">
-            <c:set var="tempLikes" value="${u.likeData}" />
-            <c:set var="tempDislikes" value="${u.dislikeData}" />
+    <c:if test="${pageContext.request.method == 'POST'}">
+      <sql:query var="matches" dataSource="jdbc/MediaRecom">
+        SELECT id, pw, salt FROM users
+        WHERE uname = ?
+        <sql:param value="${u.name}" />
+      </sql:query>
+      <c:choose>
+        <c:when test="${matches.getRowCount() == 1}">
+          <c:catch var="ex">
+            <c:set var="valid" value="${CredentialEncryption(param.pw, matches.getRowsByIndex()[0][2])
+                                        .validatePassword(matches.getRowsByIndex()[0][1])}" />
+          </c:catch>
+          <c:if test="${ex != null}">
+            ${pageContext.servletContext.log(ex.message)}
+            <c:set scope="session" var="message" value="Your password could not be validated. Please try again." />
+            <c:set scope="session" var="status" value="danger" />
           </c:if>
-          <jsp:setProperty name="u" property="likeData" value="${ListData.mapData(likesList
-                                                                .getRowsByIndex()[0][0])}" />
-          <jsp:setProperty name="u" property="dislikeData" value="${ListData.mapData(dislikesList
-                                                                    .getRowsByIndex()[0][0])}" />
-          <c:if test="${param.update}">
-            <c:set var="merge" value="${ListData.mergeLists(ListData.createArray(tempLikes, tempDislikes),
-                                        ListData.createArray(u.likeData, u.dislikeData))}" />
-            <jsp:setProperty name="u" property="likeData" value="${merge[0]}" />
-            <jsp:setProperty name="u" property="dislikeData" value="${merge[1]}" />
-            <sql:update dataSource="jdbc/MediaRecom">
-              UPDATE user_likes
-              SET items = ?
-              WHERE uid = ${u.id};
-              <sql:param value="${ListData.stringifyData(u.likeData)}" />
+          <c:if test="${valid}" var="correct">
+            <jsp:setProperty name="u" property="id" value="${matches.getRowsByIndex()[0][0]}" />
+            <% r.getUsers().remove(Integer.valueOf(u.getId())); %>
+            <jsp:setProperty name="r" property="recommendations" value="${null}" />
+            <jsp:setProperty name="u" property="loggedIn" value="${true}" />
+            <sql:query var="likesList" dataSource="jdbc/MediaRecom">
+              SELECT items FROM user_likes
+              WHERE uid = ${u.id}
+            </sql:query>
+            <sql:query var="dislikesList" dataSource="jdbc/MediaRecom">
+              SELECT items FROM user_dislikes
+              WHERE uid = ${u.id}
+            </sql:query>
+            <c:if test="${param.update}">
+              <c:set var="tempLikes" value="${u.likeData}" />
+              <c:set var="tempDislikes" value="${u.dislikeData}" />
+            </c:if>
+            <jsp:setProperty name="u" property="likeData" value="${ListData.mapData(likesList
+                                                                  .getRowsByIndex()[0][0])}" />
+            <jsp:setProperty name="u" property="dislikeData" value="${ListData.mapData(dislikesList
+                                                                      .getRowsByIndex()[0][0])}" />
+            <c:if test="${param.update}">
+              <c:set var="merge" value="${ListData.mergeLists(ListData.createArray(tempLikes, tempDislikes),
+                                          ListData.createArray(u.likeData, u.dislikeData))}" />
+              <jsp:setProperty name="u" property="likeData" value="${merge[0]}" />
+              <jsp:setProperty name="u" property="dislikeData" value="${merge[1]}" />
+              <sql:update dataSource="jdbc/MediaRecom">
+                UPDATE user_likes
+                SET items = ?
+                WHERE uid = ${u.id};
+                <sql:param value="${ListData.stringifyData(u.likeData)}" />
 
-              UPDATE user_dislikes
-              SET items = ?
-              WHERE uid = ${u.id};
-              <sql:param value="${ListData.stringifyData(u.dislikeData)}" />
-            </sql:update>
+                UPDATE user_dislikes
+                SET items = ?
+                WHERE uid = ${u.id};
+                <sql:param value="${ListData.stringifyData(u.dislikeData)}" />
+              </sql:update>
+            </c:if>
+            <c:set scope="session" var="message" value="Successfully logged in." />
+            <c:set scope="session" var="status" value="success" />
           </c:if>
-          <c:set scope="session" var="message" value="Successfully logged in." />
-          <c:set scope="session" var="status" value="success" />
-        </c:if>
-        <c:if test="${!correct}">
-          <c:set scope="session" var="message" value="The password you entered is incorrect." />
+          <c:if test="${!correct}">
+            <c:set scope="session" var="message" value="The password you entered is incorrect." />
+            <c:set scope="session" var="status" value="warning" />
+            <jsp:setProperty name="u" property="tries" value="${u.tries + 1}" />
+          </c:if>
+        </c:when>
+        <c:when test="${matches.getRowCount() == 0}">
+          <c:set scope="session" var="message" value="Unable to find a matching username." />
           <c:set scope="session" var="status" value="warning" />
           <jsp:setProperty name="u" property="tries" value="${u.tries + 1}" />
-        </c:if>
-      </c:when>
-      <c:when test="${matches.getRowCount() == 0}">
-        <c:set scope="session" var="message" value="Unable to find a matching username." />
-        <c:set scope="session" var="status" value="warning" />
-        <jsp:setProperty name="u" property="tries" value="${u.tries + 1}" />
-      </c:when>
-      <c:otherwise>
-        <c:set scope="session" var="message" value="Something has gone wrong. If the issue persists, please contact the administrator." />
-        <c:set scope="session" var="status" value="danger" />
-        <jsp:setProperty name="u" property="tries" value="${u.tries + 1}" />
-      </c:otherwise>
-    </c:choose>
-    <c:redirect url="user.jsp" />
+        </c:when>
+        <c:otherwise>
+          <c:set scope="session" var="message" value="Something has gone wrong. If the issue persists, please contact the administrator." />
+          <c:set scope="session" var="status" value="danger" />
+          <jsp:setProperty name="u" property="tries" value="${u.tries + 1}" />
+        </c:otherwise>
+      </c:choose>
+      <c:redirect url="user.jsp" />
+    </c:if>
+    <c:if test="${param.action == 'check'}">
+      <c:if test="${!u.loggedIn}">
+        <ul class="nav justify-content-lg-start justify-content-center mb-4">
+          <li class="nav-item">
+            <a class="btn btn-secondary btn-sm nav-link mr-1 profilelink" href="user.jsp#login" data-toggle="modal" data-target="#login">Log in</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-secondary btn-sm nav-link ml-1 profilelink" href="signup.jsp">Sign up</a>
+          </li>
+        </ul>
+      </c:if>
+      <c:if test="${u.loggedIn}">
+        <ul class="nav justify-content-lg-start justify-content-center mb-4">
+          <li class="nav-item">
+            <a class="btn btn-secondary btn-sm nav-link profilelink" href="logout.jsp">Log out</a>
+          </li>
+        </ul>
+      </c:if>
+    </c:if>
   </body>
 </html>

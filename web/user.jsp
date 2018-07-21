@@ -17,24 +17,24 @@
     </c:if>
     <main>
       <c:if test="${!u.loggedIn}">
-        <c:if test="${u.tries < 6}" scope="session" var="notLocked">
-          <ul class="nav justify-content-lg-start justify-content-center mb-4">
-            <li class="nav-item">
-              <a class="btn btn-secondary btn-sm nav-link mr-1 profilelink" href="user.jsp#login" data-toggle="modal" data-target="#login">Log in</a>
-            </li>
-            <li class="nav-item">
-              <a class="btn btn-secondary btn-sm nav-link ml-1 profilelink" href="signup.jsp">Sign up</a>
-            </li>
-          </ul>
-          <div id="login" class="modal fade text-dark" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" data-bind="if:!resetForm()">Log in to your account</h5>
-                  <h5 class="modal-title" data-bind="if:resetForm">Reset your password</h5>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-                <div class="modal-body">
+        <ul class="nav justify-content-lg-start justify-content-center mb-4">
+          <li class="nav-item">
+            <a class="btn btn-secondary btn-sm nav-link mr-1 profilelink" href="user.jsp#login" data-toggle="modal" data-target="#login">Log in</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-secondary btn-sm nav-link ml-1 profilelink" href="signup.jsp">Sign up</a>
+          </li>
+        </ul>
+        <div id="login" class="modal fade text-dark" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" data-bind="if:!resetForm()">Log in to your account</h5>
+                <h5 class="modal-title" data-bind="if:resetForm">Reset your password</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <c:if test="${u.tries < 6}" scope="session" var="notLocked">
                   <div id="subres"></div>
                   <form data-bind="visible:!resetForm()" action="login.jsp" method="POST">
                     <div class="form-group">
@@ -79,32 +79,36 @@
                       </small>
                       <small class="form-text text-muted">If you do not have an email associated with your account, you cannot reset your password.</small>
                     </div>
-                    <label for="npw">New Password</label>
-                    <input data-bind="enable:beginReset(),textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" required>
-                    <small class="form-text text-muted">Enter a password you don't use elsewhere.</small>
-                    <small class="form-text text-muted">Your password must be at least 8 characters.</small>
-                    <label for="cpw">Confirm Password</label>
-                    <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
+                    <div class="form-group">
+                      <label for="npw">New Password</label>
+                      <input data-bind="enable:beginReset(),textInput:pass" type="password" class="form-control" id="npw" name="pass" minlength="8" required>
+                      <small class="form-text text-muted">Enter a password you don't use elsewhere.</small>
+                      <small class="form-text text-muted">Your password must be at least 8 characters.</small>
+                      <label for="cpw">Confirm Password</label>
+                      <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
+                    </div>
                     <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block mt-3">
                       Reset Password
                     </button>
                   </form>
-                </div>
+                </c:if>
+                <c:if test="${!notLocked}">
+                  <div class="alert alert-danger">
+                    You have been locked out from being able to log in for this session. Please wait a minimum of 
+                    <strong id="timeout">${pageContext.session.maxInactiveInterval}</strong>
+                    before trying again. The timer will be reset if you refresh the page.
+                  </div>
+                  <div class="alert alert-info">
+                    If you think this has been an error, consider <a class="alert-link" href="https://github.com/bobsmith947/recsforme/issues"> opening an issue on GitHub</a>.
+                  </div>
+                </c:if>
               </div>
             </div>
           </div>
-        </c:if>
-        <c:if test="${!notLocked}">
-          <div class="alert alert-danger">
-            You have been locked out from being able to log in for this session. Please wait a minimum of <strong>30 minutes</strong> before trying again.
-          </div>
-          <div class="alert alert-info">
-            If you think this has been an error, consider <a class="alert-link" href="https://github.com/bobsmith947/recsforme/issues"> opening an issue on GitHub</a>.
-          </div>
-        </c:if>
-        <h2>Welcome to your temporary page.</h2>
-        <p>This page is unique to your browser, and will be cleared if the browsing session expires after 30 minutes of inactivity, or if you close your browser. If you sign up with an account, your lists will be saved, able to be accessed anytime, anywhere.</p>
+        </div>
       </c:if>
+      <h2>Welcome to your temporary page.</h2>
+      <p>This page is unique to your browser, and will be cleared if the browsing session expires after 30 minutes of inactivity, or if you close your browser. If you sign up with an account, your lists will be saved, able to be accessed anytime, anywhere.</p>
       <c:if test="${u.loggedIn}">
         <ul class="nav justify-content-lg-start justify-content-center mb-4">
           <li class="nav-item">

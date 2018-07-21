@@ -91,6 +91,7 @@
         </c:choose>
       </c:if>
       <c:if test="${u.loggedIn && changed}">
+        <jsp:setProperty name="r" property="recommendations" value="${null}" />
         <sql:update dataSource="jdbc/MediaRecom">
           UPDATE user_likes
           SET items = ?
