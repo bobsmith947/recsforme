@@ -40,7 +40,7 @@ $(() => {
     if (index !== 0)
       return "";
     else
-      return moment(text, "X").format("m") + " minutes";
+      return `${moment(text, "X").format("m")} minutes`;
   });
   //reverse the ordering of elements in a list
   $(".orderer").click(ev => {
@@ -62,34 +62,52 @@ $(() => {
     $("#recgen").click(() => {
       $.get("group.jsp", 
       {action: "recommend"}, 
-      response => $("#recs").append($(response).filter(".res")));
+      response => $("#recslist").append($(response).filter(".res")));
     });
-    //notify if list(s) are empty
+    $(".filter").click(ev => {
+      ev.preventDefault();
+      const target = $(ev.target);
+      const filter = target.attr("data-filter");
+      const list = $(target.attr("data-target"));
+      if (!filter)
+        list.children().show();
+      else {
+        list.children().each(function () {
+          if ($(this).attr("href").includes(filter))
+            $(this).show();
+          else if (!$(this).attr("href").includes(filter))
+            $(this).hide();
+          else
+            return;
+        });
+      }
+    });
+    //warn if the list(s) are empty
     const nolikes = $("#likes").children().length === 0;
     const nodislikes = $("#dislikes").children().length === 0;
     if (nolikes && nodislikes) {
       $(".listreset").prop("disabled", true);
-      $("#list").append("<h6 id='warn'>Your lists are empty!</h6>");
+      $("#list").append(`<h6 id="warn">Your lists are empty!</h6>`);
       $("#resetprompt").addClass("text-muted");
     } else if (nolikes) {
       $(".listreset[data-list=like]").prop("disabled", true);
-      $("#likes").append("<h6 id='warn'>You haven't added any likes!</h6>");
+      $("#likes").append(`<h6 id="warn">You haven't added any likes!</h6>`);
     } else if (nodislikes) {
       $(".listreset[data-list=dislike]").prop("disabled", true);
-      $("#dislikes").append("<h6 id='warn'>You haven't added any dislikes!</h6>");
+      $("#dislikes").append(`<h6 id="warn">You haven't added any dislikes!</h6>`);
     }
     $("#warn").addClass("text-warning");
     if (nolikes || nodislikes) {
       $(".listreset[data-list=both]").prop("disabled", true);
-      $("#warn").after("<h6><a href='search.jsp'>Click here to search for things to add.</a></h6>");
+      $("#warn").after(`<h6><a href="search.jsp">Click here to search for things to add.</a></h6>`);
     }
-    //clear the list
+    //clear the list(s)
     $(".listreset").click(ev => {
-      const action = $(ev.target).attr("data-list");
+      const list = $(ev.target).attr("data-list");
       if (confirm("Are you sure you want to clear your list(s)?")) {
         $.get("group.jsp", {
             action: "reset",
-            list: action
+            list: list
           });
         alert("List(s) cleared.");
         location.reload();

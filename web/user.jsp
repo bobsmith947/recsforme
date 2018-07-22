@@ -118,27 +118,43 @@
       </c:if>
       <div class="text-center" id="list">
         <h3>Your likes:</h3>
+        <span>Filter</span>
+        <a href="#" class="filter" data-target="#likes">All</a>
+        <a href="#" class="filter" data-filter="Movie" data-target="#likes">Movies</a>
+        <a href="#" class="filter" data-filter="Artist" data-target="#likes">Artists</a>
+        <a href="#" class="filter" data-filter="Album" data-target="#likes">Albums</a>
         <div class="list-group my-2" id="likes">
           <c:forEach var="lg" items="${u.likeData.list}">
             <a href="${ListData.generateContext(lg.type)}${lg.id}" class="list-group-item list-group-item-action">${lg.name}</a>
           </c:forEach>
         </div>
         <h3>Your dislikes:</h3>
+        <span>Filter</span>
+        <a href="#" class="filter" data-target="#dislikes">All</a>
+        <a href="#" class="filter" data-filter="Movie" data-target="#dislikes">Movies</a>
+        <a href="#" class="filter" data-filter="Artist" data-target="#dislikes">Artists</a>
+        <a href="#" class="filter" data-filter="Album" data-target="#dislikes">Albums</a>
         <div class="list-group my-2" id="dislikes">
           <c:forEach var="dg" items="${u.dislikeData.list}">
             <a href="${ListData.generateContext(dg.type)}${dg.id}" class="list-group-item list-group-item-action">${dg.name}</a>
           </c:forEach>
         </div>
       </div>
-      <c:if test="${r.recommendations == null}">
-        <button id="recgen" type="button" class="btn btn-primary btn-block btn-lg my-4">
-          Generate my recommendations
-        </button>
-      </c:if>
-      <div id="recs">
+      <div class="text-center" id="recslist">
+        <p>Recommendations are generated whenever you click the button, and are stored until you log out, or add or remove something from your lists.</p>
+        <h3>Your recommendations:</h3>
+        <c:if test="${r.recommendations == null}">
+          <button id="recgen" type="button" class="btn btn-primary btn-block btn-lg my-4">
+            Generate my recommendations
+          </button>
+        </c:if>
+        <span>Filter</span>
+        <a href="#" class="filter" data-target="#recs">All</a>
+        <a href="#" class="filter" data-filter="Movie" data-target="#recs">Movies</a>
+        <a href="#" class="filter" data-filter="Artist" data-target="#recs">Artists</a>
+        <a href="#" class="filter" data-filter="Album" data-target="#recs">Albums</a>
         <c:if test="${r.recommendations != null}">
-          <div class="list-group text-center res">
-            <h3>Your recommendations:</h3>
+          <div class="list-group" id="recs">
             <c:forEach var="rec" items="${r.recommendations.list}">
               <a href="${ListData.generateContext(rec.type)}${rec.id}" class="list-group-item list-group-item-action">${rec.name}</a>
             </c:forEach>

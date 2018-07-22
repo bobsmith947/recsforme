@@ -130,8 +130,7 @@
         <c:set var="gen" value="${Generator(r.users, u.likeData, u.dislikeData)}" />
         <jsp:setProperty name="r" property="recommendations" value="${gen.listRecommendations(0)}" />
       </c:if>
-      <div class="list-group text-center res">
-        <h3>Your recommendations:</h3>
+      <div class="list-group res" id="recs">
         <c:forEach var="rec" items="${r.recommendations.list}">
           <a href="${ListData.generateContext(rec.type)}${rec.id}" class="list-group-item list-group-item-action">${rec.name}</a>
         </c:forEach>
