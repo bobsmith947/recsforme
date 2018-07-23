@@ -20,14 +20,14 @@ import moment from "moment/min/moment.min.js";
 try {
   if (location.pathname.includes("signup.jsp")) {
     let changed = false;
-    let signUpModel = {
-      uname: ko.observable(""),
-      pw: ko.observable(""),
-      pwc: ko.observable(""),
+    const signUpModel = {
+      name: ko.observable(""),
+      pass: ko.observable(""),
+      check: ko.observable(""),
       email: ko.observable(""),
+      dob: ko.observable(""),
       sex: ko.observable(""),
       accepted: ko.observable(false),
-      dob: ko.observable(""),
       age: function () {
         const date = moment(this.dob());
         if (date.isValid())
@@ -43,20 +43,20 @@ try {
         $("button[form=info-form]").prop("disabled", true);
       },
       nameCheck: function () {
-        if ($("#uname")[0].checkValidity() && changed) {
+        if ($("#name")[0].checkValidity() && changed) {
           $("#nameres").empty();
           changed = false;
-          $.get("register.jsp", {name: this.uname()})
+          $.get("register.jsp", {name: this.name()})
                   .done(response => {
                     $("#nameres").append($(response).filter(".res"));
-                    $("#valid-name").length === 1 ? $("#uname")[0].setCustomValidity("") :
-                            $("#uname")[0].setCustomValidity("Username is already taken.");
+                    $("#valid-name").length === 1 ? $("#name")[0].setCustomValidity("") :
+                            $("#name")[0].setCustomValidity("Username is already taken.");
                   });
         }
       },
       emailCheck: function () {
         $("#emailres").empty();
-        if (this.uname() === this.email().substring(0, this.email().indexOf("@"))) {
+        if (this.name() === this.email().substring(0, this.email().indexOf("@"))) {
           $("#emailres").text("The email you use cannot be the same as your username.");
           $("#email")[0].setCustomValidity("Email cannot match username.");
         } else
@@ -64,11 +64,11 @@ try {
       },
       passCheck: function () {
         $("#passres").empty();
-        if (this.pw() !== this.pwc()) {
+        if (this.pass() !== this.check()) {
           $("#passres").text("The passwords you entered do not match.");
-          $("#pw")[0].setCustomValidity("Passwords aren't the same.");
+          $("#pass")[0].setCustomValidity("Passwords aren't the same.");
         } else
-          $("#pw")[0].setCustomValidity("");
+          $("#pass")[0].setCustomValidity("");
       },
       valid: function () {
         if (this.accepted())
@@ -76,19 +76,19 @@ try {
       }
     };
     ko.applyBindings(signUpModel);
-    $("#uname").change(() => {
-      $("#uname")[0].setCustomValidity("");
+    $("#name").change(() => {
+      $("#name")[0].setCustomValidity("");
       changed = true;
     });
     $("#info-form").find("input").change(() => signUpModel.accepted(false));
   }
   if (location.pathname.includes("user.jsp")) {
-    let logInModel = {
+    const logInModel = {
       name: ko.observable(""),
-      resetForm: ko.observable(false),
       email: ko.observable(""),
       pass: ko.observable(""),
-      passCheck: ko.observable(""),
+      check: ko.observable(""),
+      resetForm: ko.observable(false),
       requestReset: function (form) {
         $("#subres").empty();
         const reset = $(form).serializeArray();
@@ -127,7 +127,7 @@ try {
     let id = location.search.substring(4);
     let json = generateItem(name, id, type);
     let vote = checkVote(json);
-    let voteModel = {
+    const voteModel = {
       status: ko.observable(vote),
       selected: ko.observable(false),
       voted: ko.observable(vote !== null),
@@ -187,10 +187,10 @@ function generateItem(name, id, type) {
 }
 
 function checkVote(json) {
-  let group = JSON.parse(json);
+  const group = JSON.parse(json);
   //TODO maybe find another solution
   //synchronous request is deprecated
-  let xhr = $.ajax({
+  const xhr = $.ajax({
     async: false,
     url: "group.jsp",
     data: {

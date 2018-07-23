@@ -3,7 +3,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.CredentialEncryption, me.recsfor.app.ListData"%>
 <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
 <jsp:useBean id="r" scope="session" class="me.recsfor.engine.recommend.RecommendationBean" />
-<jsp:setProperty name="u" property="name" param="uname" />
+<jsp:setProperty name="u" property="name" />
 <!DOCTYPE html>
 <html>
   <title>Logging in...</title>
@@ -17,7 +17,7 @@
       <c:choose>
         <c:when test="${matches.getRowCount() == 1}">
           <c:catch var="ex">
-            <c:set var="valid" value="${CredentialEncryption(param.pw, matches.getRowsByIndex()[0][2])
+            <c:set var="valid" value="${CredentialEncryption(param.pass, matches.getRowsByIndex()[0][2])
                                         .validatePassword(matches.getRowsByIndex()[0][1])}" />
           </c:catch>
           <c:if test="${ex != null}">
