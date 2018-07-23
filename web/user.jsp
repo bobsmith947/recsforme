@@ -37,12 +37,12 @@
                   <div id="subres"></div>
                   <form data-bind="visible:!resetForm()" action="login.jsp" method="POST">
                     <div class="form-group">
-                      <label for="uname">Username</label>
-                      <input data-bind="textInput:name" type="text" class="form-control" id="uname" name="uname" required>
+                      <label for="name">Username</label>
+                      <input data-bind="textInput:name" type="text" class="form-control" id="name" name="name" required>
                     </div>
                     <div class="form-group">
                       <label for="pw">Password</label>
-                      <input type="password" class="form-control" id="pw" name="pw" required>
+                      <input type="password" class="form-control" id="pw" name="pass" required>
                       <small class="form-text text-muted">
                         Forgot your password?
                         <span data-bind="visible:name()===''">First, enter your username to be able to request a password reset for that account.</span>
@@ -84,9 +84,9 @@
                       <small class="form-text text-muted">Enter a password you don't use elsewhere.</small>
                       <small class="form-text text-muted">Your password must be at least 8 characters.</small>
                       <label for="cpw">Confirm Password</label>
-                      <input data-bind="enable:pass().length>=8,textInput:passCheck" type="password" class="form-control" id="cpw" required>
+                      <input data-bind="enable:pass().length>=8,textInput:check" type="password" class="form-control" id="cpw" required>
                     </div>
-                    <button data-bind="enable:pass()===passCheck()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block mt-3">
+                    <button data-bind="enable:pass()===check()&&pass()!==''" type="submit" class="btn btn-warning btn-lg btn-block mt-3" disabled>
                       Reset Password
                     </button>
                   </form>

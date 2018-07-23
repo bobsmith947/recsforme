@@ -54,11 +54,11 @@
         </c:when>
         <c:otherwise>
           <c:catch var="ex">
-            <% cred = new CredentialEncryption(request.getParameter("pw")); %>
+            <% cred = new CredentialEncryption(request.getParameter("pass")); %>
             <sql:update dataSource="jdbc/MediaRecom">
               INSERT INTO users (uname, pw, joined, sex, dob, email, salt)
               VALUES (?, '<%= cred.getHash() %>', '<%= LocalDate.now() %>', ?, ?, ?, '<%= cred.getSalt() %>')
-            <sql:param value="${param.uname}" />
+            <sql:param value="${param.name}" />
             <sql:param value="${param.sex}" />
             <sql:param value="${param.dob}" />
             <sql:param value="${param.email}" />
@@ -66,7 +66,7 @@
             <sql:query var="newUser" dataSource="jdbc/MediaRecom">
               SELECT id FROM users
               WHERE uname = ?
-              <sql:param value="${param.uname}" />
+              <sql:param value="${param.name}" />
             </sql:query>
             <sql:update dataSource="jdbc/MediaRecom">
               INSERT INTO user_likes (uid)
@@ -78,7 +78,9 @@
           </c:catch>
           <c:if test="${ex == null}">
             <h5 class="text-success res">Data successfully registered in the database!</h5>
-            <h6 class="text-success res">You can now log in on the <a href="user.jsp">user page</a>.</h6>
+            <h6 class="text-success res">You can now log in 
+              <a href="user.jsp#login">here.</a>
+            </h6>
           </c:if>
           <c:if test="${ex != null}">
             ${pageContext.servletContext.log(ex.message)}

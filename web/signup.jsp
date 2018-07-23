@@ -7,16 +7,16 @@
       <h2>Account Registration</h2>
       <form id="info-form">
         <div class="form-group">
-          <label for="uname">Username</label>
-          <input data-bind="textInput:uname,event:{blur:nameCheck}" type="text" class="form-control" id="uname" name="uname" placeholder="Enter your desired username" maxlength="18" pattern="\w+" autofocus required>
+          <label for="name">Username</label>
+          <input data-bind="textInput:name,event:{blur:nameCheck}" type="text" class="form-control" id="name" name="name" placeholder="Enter your desired username" maxlength="36" pattern="\w+" autofocus required>
           <small class="form-text text-muted">Only alphanumeric characters are allowed.</small>
           <div id="nameres"></div>
         </div>
         <div class="form-group">
-          <label for="pw">Password</label>
-          <input data-bind="textInput:pw" type="password" class="form-control" id="pw" name="pw" placeholder="Enter a secure password" minlength="8" required>
+          <label for="pass">Password</label>
+          <input data-bind="textInput:pass" type="password" class="form-control" id="pass" name="pass" placeholder="Enter a secure password" minlength="8" required>
           <small class="form-text text-muted">Your password must be at least 8 characters.</small>
-          <input data-bind="enable:pw().length>=8,textInput:pwc,event:{blur:passCheck}" type="password" class="form-control mt-2" placeholder="Confirm your password" required>
+          <input data-bind="enable:pass().length>=8,textInput:check,event:{blur:passCheck}" type="password" class="form-control mt-2" placeholder="Confirm your password" required>
           <div id="passres" class="text-warning mt-2"></div>
         </div>
         <h5>Optional Fields</h5>
