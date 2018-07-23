@@ -105,9 +105,9 @@
             </div>
           </div>
         </div>
-      </c:if>
-      <h2>Welcome to your temporary page.</h2>
+        <h2>Welcome to your temporary page.</h2>
       <p>This page is unique to your browser, and will be cleared if the browsing session expires after 30 minutes of inactivity, or if you close your browser. If you sign up with an account, your lists will be saved, able to be accessed anytime, anywhere.</p>
+      </c:if>
       <c:if test="${u.loggedIn}">
         <ul class="nav justify-content-lg-start justify-content-center mb-4">
           <li class="nav-item">
@@ -116,51 +116,53 @@
         </ul>
         <h2>Welcome to your page, <c:out value="${u.name}" />.</h2>
       </c:if>
-      <div class="text-center" id="list">
+      <div id="tools" class="text-center">
+        <div id="sorters">
+          <span>Sort by:</span>
+          <a href="#" class="sort" data-sort="default">Time added</a>
+          <a href="#" class="sort" data-sort="alpha" data-target="#likes,#dislikes,#recs">Alphabetical</a>
+        </div>
+        <div id="filters">
+          <span>Filter by:</span>
+          <a href="#" class="filter" data-target="#likes,#dislikes,#recs">All</a>
+          <a href="#" class="filter" data-filter="Movie" data-target="#likes,#dislikes,#recs">Movies</a>
+          <a href="#" class="filter" data-filter="Artist" data-target="#likes,#dislikes,#recs">Artists</a>
+          <a href="#" class="filter" data-filter="Album" data-target="#likes,#dislikes,#recs">Albums</a>
+        </div>
+      </div>
+      <div id="list" class="mt-3 text-right">
         <h3>Your likes:</h3>
-        <span>Filter</span>
-        <a href="#" class="filter" data-target="#likes">All</a>
-        <a href="#" class="filter" data-filter="Movie" data-target="#likes">Movies</a>
-        <a href="#" class="filter" data-filter="Artist" data-target="#likes">Artists</a>
-        <a href="#" class="filter" data-filter="Album" data-target="#likes">Albums</a>
-        <div class="list-group my-2" id="likes">
+        <a href="#" class="orderer" data-target="#likes">Toggle order</a>
+        <div class="list-group text-center" id="likes">
           <c:forEach var="lg" items="${u.likeData.list}">
             <a href="${ListData.generateContext(lg.type)}${lg.id}" class="list-group-item list-group-item-action">${lg.name}</a>
           </c:forEach>
         </div>
         <h3>Your dislikes:</h3>
-        <span>Filter</span>
-        <a href="#" class="filter" data-target="#dislikes">All</a>
-        <a href="#" class="filter" data-filter="Movie" data-target="#dislikes">Movies</a>
-        <a href="#" class="filter" data-filter="Artist" data-target="#dislikes">Artists</a>
-        <a href="#" class="filter" data-filter="Album" data-target="#dislikes">Albums</a>
-        <div class="list-group my-2" id="dislikes">
+        <a href="#" class="orderer" data-target="#dislikes">Toggle order</a>
+        <div class="list-group text-center" id="dislikes">
           <c:forEach var="dg" items="${u.dislikeData.list}">
             <a href="${ListData.generateContext(dg.type)}${dg.id}" class="list-group-item list-group-item-action">${dg.name}</a>
           </c:forEach>
         </div>
       </div>
-      <div class="text-center" id="recslist">
-        <p>Recommendations are generated whenever you click the button, and are stored until you log out, or add or remove something from your lists.</p>
+      <div class="text-right" id="recslist">
         <h3>Your recommendations:</h3>
+        <a href="#" class="orderer" data-target="#recs">Toggle order</a>
         <c:if test="${r.recommendations == null}">
           <button id="recgen" type="button" class="btn btn-primary btn-block btn-lg my-4">
             Generate my recommendations
           </button>
         </c:if>
-        <span>Filter</span>
-        <a href="#" class="filter" data-target="#recs">All</a>
-        <a href="#" class="filter" data-filter="Movie" data-target="#recs">Movies</a>
-        <a href="#" class="filter" data-filter="Artist" data-target="#recs">Artists</a>
-        <a href="#" class="filter" data-filter="Album" data-target="#recs">Albums</a>
         <c:if test="${r.recommendations != null}">
-          <div class="list-group" id="recs">
+          <div class="list-group text-center" id="recs">
             <c:forEach var="rec" items="${r.recommendations.list}">
               <a href="${ListData.generateContext(rec.type)}${rec.id}" class="list-group-item list-group-item-action">${rec.name}</a>
             </c:forEach>
           </div>
         </c:if>
       </div>
+      <p class="mt-2">Recommendations are generated whenever you click the button, and are stored until you log out, or add or remove something from your lists.</p>
       <div class="container">
         <h6 id="resetprompt" class="mt-4 mb-3">If you want to clear your lists, you can use the below buttons to do so.</h6>
         <div class="row">
@@ -172,6 +174,11 @@
           </button>
           <button class="btn btn-danger col-md my-3 ml-md-2 listreset" type="reset" data-list="dislike">
             Clear your dislikes list
+          </button>
+        </div>
+        <div class="row">
+          <button id="recsreset" class="btn btn-danger col" type="reset" disabled>
+            Clear your recommendations
           </button>
         </div>
       </div>

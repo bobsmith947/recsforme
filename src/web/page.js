@@ -50,6 +50,11 @@ $(() => {
     list.empty();
     list.append(items.toArray().reverse());
   });
+  $(".orderer").each(function () {
+    const target = $($(this).attr("data-target"));
+    if (target.children().length === 0)
+      $(this).hide();
+  });
   //error pages
   $("#escape").click(ev => {
     ev.preventDefault();
@@ -59,10 +64,33 @@ $(() => {
     $("a[href='user.jsp'] + span[data-toggle=dropdown]").remove();
     if (location.href.includes("#login"))
       $("#login").modal("show");
-    $("#recgen").click(() => {
-      $.get("group.jsp", 
-      {action: "recommend"}, 
-      response => $("#recslist").append($(response).filter(".res")));
+    if (!$("#recgen")[0])
+      $("#recsreset").prop("disabled", false);
+    else {
+      $("#recgen").click(() => {
+        $.get("group.jsp", 
+        {action: "recommend"}, 
+        response => $("#recslist").append($(response).filter(".res")));
+        $("#recgen").remove();
+        $(".orderer[data-target=\\#recs]").show();
+        $("#recsreset").prop("disabled", false);
+      });
+    }
+    $(".sort").click(ev => {
+      ev.preventDefault();
+      const target = $(ev.target);
+      const sort = target.attr("data-sort");
+      const list = $(target.attr("data-target"));
+      if (sort === "default")
+        location.reload();
+      else if (sort === "alpha") {
+        list.each(function () {
+          const sorted = $(this).children().toArray().sort(sortAlpha);
+          $(this).empty();
+          $(this).append(sorted);
+        });
+      } else
+        return;
     });
     $(".filter").click(ev => {
       ev.preventDefault();
@@ -116,6 +144,19 @@ $(() => {
         ev.target.blur();
       }
     });
+    $("#recsreset").click(ev => {
+      if (confirm("Are you sure you want to clear your recommendations?")) {
+        $.get("group.jsp", {
+          action: "recommend",
+          type: "clear"
+        });
+        alert("Recommendations cleared.");
+        location.reload();
+      } else {
+        alert("Recommendations not cleared.");
+        ev.target.blur();
+      }
+    });
   } else {
     $.get("login.jsp", {action: "check"}, response => {
       const links = $(response).find(".profilelink");
@@ -127,6 +168,17 @@ $(() => {
     });
   }
 });
+
+function sortAlpha(a, b) {
+  const one = $(a).text().toLowerCase();
+  const two = $(b).text().toLowerCase();
+  if (one > two)
+    return 1;
+  else if (one < two)
+    return -1;
+  else
+    return 0;
+}
 
 //polyfill just in case
 if (!String.prototype.includes) {

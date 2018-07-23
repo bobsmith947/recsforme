@@ -106,35 +106,40 @@
       </c:if>
     </c:if>
     <c:if test="${action == 'recommend'}">
-      <c:if test="${r.recommendations == null}">
-        <c:if test="${r.users == null}">
-          <sql:query var="users" dataSource="jdbc/MediaRecom">
-            SELECT id, uname, sex, dob FROM users
-            WHERE id != ${u.id}
-          </sql:query>
-          <jsp:setProperty name="r" property="users" value="${Generator.addUsers(users)}" />
-          <c:forEach var="user" items="${r.users.keySet()}">
-            <sql:query var="likes" dataSource="jdbc/MediaRecom">
-              SELECT items FROM user_likes
-              WHERE uid = ${user}
+      <c:if test="${!param.type}">
+        <c:if test="${r.recommendations == null}">
+          <c:if test="${r.users == null}">
+            <sql:query var="users" dataSource="jdbc/MediaRecom">
+              SELECT id, uname, sex, dob FROM users
+              WHERE id != ${u.id}
             </sql:query>
-            <sql:query var="dislikes" dataSource="jdbc/MediaRecom">
-              SELECT items FROM user_dislikes
-              WHERE uid = ${user}
-            </sql:query>
-            <c:set var="newUser" value="${Generator.addListsToUser(r.users.get(user), likes, dislikes)}" />
-            <c:set var="oldUser" value="${r.users.replace(user, newUser)}" />
-          </c:forEach>
+            <jsp:setProperty name="r" property="users" value="${Generator.addUsers(users)}" />
+            <c:forEach var="user" items="${r.users.keySet()}">
+              <sql:query var="likes" dataSource="jdbc/MediaRecom">
+                SELECT items FROM user_likes
+                WHERE uid = ${user}
+              </sql:query>
+              <sql:query var="dislikes" dataSource="jdbc/MediaRecom">
+                SELECT items FROM user_dislikes
+                WHERE uid = ${user}
+              </sql:query>
+              <c:set var="newUser" value="${Generator.addListsToUser(r.users.get(user), likes, dislikes)}" />
+              <c:set var="oldUser" value="${r.users.replace(user, newUser)}" />
+            </c:forEach>
+          </c:if>
+          <c:set var="thisUser" value="${r.users.remove(Integer.valueOf(u.id))}" />
+          <c:set var="gen" value="${Generator(r.users, u.likeData, u.dislikeData)}" />
+          <jsp:setProperty name="r" property="recommendations" value="${gen.listRecommendations(0)}" />
         </c:if>
-        <c:set var="thisUser" value="${r.users.remove(Integer.valueOf(u.id))}" />
-        <c:set var="gen" value="${Generator(r.users, u.likeData, u.dislikeData)}" />
-        <jsp:setProperty name="r" property="recommendations" value="${gen.listRecommendations(0)}" />
+        <div class="list-group text-center res" id="recs">
+          <c:forEach var="rec" items="${r.recommendations.list}">
+            <a href="${ListData.generateContext(rec.type)}${rec.id}" class="list-group-item list-group-item-action">${rec.name}</a>
+          </c:forEach>
+        </div>
       </c:if>
-      <div class="list-group res" id="recs">
-        <c:forEach var="rec" items="${r.recommendations.list}">
-          <a href="${ListData.generateContext(rec.type)}${rec.id}" class="list-group-item list-group-item-action">${rec.name}</a>
-        </c:forEach>
-      </div>
+    </c:if>
+    <c:if test="${param.type == 'clear'}">
+      <jsp:setProperty name="r" property="recommendations" value="${null}" />
     </c:if>
   </body>
 </html>

@@ -1,5 +1,31 @@
 # recsforme changelog
 
+## July 24, 2018 - Release
+
+Probably the last release for the foreseeable future. There are a few things that could still be implemented, but I think it's best to put the project on hold now.
+
+**Fixed:**
+
+* Error handling is now less spaghetti (could still use dedicated logging)
+* Use more static imports when it makes sense
+* CSS and noscript moved to header
+* Parameter naming should be more consistent
+* Artists will show their sort name (helpful with foreign artists). This required existing artists to be cleared from the database
+
+**Added:**
+
+* Enum for servlet path contexts and query delegation
+* Error page stuff
+* Album and list ordering/sorting/filtering
+* Created a SQL template so the database can easily be recreated
+* Login/logout/signup links in the navbar
+* Local lists can be merged
+* Recommendations are now displayed on the user page
+
+**Removed:**
+
+* "Various Artists" contributions are no longer shown on artist pages
+
 ## June 23, 2018 - Release
 
 It's been two months since the last release, and the recommendation engine has finally been implemented. Extensive testing has not been done, but I'm going to count this as a stable release.
