@@ -119,7 +119,7 @@
       <div id="tools" class="text-center">
         <div id="sorters">
           <span>Sort by:</span>
-          <a href="#" class="sort" data-sort="default">Time added</a>
+          <a href="#" class="sort" data-sort="default">Default (time added)</a>
           <a href="#" class="sort" data-sort="alpha" data-target="#likes,#dislikes,#recs">Alphabetical</a>
         </div>
         <div id="filters">

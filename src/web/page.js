@@ -81,9 +81,10 @@ $(() => {
       const target = $(ev.target);
       const sort = target.attr("data-sort");
       const list = $(target.attr("data-target"));
-      if (sort === "default")
-        location.reload();
-      else if (sort === "alpha") {
+      if (sort === "default") {
+        if (confirm("Page will be reloaded."))
+          location.reload();
+      } else if (sort === "alpha") {
         list.each(function () {
           const sorted = $(this).children().toArray().sort(sortAlpha);
           $(this).empty();

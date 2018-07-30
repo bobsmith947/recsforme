@@ -1,5 +1,9 @@
 # recsforme changelog
 
+## July 30, 2018 - Release
+
+Quick patch to make the default sorting option more clear. No changes to the Javadoc.
+
 ## July 24, 2018 - Release
 
 Probably the last release for the foreseeable future. There are a few things that could still be implemented, but I think it's best to put the project on hold now.
