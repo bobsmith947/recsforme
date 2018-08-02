@@ -30,6 +30,7 @@ public class CredentialEncryptionTest {
   private static final String PASS = "Th1sIs@T3stPassw0rd!";
   private static final String SALT = "f542837d53b8f624b8cc626e1af707e5";
   private static final String HASH = "0d3d5c77a155446d0c0020e8e034c848ed318811161bb4794f9503eb93465a61";
+  private CredentialEncryption encryptor;
   
   public CredentialEncryptionTest() {
   }
@@ -44,6 +45,7 @@ public class CredentialEncryptionTest {
   
   @Before
   public void setUp() {
+    encryptor = new CredentialEncryption();
   }
   
   @After
@@ -56,14 +58,13 @@ public class CredentialEncryptionTest {
   @Test
   public void testSalt() {
     System.out.println("Testing salt generation.");
-    CredentialEncryption instance = new CredentialEncryption();
-    String result = instance.getSalt();
+    String result = encryptor.getSalt();
     assertNull(result);
-    instance = new CredentialEncryption(PASS);
-    result = instance.getSalt();
+    encryptor = new CredentialEncryption(PASS);
+    result = encryptor.getSalt();
     assertNotNull(result);
-    instance = new CredentialEncryption(PASS);
-    String otherResult = instance.getSalt();
+    encryptor = new CredentialEncryption(PASS);
+    String otherResult = encryptor.getSalt();
     assertNotEquals(result, otherResult);
   }
   /**
@@ -72,14 +73,13 @@ public class CredentialEncryptionTest {
   @Test
   public void testHashSame() {
     System.out.println("Testing hash generation.");
-    CredentialEncryption instance = new CredentialEncryption();
-    String result = instance.getHash();
+    String result = encryptor.getHash();
     assertNull(result);
-    instance = new CredentialEncryption(PASS, SALT);
-    result = instance.getHash();
+    encryptor = new CredentialEncryption(PASS, SALT);
+    result = encryptor.getHash();
     assertNotNull(result);
-    instance = new CredentialEncryption(PASS, SALT);
-    String otherResult = instance.getHash();
+    encryptor = new CredentialEncryption(PASS, SALT);
+    String otherResult = encryptor.getHash();
     assertEquals(result, otherResult);
   }
   /**
@@ -88,14 +88,13 @@ public class CredentialEncryptionTest {
   @Test
   public void testHashNotSameSalt() {
     System.out.println("Testing hash generation.");
-    CredentialEncryption instance = new CredentialEncryption();
-    String result = instance.getHash();
+    String result = encryptor.getHash();
     assertNull(result);
-    instance = new CredentialEncryption(PASS);
-    result = instance.getHash();
+    encryptor = new CredentialEncryption(PASS);
+    result = encryptor.getHash();
     assertNotNull(result);
-    instance = new CredentialEncryption(PASS, SALT);
-    String otherResult = instance.getHash();
+    encryptor = new CredentialEncryption(PASS, SALT);
+    String otherResult = encryptor.getHash();
     assertNotEquals(result, otherResult);
   }
   /**
@@ -104,14 +103,13 @@ public class CredentialEncryptionTest {
   @Test
   public void testHashNotSamePass() {
     System.out.println("Testing hash generation.");
-    CredentialEncryption instance = new CredentialEncryption();
-    String result = instance.getHash();
+    String result = encryptor.getHash();
     assertNull(result);
-    instance = new CredentialEncryption(PASS, SALT);
-    result = instance.getHash();
+    encryptor = new CredentialEncryption(PASS, SALT);
+    result = encryptor.getHash();
     assertNotNull(result);
-    instance = new CredentialEncryption("alsoatestpassword", SALT);
-    String otherResult = instance.getHash();
+    encryptor = new CredentialEncryption("alsoatestpassword", SALT);
+    String otherResult = encryptor.getHash();
     assertNotEquals(result, otherResult);
   }
   /**
@@ -120,28 +118,26 @@ public class CredentialEncryptionTest {
   @Test
   public void testHashNotSame() {
     System.out.println("Testing hash generation.");
-    CredentialEncryption instance = new CredentialEncryption();
-    String result = instance.getHash();
+    String result = encryptor.getHash();
     assertNull(result);
-    instance = new CredentialEncryption(PASS);
-    result = instance.getHash();
+    encryptor = new CredentialEncryption(PASS);
+    result = encryptor.getHash();
     assertNotNull(result);
-    instance = new CredentialEncryption("alsoatestpassword", SALT);
-    String otherResult = instance.getHash();
+    encryptor = new CredentialEncryption("alsoatestpassword", SALT);
+    String otherResult = encryptor.getHash();
     assertNotEquals(result, otherResult);
   }
   /**
    * Tests that a password can be validated against an instance.
-   * @throws Exception if something goes wrong
    */
   @Test
-  public void testValidatePassword() throws Exception {
+  public void testValidatePassword() {
     System.out.println("validatePassword");
-    CredentialEncryption instance = new CredentialEncryption(PASS, SALT);
-    boolean result = instance.validatePassword(HASH);
+    encryptor = new CredentialEncryption(PASS, SALT);
+    boolean result = encryptor.validatePassword(HASH);
     assertTrue(result);
-    instance = new CredentialEncryption(PASS);
-    result = instance.validatePassword(HASH);
+    encryptor = new CredentialEncryption(PASS);
+    result = encryptor.validatePassword(HASH);
     assertFalse(result);
   }
 }

@@ -129,11 +129,22 @@ public class CredentialEncryption {
    * Instance method to determine whether a password matches its stored hash, using the generated salt for the user.
    * @param storedHash the known correct password hash
    * @return whether or not the password is correct
-   * @throws DecoderException if the a hash can not be converted from hexadecimal
    */
-  public boolean validatePassword(String storedHash) throws DecoderException {
-    byte[] testHash = decodeHex(hash.toCharArray());
-    byte[] knownHash = decodeHex(storedHash.toCharArray());
+  public boolean validatePassword(String storedHash) {
+    byte[] testHash;
+    try {
+      testHash = decodeHex(hash.toCharArray());
+    } catch (DecoderException e) {
+      System.err.println(e);
+      testHash = new byte[1];
+    }
+    byte[] knownHash;
+    try {
+      knownHash = decodeHex(storedHash.toCharArray());
+    } catch (DecoderException e) {
+      System.err.println(e);
+      knownHash = new byte[0];
+    }
     //difference between the two hashes
     //compare the key length of each
     int diff = knownHash.length ^ testHash.length;

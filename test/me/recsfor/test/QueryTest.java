@@ -16,20 +16,21 @@
 package me.recsfor.test;
 
 import me.recsfor.engine.search.*;
-import static org.hamcrest.core.Is.is;
-import static org.hamcrest.core.IsNot.not;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
 /**
  * Provides tests for query classes.
  * @author lkitaev
  */
 public class QueryTest {
   private Context movie, artist, album;
+  private BasicQuery query;
   
   public QueryTest() {
   }
@@ -89,7 +90,7 @@ public class QueryTest {
   @Test
   public void testMovieResLength() {
     System.out.println("Testing movie result length.");
-    BasicQuery query = movie.createQuery("blade runner");
+    query = movie.createQuery("blade runner");
     try {
       query = MovieQuery.class.cast(query);
     } catch (ClassCastException e) {
@@ -107,7 +108,7 @@ public class QueryTest {
   @Test
   public void testArtistResLength() {
     System.out.println("Testing artist result length.");
-    BasicQuery query = artist.createQuery("daft punk");
+    query = artist.createQuery("daft punk");
     try {
       query = ArtistQuery.class.cast(query);
     } catch (ClassCastException e) {
@@ -125,7 +126,7 @@ public class QueryTest {
   @Test
   public void testAlbumResLength() {
     System.out.println("Testing album result length.");
-    BasicQuery query = album.createQuery("homework");
+    query = album.createQuery("homework");
     try {
       query = AlbumQuery.class.cast(query);
     } catch (ClassCastException e) {
@@ -143,7 +144,7 @@ public class QueryTest {
   @Test
   public void testDifferent() {
     System.out.println("Testing query differences.");
-    BasicQuery query = Context.BASIC.createQuery("Fate/Stay Night: Heaven's Feel - I. Presage Flower");
+    query = Context.BASIC.createQuery("Fate/Stay Night: Heaven's Feel - I. Presage Flower");
     String otherQuery = "fate stay night heaven's feel i presage flower";
     assertFalse(query.different(otherQuery));
     otherQuery = "fate/stay night heaven's feel";
