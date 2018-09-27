@@ -1,5 +1,4 @@
 <h6>Copyright 2018 Lucas Kitaev</h6>
-<h6><span title="Coming soon (TM)." class="fas fa-sitemap"></span></h6>
 <script>
   window.onload = function () {
     if (!window.jQuery)

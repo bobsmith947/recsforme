@@ -8,7 +8,7 @@
   <body>
     <main>
       <h3>Welcome to recsforme, a media recommendation web app.</h3>
-      <p>recsforme is an open source project aimed at creating a fast and simple application for providing media recommendations. The source code is available under the <a href="https://github.com/bobsmith947/recsforme/blob/master/LICENSE">Apache License 2.0</a>. If you have a bug report, feature request, or anything else of that nature, be sure to give the <a href="https://github.com/bobsmith947/recsforme/blob/master/CONTRIBUTING.md">contributing guidelines</a> a read and submit an issue with any appropriate labels. More information on the project itself can be found <a href="http://info.recsfor.me">here</a>.</p>
+      <p>recsforme is an open source project aimed at creating a fast and simple application for providing media recommendations. The source code is available under the <a href="https://github.com/bobsmith947/recsforme/blob/master/LICENSE">Apache License 2.0</a>. If you have a bug report, feature request, or anything else of that nature, be sure to give the <a href="https://github.com/bobsmith947/recsforme/blob/master/CONTRIBUTING.md">contributing guidelines</a> a read and submit an issue with any appropriate labels. More information on the project itself can be found <a href="https://bobsmith947.github.io">here</a>.</p>
       <h4>Random picks:</h4>
       <c:if test="${rand == null}">
         <c:if test="${r.users == null}">

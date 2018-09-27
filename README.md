@@ -4,7 +4,7 @@
 
 A media recommendation web app.
 
-The backend is composed of a number of Java classes, beans, and servlets. The Javadoc for these can be viewed [here](http://recsfor.me/javadoc/). There are also a number of JSP's using JSTL. Bootstrap is used for styling the pages, and Knockout is used for the data model on the frontend.
+The backend is composed of Java classes, beans, and servlets. The Javadoc for these can be viewed [here](https://bobsmith947.github.io/javadoc/). There are also a number of JavaServer Pages (JSP) as well as a SQL Server database. Bootstrap is used for styling the pages, and Knockout is used for managing states.
 
 ## Getting Started
 
@@ -14,11 +14,10 @@ Want to get recsforme set up on your local machine for development and testing p
 
 * A JDK (at least Java 8)
 * A servlet container ([Tomcat](https://tomcat.apache.org) is recommended)
-* A SQL database
+* A SQL database (template is provided)
 * [Apache Ant 1.7.1+ and Apache Ivy 2.4.0](https://ant.apache.org/)
 * npm (comes with [Node.js](https://nodejs.org/en/download/))
-
-**You can get your own API key from https://www.omdbapi.com/. Set it as an environment variable named *OMDB_KEY*.**
+* [An OMDb API key](https://www.omdbapi.com/) (set it as an environment variable named *OMDB_KEY*)
 
 ### Installing
 
@@ -30,7 +29,7 @@ Want to get recsforme set up on your local machine for development and testing p
 
 ### Running
 
-You can use these commands to run and test using Tomcat.
+You can use these commands to run and test using Ant and Tomcat.
 
     $CATALINA_HOME/bin/catalina start
     ant run -Dj2ee.server.home=$CATALINA_HOME

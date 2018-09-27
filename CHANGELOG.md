@@ -1,5 +1,9 @@
 # recsforme changelog
 
+## September 26, 2018 - Release
+
+Changes to reflect the domain no longer being used. No changes to the Javadoc.
+
 ## July 30, 2018 - Release
 
 Quick patch to make the default sorting option more clear. No changes to the Javadoc.
