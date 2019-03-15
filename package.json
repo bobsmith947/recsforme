@@ -36,7 +36,7 @@
     },
     "dependencies": {
         "@fortawesome/fontawesome-free-webfonts": "^1.0.4",
-        "bootstrap": "4.0.0",
+        "bootstrap": "4.3.1",
         "browserslist": "^2.11.3",
         "jquery": "3.3.1",
         "knockout": "3.4.2",
@@ -59,8 +59,9 @@
         "webpack": "3.10.0"
     },
     "optionalDependencies": {
-        "hoek": "5.0.3",
-        "ssri": "5.2.2",
-        "lodash": "4.17.5"
+        "cryptiles": ">=4.1.2",
+        "extend": "3.0.2",
+        "macaddress": ">=0.2.9",
+        "ssri": "5.2.2"
     }
 }
