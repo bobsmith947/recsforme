@@ -1,19 +1,18 @@
+dist: bionic
 language: java
-jdk: 
-  - oraclejdk8
-  - openjdk8
 cache:
   directories: ./lib
-before_install:
-  - wget https://archive.apache.org/dist/ant/ivy/2.4.0/apache-ivy-2.4.0-bin.tar.gz
-  - tar -xf apache-ivy-2.4.0-bin.tar.gz
-  - wget https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.40/bin/apache-tomcat-8.5.40.tar.gz
-  - tar -xf apache-tomcat-8.5.40.tar.gz
-install:
-  - mv ./apache-tomcat-8.5.40 ./tomcat
-  - chmod 555 ./tomcat/bin/catalina.sh
-  #- npm install
-  - ant resolve -lib ./apache-ivy-2.4.0
-before_script: ./tomcat/bin/catalina.sh start
-script: ant test -Dj2ee.server.home=./tomcat
-after_script: ./tomcat/bin/catalina.sh stop
+addons:
+  apt:
+    packages:
+      - ant
+      - ant-optional
+      - ivy
+      - tomcat8
+before_install: sudo ln -sfv /usr/share/java/* $CATALINA_HOME/lib/* /usr/share/ant/lib
+install: ant resolve
+before_script:
+  - sudo ln -sfv /var/lib/tomcat8/conf /var/lib/tomcat8/logs $CATALINA_HOME
+  - sudo -u tomcat8 $CATALINA_HOME/bin/catalina.sh start
+script: ant test
+after_script: sudo -u tomcat8 $CATALINA_HOME/bin/catalina.sh stop

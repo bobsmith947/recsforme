@@ -4,7 +4,7 @@
 
 A media recommendation web app.
 
-The backend is composed of Java classes, beans, and servlets. The Javadoc for these can be viewed [here](https://bobsmith947.github.io/javadoc/). There are also a number of JavaServer Pages (JSP) as well as a SQL Server database. Bootstrap is used for styling the pages, and Knockout is used for managing states.
+The backend is composed of Java classes, beans, and servlets. The Javadoc for these can be viewed [here](https://bobsmith947.github.io/javadoc/). There are also a number of JavaServer Pages (JSP) as well as a SQL database. Bootstrap is used for styling the pages, and Knockout is used for managing states.
 
 ## Getting Started
 
@@ -12,12 +12,31 @@ Want to get recsforme set up on your local machine for development and testing p
 
 ### Prerequisites
 
-* A JDK (at least Java 8)
-* A servlet container ([Tomcat](https://tomcat.apache.org) is recommended)
-* A SQL database (template is provided)
-* [Apache Ant 1.7.1+ and Apache Ivy 2.4.0](https://ant.apache.org/)
+* JDK (at least Java 8)
+* Tomcat server ([Tomcat](https://tomcat.apache.org) 8.5 is recommended)
+* SQL database (template is provided)
+* [Apache Ant and Apache Ivy](https://ant.apache.org/)
 * npm (comes with [Node.js](https://nodejs.org/en/download/))
 * [An OMDb API key](https://www.omdbapi.com/) (set it as an environment variable named *OMDB_KEY*)
+
+#### Setting up Tomcat and Ant
+
+1. Set the `CATALINA_HOME` environment variable to point to the Tomcat installation directory
+2. Add a user to `$CATALINA_HOME/conf/tomcat-users.xml`
+    ```
+    <role rolename="manager-script" />
+    <user username="script" password="password" roles="manager-script" />
+    ```
+    You may use a different username/password if you also change the values of `tomcat.username` and `tomcat.password` in `nbproject/project.properties`
+3. Copy database connection driver to `$CATALINA_HOME/lib`
+4. Add database connection info to `$CATALINA_HOME/conf/context.xml` or `web/META-INF/context.xml`
+    ```
+    <Resource name="jdbc/MediaRecom" auth="Container" type="javax.sql.DataSource"
+               maxTotal="100" maxIdle="30" maxWaitMillis="10000"
+               username="" password="" driverClassName=""
+               url=""/>
+    ```
+5. Copy/link the Ivy .jar file as well as the contents of `$CATALINA_HOME/lib` to the Ant `lib` directory
 
 ### Installing
 
@@ -29,16 +48,27 @@ Want to get recsforme set up on your local machine for development and testing p
 
 ### Running
 
-You can use these commands to run and test using Ant and Tomcat.
+Start the server:
 
     $CATALINA_HOME/bin/catalina start
-    ant run -Dj2ee.server.home=$CATALINA_HOME
 
-Unit tests can be executed with:
+Build and deploy the application:    
 
-    ant test -Dj2ee.server.home=$CATALINA_HOME
+    ant run
+    
+Undeploy the application:
 
-When you're done:
+    ant run-undeploy
+    
+Cleanup build:
+
+    ant clean
+
+Run unit tests:
+
+    ant test
+
+Stop the server:
 
     $CATALINA_HOME/bin/catalina stop
 
@@ -50,7 +80,7 @@ Please read [CONTRIBUTING](./CONTRIBUTING.md) for details on the community guide
 
 * **Lucas Kitaev** - *Lead Developer and Designer*
 * **Oleg Kitaev** - *Expert Advisor*
-* **Sai Donepudi** - *Code Support Advisor*
+* **Sai Donepudi** - *Support Advisor*
 
 ## License
 
