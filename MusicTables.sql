@@ -109,6 +109,10 @@ CREATE TABLE IF NOT EXISTS release (
 	name                VARCHAR NOT NULL,
 	artist_credit       INTEGER NOT NULL REFERENCES artist_credit (id),
 	release_group       INTEGER NOT NULL REFERENCES release_group (id),
+	status              INTEGER, -- not used
+	packaging           INTEGER, -- not used
+	language            INTEGER, -- not used
+	script              INTEGER, -- not used
 	barcode             VARCHAR,
 	comment             VARCHAR,
 	edits_pending       INTEGER NOT NULL DEFAULT 0,
@@ -183,5 +187,5 @@ CREATE TABLE IF NOT EXISTS track (
 CREATE UNIQUE INDEX IF NOT EXISTS track_idx_gid ON track (gid);
 CREATE INDEX IF NOT EXISTS track_idx_recording ON track (recording);
 CREATE INDEX IF NOT EXISTS track_idx_name ON track (name);
-CREATE INDEX IF NOT EXISTS track_idx_artist_credit ON track (artist_credit)
+CREATE INDEX IF NOT EXISTS track_idx_artist_credit ON track (artist_credit);
 
