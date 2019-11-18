@@ -76,31 +76,99 @@ CREATE TABLE IF NOT EXISTS artist_credit_name (
 CREATE INDEX IF NOT EXISTS artist_credit_name_idx_artist ON artist_credit_name (artist);
 
 -- create release/release group tables
-CREATE TABLE release (
-	-- TODO
+CREATE TABLE IF NOT EXISTS release_group_primary_type (
+	id                  INTEGER PRIMARY KEY,
+    name                VARCHAR(255) NOT NULL,
+    parent              INTEGER, REFERENCES release_group_primary_type (id),
+    child_order         INTEGER NOT NULL DEFAULT 0,
+    description         TEXT,
+    gid                 uuid NOT NULL
 );
 
-CREATE TABLE release_group (
-	-- TODO
+CREATE UNIQUE INDEX IF NOT EXISTS release_group_primary_type_idx_gid ON release_group_primary_type (gid);
+
+CREATE TABLE IF NOT EXISTS release_group (
+	id                  INTEGER PRIMARY KEY,
+    gid                 UUID NOT NULL,
+    name                VARCHAR NOT NULL,
+    artist_credit       INTEGER NOT NULL REFERENCES artist_credit (id),
+    type                INTEGER REFERENCES release_group_primary_type (id),
+    comment             VARCHAR(255) NOT NULL DEFAULT '',
+    edits_pending       INTEGER NOT NULL DEFAULT 0 CHECK (edits_pending >= 0),
+    last_updated        TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE TABLE release_group_primary_type (
-	-- TODO
+CREATE UNIQUE INDEX IF NOT EXISTS release_group_idx_gid ON release_group (gid);
+
+CREATE TABLE IF NOT EXISTS release (
+	id                  INTEGER PRIMARY KEY,
+    gid                 UUID NOT NULL,
+    name                VARCHAR NOT NULL,
+    artist_credit       INTEGER NOT NULL REFERENCES artist_credit (id),
+    release_group       INTEGER NOT NULL REFERENCES release_group (id),
+    barcode             VARCHAR(255),
+    comment             VARCHAR(255) NOT NULL DEFAULT '',
+    edits_pending       INTEGER NOT NULL DEFAULT 0 CHECK (edits_pending >= 0),
+    quality             SMALLINT NOT NULL DEFAULT -1,
+    last_updated        TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS release_idx_gid ON release (gid);
 
 -- create medium/track/recording tables
-CREATE TABLE medium (
-	-- TODO
+CREATE TABLE IF NOT EXISTS medium_format (
+	id                  INTEGER PRIMARY KEY,
+    name                VARCHAR(100) NOT NULL,
+    parent              INTEGER REFERENCES medium_format (id),
+    child_order         INTEGER NOT NULL DEFAULT 0,
+    year                SMALLINT,
+    has_discids         BOOLEAN NOT NULL DEFAULT FALSE,
+    description         TEXT,
+    gid                 uuid NOT NULL
 );
 
-CREATE TABLE medium_format (
-	-- TODO
+CREATE UNIQUE INDEX IF NOT EXISTS medium_format_idx_gid ON medium_format (gid);
+
+CREATE TABLE IF NOT EXISTS medium (
+	id                  INTEGER PRIMARY KEY,
+    release             INTEGER NOT NULL REFERENCES release (id),
+    position            INTEGER NOT NULL,
+    format              INTEGER REFERENCES medium_format (id),
+    name                VARCHAR NOT NULL DEFAULT '',
+    edits_pending       INTEGER NOT NULL DEFAULT 0 CHECK (edits_pending >= 0),
+    last_updated        TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    track_count         INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE TABLE track (
-	-- TODO
+CREATE TABLE IF NOT EXISTS recording (
+	id                  INTEGER PRIMARY KEY,
+    gid                 UUID NOT NULL,
+    name                VARCHAR NOT NULL,
+    artist_credit       INTEGER NOT NULL REFERENCES artist_credit (id),
+    length              INTEGER CHECK (length IS NULL OR length > 0),
+    comment             VARCHAR(255) NOT NULL DEFAULT '',
+    edits_pending       INTEGER NOT NULL DEFAULT 0 CHECK (edits_pending >= 0),
+    last_updated        TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    video               BOOLEAN NOT NULL DEFAULT FALSE
 );
 
-CREATE TABLE recording (
-	-- TODO
+CREATE UNIQUE INDEX IF NOT EXISTS recording_idx_gid ON recording (gid);
+
+CREATE TABLE IF NOT EXISTS track (
+	id                  INTEGER PRIMARY KEY,
+    gid                 UUID NOT NULL,
+    recording           INTEGER NOT NULL REFERENCES recording (id),
+    medium              INTEGER NOT NULL REFERENCES medium (id),
+    position            INTEGER NOT NULL,
+    number              TEXT NOT NULL,
+    name                VARCHAR NOT NULL,
+    artist_credit       INTEGER NOT NULL REFERENCES artist_credit (id),
+    length              INTEGER CHECK (length IS NULL OR length > 0),
+    edits_pending       INTEGER NOT NULL DEFAULT 0 CHECK (edits_pending >= 0),
+    last_updated        TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    is_data_track       BOOLEAN NOT NULL DEFAULT FALSE
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS track_idx_gid ON track (gid);
+
+
