@@ -13,6 +13,7 @@
     <target name="resolve" description="--> retrieve dependencies with ivy">
         <ivy:retrieve />
     </target>
+	<target name="redeploy" depends="run-undeploy,run" />
     <!--
 
     There exist several targets which are by default empty and which can be 
