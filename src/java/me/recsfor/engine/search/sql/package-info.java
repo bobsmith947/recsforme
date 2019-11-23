@@ -23,10 +23,8 @@
  * provide interfaces for searching the database for a user query, but rather provides interfaces for querying
  * data about a specific entity for which the ID is already known via search results.
  * <br>
- * The public interface for classes in this package is a single <code>static</code> method
- * <code>query(id)</code> for which the underlying entity with the specified ID will be generated,
- * as specified in the <code>me.recsfor.group.model</code> package.
- * Query objects are not instantiated directly, and thus the constructor for each class must not be public.
+ * Once a Query object is instantiated, the underlying entity (as definied in the <code>me.recsfor.group.model</code>
+ * package) can be accessed using the <code>query()</code> method as required by <code>Queryable</code>.
  */
 
 package me.recsfor.engine.search.sql;
