@@ -15,11 +15,11 @@
  */
 package me.recsfor.group.model;
 
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.YearMonth;
 import java.time.temporal.Temporal;
 import java.util.UUID;
+
+import me.recsfor.engine.search.sql.Queryable;
+
 import static java.util.Objects.compare;
 
 /**
@@ -68,39 +68,54 @@ public class Album extends AbstractModel implements Comparable<Album> {
 	 * Compares two Albums by their first release date.
 	 * If both of these values are null, or are equal, compares by title instead.
 	 * @param o the Album to compare to
+	 * @return an integer that is negative, positive, or zero according to the above criteria
 	 */
 	@Override
 	public int compareTo(Album o) {
-		if (this.firstRelease == null && o.firstRelease != null)
-			return 1;
-		if (this.firstRelease != null && o.firstRelease == null)
-			return -1;
-		if (this.firstRelease == null && o.firstRelease == null)
-			return this.title.compareTo(o.title);
-		// TODO this is awful
-		return compare(this.firstRelease, o.firstRelease, (Temporal a, Temporal b) -> {
-			if (a instanceof LocalDate) {
-				LocalDate ld = (LocalDate) a;
-				if (b instanceof LocalDate) return ld.compareTo((LocalDate) b);
-				if (b instanceof YearMonth) return YearMonth.of(ld.getYear(), ld.getMonth())
-						.compareTo((YearMonth) b);
-				if (b instanceof Year) return Year.of(ld.getYear()).compareTo((Year) b);
-			}
-			if (a instanceof YearMonth) {
-				YearMonth ym = (YearMonth) a;
-				if (b instanceof LocalDate) return ym.compareTo(YearMonth
-						.of(((LocalDate) b).getYear(), ((LocalDate) b).getMonth()));
-				if (b instanceof YearMonth) return ym.compareTo((YearMonth) b);
-				if (b instanceof Year) return Year.of(ym.getYear()).compareTo((Year) b);
-			}
-			if (a instanceof Year) {
-				Year y = (Year) a;
-				if (b instanceof LocalDate) return y.compareTo(Year.of(((LocalDate) b).getYear()));
-				if (b instanceof YearMonth) return y.compareTo(Year.of(((YearMonth) b).getYear()));
-				if (b instanceof Year) return y.compareTo((Year) b);
-			}
-			throw new UnsupportedOperationException();
-		});
+		int comp = 0;
+		try {
+			comp = compare(firstRelease, o.firstRelease, Queryable.compareTemporal());
+		} catch (NullPointerException e) {
+			if (firstRelease == null && o.firstRelease != null) return 1;
+			if (firstRelease != null && o.firstRelease == null) return -1;
+		}
+		return comp != 0 ? comp : title.compareTo(o.title);
+	}
+
+	/**
+	 * Determines a hash code for this instance based on its title and first release.
+	 * @return the hash code
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((firstRelease == null) ? 0 : Queryable.hashTemporal(firstRelease));
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+
+	/**
+	 * Determines if this instance is equal to another object based on the title and first release.
+	 * @param obj the object to determine equality with
+	 * @return whether or not they're equal
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (!(obj instanceof Album)) return false;
+		Album other = (Album) obj;
+		if (firstRelease == null) {
+			if (other.firstRelease != null)
+				return false;
+		} else if (compare(firstRelease, other.firstRelease, Queryable.compareTemporal()) != 0)
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
 	}
 
 }

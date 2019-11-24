@@ -99,10 +99,6 @@ public class AlbumQuerySQL implements Queryable {
 	
 	/**
 	 * Determines the <code>Temporal</code> value of the album's first release.
-	 * Will be <code>LocalDate</code> if year, month, and day are all known.
-	 * Will be <code>YearMonth</code> if the year and month are both known.
-	 * Will be <code>Year</code> if only the year is known.
-	 * Will be <code>null</code> if none of the above values are known.
 	 * @return the point in time at which the album first released
 	 * @throws SQLException if the query fails
 	 */
@@ -112,19 +108,7 @@ public class AlbumQuerySQL implements Queryable {
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		int year = rs.getInt(1);
-		int month = rs.getInt(2);
-		int day = rs.getInt(3);
-		if (year != 0) {
-			if (month != 0) {
-				if (day != 0) {
-					return of(year, month, day);
-				}
-				return of(year, month);
-			}
-			return of(year);
-		}
-		return null;
+		return Queryable.toTemporal(rs.getInt(1), rs.getInt(2), rs.getInt(3));
 	}
 
 }
