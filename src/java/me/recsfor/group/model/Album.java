@@ -16,19 +16,22 @@
 package me.recsfor.group.model;
 
 import java.time.temporal.Temporal;
+import java.util.List;
 import java.util.UUID;
 
 import me.recsfor.engine.search.sql.Queryable;
 
 import static java.util.Objects.compare;
+import static java.util.Collections.emptyList;
 
 /**
  * Provides the data model for Album entities.
  * @author lkitaev
  */
 public class Album extends AbstractModel implements Comparable<Album> {
-	private String title;
+	private String title, primaryType, secondaryType;
 	private Temporal firstRelease;
+	private List<Song> trackList;
 
 	/**
 	 * Creates an unknown Album.
@@ -36,10 +39,14 @@ public class Album extends AbstractModel implements Comparable<Album> {
 	public Album() {
 		super();
 		title = "Unknown";
+		primaryType = "Other";
+		secondaryType = null;
+		firstRelease = null;
+		trackList = emptyList();
 	}
 	
 	/**
-	 * Creates an Album with the specified attributes.
+	 * Creates a partial Album with the specified attributes.
 	 * @param id
 	 * @param title
 	 * @param firstRelease
@@ -48,6 +55,23 @@ public class Album extends AbstractModel implements Comparable<Album> {
 		super(id);
 		this.title = title;
 		this.firstRelease = firstRelease;
+	}
+	
+	/**
+	 * Creates a complete Album with the specified attributes.
+	 * @param id
+	 * @param title
+	 * @param firstRelease
+	 * @param primaryType
+	 * @param secondaryType
+	 * @param trackList
+	 */
+	public Album(UUID id, String title, Temporal firstRelease, String primaryType, String secondaryType,
+			List<Song> trackList) {
+		this(id, title, firstRelease);
+		this.primaryType = primaryType;
+		this.secondaryType = secondaryType;
+		this.trackList = trackList;
 	}
 
 	/**
@@ -58,10 +82,31 @@ public class Album extends AbstractModel implements Comparable<Album> {
 	}
 
 	/**
+	 * @return the primaryType
+	 */
+	public String getPrimaryType() {
+		return primaryType;
+	}
+
+	/**
+	 * @return the secondaryType
+	 */
+	public String getSecondaryType() {
+		return secondaryType;
+	}
+
+	/**
 	 * @return the firstRelease
 	 */
 	public Temporal getFirstRelease() {
 		return firstRelease;
+	}
+
+	/**
+	 * @return the trackList
+	 */
+	public List<Song> getTrackList() {
+		return trackList;
 	}
 
 	/**

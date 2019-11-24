@@ -20,11 +20,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.temporal.Temporal;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.sql.DataSource;
 
 import me.recsfor.group.model.Album;
+import me.recsfor.group.model.Song;
 
 /**
  * Queries the recsforme database for data related to Album entities.
@@ -85,6 +88,24 @@ public class AlbumQuerySQL implements Queryable {
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		return Queryable.toTemporal(rs.getInt(1), rs.getInt(2), rs.getInt(3));
+	}
+	
+	public String queryPrimaryType() throws SQLException {
+		return null; // TODO join release_group with release_group_primary_type
+	}
+	
+	public String querySecondaryType() throws SQLException {
+		// TODO join release_group with release_group_secondary_type_join
+		// and then join that with release_group_secondary_type
+		return null;
+	}
+	
+	public List<Song> queryTrackList() throws SQLException {
+		List<Song> list = new LinkedList<>();
+		// TODO get the first row from release with this release_group id
+		// then join medium with that release, and then join track with that medium
+		// and add all of the tracks to the list
+		return list;
 	}
 
 }
