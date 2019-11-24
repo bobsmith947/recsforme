@@ -22,11 +22,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 
-import java.time.temporal.Temporal;
-import static java.time.LocalDate.of;
-import static java.time.YearMonth.of;
-import static java.time.Year.of;
-
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
@@ -66,32 +61,15 @@ public class ArtistQuerySQL implements Queryable {
 	 */
 	@Override
 	public Artist query() throws SQLException {
-		return new Artist(gid, queryName(), querySortName(), queryType(), queryGender(), queryComment(),
-				queryBegin(), queryEnd(), queryDiscog());
-	}
-	
-	/**
-	 * @return the name of the artist
-	 * @throws SQLException if the query fails
-	 */
-	public String queryName() throws SQLException {
-		PreparedStatement ps = con.prepareStatement("SELECT name FROM artist WHERE id = ?");
+		PreparedStatement ps = con.prepareStatement("SELECT name, sort_name, comment,"
+				+ " begin_date_year, begin_date_month, begin_date_day, end_date_year, end_date_month, end_date_day"
+				+ " FROM artist WHERE id = ?");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		return rs.getString(1);
-	}
-	
-	/**
-	 * @return the sort name of the artist
-	 * @throws SQLException if the query fails
-	 */
-	public String querySortName() throws SQLException {
-		PreparedStatement ps = con.prepareStatement("SELECT sort_name FROM artist WHERE id = ?");
-		ps.setInt(1, id);
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		return rs.getString(1);
+		return new Artist(gid, rs.getString(1), rs.getString(2), queryType(), queryGender(), rs.getString(3),
+				Queryable.toTemporal(rs.getInt(4), rs.getInt(5), rs.getInt(6)),
+				Queryable.toTemporal(rs.getInt(7), rs.getInt(8), rs.getInt(9)), queryDiscog());
 	}
 	
 	/**
@@ -123,68 +101,21 @@ public class ArtistQuerySQL implements Queryable {
 	}
 	
 	/**
-	 * @return the comment about the artist
-	 * @throws SQLException if the query fails
-	 */
-	public String queryComment() throws SQLException {
-		PreparedStatement ps = con.prepareStatement("SELECT comment FROM artist WHERE id = ?");
-		ps.setInt(1, id);
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		return rs.getString(1);
-	}
-	
-	/**
-	 * Determines the <code>Temporal</code> value of the Artist beginning.
-	 * Will be <code>LocalDate</code> if year, month, and day are all known.
-	 * Will be <code>YearMonth</code> if the year and month are both known.
-	 * Will be <code>Year</code> if only the year is known.
-	 * Will be <code>null</code> if none of the above values are known.
-	 * @return the point in time at which this artist began
-	 * @throws SQLException if the query fails
-	 */
-	public Temporal queryBegin() throws SQLException {
-		PreparedStatement ps = con.prepareStatement("SELECT begin_date_year, begin_date_month, begin_date_day"
-				+ " FROM artist WHERE id = ?");
-		ps.setInt(1, id);
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		int year = rs.getInt(1);
-		int month = rs.getInt(2);
-		int day = rs.getInt(3);
-		return toTemporal(year, month, day);
-	}
-	
-	/**
-	 * Determines the <code>Temporal</code> value of the Artist ending.
-	 * @return the point in time at which this artist ended
-	 * @throws SQLException if the query fails
-	 */
-	public Temporal queryEnd() throws SQLException {
-		PreparedStatement ps = con.prepareStatement("SELECT end_date_year, end_date_month, end_date_day"
-				+ " FROM artist WHERE id = ?");
-		ps.setInt(1, id);
-		ResultSet rs = ps.executeQuery();
-		rs.next();
-		int year = rs.getInt(1);
-		int month = rs.getInt(2);
-		int day = rs.getInt(3);
-		return toTemporal(year, month, day);
-	}
-	
-	/**
 	 * @return the albums that are associated with the artist
 	 * @throws SQLException if the query fails
 	 */
-	// TODO adding on the date makes it kinda slow, look into optimization maybe
 	public Set<Album> queryDiscog() throws SQLException {
 		Set<Album> list = new TreeSet<>();
-		PreparedStatement ps = con.prepareStatement("SELECT id, gid, name FROM release_group WHERE artist_credit IN"
-				+ " (SELECT artist_credit FROM artist_credit_name WHERE artist = ?)");
+		PreparedStatement ps = con.prepareStatement("SELECT gid, name,"
+				+ " first_release_date_year, first_release_date_month, first_release_date_day"
+				+ " FROM release_group, release_group_meta WHERE artist_credit IN"
+				+ " (SELECT artist_credit FROM artist_credit_name WHERE artist = ?)"
+				+ " AND release_group.id = release_group_meta.id");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		while (rs.next())
-			list.add(new AlbumQuerySQL(rs.getInt(1), con).basicAlbum(rs.getObject(2, UUID.class), rs.getString(3)));
+			list.add(new Album(rs.getObject(1, UUID.class), rs.getString(2),
+					Queryable.toTemporal(rs.getInt(3), rs.getInt(4), rs.getInt(5))));
 		return list;
 	}
 
