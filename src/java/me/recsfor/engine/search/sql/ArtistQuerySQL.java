@@ -27,8 +27,8 @@ import static java.time.LocalDate.of;
 import static java.time.YearMonth.of;
 import static java.time.Year.of;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 
 import me.recsfor.group.model.Artist;
@@ -198,8 +198,9 @@ public class ArtistQuerySQL implements Queryable {
 	 * @return the albums that are associated with the artist
 	 * @throws SQLException if the query fails
 	 */
-	public List<Album> queryDiscog() throws SQLException {
-		List<Album> list = new ArrayList<>();
+	// TODO adding on the date makes it kinda slow, look into optimization maybe
+	public Set<Album> queryDiscog() throws SQLException {
+		Set<Album> list = new TreeSet<>();
 		PreparedStatement ps = con.prepareStatement("SELECT id, gid, name FROM release_group WHERE artist_credit IN"
 				+ " (SELECT artist_credit FROM artist_credit_name WHERE artist = ?)");
 		ps.setInt(1, id);

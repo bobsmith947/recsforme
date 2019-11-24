@@ -64,7 +64,6 @@ public class ArtistInfo extends HttpServlet {
 	    try {
 			artist = new ArtistQuerySQL(id, db).query();
 		} catch (SQLException e) {
-			e.printStackTrace();
 			throw new ServletException(e);
 		}
 	    response.setContentType("text/html;charset=UTF-8");

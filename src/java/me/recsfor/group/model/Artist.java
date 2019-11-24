@@ -16,8 +16,8 @@
 package me.recsfor.group.model;
 
 import java.time.temporal.Temporal;
-import static java.util.Collections.emptyList;
-import java.util.List;
+import static java.util.Collections.emptySet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -27,7 +27,7 @@ import java.util.UUID;
 public class Artist extends AbstractModel {
 	private String name, sortName, type, gender, comment;
 	private Temporal begin, end;
-	private List<Album> discog;
+	private Set<Album> discog;
 
 	/**
 	 * Creates an unknown Artist
@@ -41,7 +41,7 @@ public class Artist extends AbstractModel {
 		comment = null;
 		begin = null;
 		end = null;
-		discog = emptyList();
+		discog = emptySet();
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class Artist extends AbstractModel {
 	 * @param discog
 	 */
 	public Artist(UUID id, String name, String sortName, String type, String gender, String comment,
-			Temporal begin, Temporal end, List<Album> discog) {
+			Temporal begin, Temporal end, Set<Album> discog) {
 		super(id);
 		this.name = name;
 		this.sortName = sortName;
@@ -121,7 +121,7 @@ public class Artist extends AbstractModel {
 	/**
 	 * @return the discography
 	 */
-	public List<Album> getDiscog() {
+	public Set<Album> getDiscog() {
 		return discog;
 	}
 

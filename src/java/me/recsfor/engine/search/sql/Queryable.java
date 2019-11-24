@@ -23,5 +23,14 @@ import me.recsfor.group.model.AbstractModel;
  * Defines the required <code>query()</code> method of Query classes.
  */
 public interface Queryable {
+	
+	/**
+	 * This method queries the recsforme database for data regarding a specific entity
+	 * and returns the queried data as an <code>AbstractModel</code>.
+	 * Overriding methods should specify a subclass of <code>AbstractModel</code>
+	 * that is specific to the implementation.
+	 * @return the underlying data model for the query
+	 * @throws SQLException if any of the executed queries fail
+	 */
 	public abstract AbstractModel query() throws SQLException;
 }
