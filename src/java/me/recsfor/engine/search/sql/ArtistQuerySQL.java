@@ -67,15 +67,15 @@ public class ArtistQuerySQL implements Queryable {
 	 */
 	@Override
 	public Artist query() throws SQLException {
-		return new Artist(gid, getName(), getSortName(), getType(), getGender(), getComment(),
-				getBegin(), getEnd(), getDiscog());
+		return new Artist(gid, queryName(), querySortName(), queryType(), queryGender(), queryComment(),
+				queryBegin(), queryEnd(), queryDiscog());
 	}
 	
 	/**
 	 * @return the name of this artist
 	 * @throws SQLException if the query fails
 	 */
-	public String getName() throws SQLException {
+	public String queryName() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT name FROM artist WHERE id = ?");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
@@ -87,7 +87,7 @@ public class ArtistQuerySQL implements Queryable {
 	 * @return the sort name of this artist
 	 * @throws SQLException if the query fails
 	 */
-	public String getSortName() throws SQLException {
+	public String querySortName() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT sort_name FROM artist WHERE id = ?");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
@@ -99,7 +99,7 @@ public class ArtistQuerySQL implements Queryable {
 	 * @return the type of this artist
 	 * @throws SQLException if the query fails
 	 */
-	public String getType() throws SQLException {
+	public String queryType() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT name FROM artist_type"
 				+ " WHERE id = (SELECT type FROM artist WHERE id = ?)");
 		ps.setInt(1, id);
@@ -112,7 +112,7 @@ public class ArtistQuerySQL implements Queryable {
 	 * @return the gender of this artist
 	 * @throws SQLException if the query fails
 	 */
-	public String getGender() throws SQLException {
+	public String queryGender() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT name FROM gender WHERE id ="
 				+ " (SELECT gender FROM artist WHERE id = ?)");
 		ps.setInt(1, id);
@@ -127,7 +127,7 @@ public class ArtistQuerySQL implements Queryable {
 	 * @return the comment about this artist
 	 * @throws SQLException if the query fails
 	 */
-	public String getComment() throws SQLException {
+	public String queryComment() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT comment FROM artist WHERE id = ?");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
@@ -144,7 +144,7 @@ public class ArtistQuerySQL implements Queryable {
 	 * @return the point in time at which this artist began
 	 * @throws SQLException if the query fails
 	 */
-	public Temporal getBegin() throws SQLException {
+	public Temporal queryBegin() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT begin_date_year, begin_date_month, begin_date_day"
 				+ " FROM artist WHERE id = ?");
 		ps.setInt(1, id);
@@ -174,7 +174,7 @@ public class ArtistQuerySQL implements Queryable {
 	 * @return the point in time at which this artist ended
 	 * @throws SQLException if the query fails
 	 */
-	public Temporal getEnd() throws SQLException {
+	public Temporal queryEnd() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT end_date_year, end_date_month, end_date_day"
 				+ " FROM artist WHERE id = ?");
 		ps.setInt(1, id);
@@ -199,7 +199,7 @@ public class ArtistQuerySQL implements Queryable {
 	 * @return the discography of this artist
 	 * @throws SQLException if the query fails
 	 */
-	public List<Album> getDiscog() throws SQLException {
+	public List<Album> queryDiscog() throws SQLException {
 		List<Album> list = new ArrayList<>();
 		PreparedStatement ps = con.prepareStatement("SELECT gid, name FROM release_group WHERE artist_credit IN"
 				+ " (SELECT artist_credit FROM artist_credit_name WHERE artist = ?)");
