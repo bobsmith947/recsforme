@@ -5,7 +5,7 @@
  * Uses PostgreSQL syntax.
  */
 
--- create artist tables/indexes
+-- create artist tables
 
 CREATE TABLE IF NOT EXISTS artist_type (
 	id                  INTEGER PRIMARY KEY,
@@ -88,6 +88,24 @@ CREATE TABLE IF NOT EXISTS release_group_primary_type (
 
 CREATE UNIQUE INDEX IF NOT EXISTS release_group_primary_type_idx_gid ON release_group_primary_type (gid);
 
+CREATE TABLE IF NOT EXISTS release_group_secondary_type (
+	    id                  INTEGER PRIMARY KEY,
+	    name                VARCHAR NOT NULL,
+	    parent              INTEGER REFERENCES release_group_secondary_type (id),
+	    child_order         INTEGER NOT NULL DEFAULT 0,
+	    description         VARCHAR,
+	    gid                 UUID NOT NULL
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS release_group_secondary_type_idx_gid ON release_group_secondary_type (gid);
+
+CREATE TABLE IF NOT EXISTS release_group_secondary_type_join (
+	    release_group INTEGER REFERENCES release_group (id),
+	    secondary_type INTEGER REFERENCES release_group_secondary_type (id),
+	    created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+	    PRIMARY KEY (release_group, secondary_type)
+);
+
 CREATE TABLE IF NOT EXISTS release_group (
 	id                  INTEGER PRIMARY KEY,
 	gid                 UUID NOT NULL,
@@ -102,6 +120,16 @@ CREATE TABLE IF NOT EXISTS release_group (
 CREATE UNIQUE INDEX IF NOT EXISTS release_group_idx_gid ON release_group (gid);
 CREATE INDEX IF NOT EXISTS release_group_idx_name ON release_group (name);
 CREATE INDEX IF NOT EXISTS release_group_idx_artist_credit ON release_group (artist_credit);
+
+CREATE TABLE IF NOT EXISTS release_group_meta (
+	    id                  INTEGER PRIMARY KEY REFERENCES release_group (id),
+	    release_count       INTEGER NOT NULL DEFAULT 0,
+	    first_release_date_year   SMALLINT,
+	    first_release_date_month  SMALLINT,
+	    first_release_date_day    SMALLINT,
+	    rating              SMALLINT,
+	    rating_count        INTEGER
+);
 
 CREATE TABLE IF NOT EXISTS release (
 	id                  INTEGER PRIMARY KEY,
@@ -125,26 +153,13 @@ CREATE INDEX IF NOT EXISTS release_idx_name ON release (name);
 CREATE INDEX IF NOT EXISTS release_idx_release_group ON release (release_group);
 CREATE INDEX IF NOT EXISTS release_idx_artist_credit ON release (artist_credit);
 
--- create medium/track/recording tables
-
-CREATE TABLE IF NOT EXISTS medium_format (
-	id                  INTEGER PRIMARY KEY,
-	name                VARCHAR NOT NULL,
-	parent              INTEGER REFERENCES medium_format (id),
-	child_order         INTEGER NOT NULL DEFAULT 0,
-	year                SMALLINT,
-	has_discids         BOOLEAN NOT NULL DEFAULT FALSE,
-	description         VARCHAR,
-	gid                 UUID NOT NULL
-);
-
-CREATE UNIQUE INDEX IF NOT EXISTS medium_format_idx_gid ON medium_format (gid);
+-- create medium/track tables
 
 CREATE TABLE IF NOT EXISTS medium (
 	id                  INTEGER PRIMARY KEY,
 	release             INTEGER NOT NULL REFERENCES release (id),
 	position            INTEGER NOT NULL,
-	format              INTEGER REFERENCES medium_format (id),
+	format              INTEGER, -- not used
 	name                VARCHAR NOT NULL,
 	edits_pending       INTEGER NOT NULL DEFAULT 0,
 	last_updated        TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -153,26 +168,10 @@ CREATE TABLE IF NOT EXISTS medium (
 
 CREATE INDEX IF NOT EXISTS medium_idx_track_count ON medium (track_count);
 
-CREATE TABLE IF NOT EXISTS recording (
-	id                  INTEGER PRIMARY KEY,
-	gid                 UUID NOT NULL,
-	name                VARCHAR NOT NULL,
-	artist_credit       INTEGER NOT NULL REFERENCES artist_credit (id),
-	length              INTEGER,
-	comment             VARCHAR,
-	edits_pending       INTEGER NOT NULL DEFAULT 0,
-	last_updated        TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	video               BOOLEAN NOT NULL DEFAULT FALSE
-);
-
-CREATE UNIQUE INDEX IF NOT EXISTS recording_idx_gid ON recording (gid);
-CREATE INDEX IF NOT EXISTS recording_idx_name ON recording (name);
-CREATE INDEX IF NOT EXISTS recording_idx_artist_credit ON recording (artist_credit);
-
 CREATE TABLE IF NOT EXISTS track (
 	id                  INTEGER PRIMARY KEY,
 	gid                 UUID NOT NULL,
-	recording           INTEGER NOT NULL REFERENCES recording (id),
+	recording           INTEGER NOT NULL, -- not used
 	medium              INTEGER NOT NULL REFERENCES medium (id),
 	position            INTEGER NOT NULL,
 	number              VARCHAR NOT NULL,
