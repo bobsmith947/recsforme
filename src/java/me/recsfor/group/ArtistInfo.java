@@ -18,9 +18,6 @@ package me.recsfor.group;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.temporal.Temporal;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
@@ -116,21 +113,5 @@ public class ArtistInfo extends HttpServlet {
       default:
         return "Alive/Active";
     }
-  }
-  
-  /**
-   * Formats a date string to match the correct pattern.
-   * @param date the date
-   * @return the date with padded zeroes if needed
-   */
-  private static String padDate(String date) {
-    int first = date.indexOf('-');
-    int second = date.lastIndexOf('-');
-    if (first == -1)
-      return date + "-00-00";
-    else if (first == second)
-      return date + "-00";
-    else
-      return date;
   }
 }
