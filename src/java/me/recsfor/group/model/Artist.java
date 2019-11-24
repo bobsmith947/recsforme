@@ -16,7 +16,7 @@
 package me.recsfor.group.model;
 
 import java.time.temporal.Temporal;
-import java.util.Collections;
+import static java.util.Collections.emptyList;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +41,7 @@ public class Artist extends AbstractModel {
 		comment = null;
 		begin = null;
 		end = null;
-		discog = Collections.emptyList();
+		discog = emptyList();
 	}
 	
 	/**

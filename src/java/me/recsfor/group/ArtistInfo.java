@@ -86,7 +86,7 @@ public class ArtistInfo extends HttpServlet {
 	      artist.getDiscog().forEach(album -> {
 	        out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
 	                + album.getId() + "\"><h5 class=\"mb-0\">" + album.getTitle()
-	                + "</h5></a>");
+	                + "</h5><small class=\"date\">" + album.getFirstRelease() + "</small></a>");
 	      });
 	      out.println("</div></div>");
 	      out.println("</main>");

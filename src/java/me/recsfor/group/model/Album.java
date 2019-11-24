@@ -15,6 +15,7 @@
  */
 package me.recsfor.group.model;
 
+import java.time.temporal.Temporal;
 import java.util.UUID;
 
 /**
@@ -23,6 +24,7 @@ import java.util.UUID;
  */
 public class Album extends AbstractModel {
 	private String title;
+	private Temporal firstRelease;
 
 	/**
 	 * Creates an unknown Album.
@@ -36,10 +38,12 @@ public class Album extends AbstractModel {
 	 * Creates an Album with the specified attributes.
 	 * @param id
 	 * @param title
+	 * @param firstRelease
 	 */
-	public Album(UUID id, String title) {
+	public Album(UUID id, String title, Temporal firstRelease) {
 		super(id);
 		this.title = title;
+		this.firstRelease = firstRelease;
 	}
 
 	/**
@@ -47,6 +51,13 @@ public class Album extends AbstractModel {
 	 */
 	public String getTitle() {
 		return title;
+	}
+
+	/**
+	 * @return the firstRelease
+	 */
+	public Temporal getFirstRelease() {
+		return firstRelease;
 	}
 
 }
