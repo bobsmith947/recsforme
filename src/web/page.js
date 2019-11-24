@@ -15,22 +15,22 @@
  */
 
 import moment from "moment/min/moment.min.js";
-window.Util = require("exports-loader?Util!bootstrap/js/dist/util");
+import Util from "bootstrap/js/dist/util";
 import "bootstrap/js/dist/alert";
 import "bootstrap/js/dist/collapse";
 import "bootstrap/js/dist/dropdown";
 import "bootstrap/js/dist/modal";
-import "@fortawesome/fontawesome-free-webfonts/css/fontawesome.css";
-import "@fortawesome/fontawesome-free-webfonts/css/fa-solid.css";
-import "@fortawesome/fontawesome-free-webfonts/css/fa-brands.css";
 
 $(() => {
   //format dates/times
   $(".date").each(function () {
     const str = $(this).text();
     const date = moment(str, "YYYY-MM-DD", true);
+    const yearMonth = moment(str, "YYYY-MM", true);
     if (date.isValid())
       $(this).text(date.format("LL"));
+    else if (yearMonth.isValid())
+      $(this).text(yearMonth.format("MMMM YYYY"));
     else if (str === "null")
       $(this).text("Unknown date");
     else

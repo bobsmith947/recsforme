@@ -15,7 +15,6 @@
  */
 
 var path = require("path");
-var faMin = require("font-awesome-minify-plugin");
 
 module.exports = {
   entry: ["./src/web/page.js", "./src/web/bindings.js"],
@@ -41,31 +40,7 @@ module.exports = {
           "css-loader",
           "postcss-loader"
         ]
-      },
-      {
-        test: /\.css$/,
-        include: /@fortawesome|fontAwesomeMinify/,
-        use: [
-          "style-loader",
-          "css-loader"
-        ]
-      },
-      {
-        test: /\.(png|svg|jpg|gif)$/,
-        include: /@fortawesome|fontAwesomeMinify/,
-        loader: "file-loader"
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        include: /@fortawesome|fontAwesomeMinify/,
-        loader: "file-loader"
       }
     ]
-  },
-  plugins: [
-    new faMin({
-      globPattern: "**/*(*.jsp|*.jspf|*.java)",
-      debug: true
-    })
-  ]
+  }
 };
