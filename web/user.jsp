@@ -135,14 +135,14 @@
         <a href="#" class="orderer" data-target="#likes">Toggle order</a>
         <div class="list-group text-center" id="likes">
           <c:forEach var="lg" items="${u.likeData.list}">
-            <a href="${ListData.generateContext(lg.type)}${lg.id}" class="list-group-item list-group-item-action">${lg.name}</a>
+            <a href="${lg.type.context}${lg.id}" class="list-group-item list-group-item-action">${lg.name}</a>
           </c:forEach>
         </div>
         <h3>Your dislikes:</h3>
         <a href="#" class="orderer" data-target="#dislikes">Toggle order</a>
         <div class="list-group text-center" id="dislikes">
           <c:forEach var="dg" items="${u.dislikeData.list}">
-            <a href="${ListData.generateContext(dg.type)}${dg.id}" class="list-group-item list-group-item-action">${dg.name}</a>
+            <a href="${dg.type.context}${dg.id}" class="list-group-item list-group-item-action">${dg.name}</a>
           </c:forEach>
         </div>
       </div>

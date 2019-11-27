@@ -96,36 +96,7 @@ public class ListTest {
     String result = ListData.stringifyData(data);
     assertEquals(expResult, result);
   }
-  /**
-   * Tests that the correct servlet context for movies can be generated.
-   */
-  @Test
-  public void testGenerateContextMovie() {
-    System.out.println("Testing context for movies.");
-    String expResult = "MovieInfo?id=";
-    String result = ListData.generateContext(groups[0].getType());
-    assertEquals(expResult, result);
-  }
-  /**
-   * Tests that the correct servlet context for artists can be generated.
-   */
-  @Test
-  public void testGenerateContextArtist() {
-    System.out.println("Testing context for artists.");
-    String expResult = "ArtistInfo?id=";
-    String result = ListData.generateContext(groups[1].getType());
-    assertEquals(expResult, result);
-  }
-  /**
-   * Tests that the correct servlet context for albums can be generated.
-   */
-  @Test
-  public void testGenerateContextAlbum() {
-    System.out.println("Testing context for albums.");
-    String expResult = "AlbumInfo?id=";
-    String result = ListData.generateContext(groups[2].getType());
-    assertEquals(expResult, result);
-  }
+
   /**
    * Tests that a Java object can be turned into a JSON object.
    */

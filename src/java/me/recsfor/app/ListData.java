@@ -114,64 +114,6 @@ public class ListData implements Serializable, Comparable {
   }
   
   /**
-   * Creates a string representing the servlet context path of a group, based on its type.
-   * @param groupType the type of the group
-   * @return the group context
-   */
-  public static String generateContext(String groupType) {
-    String movie = MOVIE.getContext();
-    String artist = ARTIST.getContext();
-    String album = ALBUM.getContext();
-    //<editor-fold defaultstate="collapsed">
-    switch (groupType.toLowerCase()) {
-      case "movie":
-        return movie;
-      case "series":
-        return movie;
-      case "game":
-        return movie;
-      case "person":
-        return artist;
-      case "group":
-        return artist;
-      case "orchestra":
-        return artist;
-      case "choir":
-        return artist;
-      case "character":
-        return artist;
-      case "album":
-        return album;
-      case "single":
-        return album;
-      case "ep":
-        return album;
-      case "broadcast":
-        return album;
-      case "compilation":
-        return album;
-      case "soundtrack":
-        return album;
-      case "spokenword":
-        return album;
-      case "interview":
-        return album;
-      case "audiobook":
-        return album;
-      case "live":
-        return album;
-      case "remix":
-        return album;
-      case "dj-mix":
-        return album;
-      case "mixtape/street":
-        return album;
-      default:
-        return "search.jsp?query=";
-    }
-    //</editor-fold>
-  }
-  /**
    * Creates a JSON string representing an item with the specified group properties.
    * @param name the group name
    * @param id the group id

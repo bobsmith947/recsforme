@@ -17,6 +17,7 @@ package me.recsfor.app;
 
 import java.io.Serializable;
 import static java.util.Objects.hash;
+import me.recsfor.engine.search.Context;
 
 /**
  * Represents a group in a list.
@@ -27,18 +28,18 @@ public class ListGroup implements Serializable {
   private static final long serialVersionUID = -3414177256146753331L;
   private String name;
   private String id;
-  private String type;
+  private Context type;
   
   public ListGroup() {
     name = "";
     id = "";
-    type = "";
+    type = Context.BASIC;
   }
   
   public ListGroup(String name, String id, String type) {
     this.name = name;
     this.id = id;
-    this.type = type;
+    this.type = Context.valueOf(type.toUpperCase());
   }
   
   /**
@@ -68,13 +69,13 @@ public class ListGroup implements Serializable {
   /**
    * @return the type
    */
-  public String getType() {
+  public Context getType() {
     return type;
   }
   /**
    * @param type the type to set
    */
-  public void setType(String type) {
+  public void setType(Context type) {
     this.type = type;
   }
   
