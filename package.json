@@ -22,7 +22,7 @@
     "contributors": [],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "del .\\web\\*.eot & del .\\web\\*.ttf & del .\\web\\*.woff & del .\\web\\*.woff2 && webpack --progress -p"
+	"build": "webpack --progress -p"
     },
     "browserslist": [
         "last 3 versions",
@@ -35,7 +35,6 @@
         }
     },
     "dependencies": {
-        "@fortawesome/fontawesome-free-webfonts": "^1.0.4",
         "bootstrap": "4.3.1",
         "browserslist": "^2.11.3",
         "jquery": "3.4.1",
@@ -52,7 +51,6 @@
         "cssnano": "3.10.0",
         "exports-loader": "^0.7.0",
         "file-loader": "^1.1.11",
-        "font-awesome-minify-plugin": "^1.0.1",
         "postcss-loader": "2.1.3",
         "style-loader": "0.20.3",
         "uglifyjs-webpack-plugin": "1.1.8",
