@@ -24,10 +24,11 @@ CREATE TABLE IF NOT EXISTS user_query (
 
 CREATE TABLE IF NOT EXISTS groups (
 	gid 			UUID PRIMARY KEY,
-	type			VARCHAR(20) NOT NULL
+	type			VARCHAR(20) NOT NULL,
+	name			VARCHAR NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS adds_xref (
+CREATE TABLE IF NOT EXISTS user_groups (
 	user_id			INTEGER REFERENCES users (id),
 	group_gid		UUID	REFERENCES groups (gid),
 	liked			BOOLEAN NOT NULL,
