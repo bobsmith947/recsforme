@@ -38,7 +38,9 @@ try {
       sendInfo: function () {
         $("#subres").empty();
         $.post("register.jsp", 
-          $("#info-form").serialize(), 
+          $("#info-form").find("input").filter(function () {
+            return $(this).val() !== "";
+          }).serialize(), 
           response => $("#subres").append($(response).filter(".res")));
         $("button[form=info-form]").prop("disabled", true);
       },
@@ -46,8 +48,7 @@ try {
         if ($("#name")[0].checkValidity() && changed) {
           $("#nameres").empty();
           changed = false;
-          $.get("register.jsp", {name: this.name()})
-                  .done(response => {
+          $.get("register.jsp", {name: this.name()}, response => {
                     $("#nameres").append($(response).filter(".res"));
                     $("#valid-name").length === 1 ? $("#name")[0].setCustomValidity("") :
                             $("#name")[0].setCustomValidity("Username is already taken.");

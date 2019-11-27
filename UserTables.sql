@@ -5,7 +5,7 @@
 
 CREATE TABLE IF NOT EXISTS users (
 	id                  	SERIAL PRIMARY KEY,
-	username            	VARCHAR(50) NOT NULL,
+	username            	VARCHAR(50) UNIQUE NOT NULL,
 	password_hash       	VARCHAR(128) NOT NULL,
 	password_salt       	VARCHAR(128) NOT NULL,
 	date_registered     	DATE NOT NULL DEFAULT CURRENT_DATE,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS user_query (
 	id                  	SERIAL PRIMARY KEY,
 	contents		VARCHAR NOT NULL,
-	type			VARCHAR(50) NOT NULL,
+	type			VARCHAR(20) NOT NULL,
 	time_searched		TIMESTAMP NOT NULL DEFAULT LOCALTIMESTAMP,
 	user_id			INTEGER NOT NULL REFERENCES users (id)
 );

@@ -8,7 +8,7 @@
       <form id="info-form">
         <div class="form-group">
           <label for="name">Username</label>
-          <input data-bind="textInput:name,event:{blur:nameCheck}" type="text" class="form-control" id="name" name="name" placeholder="Enter your desired username" maxlength="36" pattern="\w+" autofocus required>
+          <input data-bind="textInput:name,event:{blur:nameCheck}" type="text" class="form-control" id="name" name="name" placeholder="Enter your desired username" maxlength="50" pattern="\w+" autofocus required>
           <small class="form-text text-muted">Only alphanumeric characters are allowed.</small>
           <div id="nameres"></div>
         </div>
@@ -29,7 +29,6 @@
         <div class="form-group">
           <label for="dob">Date of birth</label>
           <input data-bind="value:dob" type="date" class="form-control" id="dob" name="dob" max="<%= java.time.LocalDate.now() %>">
-          <small class="form-text text-muted">Your date of birth can be used to tailor recommendations to match your age group.</small>
         </div>
         <div class="mb-2">Gender</div>
         <div class="form-check">
@@ -40,21 +39,17 @@
           <input data-bind="checked:sex" type="radio" class="form-check-input" id="f" name="sex" value="female">
           <label class="form-check-label" for="f">Female</label>
         </div>
-        <small class="form-text text-muted">Your gender can be used to tailor recommendations to match others of your sex.</small>
       </form>
       <h5 class="mb-4">Privacy Policy and Terms</h5>
       <div class="border p-2 p-lg-4 mb-4">
-        <strong class="d-block mb-2">By accepting these terms, you agree to be bound be them.</strong>
+        <strong class="d-block mb-2">By accepting these terms, you agree to be bound by them.</strong>
         <em class="d-block mb-2">The "service" refers to this application, recsforme.</em>
+        <em class="d-block mb-2">"Information" refers to any data sent to the service, including but not limited to: this form, search queries, and the contents of your lists.</em>
         <ol class="list-group-ordered mb-2">
-          <li>The information you submit should be entirely accurate. Submitting false information only harms the service provided to you.</li>
-          <li>The service will not profit off of your information in any way, shape, or form.</li>
-          <li>The service will not share your information with any other group or person.</li>
+          <li>The service will not profit off of, or otherwise share your information with other parties.</li>
+          <li>The service will take necessary measures to secure your information.</li>
           <li>You are to be held liable for your usage of the service.</li>
           <li>You will not take legal action against the owner of the service under any circumstance.</li>
-          <li>Only passwords are stored in an encrypted format. Any other information submitted should not be sensitive.</li>
-          <li>Sensitive information includes your full name, home/work address, or other details you would not want given out to strangers.</li>
-          <li>The owner of the service reserves all rights in accordance with the Apache License 2.0 (below).</li>
         </ol>
       </div>
       <div class="form-check">
