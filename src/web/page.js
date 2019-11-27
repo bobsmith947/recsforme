@@ -15,11 +15,6 @@
  */
 
 import moment from "moment/min/moment.min.js";
-import Util from "bootstrap/js/dist/util";
-import "bootstrap/js/dist/alert";
-import "bootstrap/js/dist/collapse";
-import "bootstrap/js/dist/dropdown";
-import "bootstrap/js/dist/modal";
 
 $(() => {
   //format dates/times
