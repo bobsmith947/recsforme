@@ -1,5 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page contentType="text/html" pageEncoding="UTF-8" import="me.recsfor.app.ListData"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="u" scope="session" class="me.recsfor.app.UserBean" />
 <jsp:useBean id="r" scope="session" class="me.recsfor.engine.recommend.RecommendationBean" />
 <!DOCTYPE html>
@@ -157,7 +157,7 @@
         <c:if test="${r.recommendations != null}">
           <div class="list-group text-center" id="recs">
             <c:forEach var="rec" items="${r.recommendations.list}">
-              <a href="${ListData.generateContext(rec.type)}${rec.id}" class="list-group-item list-group-item-action">${rec.name}</a>
+              <a href="${rec.type.context}${rec.id}" class="list-group-item list-group-item-action">${rec.name}</a>
             </c:forEach>
           </div>
         </c:if>
