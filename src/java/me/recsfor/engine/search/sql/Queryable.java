@@ -15,10 +15,6 @@
  */
 package me.recsfor.engine.search.sql;
 
-import static java.time.LocalDate.of;
-import static java.time.Year.of;
-import static java.time.YearMonth.of;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Year;
@@ -59,11 +55,11 @@ public interface Queryable {
 		if (year != 0) {
 			if (month != 0) {
 				if (day != 0) {
-					return of(year, month, day);
+					return LocalDate.of(year, month, day);
 				}
-				return of(year, month);
+				return YearMonth.of(year, month);
 			}
-			return of(year);
+			return Year.of(year);
 		}
 		return null;
 	}
