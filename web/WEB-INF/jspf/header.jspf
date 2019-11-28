@@ -48,7 +48,7 @@
             <span class="input-group-text">Type</span>
           </div>
           <select class="form-control mr-lg-2" name="type">
-            <option value="movie" selected>Movie/Show/Game</option>
+            <!--<option value="movie" selected>Movie/Show/Game</option>-->
             <option value="artist">Artist</option>
             <option value="album">Album</option>
           </select>
