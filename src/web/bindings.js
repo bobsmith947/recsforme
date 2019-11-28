@@ -18,7 +18,8 @@ import ko from "knockout/build/output/knockout-latest.js";
 import moment from "moment/min/moment.min.js";
 
 try {
-  if (location.pathname.includes("signup.jsp")) {
+    let path = location.pathname;
+  if (path.includes("signup.jsp")) {
     let changed = false;
     const signUpModel = {
       name: ko.observable(""),
@@ -83,7 +84,7 @@ try {
     });
     $("#info-form").find("input").change(() => signUpModel.accepted(false));
   }
-  if (location.pathname.includes("user.jsp")) {
+  if (path.includes("user.jsp")) {
     const logInModel = {
       name: ko.observable(""),
       email: ko.observable(""),
@@ -122,9 +123,9 @@ try {
     };
     ko.applyBindings(logInModel);
   }
-  if (location.pathname.includes("Info")) {
+  if (path.includes("Info")) {
     let name = $("#name").text();
-    let type = $("#type").text();
+    let type = path.substring(path.lastIndexOf("/") + 1, path.indexOf("Info"));
     let id = location.search.substring(4);
     let json = generateItem(name, id, type);
     let vote = checkVote(json);

@@ -68,7 +68,7 @@ public class ArtistInfo extends HttpServlet {
 	      out.println("<!DOCTYPE html><html><title>recsforme :: " + artist.getName() + "</title><body>");
 	      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
 	      out.println("<main><h2 id=\"name\">" + artist.getName() 
-	    		  + " <small class=\"text-muted\">" + artist.getSortName() + "</small></h2>");
+	    		  + " <small class=\"text-muted\">(" + artist.getSortName() + ")</small></h2>");
 	      out.println("<h3 id=\"type\">" + artist.getType() 
 	    		  + " <small class=\"text-muted\">" + artist.getGender() + "</small></h3>");
 	      if (artist.getComment() != null)
