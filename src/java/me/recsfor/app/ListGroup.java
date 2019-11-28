@@ -16,7 +16,6 @@
 package me.recsfor.app;
 
 import java.io.Serializable;
-import static java.util.Objects.hash;
 import me.recsfor.engine.search.Context;
 
 /**
@@ -82,17 +81,12 @@ public class ListGroup implements Serializable {
   @Override
   public boolean equals(Object obj) {
     if (obj == null) {
-      //ensure it's not null
       return false;
     } else if (obj == this) {
-      //check if reference is the same
       return true;
     } else if (obj.getClass() != this.getClass()) {
-      //compare classes rather than instanceof
-      //if this class is extended, children would be equal
       return false;
     } else {
-      //check if fields share the same values
       return obj.hashCode() == this.hashCode();
     }
   }
@@ -100,8 +94,7 @@ public class ListGroup implements Serializable {
   @Override
   public int hashCode() {
     int hash = 7;
-    //TODO consider using just the ID
-    hash = 97 * hash + hash(this.id);
+    hash = 97 * hash + id.hashCode();
     return hash;
   }
   
