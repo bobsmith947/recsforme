@@ -83,7 +83,7 @@ public class AlbumQuerySQL implements Queryable {
 	 */
 	public Temporal queryFirstRelease() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT first_release_date_year, first_release_date_month,"
-				+ " first_release_date_day FROM release_group_meta WHERE release_group_meta.id = ?");
+				+ " first_release_date_day FROM release_group_meta WHERE id = ?");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
@@ -99,8 +99,9 @@ public class AlbumQuerySQL implements Queryable {
 				+ " WHERE rg.id = ? AND rg.type = rgpt.id");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		rs.next();
-		return rs.getString(1);
+		if (rs.next())
+			return rs.getString(1);
+		return "";
 	}
 
 	/**

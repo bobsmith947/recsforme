@@ -66,7 +66,7 @@ public class AlbumInfo extends HttpServlet {
 			out.println("<!DOCTYPE html><html><title>recsforme :: " + album.getTitle() + "</title><body>");
 			request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
 			out.println("<main><h2 id=\"name\">" + album.getTitle() + " - <a href=\"ArtistInfo?id=\"></a></h2>");
-			out.println("<h3 id=\"type\">" + album.getPrimaryType().concat(album.getSecondaryType()) + "</h3>");
+			out.println("<h3 id=\"type\">" + chooseType() + "</h3>");
 			out.println("<h3>Released on: <span class=\"date\">" + album.getFirstRelease() + "</span></h3>");
 			request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
 			out.println("<h4>Tracklist:</h4>");
@@ -92,6 +92,18 @@ public class AlbumInfo extends HttpServlet {
 	@Override
 	public String getServletInfo() {
 		return "Provides information for album groups.";
+	}
+	
+	/**
+	 * Determines how to display the album type.
+	 * @return the secondary type if available, otherwise the primary type if known
+	 */
+	private String chooseType() {
+		if (!album.getSecondaryType().isEmpty())
+			return album.getSecondaryType();
+		if (album.getPrimaryType().isEmpty())
+			return "Unknown type";
+		return album.getPrimaryType();
 	}
 
 }

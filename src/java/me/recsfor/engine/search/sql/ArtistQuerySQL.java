@@ -81,8 +81,9 @@ public class ArtistQuerySQL implements Queryable {
 				+ " WHERE id = (SELECT type FROM artist WHERE id = ?)");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		rs.next();
-		return rs.getString(1);
+		if (rs.next())
+			return rs.getString(1);
+		return "Unknown type";
 	}
 	
 	/**
@@ -94,9 +95,8 @@ public class ArtistQuerySQL implements Queryable {
 				+ " (SELECT gender FROM artist WHERE id = ?)");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		if (rs.next()) {
+		if (rs.next())
 			return rs.getString(1);
-		}
 		return "";
 	}
 	
