@@ -121,18 +121,15 @@ public class AlbumQuerySQL implements Queryable {
 	 * @return the track listing of the album
 	 * @throws SQLException if the query fails
 	 */
-	// TODO this only gets tracks on the first disc
 	public List<Song> queryTrackList() throws SQLException {
 		List<Song> trackList = new LinkedList<>();
-		PreparedStatement ps =  con.prepareStatement("SELECT gid, name, position FROM track"
-				+ " WHERE medium = (SELECT medium.id FROM medium, release"
-				+ " WHERE release = release.id AND release_group = ? LIMIT 1)"
-				+ " ORDER BY position ASC");
+		PreparedStatement ps = con.prepareStatement("WITH first_release AS (SELECT id FROM release WHERE release_group = ? LIMIT 1)"
+				+ " SELECT track.gid, track.name, track.position FROM track, medium, first_release"
+				+ " WHERE release = first_release.id AND medium = medium.id ORDER BY medium.position, track.position");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		while(rs.next()) {
+		while(rs.next())
 			trackList.add(new Song(rs.getObject(1, UUID.class), rs.getString(2), rs.getInt(3)));
-		}
 		return trackList;
 	}
 
