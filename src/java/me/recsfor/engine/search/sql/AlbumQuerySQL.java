@@ -20,6 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -61,9 +62,10 @@ public class AlbumQuerySQL implements Queryable {
 	 */
 	@Override
 	public Album query() throws SQLException {
-		return null; // TODO return an album with the queried data
+
+		return new Album(gid, queryTitle(), queryFirstRelease(), queryPrimaryType(), querySecondaryType(), queryTrackList());	
 	}
-	
+
 	/**
 	 * @return the title of the album
 	 * @throws SQLException if the query fails
@@ -75,7 +77,7 @@ public class AlbumQuerySQL implements Queryable {
 		rs.next();
 		return rs.getString(1);
 	}
-	
+
 	/**
 	 * Determines the <code>Temporal</code> value of the album's first release.
 	 * @return the point in time at which the album first released
@@ -83,29 +85,41 @@ public class AlbumQuerySQL implements Queryable {
 	 */
 	public Temporal queryFirstRelease() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT first_release_date_year, first_release_date_month,"
-				+ " first_release_date_day FROM release_group_meta WHERE id = ?");
+				+ " first_release_date_day FROM release_group_meta WHERE release_group_meta.id = ?");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
 		return Queryable.toTemporal(rs.getInt(1), rs.getInt(2), rs.getInt(3));
 	}
-	
+
 	public String queryPrimaryType() throws SQLException {
-		return null; // TODO join release_group with release_group_primary_type
+		PreparedStatement ps = con.prepareStatement("SELECT name FROM release_group_primary_type AS rgpt, release_group AS rg" + ""
+				+ "WHERE ? release.release_group = rg.id AND rg.type = rgpt.id");
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		return rs.getString(1);
 	}
-	
+
 	public String querySecondaryType() throws SQLException {
-		// TODO join release_group with release_group_secondary_type_join
-		// and then join that with release_group_secondary_type
-		return null;
+		PreparedStatement ps = con.prepareStatement("SELECT rgst.name FROM release_group_secondary_type AS rgst, release_group_secondary_type_join AS rgstjoin, release" +
+				"WHERE ? = rgstjoin.release_group AND rgst.id = rgstjoin.secondary_type");
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		return rs.getString(1);
 	}
-	
+
 	public List<Song> queryTrackList() throws SQLException {
-		List<Song> list = new LinkedList<>();
-		// TODO get the first row from release with this release_group id
-		// then join medium with that release, and then join track with that medium
-		// and add all of the tracks to the list
-		return list;
+		List<Song> trackList = new LinkedList<>();
+		PreparedStatement ps =  con.prepareStatement("SELECT track.id, track.title, track.position FROM track, medium, release" + 
+				"WHERE release.release_group = ? AND medium.release = release.id AND track.id = medium.id ORDER BY position");
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next()) {
+			trackList.add(new Song(gid, rs.getString(1), rs.getInt(2)));
+		}
+		return trackList;
 	}
 
 }
