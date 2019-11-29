@@ -32,6 +32,7 @@ import me.recsfor.group.model.Song;
 /**
  * Queries the recsforme database for data related to Album entities.
  * @author lkitaev
+ * @author abpurdy
  */
 public class AlbumQuerySQL implements Queryable {
 	private Connection con;
@@ -61,12 +62,19 @@ public class AlbumQuerySQL implements Queryable {
 	 */
 	@Override
 	public Album query() throws SQLException {
+		return new Album(gid, queryTitle(), queryFirstRelease(), queryPrimaryType(), querySecondaryType(), queryTrackList());	
+	}
+
+	/**
+	 * @return the title of the album
+	 * @throws SQLException if the query fails
+	 */
+	public String queryTitle() throws SQLException {
 		PreparedStatement ps = con.prepareStatement("SELECT name FROM release_group WHERE id = ?");
-		ps.setObject(1, id);
+		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		// TODO get artist credit
-		return new Album(gid, rs.getString(1), queryFirstRelease(), queryPrimaryType(), querySecondaryType(), queryTrackList());	
+		return rs.getString(1);
 	}
 
 	/**
