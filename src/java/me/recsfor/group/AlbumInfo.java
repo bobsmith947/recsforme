@@ -18,6 +18,7 @@ package me.recsfor.group;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +30,7 @@ import javax.sql.DataSource;
 //import static java.net.URLEncoder.encode;
 import me.recsfor.engine.search.sql.AlbumQuerySQL;
 import me.recsfor.group.model.Album;
+import me.recsfor.group.model.Artist;
 
 /**
  * A servlet to build group pages for albums via <code>GET</code> request.
@@ -40,6 +42,8 @@ import me.recsfor.group.model.Album;
 public class AlbumInfo extends HttpServlet {
 	private static final long serialVersionUID = 3558291301985484615L;
 	private Album album;
+	private List<Artist> artistCredit;
+	private String artistCreditString;
 	
 	@Resource(name="jdbc/MediaRecom")
 	private DataSource db;
@@ -57,7 +61,10 @@ public class AlbumInfo extends HttpServlet {
 			throws ServletException, IOException {
 		String id = request.getParameter("id");
 		try {
-			album = new AlbumQuerySQL(id, db).query();
+			AlbumQuerySQL query = new AlbumQuerySQL(id, db);
+			album = query.query();
+			artistCredit = query.queryArtistCredit();
+			artistCreditString = query.queryArtistCreditString();
 		} catch (SQLException e) {
 			throw new ServletException(e);
 		}
@@ -65,7 +72,15 @@ public class AlbumInfo extends HttpServlet {
 		try (PrintWriter out = response.getWriter()) {
 			out.println("<!DOCTYPE html><html><title>recsforme :: " + album.getTitle() + "</title><body>");
 			request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
-			out.println("<main><h2 id=\"name\">" + album.getTitle() + " - <a href=\"ArtistInfo?id=\"></a></h2>");
+			out.println("<main><h2 id=\"name\">" + album.getTitle() 
+					+ " - <a href=\"ArtistInfo?id=" + artistCredit.get(0).getId() + "\">"
+					+ artistCreditString + "</a></h2>");
+			out.print("<p>All contributing artists: ");
+			artistCredit.forEach(artist -> {
+				out.print("<a href=\"ArtistInfo?id=" + artist.getId() + "\">"
+						+ artist.getName() + "</a> ");
+			});
+			out.println("</p>");
 			out.println("<h3 id=\"type\">" + chooseType() + "</h3>");
 			out.println("<h3>Released on: <span class=\"date\">" + album.getFirstRelease() + "</span></h3>");
 			request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);

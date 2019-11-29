@@ -30,7 +30,7 @@ public class Artist extends AbstractModel {
 	private Set<Album> discog;
 
 	/**
-	 * Creates an unknown Artist
+	 * Creates an unknown Artist.
 	 */
 	public Artist() {
 		super();
@@ -45,8 +45,18 @@ public class Artist extends AbstractModel {
 	}
 	
 	/**
-	 * Creates an Artist with the specified attributes
-	 * @parm id
+	 * Creates a partial Artist with the specified attributes.
+	 * @param id
+	 * @param name 
+	 */
+	public Artist(UUID id, String name) {
+		super(id);
+		this.name = name;
+	}
+	
+	/**
+	 * Creates an Artist with the specified attributes.
+	 * @param id
 	 * @param name
 	 * @param sortName
 	 * @param type

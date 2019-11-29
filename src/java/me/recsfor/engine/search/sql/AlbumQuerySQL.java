@@ -27,6 +27,7 @@ import java.util.UUID;
 import javax.sql.DataSource;
 
 import me.recsfor.group.model.Album;
+import me.recsfor.group.model.Artist;
 import me.recsfor.group.model.Song;
 
 /**
@@ -63,6 +64,37 @@ public class AlbumQuerySQL implements Queryable {
 	@Override
 	public Album query() throws SQLException {
 		return new Album(gid, queryTitle(), queryFirstRelease(), queryPrimaryType(), querySecondaryType(), queryTrackList());	
+	}
+	
+	/**
+	 * @return the Artist credit(s) for the Album
+	 * @throws SQLException if the query fails
+	 */
+	public List<Artist> queryArtistCredit() throws SQLException {
+		List<Artist> artists = new LinkedList<>();
+		PreparedStatement ps = con.prepareStatement("SELECT gid, name FROM artist"
+				+ " WHERE id IN (SELECT artist FROM artist_credit_name, artist_credit, release_group"
+				+ " WHERE artist_credit_name.artist_credit = artist_credit.id"
+				+ " AND release_group.artist_credit = artist_credit.id"
+				+ " AND release_group.id = ?)");
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		while(rs.next())
+			artists.add(new Artist(rs.getObject(1, UUID.class), rs.getString(2)));
+		return artists;
+	}
+	
+	/**
+	 * @return a string representing all Artist credits for the Album
+	 * @throws SQLException if the query fails
+	 */
+	public String queryArtistCreditString() throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT artist_credit.name FROM artist_credit, release_group"
+				+ " WHERE artist_credit.id = release_group.artist_credit AND release_group.id = ?");
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		rs.next();
+		return rs.getString(1);
 	}
 
 	/**
