@@ -13,6 +13,7 @@
 		  SELECT COUNT(*), contents, type FROM user_query
 		  GROUP BY contents, type
 		  ORDER BY COUNT(*) DESC
+		  LIMIT 10
 	  </sql:query>
       <div class="list-group text-center mt-3">
         <c:forEach var="query" items="${top.getRows()}">
