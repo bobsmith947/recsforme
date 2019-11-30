@@ -75,12 +75,14 @@ public class AlbumInfo extends HttpServlet {
 			out.println("<main><h2 id=\"name\">" + album.getTitle() 
 					+ " - <a href=\"ArtistInfo?id=" + artistCredit.get(0).getId() + "\">"
 					+ artistCreditString + "</a></h2>");
-			out.print("<p>All contributing artists: ");
-			artistCredit.forEach(artist -> {
-				out.print("<a href=\"ArtistInfo?id=" + artist.getId() + "\">"
-						+ artist.getName() + "</a> ");
-			});
-			out.println("</p>");
+			if (artistCredit.size() > 1) {
+				out.print("<p>All contributing artists: ");
+				artistCredit.forEach(artist -> {
+					out.print("<a href=\"ArtistInfo?id=" + artist.getId() + "\">"
+							+ artist.getName() + "</a>, ");
+				});
+				out.println("</p>");
+			}
 			out.println("<h3 id=\"type\">" + chooseType() + "</h3>");
 			out.println("<h3>Released on: <span class=\"date\">" + album.getFirstRelease() + "</span></h3>");
 			request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
