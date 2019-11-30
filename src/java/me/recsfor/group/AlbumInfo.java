@@ -76,26 +76,34 @@ public class AlbumInfo extends HttpServlet {
 					+ " - <a href=\"ArtistInfo?id=" + artistCredit.get(0).getId() + "\">"
 					+ artistCreditString + "</a></h2>");
 			if (artistCredit.size() > 1) {
-				out.print("<p>All contributing artists: ");
+				StringBuilder credits = new StringBuilder();
+				credits.append("<p>All contributing artists: ");
 				artistCredit.forEach(artist -> {
-					out.print("<a href=\"ArtistInfo?id=" + artist.getId() + "\">"
-							+ artist.getName() + "</a>, ");
+					credits.append("<a href=\"ArtistInfo?id=")
+							.append(artist.getId())
+							.append("\">")
+							.append(artist.getName())
+							.append("</a>, ");
 				});
-				out.println("</p>");
+				credits.delete(credits.length() - 2, credits.length());
+				credits.append("</p>");
+				out.println(credits.toString());
 			}
 			out.println("<h3 id=\"type\">" + chooseType() + "</h3>");
 			out.println("<h3>Released on: <span class=\"date\">" + album.getFirstRelease() + "</span></h3>");
 			request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
 			out.println("<h4>Tracklist:</h4>");
 			out.println("<ol class=\"list-group text-dark mb-3\">");
+			StringBuilder tracks = new StringBuilder();
 			album.getTrackList().forEach(song -> {
-				out.println("<li class=\"list-group-item d-flex justify-content-between align-items-center\">"
-						+ "<span class=\"badge badge-primary\">"
-						+ song.getPosition()
-						+ "</span>"
-						+ song.getTitle()
-						+ "<span></span></li>");
+				tracks.append("<li class=\"list-group-item d-flex justify-content-between align-items-center\">")
+						.append("<span class=\"badge badge-primary\">")
+						.append(song.getPosition())
+						.append("</span>")
+						.append(song.getTitle())
+						.append("<span></span></li>");
 			});
+			out.println(tracks.toString());
 			out.println("</ol></main>");
 			request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
 			out.println("</body></html>");

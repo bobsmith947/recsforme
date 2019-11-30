@@ -55,41 +55,48 @@ public class ArtistInfo extends HttpServlet {
    * @throws IOException if an I/O error occurs
    */
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-          throws ServletException, IOException {
-	    String id = request.getParameter("id");
-	    try {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String id = request.getParameter("id");
+		try {
 			artist = new ArtistQuerySQL(id, db).query();
 		} catch (SQLException e) {
 			throw new ServletException(e);
 		}
-	    response.setContentType("text/html;charset=UTF-8");
-	    try (PrintWriter out = response.getWriter()) {
-	      out.println("<!DOCTYPE html><html><title>recsforme :: " + artist.getName() + "</title><body>");
-	      request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
-	      out.println("<main><h2 id=\"name\">" + artist.getName() 
-	    		  + " <small class=\"text-muted\">(" + artist.getSortName() + ")</small></h2>");
-	      out.println("<h3 id=\"type\">" + artist.getType() 
-	    		  + " <small class=\"text-muted\">" + artist.getGender() + "</small></h3>");
-	      if (artist.getComment() != null)
-	    	  out.println("<h4>" + artist.getComment() + "<h4>");
-	      out.println("<h3>" + yearsType() + ": <span class=\"date\">" + artist.getBegin() 
-	              + "</span> to <span class=\"date\">" + artist.getEnd() + "</span></h3>");
-	      request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
-	      out.println("<h3>Discography:</h3><div class=\"text-right my-2\">");
-	      out.println("<a href=\"#\" class=\"orderer\" data-target=\"#discog\">Toggle order</a>");
-	      out.println("<div class=\"list-group\" id=\"discog\">");
-	      artist.getDiscog().forEach(album -> {
-	        out.println("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id="
-	                + album.getId() + "\"><h5 class=\"mb-0\">" + album.getTitle()
-	                + "</h5><small class=\"date\">" + album.getFirstRelease() + "</small></a>");
-	      });
-	      out.println("</div></div>");
-	      out.println("</main>");
-	      request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
-	      out.println("</body></html>");
-	    }
-  }
+		response.setContentType("text/html;charset=UTF-8");
+		try (PrintWriter out = response.getWriter()) {
+			out.println("<!DOCTYPE html><html><title>recsforme :: " + artist.getName() + "</title><body>");
+			request.getRequestDispatcher("WEB-INF/jspf/header.jspf").include(request, response);
+			out.println("<main><h2 id=\"name\">" + artist.getName()
+					+ " <small class=\"text-muted\">(" + artist.getSortName() + ")</small></h2>");
+			out.println("<h3 id=\"type\">" + artist.getType()
+					+ " <small class=\"text-muted\">" + artist.getGender() + "</small></h3>");
+			if (artist.getComment() != null) {
+				out.println("<h4>" + artist.getComment() + "<h4>");
+			}
+			out.println("<h3>" + yearsType() + ": <span class=\"date\">" + artist.getBegin()
+					+ "</span> to <span class=\"date\">" + artist.getEnd() + "</span></h3>");
+			request.getRequestDispatcher("WEB-INF/jspf/vote.jspf").include(request, response);
+			out.println("<h3>Discography:</h3><div class=\"text-right my-2\">");
+			out.println("<a href=\"#\" class=\"orderer\" data-target=\"#discog\">Toggle order</a>");
+			out.println("<div class=\"list-group\" id=\"discog\">");
+			StringBuilder discog = new StringBuilder();
+			artist.getDiscog().forEach(album -> {
+				discog.append("<a class=\"list-group-item list-group-item-action p-2\" href=\"AlbumInfo?id=")
+						.append(album.getId())
+						.append("\"><h5 class=\"mb-0\">")
+						.append(album.getTitle())
+						.append("</h5><small class=\"date\">")
+						.append(album.getFirstRelease())
+						.append("</small></a>");
+			});
+			out.println(discog.toString());
+			out.println("</div></div>");
+			out.println("</main>");
+			request.getRequestDispatcher("WEB-INF/jspf/footer.jspf").include(request, response);
+			out.println("</body></html>");
+		}
+	}
 
   /**
    * Returns a short description of the servlet.
