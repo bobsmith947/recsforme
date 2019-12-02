@@ -159,7 +159,9 @@ CREATE TABLE IF NOT EXISTS art_type (
 );
 CREATE TABLE IF NOT EXISTS cover_art (
 	id                  INTEGER PRIMARY KEY,
-	release             VARCHAR
+	release             VARCHAR,
+	comment             VARCHAR,         
+	date_uploaded       TIMESTAMP WItH TIME ZONE DEFAULT NOW()
 );
 CREATE TABLE IF NOT EXISTS cover_art_type (
 	id                  INTEGER PRIMARY KEY,
