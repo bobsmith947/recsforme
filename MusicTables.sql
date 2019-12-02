@@ -148,6 +148,24 @@ CREATE TABLE IF NOT EXISTS release (
 	last_updated        TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS release_group_cover_art (
+	release_group       INTEGER PRIMARY KEY REFERENCES release_group (id),
+	release             INTEGER REFERENCES release(id)
+);
+
+CREATE TABLE IF NOT EXISTS art_type (
+	id                  INTEGER PRIMARY KEY,
+	release             VARCHAR
+);
+CREATE TABLE IF NOT EXISTS cover_art (
+	id                  INTEGER PRIMARY KEY,
+	release             VARCHAR
+);
+CREATE TABLE IF NOT EXISTS cover_art_type (
+	id                  INTEGER PRIMARY KEY,
+	type_id             INTEGER NOT NULL REFERENCES release(id)
+);
+
 CREATE UNIQUE INDEX IF NOT EXISTS release_idx_gid ON release (gid);
 CREATE INDEX IF NOT EXISTS release_idx_name ON release (name);
 CREATE INDEX IF NOT EXISTS release_idx_release_group ON release (release_group);
