@@ -148,30 +148,16 @@ CREATE TABLE IF NOT EXISTS release (
 	last_updated        TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS release_group_cover_art (
-	release_group       INTEGER PRIMARY KEY REFERENCES release_group (id),
-	release             INTEGER REFERENCES release(id)
-);
-
-CREATE TABLE IF NOT EXISTS art_type (
-	id                  INTEGER PRIMARY KEY,
-	release             VARCHAR
-);
-CREATE TABLE IF NOT EXISTS cover_art (
-	id                  INTEGER PRIMARY KEY,
-	release             VARCHAR,
-	comment             VARCHAR,         
-	date_uploaded       TIMESTAMP WItH TIME ZONE DEFAULT NOW()
-);
-CREATE TABLE IF NOT EXISTS cover_art_type (
-	id                  INTEGER PRIMARY KEY,
-	type_id             INTEGER NOT NULL REFERENCES release(id)
-);
-
 CREATE UNIQUE INDEX IF NOT EXISTS release_idx_gid ON release (gid);
 CREATE INDEX IF NOT EXISTS release_idx_name ON release (name);
 CREATE INDEX IF NOT EXISTS release_idx_release_group ON release (release_group);
 CREATE INDEX IF NOT EXISTS release_idx_artist_credit ON release (artist_credit);
+
+CREATE TABLE IF NOT EXISTS release_coverart (
+	    id                  INTEGER PRIMARY KEY REFERENCES release (id),
+	    last_updated        TIMESTAMP WITH TIME ZONE,
+	    cover_art_url       VARCHAR(255)
+);
 
 -- create medium/track tables
 
