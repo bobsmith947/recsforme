@@ -166,4 +166,17 @@ public class AlbumQuerySQL implements Queryable {
 		return trackList;
 	}
 
+	/**
+	 * @return the cover art url of the album
+	 * @throws SQLException if the query fails
+	 */
+	public String queryCoverArt() throws SQLException {
+		PreparedStatement ps = con.prepareStatement("SELECT cover_art_url FROM release_coverart"
+				+ " WHERE id IN (SELECT id FROM release WHERE release_group = ?) AND cover_art_url IS NOT NULL");
+		ps.setInt(1, id);
+		ResultSet rs = ps.executeQuery();
+		if (rs.next())
+			return rs.getString(1);
+		return "";
+	}
 }

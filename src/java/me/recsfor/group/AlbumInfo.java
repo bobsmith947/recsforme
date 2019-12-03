@@ -44,6 +44,7 @@ public class AlbumInfo extends HttpServlet {
 	private Album album;
 	private List<Artist> artistCredit;
 	private String artistCreditString;
+	private String coverArt;
 	
 	@Resource(name="jdbc/MediaRecom")
 	private DataSource db;
@@ -65,6 +66,7 @@ public class AlbumInfo extends HttpServlet {
 			album = query.query();
 			artistCredit = query.queryArtistCredit();
 			artistCreditString = query.queryArtistCreditString();
+			coverArt = query.queryCoverArt();
 		} catch (SQLException e) {
 			throw new ServletException(e);
 		}
@@ -75,6 +77,8 @@ public class AlbumInfo extends HttpServlet {
 			out.println("<main><h2 id=\"name\">" + album.getTitle() 
 					+ " - <a href=\"ArtistInfo?id=" + artistCredit.get(0).getId() + "\">"
 					+ artistCreditString + "</a></h2>");
+			if (!coverArt.isEmpty())
+				out.println("<img class=\"mx-auto d-block\" src=\"" + coverArt + "\" alt=\"Cover Art\">");
 			if (artistCredit.size() > 1) {
 				StringBuilder credits = new StringBuilder();
 				credits.append("<p>All contributing artists: ");
