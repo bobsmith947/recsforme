@@ -9,14 +9,14 @@ CREATE TABLE IF NOT EXISTS users (
 	password_hash       	VARCHAR(128) NOT NULL,
 	password_salt       	VARCHAR(128) NOT NULL,
 	date_registered     	DATE NOT NULL DEFAULT CURRENT_DATE,
-	email			VARCHAR(50),
+	email			VARCHAR(254),
 	sex			VARCHAR(10),
 	date_of_birth		DATE
 );
 
 CREATE TABLE IF NOT EXISTS user_query (
 	id                  	SERIAL PRIMARY KEY,
-	contents		VARCHAR NOT NULL,
+	contents		VARCHAR(100) NOT NULL,
 	type			VARCHAR(20) NOT NULL,
 	time_searched		TIMESTAMP NOT NULL DEFAULT LOCALTIMESTAMP,
 	user_id			INTEGER REFERENCES users (id)
