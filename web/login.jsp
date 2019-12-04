@@ -32,6 +32,7 @@
 							SELECT name, gid, type, liked FROM groups, user_groups
 							WHERE user_id = ${u.id} 
 							AND group_gid = groups.gid 
+							ORDER BY time_added
 						</sql:query>
 						<c:if test="${param.update}">
 							${u.removeGroups(groups)}
