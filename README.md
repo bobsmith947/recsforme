@@ -4,6 +4,8 @@
 
 A media recommendation web app.
 
+It allows for users to search for artists and albums (using data from MusicBrainz), and add them to their like and dislike lists. From there, a recommendation algorithm is able to suggest new artists and albums for the user, based on what similar users have liked.
+
 The backend is composed of Java classes, beans, and servlets. The Javadoc for these can be viewed [here](https://bobsmith947.github.io/javadoc/). There are also a number of JavaServer Pages (JSP) as well as a SQL database. Bootstrap is used for styling the pages, and Knockout is used for managing states.
 
 ## Getting Started
@@ -13,11 +15,11 @@ Want to get recsforme set up on your local machine for development and testing p
 ### Prerequisites
 
 * JDK (at least Java 8)
-* Tomcat server ([Tomcat](https://tomcat.apache.org) 8.5 is recommended)
-* SQL database (template is provided)
+* [Apache Tomcat 8.5](https://tomcat.apache.org/download-80.cgi)
+* SQL database
 * [Apache Ant and Apache Ivy](https://ant.apache.org/)
 * npm (comes with [Node.js](https://nodejs.org/en/download/))
-* [An OMDb API key](https://www.omdbapi.com/) (set it as an environment variable named *OMDB_KEY*)
+* ~~[An OMDb API key](https://www.omdbapi.com/) (set it as an environment variable named *OMDB_KEY*)~~
 
 #### Setting up Tomcat and Ant
 
@@ -38,6 +40,15 @@ Want to get recsforme set up on your local machine for development and testing p
     ```
 5. Copy/link the Ivy .jar file as well as the contents of `$CATALINA_HOME/lib` to the Ant `lib` directory
 
+#### Setting up the database
+
+The code and scripts provided are written for use with PostgreSQL. It may be possible to use with other SQL implementations with some modifications. You need to perform these steps in order to set up the database.
+
+1. Execute `MusicTables.sql`
+2. [Copy the MusicBrainz data into the tables](https://musicbrainz.org/doc/MusicBrainz_Database/Download)
+3. Execute `UserTables.sql`
+4. Execute `InsertGroups.sql`
+
 ### Installing
 
     cd *directory you want to install recsforme in*
@@ -50,27 +61,27 @@ Want to get recsforme set up on your local machine for development and testing p
 
 Start the server:
 
-    $CATALINA_HOME/bin/catalina start
+    ant start
 
 Build and deploy the application:    
 
     ant run
     
-Undeploy the application:
+Redeploy the application (when you make changes):
 
-    ant run-undeploy
+    ant redeploy
+
+Stop the server:
+
+    ant stop
     
-Cleanup build:
-
-    ant clean
-
 Run unit tests:
 
     ant test
 
-Stop the server:
+Cleanup build:
 
-    $CATALINA_HOME/bin/catalina stop
+    ant clean
 
 ## Contributing
 
