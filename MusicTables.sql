@@ -99,13 +99,6 @@ CREATE TABLE IF NOT EXISTS release_group_secondary_type (
 
 CREATE UNIQUE INDEX IF NOT EXISTS release_group_secondary_type_idx_gid ON release_group_secondary_type (gid);
 
-CREATE TABLE IF NOT EXISTS release_group_secondary_type_join (
-	    release_group INTEGER REFERENCES release_group (id),
-	    secondary_type INTEGER REFERENCES release_group_secondary_type (id),
-	    created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	    PRIMARY KEY (release_group, secondary_type)
-);
-
 CREATE TABLE IF NOT EXISTS release_group (
 	id                  INTEGER PRIMARY KEY,
 	gid                 UUID NOT NULL,
@@ -120,6 +113,13 @@ CREATE TABLE IF NOT EXISTS release_group (
 CREATE UNIQUE INDEX IF NOT EXISTS release_group_idx_gid ON release_group (gid);
 CREATE INDEX IF NOT EXISTS release_group_idx_name ON release_group (name);
 CREATE INDEX IF NOT EXISTS release_group_idx_artist_credit ON release_group (artist_credit);
+
+CREATE TABLE IF NOT EXISTS release_group_secondary_type_join (
+	    release_group INTEGER REFERENCES release_group (id),
+	    secondary_type INTEGER REFERENCES release_group_secondary_type (id),
+	    created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+	    PRIMARY KEY (release_group, secondary_type)
+);
 
 CREATE TABLE IF NOT EXISTS release_group_meta (
 	    id                  INTEGER PRIMARY KEY REFERENCES release_group (id),

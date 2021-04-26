@@ -36,3 +36,11 @@ CREATE TABLE IF NOT EXISTS user_groups (
 	PRIMARY KEY (user_id, group_gid)
 );
 
+CREATE TABLE IF NOT EXISTS user_recommendations (
+	user_id			INTEGER REFERENCES users (id),
+	group_gid		UUID	REFERENCES groups (gid),
+	score			REAL NOT NULL CHECK (score > -1 AND score < 1),
+	time_updated		TIMESTAMP NOT NULL DEFAULT LOCALTIMESTAMP,
+	PRIMARY KEY (user_id, group_gid)
+);
+
