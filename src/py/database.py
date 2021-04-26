@@ -3,9 +3,10 @@
 import psycopg2, os, uuid, random
 
 class User:
-	def __init__(self, userId, userName):
+	def __init__(self, userId, userName, userGroups):
 		self.id = userId
 		self.name = userName
+		self.groups = userGroups
 
 class Group:
 	def __init__(self, gid, gtype, gname):
@@ -25,7 +26,11 @@ cur = conn.cursor()
 
 def getUsers():
 	cur.execute("SELECT id, username FROM users")
-	return [User(*x) for x in cur]
+	return [User(*x, getUserGroups(x[0])) for x in cur]
+
+def getUserGroups(userId):
+	cur.execute("SELECT group_gid, liked FROM user_groups WHERE user_id = %s", (userId,))
+	return {uuid.UUID(x[0]): x[1] for x in cur}
 
 def getArtists():
 	cur.execute("SELECT * FROM groups WHERE type LIKE 'artist'")
@@ -47,5 +52,3 @@ def createTestUsers(numUsers=100, numGroups=10):
 			cur.execute("INSERT INTO user_groups VALUES (%s, %s, %s, LOCALTIMESTAMP)",
 				(i, str(group.id), bool(random.getrandbits(1))))
 
-cur.close()
-conn.close()
