@@ -26,19 +26,19 @@ cur = conn.cursor()
 
 def getUsers():
 	cur.execute("SELECT id, username FROM users")
-	return [User(*x, getUserGroups(x[0])) for x in cur]
+	return [User(*x, getUserGroups(x[0])) for x in cur.fetchall()]
 
 def getUserGroups(userId):
 	cur.execute("SELECT group_gid, liked FROM user_groups WHERE user_id = %s", (userId,))
-	return {uuid.UUID(x[0]): x[1] for x in cur}
+	return {uuid.UUID(x[0]): x[1] for x in cur.fetchall()}
 
 def getArtists():
 	cur.execute("SELECT * FROM groups WHERE type LIKE 'artist'")
-	return [Group(*x) for x in cur]
+	return [Group(*x) for x in cur.fetchall()]
 
 def getAlbums():
 	cur.execute("SELECT * FROM groups WHERE type LIKE 'album'")
-	return [Group(*x) for x in cur]
+	return [Group(*x) for x in cur.fetchall()]
 
 def createTestUsers(numUsers=100, numGroups=10):
 	artists = getArtists()
