@@ -7,12 +7,18 @@ class User:
 		self.id = userId
 		self.name = userName
 		self.groups = userGroups
+	
+	def __str__(self):
+		return f"{self.name} ({self.id})"
 
 class Group:
 	def __init__(self, gid, gtype, gname):
 		self.id = uuid.UUID(gid)
 		self.type = gtype
 		self.name = gname
+	
+	def __str__(self):
+		return f"{self.name} - {self.type} ({self.id})"
 
 conn = psycopg2.connect(
 	dbname=os.environ.get("PGDATABASE"),
