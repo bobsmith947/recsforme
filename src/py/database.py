@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import psycopg2, os, uuid, random
+from psycopg2.extras import execute_values
 
 class User:
 	def __init__(self, userId, userName, userGroups):
@@ -50,19 +51,16 @@ def createTestUsers(numUsers=100, numGroups=10):
 	artists = getArtists()
 	albums = getAlbums()
 	random.seed()
+	execute_values(cur, "INSERT INTO users VALUES %s", [(i, f"test{i}") for i in range(numUsers)])
 	for i in range(numUsers):
-		cur.execute("INSERT INTO users VALUES (%s, %s, '', '')",
-			(i, f"test{i}"))
 		groups = random.sample(artists, numGroups // 2) + random.sample(albums, numGroups // 2)
-		for group in groups:
-			cur.execute("INSERT INTO user_groups VALUES (%s, %s, %s)",
-				(i, str(group.id), bool(random.getrandbits(1))))
+		execute_values(cur, "INSERT INTO user_groups VALUES %s",
+				[(i, str(x.id), bool(random.getrandbits(1))) for x in groups])
 
 def updateUserRecs(users):
 	for user in users:
-		for group, score in user.recs.items():
-			cur.execute("""INSERT INTO user_recommendations VALUES (%s, %s, %s)
-					ON CONFLICT (user_id, group_gid) DO UPDATE
-					SET score = %s, time_updated = DEFAULT""",
-					(user.id, str(group.id), float(score), float(score)))
+		execute_values(cur, """INSERT INTO user_recommendations VALUES %s
+				ON CONFLICT (user_id, group_gid) DO UPDATE
+				SET score = EXCLUDED.score, time_updated = DEFAULT""",
+				[(user.id, str(x.id), float(y)) for x, y in user.recs.items()])
 
