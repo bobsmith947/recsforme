@@ -14,7 +14,7 @@
 }
 
 \title{recsforme: A media recommendation web app\thanks{\url{https://github.com/bobsmith947/recsforme}}}
-\author{Lucas Kitaev\thanks{Group \#18}}
+\author{Lucas Kitaev}
 \date{\today}
 
 \begin{document}
@@ -38,5 +38,28 @@
 	The chosen model is the \href{https://github.com/iskandr/fancyimpute/blob/master/fancyimpute/similarity_weighted_averaging.py}{\tt SimilarityWeightedAveraging} class from the {\tt fancyimpute} package for matrix completion. This model seemed like a good choice because it expects sparse input, which is reasonable since most users will only ever add a small percentage of the total number of groups to their lists. The model actually users a similar approach to the algorithm I wrote myself. It calculates similarity between rows (users) and uses those similarities to calculate missing entries.
 
 	\subsection*{Evaluation}
-	Since it's impossible to know the true completed matrix, and obscuring entries isn't particularly valuable for randomly generated data, there is no scoring metric I'm interested in using to evaluate the model. Instead, I'm more interested in the computational performance of the model.
+	Since it's impossible to know the true completed matrix, and obscuring entries isn't particularly valuable for randomly generated data, there is no scoring metric I'm interested in using to evaluate the model. Instead, I'm more interested in the computational performance of the model. For testing this, I created 1,000 users each with 100 artists and 100 albums on their lists. I ran it on my laptop with a 2 GHz CPU to get an idea of the lower end of performance; only one CPU core was utilized; memory usage peaked at 1.4 GB. 13,430 recommendations were generated in total by picking up to 10 album recommendations and 10 artist recommendations for each user (recommendations are not added if they do not have a score of at least 0 on a scale of -1 to 1). The verbose output and execution time is shown on the next page.
+
+	\newpage
+
+	\begin{verbatim}
+	Album recommendations:
+	[SimilarityWeightedAveraging] Creating dictionary from matrix  with shape (1000, 18595)
+	[SimilarityWeightedAveraging] # rows = 1000
+	[SimilarityWeightedAveraging] # columns = 18513
+	[SimilarityWeightedAveraging] Computed 61416 similarities between rows
+
+	Artist recommendations:
+	[SimilarityWeightedAveraging] Creating dictionary from matrix  with shape (1000, 184055)
+	[SimilarityWeightedAveraging] # rows = 1000
+	[SimilarityWeightedAveraging] # columns = 77367
+	[SimilarityWeightedAveraging] Computed 1205 similarities between rows
+
+	real    32m50.788s
+	user    17m34.063s
+	sys     2m20.047s
+	\end{verbatim}
+
+	\section*{Conclusion}
+	The next step for the project will be setting up the website to get recommendations from the database. This will allow me to do further testing by manually creating users that have more representative tastes, and seeing if I can get reasonable recommendations for those users. I can also do more performance tuning, and potentially implement multithreading to allow utilization of multiple CPU cores.
 \end{document}
