@@ -1,0 +1,42 @@
+\documentclass[12pt]{article}
+\setlength{\evensidemargin}{-0.25in}
+\setlength{\oddsidemargin} {-0.25in}
+\setlength{\textwidth}     {+7.00in}
+\setlength{\topmargin}     {+0.00in}
+\setlength{\textheight}    {+8.50in}
+
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,      
+	urlcolor=cyan,
+}
+
+\title{recsforme: A media recommendation web app\thanks{\url{https://github.com/bobsmith947/recsforme}}}
+\author{Lucas Kitaev\thanks{Group \#18}}
+\date{\today}
+
+\begin{document}
+	\maketitle
+
+	\section*{Introduction}
+	I started working on this in 2017 as my high school senior project. Over the years, I have found myself coming back and making improvements with the new skills I have learned. The website allows users to search for music, TV shows, and movies (these are referred to as ``groups''). Users can vote on a group by either ``liking'' or ``disliking'' it. Users can view their list of likes and dislikes, and generate recommendations based on the groups they have liked and disliked. The backend of the application is built on the since-renamed Java EE platform for Java 8. The frontend of the application uses a Model-View-ViewModel (MVVM) architecture provided by \href{https://knockoutjs.com/}{Knockout} and styling is done through \href{https://getbootstrap.com/}{Bootstrap}.
+
+	\section*{The Problem}
+	Turns out the na\"{\i}ve recommendation engine implementation I wrote wasn't the most efficient! To generate recommendations for a user, the algorithm would essentially compare that user to all other users, and rank them based on similarity. The recommendations would then be taken from the users with the highest similarity. You can only imagine this approach would quickly become slow as the number of users increased. Given that this website is mostly for my own academic interest rather than to actually provide a service to real people, efficency is not much of a concern, but I was looking to see if machine learning could help speed up the process.
+
+	\newpage
+
+	\section*{The Solution}
+	Since Java doesn't have the best support for machine learning toolkits, I figured that I should stick with Python to implement the new recommendation engine. The proposed solution is a Python script can be periodically run to generate recommendations for all users. The script can communicate with the backend Postgres database using \href{https://www.psycopg.org/}{Psycopg}.
+
+	\subsection*{Data}
+	Group information is taken from the \href{https://musicbrainz.org/doc/MusicBrainz_Database/}{MusicBrainz Database}. As the name suggests, this only covers music groups, likes artists and albums. The website previously used an alternative API similar to IMDb to get information on movies and TV shows, however that has since been removed for the purposes of this project. After importing the MusicBrainz sample dataset, I created a list of users and randomly assigned groups as either likes or dislikes of that user. Obviously, randomly picking things to like and dislike may not accurately represent the taste of most real people, but given the absence of real people to use, this will serve as the training data.
+
+	\subsection*{Model}
+	The chosen model is the \href{https://github.com/iskandr/fancyimpute/blob/master/fancyimpute/similarity_weighted_averaging.py}{\tt SimilarityWeightedAveraging} class from the {\tt fancyimpute} package for matrix completion. This model seemed like a good choice because it expects sparse input, which is reasonable since most users will only ever add a small percentage of the total number of groups to their lists. The model actually users a similar approach to the algorithm I wrote myself. It calculates similarity between rows (users) and uses those similarities to calculate missing entries.
+
+	\subsection*{Evaluation}
+	Since it's impossible to know the true completed matrix, and obscuring entries isn't particularly valuable for randomly generated data, there is no scoring metric I'm interested in using to evaluate the model. Instead, I'm more interested in the computational performance of the model.
+\end{document}
