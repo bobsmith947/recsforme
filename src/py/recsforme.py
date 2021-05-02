@@ -6,52 +6,57 @@ from fancyimpute import SimilarityWeightedAveraging
 
 users = getUsers()
 artists = getArtists()
+artistIds = [x.id for x in artists]
 albums = getAlbums()
+albumIds = [x.id for x in albums]
 
 artistLikes = np.full((len(users), len(artists)), np.nan, np.half)
 albumLikes = np.full((len(users), len(albums)), np.nan, np.half)
 
 # fill in likes/dislikes for each user
 for i in range(len(users)):
-	for j in range(len(albums)):
-		liked = users[i].groups.get(albums[j].id)
-		if liked is not None:
+	for gid, liked in users[i].groups.items():
+		albumIndex = indexOf(albumIds, gid)
+		if albumIndex != -1:
+			j = albumIndex
 			if liked is True:
-				albumLikes[i][j] = 1.0
+				albumLikes.itemset((i, j), 1.0)
 			else:
-				albumLikes[i][j] = -1.0
-	for j in range(len(artists)):
-		liked = users[i].groups.get(artists[j].id)
-		if liked is not None:
+				albumLikes.itemset((i, j), -1.0)
+			continue
+		artistIndex = indexOf(artistIds, gid)
+		if artistIndex != -1:
+			j = artistIndex
 			if liked is True:
-				artistLikes[i][j] = 1.0
+				artistLikes.itemset((i, j), 1.0)
 			else:
-				artistLikes[i][j] = -1.0
+				artistLikes.itemset((i, j), -1.0)
 
-# create mask for likes/dislikes
-albumMask = np.ma.make_mask(~np.isnan(albumLikes))
-artistMask = np.ma.make_mask(~np.isnan(artistLikes))
-
-# fill in missing entries
-# mask out the entries that have already been filled in
+# fill in missing entries using matrix completion model
+# mask out entries that have already been filled in
+# delete likes after running model to free memory
 swa = SimilarityWeightedAveraging(verbose=True)
-albumRecs = np.ma.MaskedArray(swa.fit_transform(albumLikes),
-				albumMask, fill_value=np.NINF)
-artistRecs = np.ma.MaskedArray(swa.fit_transform(artistLikes),
-				artistMask, fill_value=np.NINF)
+albumRecs = np.ma.MaskedArray(swa.fit_transform(albumLikes),~np.isnan(albumLikes))
+del albumLikes
+artistRecs = np.ma.MaskedArray(swa.fit_transform(artistLikes),~np.isnan(artistLikes))
+del artistLikes
 
 # find top picks and add them to each user's recommendations
 numPicks = 10
 for i in range(len(users)):
 	users[i].recs = {}
-	topAlbums = albumRecs[i].argsort(endwith=False)[-numPicks:]
-	topArtists = artistRecs[i].argsort(endwith=False)[-numPicks:]
+	topAlbums = albumRecs[i].argsort(endwith=False)[-numPicks:].tolist()
+	topArtists = artistRecs[i].argsort(endwith=False)[-numPicks:].tolist()
 	for j in topAlbums:
-		if albumRecs[i][j] > 0:
-			users[i].recs[albums[j]] = albumRecs[i][j]
+		score = albumRecs.item((i, j))
+		if score > 0:
+			users[i].recs[albums[j]] = score
 	for j in topArtists:
-		if artistRecs[i][j] > 0:
-			users[i].recs[artists[j]] = artistRecs[i][j]
+		score = artistRecs.item((i, j))
+		if score > 0:
+			users[i].recs[artists[j]] = score
 
+del albumRecs
+del artistRecs
 updateUserRecs(users)
 

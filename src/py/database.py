@@ -2,6 +2,7 @@
 
 import psycopg2, os, uuid, random
 from psycopg2.extras import execute_values
+from bisect import bisect_left
 
 class User:
 	def __init__(self, userId, userName, userGroups):
@@ -32,7 +33,7 @@ conn.autocommit = True
 cur = conn.cursor()
 
 def getUsers():
-	cur.execute("SELECT id, username FROM users")
+	cur.execute("SELECT id, username FROM users ORDER BY id")
 	return [User(*x, getUserGroups(x[0])) for x in cur.fetchall()]
 
 def getUserGroups(userId):
@@ -40,11 +41,11 @@ def getUserGroups(userId):
 	return {uuid.UUID(x[0]): x[1] for x in cur.fetchall()}
 
 def getArtists():
-	cur.execute("SELECT * FROM groups WHERE type LIKE 'artist'")
+	cur.execute("SELECT * FROM groups WHERE type LIKE 'artist' ORDER BY gid")
 	return [Group(*x) for x in cur.fetchall()]
 
 def getAlbums():
-	cur.execute("SELECT * FROM groups WHERE type LIKE 'album'")
+	cur.execute("SELECT * FROM groups WHERE type LIKE 'album' ORDER BY gid")
 	return [Group(*x) for x in cur.fetchall()]
 
 def createTestUsers(numUsers=100, numGroups=10):
@@ -62,5 +63,11 @@ def updateUserRecs(users):
 		execute_values(cur, """INSERT INTO user_recommendations VALUES %s
 				ON CONFLICT (user_id, group_gid) DO UPDATE
 				SET score = EXCLUDED.score, time_updated = DEFAULT""",
-				[(user.id, str(x.id), float(y)) for x, y in user.recs.items()])
+				[(user.id, str(x.id), y) for x, y in user.recs.items()])
+
+def indexOf(a, x):
+	i = bisect_left(a, x)
+	if i != len(a) and a[i] == x:
+		return i
+	return -1
 
