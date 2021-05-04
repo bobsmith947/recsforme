@@ -19,6 +19,7 @@ import java.beans.*;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.SortedMap;
+import java.util.LinkedHashSet;
 import javax.servlet.jsp.jstl.sql.Result;
 import me.recsfor.app.ListData;
 import me.recsfor.app.ListGroup;
@@ -67,6 +68,15 @@ public class RecommendationBean implements Serializable {
 			}
 			users.put(id, user);
 		}
+	}
+
+	public void addRecs(Result results) {
+		LinkedHashSet<ListGroup> recs = new LinkedHashSet<>();
+		for (SortedMap row : results.getRows()) {
+			recs.add(new ListGroup(row.get("name").toString(),
+				row.get("gid").toString(), row.get("type").toString()));
+		}
+		setRecommendations(new ListData(recs));
 	}
 
 	/**

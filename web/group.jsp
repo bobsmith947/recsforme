@@ -90,17 +90,15 @@
 		<c:if test="${action == 'recommend'}">
 			<c:if test="${!param.type}">
 				<c:if test="${r.recommendations == null}">
-					<c:if test="${r.users == null}">
-						<sql:query var="users" dataSource="jdbc/MediaRecom">
-							SELECT id, username, gid, name, type, liked FROM users, groups, user_groups
-							WHERE id != ${u.id}
-							AND user_id = id
-							AND group_gid = gid
-						</sql:query>
-						${r.addUsers(users)}
-					</c:if>
-					<c:set var="gen" value="${Generator(r.users, u.likeData, u.dislikeData)}" />
-					<jsp:setProperty name="r" property="recommendations" value="${gen.listRecommendations(0)}" />
+					<sql:query var="recs" dataSource="jdbc/MediaRecom">
+						SELECT gid, name, type FROM groups, user_recommendations
+						WHERE user_id = ${u.id}
+						AND group_gid = gid
+					</sql:query>
+					${r.addRecs(recs)}
+				</c:if>
+				<c:if test="${r.recommendations.list.isEmpty()}">
+					<h6 class="text-warning res">You have no recommendations at the moment, check again later.</h6>
 				</c:if>
 				<div class="list-group text-center res" id="recs">
 					<c:forEach var="rec" items="${r.recommendations.list}">
