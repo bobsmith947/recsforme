@@ -41,11 +41,11 @@ def getUserGroups(userId):
 	return {uuid.UUID(x[0]): x[1] for x in cur.fetchall()}
 
 def getArtists():
-	cur.execute("SELECT * FROM groups WHERE type LIKE 'artist' ORDER BY gid")
+	cur.execute("SELECT * FROM groups WHERE type = 'artist' ORDER BY gid")
 	return [Group(*x) for x in cur.fetchall()]
 
 def getAlbums():
-	cur.execute("SELECT * FROM groups WHERE type LIKE 'album' ORDER BY gid")
+	cur.execute("SELECT * FROM groups WHERE type = 'album' ORDER BY gid")
 	return [Group(*x) for x in cur.fetchall()]
 
 def createTestUsers(numUsers=100, numGroups=10):
