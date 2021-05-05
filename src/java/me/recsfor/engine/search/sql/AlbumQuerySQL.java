@@ -179,4 +179,13 @@ public class AlbumQuerySQL implements Queryable {
 			return rs.getString(1);
 		return "";
 	}
+
+	@Override
+	public void close() {
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

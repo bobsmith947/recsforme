@@ -25,7 +25,7 @@ import java.util.Comparator;
 import me.recsfor.group.model.AbstractModel;
 
 /**
- * Defines the required <code>query()</code> method of Query classes,
+ * Defines the required methods of Query classes,
  * and provides utility methods related to database queries.
  */
 public interface Queryable {
@@ -39,6 +39,12 @@ public interface Queryable {
 	 * @throws SQLException if any of the executed queries fail
 	 */
 	abstract AbstractModel query() throws SQLException;
+
+	/**
+	 * Closes the underlying database connection,
+	 * any further query calls after this method is called are invalid.
+	 */
+	abstract void close();
 	
 	/**
 	 * Creates a <code>Temporal</code> value based on the given parameters.
