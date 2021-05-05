@@ -67,6 +67,7 @@ public class AlbumInfo extends HttpServlet {
 			artistCredit = query.queryArtistCredit();
 			artistCreditString = query.queryArtistCreditString();
 			coverArt = query.queryCoverArt();
+			query.close();
 		} catch (SQLException e) {
 			throw new ServletException(e);
 		}

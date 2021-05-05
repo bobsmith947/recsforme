@@ -119,4 +119,12 @@ public class ArtistQuerySQL implements Queryable {
 		return list;
 	}
 
+	@Override
+	public void close() {
+		try {
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -41,25 +41,27 @@ import me.recsfor.group.model.Artist;
  * @author lkitaev
  */
 public class ArtistInfo extends HttpServlet {
-  private static final long serialVersionUID = -8210213618927548383L;
-  private Artist artist;
-  
-  @Resource(name="jdbc/MediaRecom")
-  private DataSource db;
-  
-  /**
-   * Handles the HTTP <code>GET</code> method.
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  @Override
+	private static final long serialVersionUID = -8210213618927548383L;
+	private Artist artist;
+	  
+	@Resource(name="jdbc/MediaRecom")
+	private DataSource db;
+	  
+	/**
+	 * Handles the HTTP <code>GET</code> method.
+	 * @param request servlet request
+	 * @param response servlet response
+	 * @throws ServletException if a servlet-specific error occurs
+	 * @throws IOException if an I/O error occurs
+	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String id = request.getParameter("id");
 		try {
-			artist = new ArtistQuerySQL(id, db).query();
+			ArtistQuerySQL query = new ArtistQuerySQL(id, db);
+			artist = query.query();
+			query.close();
 		} catch (SQLException e) {
 			throw new ServletException(e);
 		}
@@ -98,27 +100,27 @@ public class ArtistInfo extends HttpServlet {
 		}
 	}
 
-  /**
-   * Returns a short description of the servlet.
-   * @return a String containing servlet description
-   */
-  @Override
-  public String getServletInfo() {
-    return "Provides information for artist groups.";
-  }
-  
-  /**
-   * Determines how the years of an artist should be referred to as based on its type.
-   * @return the proper to term to use
-   */
-  private String yearsType() {
-    switch (artist.getType()) {
-      case "Person":
-        return "Alive";
-      case "Group":
-        return "Active";
-      default:
-        return "Alive/Active";
-    }
-  }
+	/**
+	 * Returns a short description of the servlet.
+	 * @return a String containing servlet description
+	 */
+	@Override
+	public String getServletInfo() {
+		return "Provides information for artist groups.";
+	}
+	  
+	/**
+	 * Determines how the years of an artist should be referred to as based on its type.
+	 * @return the proper to term to use
+	 */
+	private String yearsType() {
+		switch (artist.getType()) {
+			case "Person":
+				return "Alive";
+			case "Group":
+				return "Active";
+			default:
+				return "Alive/Active";
+		}
+	}
 }
