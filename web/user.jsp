@@ -127,6 +127,12 @@
 					<a href="#" class="filter" data-filter="Artist" data-target="#likes,#dislikes,#recs">Artists</a>
 					<a href="#" class="filter" data-filter="Album" data-target="#likes,#dislikes,#recs">Albums</a>
 				</div>
+				<div id="jump">
+					<span>Jump to:</span>
+					<a href="#likes">Likes</a>
+					<a href="#dislikes">Dislikes</a>
+					<a href="#recslist">Recommendations</a>
+				</div>
 			</div>
 			<div id="list" class="mt-3 text-right">
 				<h3>Your likes:</h3>
