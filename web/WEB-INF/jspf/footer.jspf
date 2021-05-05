@@ -1,4 +1,4 @@
-<h6>Copyright 2019 Lucas Kitaev</h6>
+<h6>&copy; 2021 Lucas Kitaev</h6>
 <script>
   window.onload = function () {
     if (!window.jQuery)
