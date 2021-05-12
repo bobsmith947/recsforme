@@ -32,6 +32,10 @@ conn = psycopg2.connect(
 conn.autocommit = True
 cur = conn.cursor()
 
+def close():
+	cur.close()
+	conn.close()
+
 def getUsers():
 	cur.execute("SELECT id, username FROM users ORDER BY id")
 	return [User(*x, getUserGroups(x[0])) for x in cur.fetchall()]
@@ -70,4 +74,3 @@ def indexOf(a, x):
 	if i != len(a) and a[i] == x:
 		return i
 	return -1
-

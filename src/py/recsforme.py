@@ -59,4 +59,4 @@ for i in range(len(users)):
 del albumRecs
 del artistRecs
 updateUserRecs(users)
-
+close()
