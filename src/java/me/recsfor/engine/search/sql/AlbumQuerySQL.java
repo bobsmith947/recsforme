@@ -51,10 +51,13 @@ public class AlbumQuerySQL implements Queryable {
 		PreparedStatement ps = con.prepareStatement("SELECT id FROM release_group WHERE gid = ?");
 		ps.setObject(1, gid);
 		ResultSet rs = ps.executeQuery();
-		if (rs.next())
+		if (rs.next()) {
 			this.id = rs.getInt(1);
-		else
+			ps.close();
+		} else {
+			con.close();
 			throw new SQLException(id + " was not found in the database");
+		}
 	}
 
 	/**

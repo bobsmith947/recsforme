@@ -61,15 +61,18 @@ public class AlbumInfo extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String id = request.getParameter("id");
+		AlbumQuerySQL query = null;
 		try {
-			AlbumQuerySQL query = new AlbumQuerySQL(id, db);
+			query = new AlbumQuerySQL(id, db);
 			album = query.query();
 			artistCredit = query.queryArtistCredit();
 			artistCreditString = query.queryArtistCreditString();
 			coverArt = query.queryCoverArt();
-			query.close();
 		} catch (SQLException e) {
 			throw new ServletException(e);
+		} finally {
+			if (query != null)
+				query.close();
 		}
 		response.setContentType("text/html;charset=UTF-8");
 		try (PrintWriter out = response.getWriter()) {
