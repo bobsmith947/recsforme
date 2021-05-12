@@ -16,7 +16,7 @@ Want to get recsforme set up on your local machine for development and testing p
 
 * JDK (at least Java 8)
 * [Apache Tomcat 8.5](https://tomcat.apache.org/download-80.cgi)
-* SQL database
+* PostgreSQL 10+
 * [Apache Ant and Apache Ivy](https://ant.apache.org/)
 * npm (comes with [Node.js](https://nodejs.org/en/download/))
 * ~~[An OMDb API key](https://www.omdbapi.com/) (set it as an environment variable named *OMDB_KEY*)~~
@@ -42,10 +42,12 @@ Want to get recsforme set up on your local machine for development and testing p
 
 #### Setting up the database
 
-The code and scripts provided are written for use with PostgreSQL. It may be possible to use with other SQL implementations with some modifications. You need to perform these steps in order to set up the database.
+To set up a local PostgreSQL database, make sure the `PGDATA` and `PGDATABASE` environment variables are set, and then run the `initdb` and `createdb` commands. The `pg_ctl` command can be used to manage the database server, and the `psql` command can be used to interact with the database.
+
+The scripts provided are written for use with PostgreSQL. It may be possible to use with other SQL implementations with some modifications. You need to perform these steps in order to set up the database.
 
 1. Execute `MusicTables.sql`
-2. [Copy the MusicBrainz data into the tables](https://musicbrainz.org/doc/MusicBrainz_Database/Download)
+2. [Copy the MusicBrainz data into the tables](https://musicbrainz.org/doc/MusicBrainz_Database/Download) using `CopyDump.sql`
 3. Execute `UserTables.sql`
 4. Execute `InsertGroups.sql`
 
@@ -82,6 +84,10 @@ Run unit tests:
 Cleanup build:
 
     ant clean
+
+Prepare the local database:
+
+    sudo -E ant mkdb
 
 ## Contributing
 
