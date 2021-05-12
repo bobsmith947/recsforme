@@ -16,7 +16,7 @@
 package me.recsfor.app;
 
 import java.io.Serializable;
-import static java.util.Objects.hash;
+import me.recsfor.engine.search.Context;
 
 /**
  * Represents a group in a list.
@@ -27,18 +27,18 @@ public class ListGroup implements Serializable {
   private static final long serialVersionUID = -3414177256146753331L;
   private String name;
   private String id;
-  private String type;
+  private Context type;
   
   public ListGroup() {
     name = "";
     id = "";
-    type = "";
+    type = Context.BASIC;
   }
   
   public ListGroup(String name, String id, String type) {
     this.name = name;
     this.id = id;
-    this.type = type;
+    this.type = Context.valueOf(type.toUpperCase());
   }
   
   /**
@@ -68,30 +68,25 @@ public class ListGroup implements Serializable {
   /**
    * @return the type
    */
-  public String getType() {
+  public Context getType() {
     return type;
   }
   /**
    * @param type the type to set
    */
-  public void setType(String type) {
+  public void setType(Context type) {
     this.type = type;
   }
   
   @Override
   public boolean equals(Object obj) {
     if (obj == null) {
-      //ensure it's not null
       return false;
     } else if (obj == this) {
-      //check if reference is the same
       return true;
     } else if (obj.getClass() != this.getClass()) {
-      //compare classes rather than instanceof
-      //if this class is extended, children would be equal
       return false;
     } else {
-      //check if fields share the same values
       return obj.hashCode() == this.hashCode();
     }
   }
@@ -99,8 +94,7 @@ public class ListGroup implements Serializable {
   @Override
   public int hashCode() {
     int hash = 7;
-    //TODO consider using just the ID
-    hash = 97 * hash + hash(this.name, this.id, this.type);
+    hash = 97 * hash + id.hashCode();
     return hash;
   }
   

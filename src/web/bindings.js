@@ -18,7 +18,8 @@ import ko from "knockout/build/output/knockout-latest.js";
 import moment from "moment/min/moment.min.js";
 
 try {
-  if (location.pathname.includes("signup.jsp")) {
+    let path = location.pathname;
+  if (path.includes("signup.jsp")) {
     let changed = false;
     const signUpModel = {
       name: ko.observable(""),
@@ -38,7 +39,9 @@ try {
       sendInfo: function () {
         $("#subres").empty();
         $.post("register.jsp", 
-          $("#info-form").serialize(), 
+          $("#info-form").find("input").filter(function () {
+            return $(this).val() !== "";
+          }).serialize(), 
           response => $("#subres").append($(response).filter(".res")));
         $("button[form=info-form]").prop("disabled", true);
       },
@@ -46,8 +49,7 @@ try {
         if ($("#name")[0].checkValidity() && changed) {
           $("#nameres").empty();
           changed = false;
-          $.get("register.jsp", {name: this.name()})
-                  .done(response => {
+          $.get("register.jsp", {name: this.name()}, response => {
                     $("#nameres").append($(response).filter(".res"));
                     $("#valid-name").length === 1 ? $("#name")[0].setCustomValidity("") :
                             $("#name")[0].setCustomValidity("Username is already taken.");
@@ -82,7 +84,7 @@ try {
     });
     $("#info-form").find("input").change(() => signUpModel.accepted(false));
   }
-  if (location.pathname.includes("user.jsp")) {
+  if (path.includes("user.jsp")) {
     const logInModel = {
       name: ko.observable(""),
       email: ko.observable(""),
@@ -121,9 +123,9 @@ try {
     };
     ko.applyBindings(logInModel);
   }
-  if (location.pathname.includes("Info")) {
+  if (path.includes("Info")) {
     let name = $("#name").text();
-    let type = $("#type").text();
+    let type = path.substring(path.lastIndexOf("/") + 1, path.indexOf("Info"));
     let id = location.search.substring(4);
     let json = generateItem(name, id, type);
     let vote = checkVote(json);

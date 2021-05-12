@@ -30,3 +30,6 @@ lib/
 !lib/nblibraries.properties
 !lib/musicbrainzws2.jar
 !lib/CopyLibs/org-netbeans-modules-java-j2seproject-copylibstask.jar
+.project
+.classpath
+.settings/

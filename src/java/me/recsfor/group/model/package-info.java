@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Lucas Kitaev.
+ * Copyright 2019 Lucas Kitaev.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,10 @@
  */
 
 /**
- * This package provides functionality to dynamically generate group pages using servlets.
- * Servlets are registered in <code>web.xml</code>, and do not have any initialization parameters.
- * <code>GET</code> requests are formatted with an <code>id</code> parameter set to the group ID.
- * <code>POST</code> requests are not supported.
- * The servlet associated with a group can be accessed from the frontend by selecting a search result.
+ * Provides the data model for group-related entities.
+ * This includes Artists, which are related to any number of Albums, which in turn contain any number of Songs.
+ * Both Artists and Albums provide their own query interfaces through the <code>me.recsfor.engine.search.sql</code>
+ * package, which queries the recsforme database for data related to these entities.
  */
 
-package me.recsfor.group;
+package me.recsfor.group.model;

@@ -16,7 +16,6 @@
 package me.recsfor.engine.recommend;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 import me.recsfor.app.ListData;
 
 /**
@@ -24,92 +23,57 @@ import me.recsfor.app.ListData;
  * @author lkitaev
  */
 public class User implements Serializable {
-  private static final long serialVersionUID = -4997310154302356037L;
-  private String name;
-  private Sex sex;
-  private short age;
-  private ListData likes;
-  private ListData dislikes;
-  
-  public User() {
-    name = "unknown";
-    sex = Sex.UNKNOWN;
-    age = -1;
-    likes = null;
-    dislikes = null;
-  }
-  
-  public User(String uname, String sex, LocalDate dob) {
-    name = uname;
-    this.sex = sex != null && !sex.isEmpty() ? Sex.valueOf(sex.toUpperCase()) : Sex.UNKNOWN;
-    age = (dob.isEqual(LocalDate.of(1900, 1, 1))) ? -1 : //check for the default date
-            (short) dob.until(LocalDate.now()).getYears();
-  }
-  
-  public User(String uname, String sex, LocalDate dob, String likeList, String dislikeList) {
-    this(uname, sex, dob);
-    likes = ListData.mapData(likeList);
-    dislikes = ListData.mapData(dislikeList);
-  }
-  
-  /**
-   * @return the name
-   */
-  public String getName() {
-    return name;
-  }
-  /**
-   * @param name the name to set
-   */
-  public void setName(String name) {
-    this.name = name;
-  }
-  /**
-   * @return the sex
-   */
-  public Sex getSex() {
-    return sex;
-  }
-  /**
-   * @param sex the sex to set
-   */
-  public void setSex(Sex sex) {
-    this.sex = sex;
-  }
-  /**
-   * @return the age
-   */
-  public short getAge() {
-    return age;
-  }
-  /**
-   * @param age the age to set
-   */
-  public void setAge(short age) {
-    this.age = age;
-  }
-  /**
-   * @return the likes
-   */
-  public ListData getLikes() {
-    return likes;
-  }
-  /**
-   * @param likes the likes to set
-   */
-  public void setLikes(ListData likes) {
-    this.likes = likes;
-  }
-  /**
-   * @return the dislikes
-   */
-  public ListData getDislikes() {
-    return dislikes;
-  }
-  /**
-   * @param dislikes the dislikes to set
-   */
-  public void setDislikes(ListData dislikes) {
-    this.dislikes = dislikes;
-  }
+
+	private static final long serialVersionUID = -4997310154302356037L;
+	private String name;
+	private ListData likes;
+	private ListData dislikes;
+
+	public User(String name) {
+		this.name = name;
+		likes = new ListData();
+		dislikes = new ListData();
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * @return the likes
+	 */
+	public ListData getLikes() {
+		return likes;
+	}
+
+	/**
+	 * @param likes the likes to set
+	 */
+	public void setLikes(ListData likes) {
+		this.likes = likes;
+	}
+
+	/**
+	 * @return the dislikes
+	 */
+	public ListData getDislikes() {
+		return dislikes;
+	}
+
+	/**
+	 * @param dislikes the dislikes to set
+	 */
+	public void setDislikes(ListData dislikes) {
+		this.dislikes = dislikes;
+	}
 }
