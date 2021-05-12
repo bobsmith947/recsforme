@@ -66,7 +66,14 @@ public class AlbumQuerySQL implements Queryable {
 	 */
 	@Override
 	public Album query() throws SQLException {
-		return new Album(gid, queryTitle(), queryFirstRelease(), queryPrimaryType(), querySecondaryType(), queryTrackList());	
+		return new Album(
+			gid,
+			queryTitle(),
+			queryFirstRelease(),
+			queryPrimaryType(),
+			querySecondaryType(),
+			queryTrackList()
+		);	
 	}
 	
 	/**
@@ -82,8 +89,13 @@ public class AlbumQuerySQL implements Queryable {
 				+ " AND release_group.id = ?)");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		while(rs.next())
-			artists.add(new Artist(rs.getObject(1, UUID.class), rs.getString(2)));
+		while(rs.next()) {
+			artists.add(new Artist(
+				rs.getObject(1, UUID.class),
+				rs.getString(2)
+			));
+		}
+		ps.close();
 		return artists;
 	}
 	
@@ -92,12 +104,15 @@ public class AlbumQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails
 	 */
 	public String queryArtistCreditString() throws SQLException {
+		String credit;
 		PreparedStatement ps = con.prepareStatement("SELECT artist_credit.name FROM artist_credit, release_group"
 				+ " WHERE artist_credit.id = release_group.artist_credit AND release_group.id = ?");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		return rs.getString(1);
+		credit = rs.getString(1);
+		ps.close();
+		return credit;
 	}
 
 	/**
@@ -105,11 +120,14 @@ public class AlbumQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails
 	 */
 	public String queryTitle() throws SQLException {
+		String title;
 		PreparedStatement ps = con.prepareStatement("SELECT name FROM release_group WHERE id = ?");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		return rs.getString(1);
+		title = rs.getString(1);
+		ps.close();
+		return title;
 	}
 
 	/**
@@ -117,12 +135,15 @@ public class AlbumQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails
 	 */
 	public Temporal queryFirstRelease() throws SQLException {
+		Temporal releaseDate;
 		PreparedStatement ps = con.prepareStatement("SELECT first_release_date_year, first_release_date_month,"
 				+ " first_release_date_day FROM release_group_meta WHERE id = ?");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		return Queryable.toTemporal(rs.getInt(1), rs.getInt(2), rs.getInt(3));
+		releaseDate = Queryable.toTemporal(rs.getInt(1), rs.getInt(2), rs.getInt(3));
+		ps.close();
+		return releaseDate;
 	}
 
 	/**
@@ -130,13 +151,14 @@ public class AlbumQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails
 	 */
 	public String queryPrimaryType() throws SQLException {
+		String type = "";
 		PreparedStatement ps = con.prepareStatement("SELECT rgpt.name FROM release_group_primary_type AS rgpt, release_group AS rg"
 				+ " WHERE rg.id = ? AND rg.type = rgpt.id");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		if (rs.next())
-			return rs.getString(1);
-		return "";
+		if (rs.next()) type = rs.getString(1);
+		ps.close();
+		return type;
 	}
 
 	/**
@@ -144,13 +166,14 @@ public class AlbumQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails
 	 */
 	public String querySecondaryType() throws SQLException {
+		String type = "";
 		PreparedStatement ps = con.prepareStatement("SELECT rgst.name FROM release_group_secondary_type AS rgst, release_group_secondary_type_join AS rgstjoin"
 				+ " WHERE rgstjoin.release_group = ? AND rgst.id = rgstjoin.secondary_type");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		if (rs.next())
-			return rs.getString(1);
-		return "";
+		if (rs.next()) type = rs.getString(1);
+		ps.close();
+		return type;
 	}
 
 	/**
@@ -164,8 +187,14 @@ public class AlbumQuerySQL implements Queryable {
 				+ " WHERE release = first_release.id AND medium = medium.id ORDER BY medium.position, track.position");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		while(rs.next())
-			trackList.add(new Song(rs.getObject(1, UUID.class), rs.getString(2), rs.getInt(3)));
+		while(rs.next()) {
+			trackList.add(new Song(
+				rs.getObject(1, UUID.class),
+				rs.getString(2),
+				rs.getInt(3)
+			));
+		}
+		ps.close();
 		return trackList;
 	}
 
@@ -174,13 +203,14 @@ public class AlbumQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails
 	 */
 	public String queryCoverArt() throws SQLException {
+		String coverArtUrl = "";
 		PreparedStatement ps = con.prepareStatement("SELECT cover_art_url FROM release_coverart"
 				+ " WHERE id IN (SELECT id FROM release WHERE release_group = ?) AND cover_art_url IS NOT NULL");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		if (rs.next())
-			return rs.getString(1);
-		return "";
+		if (rs.next()) coverArtUrl = rs.getString(1);
+		ps.close();
+		return coverArtUrl;
 	}
 
 	@Override
