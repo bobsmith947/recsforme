@@ -21,11 +21,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.sql.DataSource;
-
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.UUID;
-
 import me.recsfor.group.model.Artist;
 import me.recsfor.group.model.Album;
 
@@ -33,10 +31,7 @@ import me.recsfor.group.model.Album;
  * Queries the recsforme database for data related to Artist entities.
  * @author lkitaev
  */
-public class ArtistQuerySQL implements Queryable {
-	private Connection con;
-	private int id;
-	private UUID gid;
+public class ArtistQuerySQL extends AbstractQuerySQL {
 
 	/**
 	 * @param id the uuid of the artist
@@ -44,7 +39,7 @@ public class ArtistQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails or no rows are found
 	 */
 	public ArtistQuerySQL(String id, DataSource db) throws SQLException {
-		gid = UUID.fromString(id);
+		super(id);
 		con = db.getConnection();
 		PreparedStatement ps = con.prepareStatement("SELECT id FROM artist WHERE gid = ?");
 		ps.setObject(1, gid);
@@ -53,6 +48,7 @@ public class ArtistQuerySQL implements Queryable {
 			this.id = rs.getInt(1);
 			ps.close();
 		} else {
+			ps.close();
 			con.close();
 			throw new SQLException(id + " was not found in the database.");
 		}
@@ -78,8 +74,8 @@ public class ArtistQuerySQL implements Queryable {
 			queryType(),
 			queryGender(),
 			rs.getString(3),
-			Queryable.toTemporal(rs.getInt(4), rs.getInt(5), rs.getInt(6)),
-			Queryable.toTemporal(rs.getInt(7), rs.getInt(8), rs.getInt(9)),
+			QueryUtils.toTemporal(rs.getInt(4), rs.getInt(5), rs.getInt(6)),
+			QueryUtils.toTemporal(rs.getInt(7), rs.getInt(8), rs.getInt(9)),
 			queryDiscog()
 		);
 		ps.close();
@@ -133,7 +129,7 @@ public class ArtistQuerySQL implements Queryable {
 			discog.add(new Album(
 				rs.getObject(1, UUID.class),
 				rs.getString(2),
-				Queryable.toTemporal(rs.getInt(3), rs.getInt(4), rs.getInt(5))
+				QueryUtils.toTemporal(rs.getInt(3), rs.getInt(4), rs.getInt(5))
 			));
 		}
 		ps.close();

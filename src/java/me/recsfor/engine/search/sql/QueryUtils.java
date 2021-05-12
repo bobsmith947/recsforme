@@ -15,36 +15,18 @@
  */
 package me.recsfor.engine.search.sql;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.temporal.Temporal;
 import java.util.Comparator;
 
-import me.recsfor.group.model.AbstractModel;
-
 /**
- * Defines the required methods of Query classes,
- * and provides utility methods related to database queries.
+ * Provides utility methods related to database queries.
  */
-public interface Queryable {
-	
-	/**
-	 * This method queries the recsforme database for data regarding a specific entity
-	 * and returns the queried data as an <code>AbstractModel</code>.
-	 * Overriding methods should specify a subclass of <code>AbstractModel</code>
-	 * that is specific to the implementation.
-	 * @return the underlying data model for the query
-	 * @throws SQLException if any of the executed queries fail
-	 */
-	abstract AbstractModel query() throws SQLException;
+public class QueryUtils {
 
-	/**
-	 * Closes the underlying database connection,
-	 * any further query calls after this method is called are invalid.
-	 */
-	abstract void close();
+	private QueryUtils() {}
 	
 	/**
 	 * Creates a <code>Temporal</code> value based on the given parameters.
@@ -57,7 +39,7 @@ public interface Queryable {
 	 * @param day the day
 	 * @return the corresponding Temporal
 	 */
-	static Temporal toTemporal(int year, int month, int day) {
+	public static Temporal toTemporal(int year, int month, int day) {
 		if (year != 0) {
 			if (month != 0) {
 				if (day != 0) {
@@ -75,7 +57,7 @@ public interface Queryable {
 	 * @param t the object to hash
 	 * @return the hash code
 	 */
-	static int hashTemporal(Temporal t) {
+	public static int hashTemporal(Temporal t) {
 		if (t instanceof LocalDate) return ((LocalDate) t).hashCode();
 		if (t instanceof YearMonth) return ((YearMonth) t).hashCode();
 		if (t instanceof Year) return ((Year) t).hashCode();
@@ -86,7 +68,7 @@ public interface Queryable {
 	 * Generates a <code>Comparator</code> for two <code>Temporal</code> objects
 	 * @return the Comparator
 	 */
-	static Comparator<Temporal> compareTemporal() {
+	public static Comparator<Temporal> compareTemporal() {
 		return (Temporal a, Temporal b) -> {
 			if (a == null || b == null) throw new NullPointerException();
 			if (a instanceof LocalDate) {

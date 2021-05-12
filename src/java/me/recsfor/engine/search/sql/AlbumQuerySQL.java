@@ -23,9 +23,7 @@ import java.time.temporal.Temporal;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-
 import javax.sql.DataSource;
-
 import me.recsfor.group.model.Album;
 import me.recsfor.group.model.Artist;
 import me.recsfor.group.model.Song;
@@ -35,10 +33,7 @@ import me.recsfor.group.model.Song;
  * @author lkitaev
  * @author abpurdy
  */
-public class AlbumQuerySQL implements Queryable {
-	private Connection con;
-	private int id;
-	private UUID gid;
+public class AlbumQuerySQL extends AbstractQuerySQL {
 
 	/**
 	 * @param id the uuid of the release group
@@ -46,7 +41,7 @@ public class AlbumQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails or no rows are found
 	 */
 	public AlbumQuerySQL(String id, DataSource db) throws SQLException {
-		gid = UUID.fromString(id);
+		super(id);
 		con = db.getConnection();
 		PreparedStatement ps = con.prepareStatement("SELECT id FROM release_group WHERE gid = ?");
 		ps.setObject(1, gid);
@@ -55,6 +50,7 @@ public class AlbumQuerySQL implements Queryable {
 			this.id = rs.getInt(1);
 			ps.close();
 		} else {
+			ps.close();
 			con.close();
 			throw new SQLException(id + " was not found in the database");
 		}
@@ -141,7 +137,7 @@ public class AlbumQuerySQL implements Queryable {
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		releaseDate = Queryable.toTemporal(rs.getInt(1), rs.getInt(2), rs.getInt(3));
+		releaseDate = QueryUtils.toTemporal(rs.getInt(1), rs.getInt(2), rs.getInt(3));
 		ps.close();
 		return releaseDate;
 	}
