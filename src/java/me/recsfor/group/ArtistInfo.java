@@ -58,12 +58,15 @@ public class ArtistInfo extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String id = request.getParameter("id");
+		ArtistQuerySQL query = null;
 		try {
-			ArtistQuerySQL query = new ArtistQuerySQL(id, db);
+			query = new ArtistQuerySQL(id, db);
 			artist = query.query();
-			query.close();
 		} catch (SQLException e) {
 			throw new ServletException(e);
+		} finally {
+			if (query != null)
+				query.close();
 		}
 		response.setContentType("text/html;charset=UTF-8");
 		try (PrintWriter out = response.getWriter()) {

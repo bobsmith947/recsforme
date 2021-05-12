@@ -49,10 +49,13 @@ public class ArtistQuerySQL implements Queryable {
 		PreparedStatement ps = con.prepareStatement("SELECT id FROM artist WHERE gid = ?");
 		ps.setObject(1, gid);
 		ResultSet rs = ps.executeQuery();
-		if (rs.next())
+		if (rs.next()) {
 			this.id = rs.getInt(1);
-		else
+			ps.close();
+		} else {
+			con.close();
 			throw new SQLException(id + " was not found in the database.");
+		}
 	}
 	
 	/**
@@ -61,15 +64,26 @@ public class ArtistQuerySQL implements Queryable {
 	 */
 	@Override
 	public Artist query() throws SQLException {
+		Artist artist;
 		PreparedStatement ps = con.prepareStatement("SELECT name, sort_name, comment,"
 				+ " begin_date_year, begin_date_month, begin_date_day, end_date_year, end_date_month, end_date_day"
 				+ " FROM artist WHERE id = ?");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
 		rs.next();
-		return new Artist(gid, rs.getString(1), rs.getString(2), queryType(), queryGender(), rs.getString(3),
-				Queryable.toTemporal(rs.getInt(4), rs.getInt(5), rs.getInt(6)),
-				Queryable.toTemporal(rs.getInt(7), rs.getInt(8), rs.getInt(9)), queryDiscog());
+		artist = new Artist(
+			gid,
+			rs.getString(1),
+			rs.getString(2),
+			queryType(),
+			queryGender(),
+			rs.getString(3),
+			Queryable.toTemporal(rs.getInt(4), rs.getInt(5), rs.getInt(6)),
+			Queryable.toTemporal(rs.getInt(7), rs.getInt(8), rs.getInt(9)),
+			queryDiscog()
+		);
+		ps.close();
+		return artist;
 	}
 	
 	/**
@@ -77,13 +91,14 @@ public class ArtistQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails
 	 */
 	public String queryType() throws SQLException {
+		String type = "Unknown type";
 		PreparedStatement ps = con.prepareStatement("SELECT name FROM artist_type"
 				+ " WHERE id = (SELECT type FROM artist WHERE id = ?)");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		if (rs.next())
-			return rs.getString(1);
-		return "Unknown type";
+		if (rs.next()) type = rs.getString(1);
+		ps.close();
+		return type;
 	}
 	
 	/**
@@ -91,13 +106,14 @@ public class ArtistQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails
 	 */
 	public String queryGender() throws SQLException {
+		String gender = "";
 		PreparedStatement ps = con.prepareStatement("SELECT name FROM gender WHERE id ="
 				+ " (SELECT gender FROM artist WHERE id = ?)");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		if (rs.next())
-			return rs.getString(1);
-		return "";
+		if (rs.next()) gender = rs.getString(1);
+		ps.close();
+		return gender;
 	}
 	
 	/**
@@ -105,7 +121,7 @@ public class ArtistQuerySQL implements Queryable {
 	 * @throws SQLException if the query fails
 	 */
 	public Set<Album> queryDiscog() throws SQLException {
-		Set<Album> list = new TreeSet<>();
+		Set<Album> discog = new TreeSet<>();
 		PreparedStatement ps = con.prepareStatement("SELECT gid, name,"
 				+ " first_release_date_year, first_release_date_month, first_release_date_day"
 				+ " FROM release_group, release_group_meta WHERE artist_credit IN"
@@ -113,10 +129,15 @@ public class ArtistQuerySQL implements Queryable {
 				+ " AND release_group.id = release_group_meta.id");
 		ps.setInt(1, id);
 		ResultSet rs = ps.executeQuery();
-		while (rs.next())
-			list.add(new Album(rs.getObject(1, UUID.class), rs.getString(2),
-					Queryable.toTemporal(rs.getInt(3), rs.getInt(4), rs.getInt(5))));
-		return list;
+		while (rs.next()) {
+			discog.add(new Album(
+				rs.getObject(1, UUID.class),
+				rs.getString(2),
+				Queryable.toTemporal(rs.getInt(3), rs.getInt(4), rs.getInt(5))
+			));
+		}
+		ps.close();
+		return discog;
 	}
 
 	@Override
