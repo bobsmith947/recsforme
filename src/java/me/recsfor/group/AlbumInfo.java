@@ -67,7 +67,8 @@ public class AlbumInfo extends HttpServlet {
 			album = query.query();
 			artistCredit = query.queryArtistCredit();
 			artistCreditString = query.queryArtistCreditString();
-			coverArt = query.queryCoverArt();
+			//coverArt = query.queryCoverArt();
+			coverArt = "https://coverartarchive.org/release-group/" + id + "/front-250";
 		} catch (SQLException e) {
 			throw new ServletException(e);
 		} finally {
@@ -81,8 +82,7 @@ public class AlbumInfo extends HttpServlet {
 			out.println("<main><h2 id=\"name\">" + album.getTitle() 
 					+ " - <a href=\"ArtistInfo?id=" + artistCredit.get(0).getId() + "\">"
 					+ artistCreditString + "</a></h2>");
-			if (!coverArt.isEmpty())
-				out.println("<img class=\"mx-auto d-block\" src=\"" + coverArt + "\" alt=\"Cover Art\">");
+			out.println("<img class=\"mx-auto d-block\" src=\"" + coverArt + "\" alt=\"Cover Art\">");
 			if (artistCredit.size() > 1) {
 				StringBuilder credits = new StringBuilder();
 				credits.append("<p>All contributing artists: ");
