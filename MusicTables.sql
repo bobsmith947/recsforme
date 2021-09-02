@@ -89,12 +89,12 @@ CREATE TABLE IF NOT EXISTS release_group_primary_type (
 CREATE UNIQUE INDEX IF NOT EXISTS release_group_primary_type_idx_gid ON release_group_primary_type (gid);
 
 CREATE TABLE IF NOT EXISTS release_group_secondary_type (
-	    id                  INTEGER PRIMARY KEY,
-	    name                VARCHAR NOT NULL,
-	    parent              INTEGER REFERENCES release_group_secondary_type (id),
-	    child_order         INTEGER NOT NULL DEFAULT 0,
-	    description         VARCHAR,
-	    gid                 UUID NOT NULL
+	id                  INTEGER PRIMARY KEY,
+	name                VARCHAR NOT NULL,
+	parent              INTEGER REFERENCES release_group_secondary_type (id),
+	child_order         INTEGER NOT NULL DEFAULT 0,
+	description         VARCHAR,
+	gid                 UUID NOT NULL
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS release_group_secondary_type_idx_gid ON release_group_secondary_type (gid);
@@ -115,20 +115,20 @@ CREATE INDEX IF NOT EXISTS release_group_idx_name ON release_group (name);
 CREATE INDEX IF NOT EXISTS release_group_idx_artist_credit ON release_group (artist_credit);
 
 CREATE TABLE IF NOT EXISTS release_group_secondary_type_join (
-	    release_group INTEGER REFERENCES release_group (id),
-	    secondary_type INTEGER REFERENCES release_group_secondary_type (id),
-	    created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	    PRIMARY KEY (release_group, secondary_type)
+	release_group INTEGER REFERENCES release_group (id),
+	secondary_type INTEGER REFERENCES release_group_secondary_type (id),
+	created TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+	PRIMARY KEY (release_group, secondary_type)
 );
 
 CREATE TABLE IF NOT EXISTS release_group_meta (
-	    id                  INTEGER PRIMARY KEY REFERENCES release_group (id),
-	    release_count       INTEGER NOT NULL DEFAULT 0,
-	    first_release_date_year   SMALLINT,
-	    first_release_date_month  SMALLINT,
-	    first_release_date_day    SMALLINT,
-	    rating              SMALLINT,
-	    rating_count        INTEGER
+	id                  INTEGER PRIMARY KEY REFERENCES release_group (id),
+	release_count       INTEGER NOT NULL DEFAULT 0,
+	first_release_date_year   SMALLINT,
+	first_release_date_month  SMALLINT,
+	first_release_date_day    SMALLINT,
+	rating              SMALLINT,
+	rating_count        INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS release (
@@ -154,9 +154,20 @@ CREATE INDEX IF NOT EXISTS release_idx_release_group ON release (release_group);
 CREATE INDEX IF NOT EXISTS release_idx_artist_credit ON release (artist_credit);
 
 CREATE TABLE IF NOT EXISTS release_coverart (
-	    id                  INTEGER PRIMARY KEY REFERENCES release (id),
-	    last_updated        TIMESTAMP WITH TIME ZONE,
-	    cover_art_url       VARCHAR(255)
+	id                  INTEGER PRIMARY KEY REFERENCES release (id),
+	last_updated        TIMESTAMP WITH TIME ZONE,
+	cover_art_url       VARCHAR(255)
+);
+
+CREATE TYPE cover_art_presence AS ENUM ('absent', 'present', 'darkened');
+
+CREATE TABLE IF NOT EXISTS release_meta (
+	id                  INTEGER PRIMARY KEY REFERENCES release (id),
+	date_added          TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+	info_url            VARCHAR(255),
+	amazon_asin         VARCHAR(10),
+	amazon_store        VARCHAR(20),
+	cover_art_presence  cover_art_presence NOT NULL DEFAULT 'absent'
 );
 
 -- create medium/track tables
