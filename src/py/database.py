@@ -67,7 +67,7 @@ def updateUserRecs(users):
 		execute_values(cur, """INSERT INTO user_recommendations VALUES %s
 				ON CONFLICT (user_id, group_gid) DO UPDATE
 				SET score = EXCLUDED.score, time_updated = DEFAULT""",
-				[(user.id, str(x.id), y) for x, y in user.recs.items()])
+				[(user.id, str(x), y) for x, y in user.recs.items()])
 
 def indexOf(a, x):
 	i = bisect_left(a, x)

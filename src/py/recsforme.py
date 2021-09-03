@@ -5,13 +5,10 @@ import numpy as np
 from fancyimpute import SimilarityWeightedAveraging
 
 users = getUsers()
-artists = getArtists()
-artistIds = [x.id for x in artists]
-albums = getAlbums()
-albumIds = [x.id for x in albums]
-
-artistLikes = np.full((len(users), len(artists)), np.nan, np.half)
-albumLikes = np.full((len(users), len(albums)), np.nan, np.half)
+artistIds = [x.id for x in getArtists()]
+albumIds = [x.id for x in getAlbums()]
+artistLikes = np.full((len(users), len(artistIds)), np.nan, np.half)
+albumLikes = np.full((len(users), len(albumIds)), np.nan, np.half)
 
 # fill in likes/dislikes for each user
 for i in range(len(users)):
@@ -36,9 +33,9 @@ for i in range(len(users)):
 # mask out entries that have already been filled in
 # delete likes after running model to free memory
 swa = SimilarityWeightedAveraging(verbose=True)
-albumRecs = np.ma.MaskedArray(swa.fit_transform(albumLikes),~np.isnan(albumLikes))
+albumRecs = np.ma.MaskedArray(swa.fit_transform(albumLikes), ~np.isnan(albumLikes))
 del albumLikes
-artistRecs = np.ma.MaskedArray(swa.fit_transform(artistLikes),~np.isnan(artistLikes))
+artistRecs = np.ma.MaskedArray(swa.fit_transform(artistLikes), ~np.isnan(artistLikes))
 del artistLikes
 
 # find top picks and add them to each user's recommendations
@@ -50,13 +47,17 @@ for i in range(len(users)):
 	for j in topAlbums:
 		score = albumRecs.item((i, j))
 		if score > 0:
-			users[i].recs[albums[j]] = score
+			users[i].recs[albumIds[j]] = score
 	for j in topArtists:
 		score = artistRecs.item((i, j))
 		if score > 0:
-			users[i].recs[artists[j]] = score
+			users[i].recs[artistIds[j]] = score
 
+# free memory
+artistIds.clear()
+albumIds.clear()
 del albumRecs
 del artistRecs
+
 updateUserRecs(users)
 close()
