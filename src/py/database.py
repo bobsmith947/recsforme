@@ -9,6 +9,7 @@ class User:
 		self.id = userId
 		self.name = userName
 		self.groups = userGroups
+		self.recs = {}
 	
 	def __str__(self):
 		return f"{self.name} ({self.id})"
