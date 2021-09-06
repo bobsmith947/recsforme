@@ -184,6 +184,7 @@ CREATE TABLE IF NOT EXISTS medium (
 );
 
 CREATE INDEX IF NOT EXISTS medium_idx_track_count ON medium (track_count);
+CREATE INDEX IF NOT EXISTS medium_idx_release ON medium (release);
 
 CREATE TABLE IF NOT EXISTS track (
 	id                  INTEGER PRIMARY KEY,
@@ -201,7 +202,7 @@ CREATE TABLE IF NOT EXISTS track (
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS track_idx_gid ON track (gid);
-CREATE INDEX IF NOT EXISTS track_idx_recording ON track (recording);
 CREATE INDEX IF NOT EXISTS track_idx_name ON track (name);
 CREATE INDEX IF NOT EXISTS track_idx_artist_credit ON track (artist_credit);
+CREATE INDEX IF NOT EXISTS track_idx_medium ON track (medium);
 
